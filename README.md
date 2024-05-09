@@ -1,4 +1,4 @@
-# SWP391 - Diamon Shop System
+# SWP391 - Diamond Shop System
 
 ### Team member
 
