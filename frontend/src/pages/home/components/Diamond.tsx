@@ -10,12 +10,8 @@ import Asscher from "../../../components/svg/Asscher";
 import Oval from "../../../components/svg/Oval";
 import Princess from "../../../components/svg/Princess";
 
-const DiamondItem = () => {
-  return (
-    <div className="text-sm">
-      <Round />
-    </div>
-  );
+const DiamondItem = ({ children }: { children: React.ReactNode }) => {
+  return <div className="text-sm">{children}</div>;
 };
 
 export default function Diamond() {
@@ -24,17 +20,45 @@ export default function Diamond() {
       <div className="w-full flex justify-center great-vibes-regular text-7xl mt-16">
         Đa dạng đá quý
       </div>
-      <div className="mt-8 flex gap-4 justify-evenly">
-        <Round />
-        <Pear />
-        <Heart />
-        <Marquise />
-        <Emerald />
-        <Cushion />
-        <Radiant />
-        <Asscher />
-        <Oval />
-        <Princess />
+      <div className="mt-8 flex gap-4 justify-evenly px-8">
+        <DiamondItem>
+          <Round />
+        </DiamondItem>
+        <DiamondItem>
+          <Pear />
+        </DiamondItem>
+        <DiamondItem>
+          <Heart />
+        </DiamondItem>
+        <DiamondItem>
+          <Marquise />
+        </DiamondItem>
+        <DiamondItem>
+          <Emerald />
+        </DiamondItem>
+        <DiamondItem>
+          <Cushion />
+        </DiamondItem>
+        <DiamondItem>
+          <Radiant />
+        </DiamondItem>
+        <DiamondItem>
+          <Asscher />
+        </DiamondItem>
+        <DiamondItem>
+          <Oval />
+        </DiamondItem>
+        <DiamondItem>
+          <Princess />
+        </DiamondItem>
+      </div>
+      <div className="flex justify-center mt-16">
+        <a
+          href="./"
+          className="inline-block py-2 px-4 font-bold border-2 border-black hover:scale-95 transition-all"
+        >
+          XEM NGAY
+        </a>
       </div>
     </div>
   );
