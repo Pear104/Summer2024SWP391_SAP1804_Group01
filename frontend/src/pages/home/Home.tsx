@@ -3,7 +3,6 @@ import Banner from "./components/Banner";
 import Explore from "./components/Explore";
 import Diamond from "./components/Diamond";
 import Content from "./components/Content";
-import Contact from "./components/Contact";
 export default function Home() {
   return (
     <div className="">
@@ -13,8 +12,6 @@ export default function Home() {
       <Diamond />
       <div className="border border-black border-opacity-40 mx-64 mt-32 mb-16"></div>
       <Content />
-      <div className="border border-black border-opacity-40 mx-64 mt-32 mb-16"></div>
-      <Contact />
     </div>
   );
 }

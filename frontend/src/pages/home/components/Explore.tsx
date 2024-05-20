@@ -1,5 +1,3 @@
-import React from "react";
-
 const ProductItem = () => {
   return (
     <div className="">
@@ -13,7 +11,7 @@ export default function Explore() {
   return (
     <div className="w-full">
       <div className="w-full flex justify-center great-vibes-regular text-7xl mt-16">
-        Sản phẩm nổi bật của chúng tôi
+        Featured products
       </div>
       <div className="mt-8 flex gap-4 justify-evenly">
         <ProductItem />
@@ -24,16 +22,3 @@ export default function Explore() {
     </div>
   );
 }
-
-const test = () => {
-  return (
-    <div className="w-full">
-      <div className="w-full flex justify-center great-vibes-regular text-7xl mt-16">
-        Chiêm ngưỡng vẻ đẹp của tạo hóa qua những viên kim cương
-      </div>
-      <div>
-        <div>Ahihi</div>
-      </div>
-    </div>
-  );
-};
