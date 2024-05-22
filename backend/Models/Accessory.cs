@@ -30,5 +30,6 @@ namespace backend.Models
 
         public List<AccessoryImage> AccessoryImages { get; set; } = new List<AccessoryImage>();
 
+        public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     }
 }
