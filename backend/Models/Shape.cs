@@ -13,7 +13,7 @@ namespace backend.Models
 
         [Column("name")]
         public string Name { get; set; } = string.Empty;
-        public List<Variant> Variants { get; set; } = new List<Variant>();
+        public List<Accessory> Accessories { get; set; } = new List<Accessory>();
         public List<Diamond> Diamonds { get; set; } = new List<Diamond>();
 
     }

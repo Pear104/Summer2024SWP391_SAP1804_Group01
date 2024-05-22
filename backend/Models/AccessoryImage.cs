@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models
 {
-    [Table("variant_image")]
-    public class VariantImage
+    [Table("accessory_image")]
+    public class AccessoryImage
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -14,8 +14,8 @@ namespace backend.Models
         [Column("image_url")]
         public string Url { get; set; } = string.Empty;
 
-        [Column("variant_id")]
-        public long VariantID { get; set; }
-        public Variant Variant { get; set; }
+        [Column("accessory_id")]
+        public long AccessoryId { get; set; }
+        public Accessory Accessory { get; set; }
     }
 }

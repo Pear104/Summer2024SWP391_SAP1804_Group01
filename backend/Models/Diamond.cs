@@ -11,14 +11,20 @@ namespace backend.Models
         [Column("diamond_id")]
         public long Id { get; set; }
 
-        [Column("certificate_id")]
-        public long CertificateId { get; set; }
+        [Column("lab")]
+        public string Lab { get; set; }
 
-        [Column("lab_name")]
-        public string LabName { get; set; }
+        [Column("certificate_number")]
+        public long CertificateNumber { get; set; }
+
+        [Column("certificate_url")]
+        public string CertificateUrl { get; set; }
+
+        [Column("image_url")]
+        public string ImageUrl { get; set; }
 
         [Column("carat")]
-        public double Carat { get; set; }
+        public float Carat { get; set; }
 
         [Column("cut")]
         public string Cut { get; set; }
@@ -35,14 +41,11 @@ namespace backend.Models
         [Column("symmetry")]
         public string Symmetry { get; set; }
 
-        [Column("fluorescene")]
-        public string Fluorescene { get; set; }
-
-        [Column("price")]
-        public double Price { get; set; }
+        [Column("fluorescence")]
+        public string Fluorescence { get; set; }
 
         [Column("availability")]
-        public bool Availability { get; set; }
+        public bool Availability { get; set; } = true;
 
         [Column("shape_id")]
         public long ShapeId { get; set; }

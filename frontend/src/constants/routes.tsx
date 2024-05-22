@@ -9,6 +9,8 @@ import AccountDetail from "../pages/account/AccountDetail";
 import OrderHistory from "../pages/account/OrderHistory";
 import ProductLayout from "../layouts/ProductLayout";
 import DiamondList from "../pages/product/diamond/DiamondList";
+import Test from "../pages/test/Test";
+import DiamondDetail from "../pages/product/diamond/DiamondDetail";
 
 const routes = [
   {
@@ -18,6 +20,10 @@ const routes = [
     children: [
       {
         children: [
+          {
+            element: <Test />,
+            path: "/test",
+          },
           {
             element: <Home />,
             path: "/",
@@ -57,8 +63,8 @@ const routes = [
                 element: <DiamondList />,
               },
               {
-                element: <OrderHistory />,
-                path: "order-history",
+                element: <DiamondDetail />,
+                path: "diamond/detail",
               },
             ],
           },

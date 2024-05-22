@@ -1,10 +1,10 @@
 drop table [diamond]
-drop table [variant_image]
+drop table [accessory_image]
 drop table [variant]
 
-drop table [setting]
+drop table [accessory]
 drop table [setting_style]
-drop table [setting_type]
+drop table [accessory_type]
 drop table [shape]
 drop table [material]
 drop table [__EFMigrationsHistory]

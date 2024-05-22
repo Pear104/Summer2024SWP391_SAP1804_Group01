@@ -1,9 +1,8 @@
-﻿using backend.Data;
+﻿using System.Text.RegularExpressions;
+using backend.Crawler;
+using backend.Data;
 using backend.Models;
-using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.Text;
 
 namespace backend.Controllers
 {
@@ -11,7 +10,8 @@ namespace backend.Controllers
     [ApiController]
     public class SeedController : ControllerBase
     {
-        public string[] _shapes = [
+        public string[] _shapes =
+        [
             "Round",
             "Emerald",
             "Heart",
@@ -24,127 +24,183 @@ namespace backend.Controllers
             "Asscher"
         ];
 
-        public string[] _materials = [
-            "14KT White Gold",
-            "14KT Yellow Gold",
-            "14KT Rose Gold",
-            "18KT White Gold",
-            "18KT Yellow Gold",
-            "18KT Rose Gold",
-            "14KT White & Yellow Gold",
-            "14KT White & Rose Gold",
-            "18KT White & Yellow Gold",
-            "18KT White & Rose Gold"
-        ];
-
-        public class Diamond
+        public Dictionary<string, Dictionary<string, string[]>> _accessory = new Dictionary<
+            string,
+            Dictionary<string, string[]>
+        >
         {
-            public string diamond_name { get; set; }
-            public string Appointment { get; set; }
-            public string QuickShip { get; set; }
-            public int bank_wire_price_in_currency { get; set; }
-            public string cert_num { get; set; }
-            public string cert_url { get; set; }
-            public string city { get; set; }
-            public string clarity { get; set; }
-            public string color { get; set; }
-            public string country { get; set; }
-            public string culet_condition { get; set; }
-            public string culet_size { get; set; }
-            public string currency_code { get; set; }
-            public string currency_symbol { get; set; }
-            public string current_diamond_type { get; set; }
-            public string cut { get; set; }
-            public string depth_percent { get; set; }
-            public string diamondQuantity { get; set; }
-            public string diamond_feed { get; set; }
-            public string diamond_id { get; set; }
-            public string diamond_type { get; set; }
-            public int discount_perc { get; set; }
-            public string eye_clean { get; set; }
-            public string fluor_color { get; set; }
-            public string fluor_intensity { get; set; }
-            public string girdle_condition { get; set; }
-            public string girdle_max { get; set; }
-            public string girdle_min { get; set; }
-            public bool has_cert_file { get; set; }
-            public bool has_image_file { get; set; }
-            public bool has_sarineloupe { get; set; }
-            public bool has_video_file { get; set; }
-            public string image_file_url { get; set; }
-            public string image_url { get; set; }
-            public string inserted_on { get; set; }
-            public string lab { get; set; }
-            public double meas_depth { get; set; }
-            public double meas_length { get; set; }
-            public double meas_width { get; set; }
-            public string measurements { get; set; }
-            public string polish { get; set; }
-            public string ratio { get; set; }
-            public string retail_price { get; set; }
-            public string sellerName { get; set; }
-            public string shape { get; set; }
-            public double size { get; set; }
-            public string special_price { get; set; }
-            public string state { get; set; }
-            public string steps_image_url { get; set; }
-            public string stock_num { get; set; }
-            public string symmetry { get; set; }
-            public string table_percent { get; set; }
-            public int total_discounted_sales_price { get; set; }
-            public string total_discounted_sales_price_in_currency { get; set; }
-            public string total_discounted_sales_price_without_currency_symbol { get; set; }
-            public int total_sales_price { get; set; }
-            public string total_sales_price_in_currency { get; set; }
-            public string total_sales_price_without_currency_symbol { get; set; }
-            public string vaultDiscount { get; set; }
-            public string video_file_url { get; set; }
-            public string video_file_url_insecure { get; set; }
-            public string video_url { get; set; }
-        }
+            {
+                "Earrings",
+                new Dictionary<string, string[]>
+                {
+                    {
+                        "Round",
 
-        public class LiveDiamondData
-        {
-            public int originalCount { get; set; }
-            public int dataCount { get; set; }
-            public string diamondsReturned { get; set; }
-            public string pageNo { get; set; }
-            public List<Diamond> diamond { get; set; }
-        }
+                        [
+                            "https://www.withclarity.com/products/classic-round-diamond-four-prong-studs-earrings?variant=45132546605339",
+                            "https://www.withclarity.com/products/toi-et-moi-round-front-back-earring?variant=47585399931163",
+                            "https://www.withclarity.com/products/round-diamond-halo-earrings?variant=46464292159771"
+                        ]
+                    },
+                    {
+                        "Princess",
 
-        public class Data
-        {
-            public LiveDiamondData liveDiamondData { get; set; }
-        }
+                        [
+                            "https://www.withclarity.com/products/classic-princess-brilliant-cut-diamond-martini-stud-earrings?variant=45132532777243",
+                            "https://www.withclarity.com/products/princess-diamond-halo-earrings?variant=46466683994395"
+                        ]
+                    },
+                    {
+                        "Emerald",
 
-        public class Root
+                        [
+                            "https://www.withclarity.com/products/toi-et-moi-halo-emeralds-front-back-earring?variant=47585398030619",
+                            "https://www.withclarity.com/products/toi-et-moi-round-and-emerald-front-back-earring?variant=47558295257371"
+                        ]
+                    },
+                    {
+                        "Oval",
+
+                        [
+                            "https://www.withclarity.com/products/oval-created-sapphire-and-lab-diamond-classic-solitaire-under-halo-earrings?variant=47661178978587",
+                            "https://www.withclarity.com/products/classic-oval-diamond-stud-earrings?variant=45132519309595"
+                        ]
+                    },
+                    {
+                        "Pear",
+
+                        [
+                            "https://www.withclarity.com/products/toi-et-moi-halo-round-and-teardrop-front-back-earring?variant=47558280544539",
+                            "https://www.withclarity.com/products/elegance-pear-drop-earrings?variant=46915603923227",
+                            "https://www.withclarity.com/products/pear-diamond-halo-earring?variant=46466035187995"
+                        ]
+                    },
+                    {
+                        "Heart",
+
+                        [
+                            "https://www.withclarity.com/products/pear-round-and-heart-matching-earring?variant=48074394501403",
+                            "https://www.withclarity.com/products/halo-oval-and-heart-front-back-earring?variant=47781374689563"
+                        ]
+                    },
+                }
+            },
+            {
+                "Necklaces",
+                new Dictionary<string, string[]>
+                {
+                    {
+                        "Round",
+
+                        [
+                            "https://www.withclarity.com/products/kite-set-round-lab-created-diamond-solitaire-pendant?variant=46588271591707",
+                            "https://www.withclarity.com/products/kite-chamfered-bezel-set-solitaire-necklace?variant=45132426379547",
+                            "https://www.withclarity.com/products/round-created-ruby-and-lab-diamond-classic-halo-pendant-with-studded-split-bale?variant=47661173440795",
+                            "https://www.withclarity.com/products/round-created-sapphire-and-lab-diamond-classic-solitaire-pendant-with-studded-bale?variant=47661167903003"
+                        ]
+                    },
+                    {
+                        "Cushion",
+
+                        [
+                            "https://www.withclarity.com/products/halo-cushion-lab-created-diamond-necklace?variant=46882526298395",
+                            "https://www.withclarity.com/products/classic-cushion-bezel-necklace?variant=48408681546011"
+                        ]
+                    },
+                    {
+                        "Heart",
+
+                        [
+                            "https://www.withclarity.com/products/classic-heart-bezel-necklace?variant=48409217597723",
+                        ]
+                    },
+                    {
+                        "Oval",
+
+                        [
+                            "https://www.withclarity.com/products/oval-sapphire-and-lab-diamond-classic-halo-pendant-with-studded-split-bale?variant=45600520634651",
+                        ]
+                    },
+                    {
+                        "Pear",
+
+                        [
+                            "https://www.withclarity.com/products/pear-created-ruby-and-lab-diamond-classic-halo-pendant-with-studded-split-bale?variant=47661171474715",
+                            "https://www.withclarity.com/products/pear-bezel-drop-necklace?variant=48408967053595"
+                        ]
+                    },
+                    {
+                        "Emerald",
+
+                        [
+                            "https://www.withclarity.com/products/emerald-bezel-drop-necklace?variant=48409146032411"
+                        ]
+                    },
+                }
+            },
+            {
+                "Bracelets",
+                new Dictionary<string, string[]>
+                {
+                    {
+                        "Round",
+
+                        [
+                            "https://www.withclarity.com/products/round-with-trailing-round-and-marquise-tennis-bracelet?variant=48700537045275",
+                            "https://www.withclarity.com/products/round-station-tennis-bracelet?variant=48700533965083"
+                        ]
+                    },
+                    {
+                        "Emerald",
+
+                        [
+                            "https://www.withclarity.com/products/bezeled-princess-station-with-emeralds-tennis-bracelet?variant=48700563030299",
+                            "https://www.withclarity.com/products/half-bezeled-emerald-east-west-tennis-bracelet?variant=48700531081499"
+                        ]
+                    },
+                    {
+                        "Oval",
+
+                        [
+                            "https://www.withclarity.com/products/half-pave-bezel-bangle?variant=48409312755995",
+                            "https://www.withclarity.com/products/oval-with-trailing-round-and-emeralds-tennis-bracelet?variant=48700541305115",
+                            "https://www.withclarity.com/products/graduating-oval-tennis-bracelet?variant=48702882251035"
+                        ]
+                    },
+                    {
+                        "Heart",
+
+                        [
+                            "https://www.withclarity.com/products/half-pave-heart-bangle?variant=48409085837595",
+                            "https://www.withclarity.com/products/multi-heart-bezel-bangle?variant=48409563037979",
+                            "https://www.withclarity.com/products/bezeled-heart-station-tennis-bracelet?variant=48700538257691",
+                        ]
+                    },
+                    {
+                        "Pear",
+
+                        [
+                            "https://www.withclarity.com/products/graduating-pear-tennis-bracelet?variant=48700552315163"
+                        ]
+                    },
+                }
+            },
+        };
+
+        private static int RandomKarat()
         {
-            public Data data { get; set; }
+            Random random = new Random();
+            int[] karats = { 18, 24 };
+            int index = random.Next(karats.Length);
+            int randomKarat = karats[index];
+            return randomKarat;
         }
 
         private readonly ApplicationDbContext _context;
+
         public SeedController(ApplicationDbContext context)
         {
             _context = context;
-        }
-
-        private async Task<HtmlDocument?> GetAndLoadHtml(string url)
-        {
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3");
-
-            try
-            {
-                string html = await client.GetStringAsync(url);
-                var doc = new HtmlDocument();
-                doc.LoadHtml(html);
-                return doc;
-            }
-            catch (HttpRequestException ex)
-            {
-                Console.WriteLine($"Request error: {ex.Message}");
-                return null;
-            }
         }
 
         [HttpGet("/test")]
@@ -154,162 +210,218 @@ namespace backend.Controllers
             return Ok("ahihi");
         }
 
-        [HttpGet("/diamond")]
+        [HttpGet("/crawler/2")]
         public async Task<IActionResult> AddDiamond()
         {
-            var url = "https://vportalwithclarity.com/fetchdirectdiamond/";
-
-            // Create the JSON payload
-            var payload = new
+            foreach (var shape in _shapes)
             {
-                filter = new object[]
+                var shapeModel = _context.Shapes.FirstOrDefault(x => x.Name == shape);
+                var diamondList = await CrawlHelper.CrawlDiamond(shapeModel);
+                foreach (var diamond in diamondList)
                 {
-                new { shapes = new[] { "Round" } },
-                new { cuts = new[] { 0, 1, 2, 3, 4 } },
-                new { colors = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 } },
-                new { claritys = new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 } },
-                new { labs = new int[] { } },
-                new { polish = new[] { 0, 1, 2, 3 } },
-                new { symmetrys = new[] { 0, 1, 2, 3 } },
-                new { price = "100.00,700000.00" },
-                new { carat = "0.25,20.00" },
-                new { page = 2 },
-                new { orderBy = "Shape" },
-                new { sortBy = "ASC" },
-                new { lwratio = "0.9,2.75" },
-                new { fluorescences = new[] { 0, 1, 2, 3 } },
-                new { sku = "" },
-                new { table = "40,90" },
-                new { depth = "40,90" },
-                new { type = "" },
-                new { diamond_type = "lab" },
-                new { cert_num = "" },
-                new { quick_ship_diamonds = "N" },
-                new { Appointment = "" },
-                new { VaultDiscount = "No" },
-                new { reports = "" },
-                new { color_intensity = new int[] { } }
-                }
-            };
-
-            // Serialize the payload to JSON
-            var jsonPayload = System.Text.Json.JsonSerializer.Serialize(payload);
-
-            // Set up the HttpClient
-            using (var httpClient = new HttpClient())
-            {
-                // Set up the headers
-                httpClient.DefaultRequestHeaders.Add("Origin", "https://www.withclarity.com");
-                httpClient.DefaultRequestHeaders.Referrer = new Uri("https://www.withclarity.com/");
-
-                // Create the content
-                var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
-
-                // Send the POST request
-                var response = await httpClient.PostAsync(url, content);
-
-                // Read the response (optional)
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var root = JsonConvert.DeserializeObject<Root>(responseContent);
-                await Console.Out.WriteLineAsync(root.data.liveDiamondData.diamond[0].diamond_name);
-                foreach (Diamond diamond in root.data.liveDiamondData.diamond)
-                {
-                    await Console.Out.WriteLineAsync(diamond.diamond_name);
+                    await _context.Diamonds.AddAsync(diamond);
                 }
             }
-            return Ok("ahihi");
+            await _context.SaveChangesAsync();
+
+            return Ok("add ok");
         }
 
-        [HttpGet("/setting-variant")]
-        public async Task<IActionResult> AddSettingAndVariant()
+        [HttpGet("/crawler/3")]
+        public async Task<IActionResult> AddAccessory()
         {
-
-            string url = "https://www.withclarity.com/collections/engagement-rings";
-            var doc = await GetAndLoadHtml(url);
-            var options = doc?.DocumentNode.SelectNodes("//*[@id=\"ProductSelect-setting-product-template\"]/option");
-
-            if (options != null)
+            List<Accessory> accessories = new List<Accessory>();
+            //string url =
+            //"https://www.withclarity.com/products/kite-set-round-lab-created-diamond-solitaire-pendant?variant=46588271591707";
+            //var accessoryModel = await CrawlHelper.CrawlAccessory(url);
+            foreach (var accessoryType in _accessory.Keys)
             {
-                foreach (var node in options)
+                var typeModel = _context.AccessoryTypes.FirstOrDefault(x =>
+                    x.Name == accessoryType
+                );
+                foreach (var shape in _accessory[accessoryType].Keys)
                 {
-                    string[] a = node.InnerText.Trim().Split(" / ");
-                    string imageUrl = node.Attributes["data-variant-featured-img"].Value;
-                    var price = Convert.ToDouble(node.Attributes["data-price-without-currency"].Value) / 100;
-                    var material = a[0];
-                    var shape = a[1];
-                    new Variant
+                    var shapeModel = _context.Shapes.FirstOrDefault(x => x.Name == shape);
+                    foreach (string url in _accessory[accessoryType][shape])
                     {
-                        //Material = 
-                    };
+                        var temp = await Crawler.CrawlHelper.CrawlAccessory(url);
+                        var accessoryModel = new Accessory
+                        {
+                            Name = temp["Name"],
+                            Karat = RandomKarat(),
+                            MaterialWeight = float.Parse(temp["Price"]) / (float)56.13,
+                        };
+                        List<AccessoryImage> accessoryImages = new List<AccessoryImage>();
+                        accessoryImages.Add(
+                            new AccessoryImage { Accessory = accessoryModel, Url = temp["Image"], }
+                        );
+                        if (temp["Image"].Contains("FRONTVIEW"))
+                        {
+                            accessoryImages.Add(
+                                new AccessoryImage
+                                {
+                                    Url = temp["Image"].Replace("FRONTVIEW", "SIDEVIEW"),
+                                }
+                            );
+                            accessoryImages.Add(
+                                new AccessoryImage
+                                {
+                                    Url = temp["Image"].Replace("FRONTVIEW", "RIGHTVIEW"),
+                                }
+                            );
+                        }
+                        accessoryModel.AccessoryType = typeModel;
+                        accessoryModel.Shape = shapeModel;
+                        accessoryModel.AccessoryImages = accessoryImages;
+                        //accessories.Add(accessoryModel);
+                        _context.Accessories.Add(accessoryModel);
+                    }
                 }
             }
-            else
-            {
-                await Console.Out.WriteLineAsync("No options found");
-            }
-            return Ok("ahihi");
+            await _context.SaveChangesAsync();
+
+            return Ok("ahii");
         }
 
-        [HttpGet("/shape")]
+        private static string ReplaceCaseInsensitive(
+            string input,
+            string search,
+            string replacement
+        )
+        {
+            string result = Regex.Replace(
+                input,
+                Regex.Escape(search),
+                replacement.Replace("$", "$$"),
+                RegexOptions.IgnoreCase
+            );
+            return result;
+        }
+
+        [HttpGet("/crawler/4")]
+        public async Task<IActionResult> AddRings()
+        {
+            var typeModel = _context.AccessoryTypes.FirstOrDefault(x => x.Name == "Rings");
+            //var test = new List<Accessory>();
+            foreach (string shape in this._shapes)
+            {
+                var shapeModel = _context.Shapes.FirstOrDefault(x => x.Name == shape);
+                var rings = await Crawler.CrawlHelper.CrawlRing(shapeModel);
+                foreach (var item in rings)
+                {
+                    var accessoryModel = new Accessory
+                    {
+                        Name = item["Name"],
+                        Karat = RandomKarat(),
+                        MaterialWeight = float.Parse(item["Price"]) / (float)56.13,
+                    };
+                    accessoryModel.AccessoryType = typeModel;
+                    accessoryModel.Shape = shapeModel;
+
+                    List<AccessoryImage> accessoryImages = new List<AccessoryImage>();
+                    accessoryImages.Add(
+                        new AccessoryImage { Accessory = accessoryModel, Url = item["Image"], }
+                    );
+                    bool contains =
+                        item["Image"].IndexOf("FRONTVIEW_800x", StringComparison.OrdinalIgnoreCase)
+                        >= 0;
+                    if (item["Image"].Contains("FRONTVIEW_800x"))
+                    {
+                        accessoryImages.Add(
+                            new AccessoryImage
+                            {
+                                Url = ReplaceCaseInsensitive(
+                                    item["Image"],
+                                    "FRONTVIEW",
+                                    "SIDEVIEW"
+                                ),
+                            }
+                        );
+                        accessoryImages.Add(
+                            new AccessoryImage
+                            {
+                                Url = ReplaceCaseInsensitive(
+                                    item["Image"],
+                                    "FRONTVIEW",
+                                    "PROFILEVIEW"
+                                ),
+                            }
+                        );
+                    }
+                    else if (item["Image"].Contains("frontview_800x"))
+                    {
+                        accessoryImages.Add(
+                            new AccessoryImage
+                            {
+                                Url = ReplaceCaseInsensitive(
+                                    item["Image"],
+                                    "frontview",
+                                    "sideview"
+                                ),
+                            }
+                        );
+                        accessoryImages.Add(
+                            new AccessoryImage
+                            {
+                                Url = ReplaceCaseInsensitive(
+                                    item["Image"],
+                                    "frontview",
+                                    "profileview"
+                                ),
+                            }
+                        );
+                    }
+                    accessoryModel.AccessoryImages = accessoryImages;
+                    _context.Accessories.Add(accessoryModel);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            return Ok("ok ahihi");
+        }
+
+        //[HttpGet("/crawler/4")]
+        //public async Task<IActionResult> AddAcc1()
+        //{
+        //    await AddRings(
+        //        [
+        //            "Round",
+        //            "Emerald",
+        //            "Heart",
+        //            "Pear",
+        //            "Oval",
+        //            "Cushion",
+        //            "Princess",
+        //            "Radiant",
+        //            "Marquise",
+        //            "Asscher"
+        //        ]
+        //    );
+        //    return Ok("ahihi");
+        //}
+
+        [HttpGet("/crawler/1")]
         public IActionResult AddShape()
         {
             foreach (string shape in this._shapes)
             {
-                var shapeModel = new Shape
-                {
-                    Name = shape
-                };
+                var shapeModel = new Shape { Name = shape };
                 _context.Shapes.Add(shapeModel);
             }
-            _context.SaveChanges();
-            return Ok("add ok");
-        }
-
-        [HttpGet("/material")]
-        public IActionResult AddMaterial()
-        {
-            string[] materials = [
-              "14KT White Gold",
-              "14KT Yellow Gold",
-              "14KT Rose Gold",
-              "18KT White Gold",
-              "18KT Yellow Gold",
-              "18KT Rose Gold",
-              "Platinum",
-              "14KT White & Yellow Gold",
-              "14KT White & Rose Gold",
-              "18KT White & Yellow Gold",
-              "18KT White & Rose Gold"
-            ];
-            foreach (string material in materials)
+            Dictionary<string, double> settingTypes = new Dictionary<string, double>
             {
-                var materialModel = new Material
-                {
-                    Name = material
-                };
-                _context.Materials.Add(materialModel);
-            }
-            _context.SaveChanges();
-            return Ok("add ok");
-        }
-
-        [HttpGet("/settingtype")]
-        public IActionResult AddSettingType()
-        {
-            string[] settingTypes = [
-              "Engagement Ring",
-              "Earrings",
-              "Necklaces",
-              "Rings",
-              "Bracelets",
-            ];
-            foreach (string settingType in settingTypes)
+                { "Earrings", 200 },
+                { "Necklaces", 400 },
+                { "Rings", 150 },
+                { "Bracelets", 300 }
+            };
+            foreach (string settingType in settingTypes.Keys)
             {
-                var settingTypeModel = new SettingType
+                var settingTypeModel = new AccessoryType
                 {
-                    Name = settingType
+                    Name = settingType,
+                    ProcessingPrice = settingTypes[settingType]
                 };
-                _context.SettingTypes.Add(settingTypeModel);
+                _context.AccessoryTypes.Add(settingTypeModel);
             }
             _context.SaveChanges();
             return Ok("add ok");

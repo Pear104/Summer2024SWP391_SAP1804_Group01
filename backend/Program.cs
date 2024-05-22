@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using backend.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +12,11 @@ namespace backend
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder
+                .Services.AddControllers()
+                .AddJsonOptions(x =>
+                    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
+                );
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -26,13 +31,16 @@ namespace backend
             // Add CORS
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy(name: "AllowedOrigins",
-                                  policy =>
-                                  {
-                                      policy.WithOrigins("http://localhost:3000")
-                                      .AllowAnyHeader()
-                                      .AllowAnyMethod();
-                                  });
+                options.AddPolicy(
+                    name: "AllowedOrigins",
+                    policy =>
+                    {
+                        policy
+                            .WithOrigins("http://localhost:3000")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    }
+                );
             });
 
             var app = builder.Build();
@@ -46,8 +54,11 @@ namespace backend
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseCors("AllowedOrigins");
 
+            app.UseRouting();
+
+            app.UseAuthorization();
 
             app.MapControllers();
 

@@ -3,16 +3,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models
 {
-    [Table("material")]
-    public class Material
+    [Table("accessory_type")]
+    public class AccessoryType
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("material_id")]
+        [Column("accessory_type_id")]
         public long Id { get; set; }
 
         [Column("name")]
         public string Name { get; set; } = string.Empty;
-        public List<Variant> Variants { get; set; } = new List<Variant>();
+
+        [Column("processing_price")]
+        public double ProcessingPrice { get; set; }
+
+        public List<Accessory> Accessories { get; set; } = new List<Accessory>();
     }
 }
