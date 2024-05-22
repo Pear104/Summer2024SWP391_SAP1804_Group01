@@ -10,7 +10,7 @@ namespace backend.Models
     public class Role
     {
         [Column("role_id")]
-        public int RoleId { get; set; }
+        public long RoleId { get; set; }
         [Column("role_name")]
         public string RoleName { get; set; } = string.Empty;
         public List<Account> Accounts { get; set; } = new List<Account>();
