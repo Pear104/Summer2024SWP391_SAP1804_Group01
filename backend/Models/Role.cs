@@ -13,5 +13,7 @@ namespace backend.Models
         public int RoleId { get; set; }
         [Column("role_name")]
         public string RoleName { get; set; } = string.Empty;
+        public List<Account> Accounts { get; set; } = new List<Account>();
+        
     }
 }

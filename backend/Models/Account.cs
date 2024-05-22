@@ -13,6 +13,10 @@ namespace backend.Models
         public long Id { get; set; }
         [Column("role_id")]
         public long RoleId { get; set; }
+        
+        public Role Role { get; set; } = new Role();
+        public Rank Rank { get; set; } = new Rank();
+
         [Column("rank_id")]
         public long RankId { get; set; }
         [Column("name")]

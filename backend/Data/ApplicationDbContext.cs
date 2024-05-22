@@ -14,6 +14,9 @@ namespace backend.Data
         public DbSet<Accessory> Accessories { get; set; }
         public DbSet<AccessoryType> AccessoryTypes { get; set; }
         public DbSet<AccessoryImage> VariantImages { get; set; }
+        public DbSet<Account> Accounts { get; set; }
+        public DbSet<Rank> Ranks { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -29,6 +32,10 @@ namespace backend.Data
             builder.Entity<AccessoryType>().Property(o => o.Id).ValueGeneratedOnAdd();
 
             builder.Entity<AccessoryImage>().Property(o => o.Id).ValueGeneratedOnAdd();
+
+            builder.Entity<Account>().Property(o => o.Id).ValueGeneratedOnAdd();
+            builder.Entity<Rank>().Property(o => o.RankId).ValueGeneratedOnAdd();
+            builder.Entity<Role>().Property(o => o.RoleId).ValueGeneratedOnAdd();
 
             //Them khoa ngoai giua Setting voi SettingStyle
             builder
@@ -57,6 +64,20 @@ namespace backend.Data
                 .HasOne(o => o.Shape)
                 .WithMany(o => o.Accessories)
                 .HasForeignKey(o => o.ShapeId);
+
+            //Them khoa ngoai giua Account voi Role
+            builder
+                .Entity<Account>()
+                .HasOne(o => o.Role)
+                .WithMany(o => o.Accounts)
+                .HasForeignKey(o => o.RoleId);
+
+            //Them khoa ngoai giua Account voi Rank
+            builder
+                .Entity<Account>()
+                .HasOne(o => o.Rank)
+                .WithMany(o => o.Accounts)
+                .HasForeignKey(o => o.RankId);
 
             //Example
 

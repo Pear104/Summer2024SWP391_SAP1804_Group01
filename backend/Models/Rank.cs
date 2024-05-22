@@ -17,6 +17,7 @@ namespace backend.Models
         public float Discount { get; set; }
         [Column("reward_point")]
         public int RewardPoint { get; set; }
+        public List<Account> Accounts { get; set; } = new List<Account>();
         
     }
 }
