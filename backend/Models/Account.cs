@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models
 {
@@ -47,5 +47,7 @@ namespace backend.Models
         public List<Order> OrdersOfCustomer { get; set; } = new List<Order>();
         public List<Order> OrdersOfSaleStaff { get; set; } = new List<Order>();
         public List<Order> OrdersOfDeliveryStaff { get; set; } = new List<Order>();
+
+        //Ánh: Chưa rõ warranty request nên thêm vào ntn.
     }
 }
