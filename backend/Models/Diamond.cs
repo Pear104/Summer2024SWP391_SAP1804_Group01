@@ -9,48 +9,48 @@ namespace backend.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("diamond_id")]
-        public long Id { get; set; }
+        public long DiamondId { get; set; }
 
         [Column("lab")]
-        public string Lab { get; set; }
+        public string Lab { get; set; } = string.Empty;
 
         [Column("certificate_number")]
         public long CertificateNumber { get; set; }
 
         [Column("certificate_url")]
-        public string CertificateUrl { get; set; }
+        public string CertificateUrl { get; set; } = string.Empty;
 
         [Column("image_url")]
-        public string ImageUrl { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
 
         [Column("carat")]
         public float Carat { get; set; }
 
         [Column("cut")]
-        public string Cut { get; set; }
+        public string Cut { get; set; } = string.Empty;
 
         [Column("color")]
-        public string Color { get; set; }
+        public string Color { get; set; } = string.Empty;
 
         [Column("clarity")]
-        public string Clarity { get; set; }
+        public string Clarity { get; set; } = string.Empty;
 
         [Column("polish")]
-        public string Polish { get; set; }
+        public string Polish { get; set; } = string.Empty;
 
         [Column("symmetry")]
-        public string Symmetry { get; set; }
+        public string Symmetry { get; set; } = string.Empty;
 
         [Column("fluorescence")]
-        public string Fluorescence { get; set; }
+        public string Fluorescence { get; set; } = string.Empty;
 
         [Column("availability")]
         public bool Availability { get; set; } = true;
 
         [Column("shape_id")]
         public long ShapeId { get; set; }
-        public Shape Shape { get; set; }
+        public Shape Shape { get; set; } = new Shape();
 
-
+        public List<OrderDetail> OrderDetails = new List<OrderDetail>();
     }
 }

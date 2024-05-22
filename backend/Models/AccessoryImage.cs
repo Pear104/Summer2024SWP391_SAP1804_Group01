@@ -9,13 +9,13 @@ namespace backend.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("image_id")]
-        public long Id { get; set; }
+        public long AccessoryImageId { get; set; }
 
         [Column("image_url")]
         public string Url { get; set; } = string.Empty;
 
         [Column("accessory_id")]
         public long AccessoryId { get; set; }
-        public Accessory Accessory { get; set; }
+        public Accessory Accessory { get; set; } = new Accessory();
     }
 }

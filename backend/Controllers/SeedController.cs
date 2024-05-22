@@ -255,18 +255,12 @@ namespace backend.Controllers
                         accessoryImages.Add(
                             new AccessoryImage { Accessory = accessoryModel, Url = temp["Image"], }
                         );
-                        if (temp["Image"].Contains("FRONTVIEW"))
+                        if (temp["Image"].Contains("FRONTVIEW_400x"))
                         {
                             accessoryImages.Add(
                                 new AccessoryImage
                                 {
                                     Url = temp["Image"].Replace("FRONTVIEW", "SIDEVIEW"),
-                                }
-                            );
-                            accessoryImages.Add(
-                                new AccessoryImage
-                                {
-                                    Url = temp["Image"].Replace("FRONTVIEW", "RIGHTVIEW"),
                                 }
                             );
                         }

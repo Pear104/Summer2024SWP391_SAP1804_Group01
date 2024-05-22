@@ -9,7 +9,7 @@ namespace backend.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("accessory_type_id")]
-        public long Id { get; set; }
+        public long AccessoryTypeId { get; set; }
 
         [Column("name")]
         public string Name { get; set; } = string.Empty;

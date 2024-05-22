@@ -1,9 +1,9 @@
-﻿using System.Text;
-using backend.Models;
+﻿using backend.Models;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Edge;
+using System.Text;
 
 namespace backend.Crawler
 {
@@ -90,7 +90,7 @@ namespace backend.Crawler
                         CertificateUrl = diamond.cert_url,
                         ImageUrl = diamond.image_file_url,
                         Availability = true,
-                        ShapeId = shapeModel.Id,
+                        ShapeId = shapeModel.ShapeId,
                         Lab = diamond.lab,
                         Shape = shapeModel
                     };

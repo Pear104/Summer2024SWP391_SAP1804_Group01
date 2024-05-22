@@ -9,7 +9,7 @@ namespace backend.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("shape_id")]
-        public long Id { get; set; }
+        public long ShapeId { get; set; }
 
         [Column("name")]
         public string Name { get; set; } = string.Empty;

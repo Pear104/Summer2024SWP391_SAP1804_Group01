@@ -1,32 +1,28 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models
 {
-    [Table("oder_detail")]
+    [Table("order_detail")]
     public class OrderDetail
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("order_detail_id")]
-        public long OrderDetailID { get; set; }
+        public long OrderDetailId { get; set; }
         [Column("size")]
-        public float? size { get; set; }
+        public float? Size { get; set; }
         [Column("item_price")]
         public double ItemPrice { get; set; }
         [Column("order_id")]
-        public long OrderID { get; set; }
-        public Order Order {get;set;}
+        public long OrderId { get; set; }
+        public Order Order { get; set; } = new Order();
         [Column("diamond_id")]
-        public long DiamondID { get; set; }
-        public Diamond Diamond {get;set;} = null;
+        public long DiamondId { get; set; }
+        public Diamond Diamond { get; set; } = new Diamond();
         [Column("accessory_id")]
-        public long AccessoryID { get; set; }
-        public Accessory Accessory {get; set;} = null;
+        public long AccessoryId { get; set; }
+        public Accessory Accessory { get; set; } = new Accessory();
 
     }
 }

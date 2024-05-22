@@ -8,34 +8,35 @@ namespace backend.Data
         public ApplicationDbContext(DbContextOptions options)
             : base(options) { }
 
-        // Diamond + Setting Section
         public DbSet<Shape> Shapes { get; set; }
         public DbSet<Diamond> Diamonds { get; set; }
         public DbSet<Accessory> Accessories { get; set; }
         public DbSet<AccessoryType> AccessoryTypes { get; set; }
-        public DbSet<AccessoryImage> VariantImages { get; set; }
+        public DbSet<AccessoryImage> AccessoryImages { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Rank> Ranks { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Promotion> Promotions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
-
             // Set Id auto increment
-            builder.Entity<Shape>().Property(o => o.Id).ValueGeneratedOnAdd();
-
-            builder.Entity<Diamond>().Property(o => o.Id).ValueGeneratedOnAdd();
-
-            builder.Entity<Accessory>().Property(o => o.Id).ValueGeneratedOnAdd();
-
-            builder.Entity<AccessoryType>().Property(o => o.Id).ValueGeneratedOnAdd();
-
-            builder.Entity<AccessoryImage>().Property(o => o.Id).ValueGeneratedOnAdd();
-
-            builder.Entity<Account>().Property(o => o.Id).ValueGeneratedOnAdd();
+            builder.Entity<Shape>().Property(o => o.ShapeId).ValueGeneratedOnAdd();
+            builder.Entity<Diamond>().Property(o => o.DiamondId).ValueGeneratedOnAdd();
+            builder.Entity<Accessory>().Property(o => o.AccessoryId).ValueGeneratedOnAdd();
+            builder.Entity<AccessoryType>().Property(o => o.AccessoryTypeId).ValueGeneratedOnAdd();
+            builder
+                .Entity<AccessoryImage>()
+                .Property(o => o.AccessoryImageId)
+                .ValueGeneratedOnAdd();
+            builder.Entity<Account>().Property(o => o.AccountId).ValueGeneratedOnAdd();
             builder.Entity<Rank>().Property(o => o.RankId).ValueGeneratedOnAdd();
             builder.Entity<Role>().Property(o => o.RoleId).ValueGeneratedOnAdd();
+            builder.Entity<Order>().Property(o => o.OrderId).ValueGeneratedOnAdd();
+            builder.Entity<OrderDetail>().Property(o => o.OrderDetailId).ValueGeneratedOnAdd();
+            builder.Entity<Promotion>().Property(o => o.PromotionId).ValueGeneratedOnAdd();
 
             //Them khoa ngoai giua Setting voi SettingStyle
             builder
@@ -44,7 +45,7 @@ namespace backend.Data
                 .WithMany(o => o.Accessories)
                 .HasForeignKey(o => o.AccessoryTypeId);
 
-            //Them khoa ngoai giua VariantImage voi Variant
+            //Them khoa ngoai giua AccessoryImage voi Accessory
             builder
                 .Entity<AccessoryImage>()
                 .HasOne(o => o.Accessory)
@@ -78,6 +79,52 @@ namespace backend.Data
                 .HasOne(o => o.Rank)
                 .WithMany(o => o.Accounts)
                 .HasForeignKey(o => o.RankId);
+
+            //Them khoa ngoai giua OrderDetail voi Order
+            builder
+                .Entity<OrderDetail>()
+                .HasOne(o => o.Order)
+                .WithMany(o => o.OrderDetails)
+                .HasForeignKey(o => o.OrderId);
+
+            //Them khoa ngoai giua Promotion voi Order
+            builder
+                .Entity<Order>()
+                .HasOne(o => o.Promotion)
+                .WithMany(o => o.Orders)
+                .HasForeignKey(o => o.PromotionId);
+
+            //Them khoa ngoai giua Customer voi Order
+            builder
+                .Entity<Order>()
+                .HasOne(o => o.Customer)
+                .WithMany(a => a.OrdersOfCustomer)
+                .HasForeignKey(o => o.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            //Them khoa ngoai giua SaleStaff voi Order
+            builder
+                .Entity<Order>()
+                .HasOne(o => o.SaleStaff)
+                .WithMany(a => a.OrdersOfSaleStaff)
+                .HasForeignKey(o => o.SaleStaffId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            //Them khoa ngoai giua DeliveryStaff voi Order
+            builder
+                .Entity<Order>()
+                .HasOne(o => o.DeliveryStaff)
+                .WithMany(a => a.OrdersOfDeliveryStaff)
+                .HasForeignKey(o => o.DeliveryStaffId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            //Them khoa ngoai giua Diamond voi OrderDetail
+            builder
+                .Entity<OrderDetail>()
+                .HasOne(o => o.Diamond)
+                .WithMany(o => o.OrderDetails)
+                .HasForeignKey(o => o.DiamondId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //Example
 
@@ -113,6 +160,135 @@ namespace backend.Data
             //    .HasOne(o => o.User)
             //    .WithOne(o => o.)
             //    .HasForeignKey(o => o.UserID);
+
+            base.OnModelCreating(builder);
+
+            // Add test data
+            List<Role> roles = new List<Role>
+            {
+                new Role { RoleId = 1, RoleName = "Customer" },
+                new Role { RoleId = 2, RoleName = "SaleStaff" },
+                new Role { RoleId = 3, RoleName = "DeliveryStaff" },
+                new Role { RoleId = 4, RoleName = "WarrantyStaff" },
+                new Role { RoleId = 5, RoleName = "Manager" },
+                new Role { RoleId = 6, RoleName = "Administrator" },
+            };
+
+            List<Rank> ranks = new List<Rank>
+            {
+                new Rank
+                {
+                    RankId = 1,
+                    RankName = "Bronze",
+                    Discount = 0.025f,
+                    RewardPoint = 0
+                },
+                new Rank
+                {
+                    RankId = 2,
+                    RankName = "Silver",
+                    Discount = 0.05f,
+                    RewardPoint = 500
+                },
+                new Rank
+                {
+                    RankId = 3,
+                    RankName = "Gold",
+                    Discount = 0.075f,
+                    RewardPoint = 1000
+                },
+                new Rank
+                {
+                    RankId = 4,
+                    RankName = "Platinum",
+                    Discount = 0.1f,
+                    RewardPoint = 1500
+                },
+                new Rank
+                {
+                    RankId = 5,
+                    RankName = "Emerald",
+                    Discount = 0.125f,
+                    RewardPoint = 2000
+                },
+                new Rank
+                {
+                    RankId = 6,
+                    RankName = "Diamond",
+                    Discount = 0.15f,
+                    RewardPoint = 2500
+                },
+            };
+            builder.Entity<Role>().HasData(roles);
+            builder.Entity<Rank>().HasData(ranks);
+
+            List<Account> accounts = new List<Account>
+            {
+                new Account
+                {
+                    RoleId = 1,
+                    RankId = 1,
+                    AccountId = 1,
+                    Name = "ToiLaCustomer",
+                    Email = "customer@gmail.com",
+                    Password = "12345"
+                },
+                //new Account
+                //{
+                //    RoleId = 2,
+                //    RankId = 2,
+                //    AccountId = 2,
+                //    Name = "ToiLaSaleStaff",
+                //    Email = "sale_staff@gmail.com",
+                //    Password = "12345"
+                //},
+                //new Account
+                //{
+                //    RoleId = 3,
+                //    RankId = 3,
+                //    AccountId = 3,
+                //    Name = "ToiLaDeliverystaff",
+                //    Email = "delivery_staff@gmail.com",
+                //    Password = "12345",
+                //},
+                //new Account
+                //{
+                //    RoleId = 4,
+                //    RankId = 4,
+                //    AccountId = 4,
+                //    Name = "ToiLaWarrantyStaff",
+                //    Email = "warranty_staff@gmail.com",
+                //    Password = "12345"
+                //},
+                //new Account
+                //{
+                //    RoleId = 5,
+                //    RankId = 5,
+                //    AccountId = 5,
+                //    Name = "ToiLaManager",
+                //    Email = "manager@gmail.com",
+                //    Password = "12345"
+                //},
+                //new Account
+                //{
+                //    RoleId = 6,
+                //    RankId = 6,
+                //    AccountId = 6,
+                //    Name = "ToiLaAdministrator",
+                //    Email = "administrator@gmail.com",
+                //    Password = "12345"
+                //},
+            };
+            //builder.Entity<Account>().HasData(accounts);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            // Configure the database provider and connection string
+            optionsBuilder.UseSqlServer("DefaultConnection");
+
+            // Enable sensitive data logging
+            optionsBuilder.EnableSensitiveDataLogging();
         }
     }
 }
