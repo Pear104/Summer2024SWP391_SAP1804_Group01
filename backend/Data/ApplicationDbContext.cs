@@ -22,6 +22,8 @@ namespace backend.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+
             // Set Id auto increment
             builder.Entity<Shape>().Property(o => o.ShapeId).ValueGeneratedOnAdd();
             builder.Entity<Diamond>().Property(o => o.DiamondId).ValueGeneratedOnAdd();
@@ -161,7 +163,6 @@ namespace backend.Data
             //    .WithOne(o => o.)
             //    .HasForeignKey(o => o.UserID);
 
-            base.OnModelCreating(builder);
 
             // Add test data
             List<Role> roles = new List<Role>
@@ -221,74 +222,6 @@ namespace backend.Data
             };
             builder.Entity<Role>().HasData(roles);
             builder.Entity<Rank>().HasData(ranks);
-
-            List<Account> accounts = new List<Account>
-            {
-                new Account
-                {
-                    RoleId = 1,
-                    RankId = 1,
-                    AccountId = 1,
-                    Name = "ToiLaCustomer",
-                    Email = "customer@gmail.com",
-                    Password = "12345"
-                },
-                //new Account
-                //{
-                //    RoleId = 2,
-                //    RankId = 2,
-                //    AccountId = 2,
-                //    Name = "ToiLaSaleStaff",
-                //    Email = "sale_staff@gmail.com",
-                //    Password = "12345"
-                //},
-                //new Account
-                //{
-                //    RoleId = 3,
-                //    RankId = 3,
-                //    AccountId = 3,
-                //    Name = "ToiLaDeliverystaff",
-                //    Email = "delivery_staff@gmail.com",
-                //    Password = "12345",
-                //},
-                //new Account
-                //{
-                //    RoleId = 4,
-                //    RankId = 4,
-                //    AccountId = 4,
-                //    Name = "ToiLaWarrantyStaff",
-                //    Email = "warranty_staff@gmail.com",
-                //    Password = "12345"
-                //},
-                //new Account
-                //{
-                //    RoleId = 5,
-                //    RankId = 5,
-                //    AccountId = 5,
-                //    Name = "ToiLaManager",
-                //    Email = "manager@gmail.com",
-                //    Password = "12345"
-                //},
-                //new Account
-                //{
-                //    RoleId = 6,
-                //    RankId = 6,
-                //    AccountId = 6,
-                //    Name = "ToiLaAdministrator",
-                //    Email = "administrator@gmail.com",
-                //    Password = "12345"
-                //},
-            };
-            //builder.Entity<Account>().HasData(accounts);
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            // Configure the database provider and connection string
-            optionsBuilder.UseSqlServer("DefaultConnection");
-
-            // Enable sensitive data logging
-            optionsBuilder.EnableSensitiveDataLogging();
         }
     }
 }

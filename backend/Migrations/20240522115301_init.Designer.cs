@@ -12,7 +12,7 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240522103026_init")]
+    [Migration("20240522115301_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -428,44 +428,44 @@ namespace backend.Migrations
                         new
                         {
                             RankId = 1L,
-                            Discount = 0f,
+                            Discount = 0.025f,
                             RankName = "Bronze",
                             RewardPoint = 0
                         },
                         new
                         {
                             RankId = 2L,
-                            Discount = 0f,
+                            Discount = 0.05f,
                             RankName = "Silver",
-                            RewardPoint = 0
+                            RewardPoint = 500
                         },
                         new
                         {
                             RankId = 3L,
-                            Discount = 0f,
+                            Discount = 0.075f,
                             RankName = "Gold",
-                            RewardPoint = 0
+                            RewardPoint = 1000
                         },
                         new
                         {
                             RankId = 4L,
-                            Discount = 0f,
+                            Discount = 0.1f,
                             RankName = "Platinum",
-                            RewardPoint = 0
+                            RewardPoint = 1500
                         },
                         new
                         {
                             RankId = 5L,
-                            Discount = 0f,
+                            Discount = 0.125f,
                             RankName = "Emerald",
-                            RewardPoint = 0
+                            RewardPoint = 2000
                         },
                         new
                         {
                             RankId = 6L,
-                            Discount = 0f,
+                            Discount = 0.15f,
                             RankName = "Diamond",
-                            RewardPoint = 0
+                            RewardPoint = 2500
                         });
                 });
 

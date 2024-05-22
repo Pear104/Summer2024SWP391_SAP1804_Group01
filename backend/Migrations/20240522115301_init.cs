@@ -285,12 +285,12 @@ namespace backend.Migrations
                 columns: new[] { "rank_id", "discount", "rank_name", "reward_point" },
                 values: new object[,]
                 {
-                    { 1L, 0f, "Bronze", 0 },
-                    { 2L, 0f, "Silver", 0 },
-                    { 3L, 0f, "Gold", 0 },
-                    { 4L, 0f, "Platinum", 0 },
-                    { 5L, 0f, "Emerald", 0 },
-                    { 6L, 0f, "Diamond", 0 }
+                    { 1L, 0.025f, "Bronze", 0 },
+                    { 2L, 0.05f, "Silver", 500 },
+                    { 3L, 0.075f, "Gold", 1000 },
+                    { 4L, 0.1f, "Platinum", 1500 },
+                    { 5L, 0.125f, "Emerald", 2000 },
+                    { 6L, 0.15f, "Diamond", 2500 }
                 });
 
             migrationBuilder.InsertData(

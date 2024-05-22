@@ -420,5 +420,71 @@ namespace backend.Controllers
             _context.SaveChanges();
             return Ok("add ok");
         }
+
+        [HttpGet("/crawler/5")]
+        public IActionResult AddAccount()
+        {
+            List<Account> accounts = new List<Account>
+            {
+                new Account
+                {
+                    RoleId = 1,
+                    RankId = 1,
+                    Name = "ToiLaCustomer",
+                    Email = "customer@gmail.com",
+                    Password = "12345"
+                },
+                new Account
+                {
+                    RoleId = 2,
+                    RankId = 2,
+                    Name = "ToiLaSaleStaff",
+                    Email = "sale_staff@gmail.com",
+                    Password = "12345"
+                },
+                new Account
+                {
+                    RoleId = 3,
+                    RankId = 3,
+                    Name = "ToiLaDeliverystaff",
+                    Email = "delivery_staff@gmail.com",
+                    Password = "12345",
+                },
+                new Account
+                {
+                    RoleId = 4,
+                    RankId = 4,
+                    Name = "ToiLaWarrantyStaff",
+                    Email = "warranty_staff@gmail.com",
+                    Password = "12345"
+                },
+                new Account
+                {
+                    RoleId = 5,
+                    RankId = 5,
+                    Name = "ToiLaManager",
+                    Email = "manager@gmail.com",
+                    Password = "12345"
+                },
+                new Account
+                {
+                    RoleId = 6,
+                    RankId = 6,
+                    Name = "ToiLaAdministrator",
+                    Email = "administrator@gmail.com",
+                    Password = "12345"
+                },
+            };
+            foreach (var account in accounts)
+            {
+                var role = _context.Roles.Find(account.RoleId);
+                var rank = _context.Ranks.Find(account.RankId);
+                account.Rank = rank;
+                account.Role = role;
+                _context.Accounts.Add(account);
+            }
+            _context.SaveChanges();
+            return Ok("ahii");
+        }
     }
 }
