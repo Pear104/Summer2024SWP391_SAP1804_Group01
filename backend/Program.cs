@@ -1,5 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using backend.Data;
+using backend.Interfaces;
+using backend.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend
@@ -42,7 +44,7 @@ namespace backend
                     }
                 );
             });
-
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
