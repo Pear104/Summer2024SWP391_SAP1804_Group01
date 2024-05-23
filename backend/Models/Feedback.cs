@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace backend.Models
 {
+    [Table("feedback")]
     public class Feedback
     {
         [Key]

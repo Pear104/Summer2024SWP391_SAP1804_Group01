@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models
 {
+    [Table("warranty_request")]
     public class WarrantyRequest
     {
         [Key]
