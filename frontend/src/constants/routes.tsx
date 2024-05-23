@@ -11,6 +11,8 @@ import ProductLayout from "../layouts/ProductLayout";
 import DiamondList from "../pages/product/diamond/DiamondList";
 import Test from "../pages/test/Test";
 import DiamondDetail from "../pages/product/diamond/DiamondDetail";
+import AccessoryList from "../pages/product/accessory/AccessoryList";
+import AccessoryDetail from "../pages/product/accessory/AccessoryDetail";
 
 const routes = [
   {
@@ -63,8 +65,16 @@ const routes = [
                 element: <DiamondList />,
               },
               {
-                element: <DiamondDetail />,
                 path: "diamond/detail",
+                element: <DiamondDetail />,
+              },
+              {
+                path: "accessory",
+                element: <AccessoryList />,
+              },
+              {
+                path: "accessory/detail",
+                element: <AccessoryDetail />,
               },
             ],
           },

@@ -22,6 +22,11 @@ namespace backend.Data
         public DbSet<WarrantyCard> WarrantyCards { get; set; }
         public DbSet<WarrantyRequest> WarrantyRequests { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
+        public DbSet<PriceRate> PriceRates { get; set; }
+        public DbSet<DiamondPriceList> DiamondPriceLists { get; set; }
+        public DbSet<MaterialPriceList> MaterialPriceLists { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -32,10 +37,6 @@ namespace backend.Data
             builder.Entity<Diamond>().Property(o => o.DiamondId).ValueGeneratedOnAdd();
             builder.Entity<Accessory>().Property(o => o.AccessoryId).ValueGeneratedOnAdd();
             builder.Entity<AccessoryType>().Property(o => o.AccessoryTypeId).ValueGeneratedOnAdd();
-            builder
-                .Entity<AccessoryImage>()
-                .Property(o => o.AccessoryImageId)
-                .ValueGeneratedOnAdd();
             builder.Entity<Account>().Property(o => o.AccountId).ValueGeneratedOnAdd();
             builder.Entity<Rank>().Property(o => o.RankId).ValueGeneratedOnAdd();
             builder.Entity<Role>().Property(o => o.RoleId).ValueGeneratedOnAdd();
@@ -43,10 +44,28 @@ namespace backend.Data
             builder.Entity<OrderDetail>().Property(o => o.OrderDetailId).ValueGeneratedOnAdd();
             builder.Entity<Promotion>().Property(o => o.PromotionId).ValueGeneratedOnAdd();
             builder.Entity<WarrantyCard>().Property(o => o.WarrantyCardId).ValueGeneratedOnAdd();
-            builder.Entity<WarrantyRequest>().Property(o => o.WarrantyRequestId).ValueGeneratedOnAdd();
             builder.Entity<Transaction>().Property(o => o.TransactionId).ValueGeneratedOnAdd();
+            builder.Entity<Blog>().Property(o => o.BlogId).ValueGeneratedOnAdd();
+            builder.Entity<Feedback>().Property(o => o.FeedbackId).ValueGeneratedOnAdd();
+            builder.Entity<PriceRate>().Property(o => o.PriceRateId).ValueGeneratedOnAdd();
+            builder
+                .Entity<DiamondPriceList>()
+                .Property(o => o.DiamondPriceListId)
+                .ValueGeneratedOnAdd();
+            builder
+                .Entity<MaterialPriceList>()
+                .Property(o => o.MaterialPriceListId)
+                .ValueGeneratedOnAdd();
+            builder
+                .Entity<AccessoryImage>()
+                .Property(o => o.AccessoryImageId)
+                .ValueGeneratedOnAdd();
+            builder
+                .Entity<WarrantyRequest>()
+                .Property(o => o.WarrantyRequestId)
+                .ValueGeneratedOnAdd();
 
-            //Them khoa ngoai giua Setting voi SettingStyle
+            //Them khoa ngoai giua Accessory voi AccessoryType
             builder
                 .Entity<Accessory>()
                 .HasOne(o => o.AccessoryType)
@@ -147,6 +166,34 @@ namespace backend.Data
                 .HasOne(o => o.WarrantyCard)
                 .WithMany(o => o.WarrantyRequests)
                 .HasForeignKey(o => o.WarrantyCardId);
+
+            //Them khoa ngoai giua Blog voi Author
+            builder
+                .Entity<Blog>()
+                .HasOne(o => o.Author)
+                .WithMany(o => o.Blogs)
+                .HasForeignKey(o => o.AuthorId);
+
+            //Them khoa ngoai giua PriceRate voi Account
+            builder
+                .Entity<PriceRate>()
+                .HasOne(o => o.Account)
+                .WithMany(o => o.PriceRates)
+                .HasForeignKey(o => o.AccountId);
+
+            //Them khoa ngoai giua Order voi Feedback
+            builder
+                .Entity<Feedback>()
+                .HasOne(o => o.Order)
+                .WithMany(o => o.Feedbacks)
+                .HasForeignKey(o => o.OrderId);
+
+            //Them khoa ngoai giua Order voi Feedback
+            builder
+                .Entity<Feedback>()
+                .HasOne(o => o.Accessory)
+                .WithMany(o => o.Feedbacks)
+                .HasForeignKey(o => o.AccessoryId);
 
             //Example
 

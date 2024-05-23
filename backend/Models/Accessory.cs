@@ -29,7 +29,7 @@ namespace backend.Models
         public Shape Shape { get; set; } = new Shape();
 
         public List<AccessoryImage> AccessoryImages { get; set; } = new List<AccessoryImage>();
-
         public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+        public List<Feedback> Feedbacks { get; set; } = new List<Feedback>();
     }
 }

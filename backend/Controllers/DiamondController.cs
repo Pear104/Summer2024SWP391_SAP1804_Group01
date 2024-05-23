@@ -27,7 +27,7 @@ namespace backend.Controllers
         [HttpGet("{id}")]
         public async Task<Diamond> Get(long id)
         {
-            return await _context.Diamonds.FindAsync(id);
+            return await _context.Diamonds.Include(x => x.Shape).FirstOrDefaultAsync(d => d.DiamondId == id); ;
         }
 
         // POST api/<DiamondController>

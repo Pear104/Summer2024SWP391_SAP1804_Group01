@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models
 {
@@ -20,6 +20,6 @@ namespace backend.Models
         public string TransactionStatus { get; set; } = String.Empty;
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
-        
+
     }
 }

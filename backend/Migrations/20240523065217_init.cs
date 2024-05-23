@@ -28,6 +28,39 @@ namespace backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "diamond_price_list",
+                columns: table => new
+                {
+                    diamond_price_list_id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    eff_time = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    min_carat_eff = table.Column<float>(type: "real", nullable: false),
+                    max_carat_eff = table.Column<float>(type: "real", nullable: false),
+                    color = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    clarity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    unit_price = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_diamond_price_list", x => x.diamond_price_list_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "material_price_list",
+                columns: table => new
+                {
+                    material_price_list_id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    karat = table.Column<int>(type: "int", nullable: false),
+                    eff_time = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    unit_price = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_material_price_list", x => x.material_price_list_id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "promotion",
                 columns: table => new
                 {
@@ -81,6 +114,21 @@ namespace backend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_shape", x => x.shape_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "warranty_card",
+                columns: table => new
+                {
+                    warranty_card_id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    order_detail_id = table.Column<long>(type: "bigint", nullable: false),
+                    start_time = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    end_time = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_warranty_card", x => x.warranty_card_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -179,6 +227,28 @@ namespace backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "blog",
+                columns: table => new
+                {
+                    blog_id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    author_id = table.Column<long>(type: "bigint", nullable: false),
+                    title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_blog", x => x.blog_id);
+                    table.ForeignKey(
+                        name: "FK_blog_account_author_id",
+                        column: x => x.author_id,
+                        principalTable: "account",
+                        principalColumn: "account_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "order",
                 columns: table => new
                 {
@@ -226,6 +296,56 @@ namespace backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "price_rate",
+                columns: table => new
+                {
+                    price_rate_id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    account_id = table.Column<long>(type: "bigint", nullable: false),
+                    percent = table.Column<float>(type: "real", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_price_rate", x => x.price_rate_id);
+                    table.ForeignKey(
+                        name: "FK_price_rate_account_account_id",
+                        column: x => x.account_id,
+                        principalTable: "account",
+                        principalColumn: "account_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "warranty_request",
+                columns: table => new
+                {
+                    warranty_request_id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    warranty_staff_id = table.Column<long>(type: "bigint", nullable: false),
+                    warranty_card_id = table.Column<long>(type: "bigint", nullable: false),
+                    receive_time = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    return_time = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    warranty_status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_warranty_request", x => x.warranty_request_id);
+                    table.ForeignKey(
+                        name: "FK_warranty_request_account_warranty_staff_id",
+                        column: x => x.warranty_staff_id,
+                        principalTable: "account",
+                        principalColumn: "account_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_warranty_request_warranty_card_warranty_card_id",
+                        column: x => x.warranty_card_id,
+                        principalTable: "warranty_card",
+                        principalColumn: "warranty_card_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "accessory_image",
                 columns: table => new
                 {
@@ -246,6 +366,35 @@ namespace backend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "feedback",
+                columns: table => new
+                {
+                    feedback_id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    order_id = table.Column<long>(type: "bigint", nullable: false),
+                    accessory_id = table.Column<long>(type: "bigint", nullable: false),
+                    score = table.Column<int>(type: "int", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    content = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_feedback", x => x.feedback_id);
+                    table.ForeignKey(
+                        name: "FK_feedback_accessory_accessory_id",
+                        column: x => x.accessory_id,
+                        principalTable: "accessory",
+                        principalColumn: "accessory_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_feedback_order_order_id",
+                        column: x => x.order_id,
+                        principalTable: "order",
+                        principalColumn: "order_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "order_detail",
                 columns: table => new
                 {
@@ -255,7 +404,8 @@ namespace backend.Migrations
                     item_price = table.Column<double>(type: "float", nullable: false),
                     order_id = table.Column<long>(type: "bigint", nullable: false),
                     diamond_id = table.Column<long>(type: "bigint", nullable: false),
-                    accessory_id = table.Column<long>(type: "bigint", nullable: false)
+                    accessory_id = table.Column<long>(type: "bigint", nullable: false),
+                    warranty_card_id = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -274,6 +424,34 @@ namespace backend.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_order_detail_order_order_id",
+                        column: x => x.order_id,
+                        principalTable: "order",
+                        principalColumn: "order_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_order_detail_warranty_card_warranty_card_id",
+                        column: x => x.warranty_card_id,
+                        principalTable: "warranty_card",
+                        principalColumn: "warranty_card_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "transaction",
+                columns: table => new
+                {
+                    transaction_id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    order_id = table.Column<long>(type: "bigint", nullable: false),
+                    payment_method = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    transaction_status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_transaction", x => x.transaction_id);
+                    table.ForeignKey(
+                        name: "FK_transaction_order_order_id",
                         column: x => x.order_id,
                         principalTable: "order",
                         principalColumn: "order_id",
@@ -332,9 +510,24 @@ namespace backend.Migrations
                 column: "role_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_blog_author_id",
+                table: "blog",
+                column: "author_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_diamond_shape_id",
                 table: "diamond",
                 column: "shape_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_feedback_accessory_id",
+                table: "feedback",
+                column: "accessory_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_feedback_order_id",
+                table: "feedback",
+                column: "order_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_order_customer_id",
@@ -370,6 +563,32 @@ namespace backend.Migrations
                 name: "IX_order_detail_order_id",
                 table: "order_detail",
                 column: "order_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_order_detail_warranty_card_id",
+                table: "order_detail",
+                column: "warranty_card_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_price_rate_account_id",
+                table: "price_rate",
+                column: "account_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_transaction_order_id",
+                table: "transaction",
+                column: "order_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_warranty_request_warranty_card_id",
+                table: "warranty_request",
+                column: "warranty_card_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_warranty_request_warranty_staff_id",
+                table: "warranty_request",
+                column: "warranty_staff_id");
         }
 
         /// <inheritdoc />
@@ -379,7 +598,28 @@ namespace backend.Migrations
                 name: "accessory_image");
 
             migrationBuilder.DropTable(
+                name: "blog");
+
+            migrationBuilder.DropTable(
+                name: "diamond_price_list");
+
+            migrationBuilder.DropTable(
+                name: "feedback");
+
+            migrationBuilder.DropTable(
+                name: "material_price_list");
+
+            migrationBuilder.DropTable(
                 name: "order_detail");
+
+            migrationBuilder.DropTable(
+                name: "price_rate");
+
+            migrationBuilder.DropTable(
+                name: "transaction");
+
+            migrationBuilder.DropTable(
+                name: "warranty_request");
 
             migrationBuilder.DropTable(
                 name: "accessory");
@@ -389,6 +629,9 @@ namespace backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "order");
+
+            migrationBuilder.DropTable(
+                name: "warranty_card");
 
             migrationBuilder.DropTable(
                 name: "accessory_type");

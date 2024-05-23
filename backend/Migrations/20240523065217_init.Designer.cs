@@ -12,8 +12,8 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240523001658_init2")]
-    partial class init2
+    [Migration("20240523065217_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -180,6 +180,40 @@ namespace backend.Migrations
                     b.ToTable("account");
                 });
 
+            modelBuilder.Entity("backend.Models.Blog", b =>
+                {
+                    b.Property<long>("BlogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("blog_id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("BlogId"));
+
+                    b.Property<long>("AuthorId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("author_id");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("content");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("title");
+
+                    b.HasKey("BlogId");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("blog");
+                });
+
             modelBuilder.Entity("backend.Models.Diamond", b =>
                 {
                     b.Property<long>("DiamondId")
@@ -255,6 +289,111 @@ namespace backend.Migrations
                     b.HasIndex("ShapeId");
 
                     b.ToTable("diamond");
+                });
+
+            modelBuilder.Entity("backend.Models.DiamondPriceList", b =>
+                {
+                    b.Property<long>("DiamondPriceListId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("diamond_price_list_id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("DiamondPriceListId"));
+
+                    b.Property<string>("Clarity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("clarity");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("color");
+
+                    b.Property<DateTime>("EffTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("eff_time");
+
+                    b.Property<float>("MaxCaratEff")
+                        .HasColumnType("real")
+                        .HasColumnName("max_carat_eff");
+
+                    b.Property<float>("MinCaratEff")
+                        .HasColumnType("real")
+                        .HasColumnName("min_carat_eff");
+
+                    b.Property<double>("UnitPrice")
+                        .HasColumnType("float")
+                        .HasColumnName("unit_price");
+
+                    b.HasKey("DiamondPriceListId");
+
+                    b.ToTable("diamond_price_list");
+                });
+
+            modelBuilder.Entity("backend.Models.Feedback", b =>
+                {
+                    b.Property<long>("FeedbackId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("feedback_id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("FeedbackId"));
+
+                    b.Property<long>("AccessoryId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("accessory_id");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("content");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at");
+
+                    b.Property<long>("OrderId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("order_id");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int")
+                        .HasColumnName("score");
+
+                    b.HasKey("FeedbackId");
+
+                    b.HasIndex("AccessoryId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("feedback");
+                });
+
+            modelBuilder.Entity("backend.Models.MaterialPriceList", b =>
+                {
+                    b.Property<long>("MaterialPriceListId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("material_price_list_id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("MaterialPriceListId"));
+
+                    b.Property<DateTime>("EffTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("eff_time");
+
+                    b.Property<int>("Karat")
+                        .HasColumnType("int")
+                        .HasColumnName("karat");
+
+                    b.Property<double>("UnitPrice")
+                        .HasColumnType("float")
+                        .HasColumnName("unit_price");
+
+                    b.HasKey("MaterialPriceListId");
+
+                    b.ToTable("material_price_list");
                 });
 
             modelBuilder.Entity("backend.Models.Order", b =>
@@ -377,6 +516,34 @@ namespace backend.Migrations
                         .IsUnique();
 
                     b.ToTable("order_detail");
+                });
+
+            modelBuilder.Entity("backend.Models.PriceRate", b =>
+                {
+                    b.Property<long>("PriceRateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("price_rate_id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("PriceRateId"));
+
+                    b.Property<long>("AccountId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("account_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at");
+
+                    b.Property<float>("Percent")
+                        .HasColumnType("real")
+                        .HasColumnName("percent");
+
+                    b.HasKey("PriceRateId");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("price_rate");
                 });
 
             modelBuilder.Entity("backend.Models.Promotion", b =>
@@ -577,7 +744,7 @@ namespace backend.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("transaction");
                 });
 
             modelBuilder.Entity("backend.Models.WarrantyCard", b =>
@@ -603,7 +770,7 @@ namespace backend.Migrations
 
                     b.HasKey("WarrantyCardId");
 
-                    b.ToTable("WarrantyCards");
+                    b.ToTable("warranty_card");
                 });
 
             modelBuilder.Entity("backend.Models.WarrantyRequest", b =>
@@ -642,7 +809,7 @@ namespace backend.Migrations
 
                     b.HasIndex("WarrantyStaffId");
 
-                    b.ToTable("WarrantyRequests");
+                    b.ToTable("warranty_request");
                 });
 
             modelBuilder.Entity("backend.Models.Accessory", b =>
@@ -694,6 +861,17 @@ namespace backend.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("backend.Models.Blog", b =>
+                {
+                    b.HasOne("backend.Models.Account", "Author")
+                        .WithMany("Blogs")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+                });
+
             modelBuilder.Entity("backend.Models.Diamond", b =>
                 {
                     b.HasOne("backend.Models.Shape", "Shape")
@@ -703,6 +881,25 @@ namespace backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Shape");
+                });
+
+            modelBuilder.Entity("backend.Models.Feedback", b =>
+                {
+                    b.HasOne("backend.Models.Accessory", "Accessory")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("AccessoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend.Models.Order", "Order")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Accessory");
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("backend.Models.Order", b =>
@@ -773,6 +970,17 @@ namespace backend.Migrations
                     b.Navigation("WarrantyCard");
                 });
 
+            modelBuilder.Entity("backend.Models.PriceRate", b =>
+                {
+                    b.HasOne("backend.Models.Account", "Account")
+                        .WithMany("PriceRates")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
             modelBuilder.Entity("backend.Models.Transaction", b =>
                 {
                     b.HasOne("backend.Models.Order", "Order")
@@ -807,6 +1015,8 @@ namespace backend.Migrations
                 {
                     b.Navigation("AccessoryImages");
 
+                    b.Navigation("Feedbacks");
+
                     b.Navigation("OrderDetails");
                 });
 
@@ -817,11 +1027,15 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Account", b =>
                 {
+                    b.Navigation("Blogs");
+
                     b.Navigation("OrdersOfCustomer");
 
                     b.Navigation("OrdersOfDeliveryStaff");
 
                     b.Navigation("OrdersOfSaleStaff");
+
+                    b.Navigation("PriceRates");
 
                     b.Navigation("RequestOfWarrantyStaff");
                 });
@@ -833,6 +1047,8 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Order", b =>
                 {
+                    b.Navigation("Feedbacks");
+
                     b.Navigation("OrderDetails");
 
                     b.Navigation("Transactions");

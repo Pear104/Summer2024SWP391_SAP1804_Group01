@@ -72,7 +72,7 @@ export default function TopNav() {
         </div>
         <a
           className="relative mulish-regular flex gap-1 items-center py-1 px-3 border-b-2 border-b-transparent text-base hover:border-b-blue-500 duration-200 transition-all"
-          href={"/jewelry"}
+          href={"/product/accessory"}
           onMouseEnter={() => {
             setJewelryDrop(true);
           }}

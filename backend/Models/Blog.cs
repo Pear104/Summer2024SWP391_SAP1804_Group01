@@ -13,16 +13,15 @@ namespace backend.Models
 
         [Column("author_id")]
         public long AuthorId { get; set; }
-        public Account Author  { get; set; } = new Account();
+        public Account Author { get; set; } = new Account();
 
         [Column("title")]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         [Column("content")]
-        public string Content { get; set; }
+        public string Content { get; set; } = string.Empty;
 
-        [Column(created_at)]
-        public DateTime CreatedAt { get; set;}
-
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
     }
 }

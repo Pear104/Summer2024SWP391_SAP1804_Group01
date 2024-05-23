@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models
 {
@@ -14,16 +14,18 @@ namespace backend.Models
         [Column("order_id")]
         public long OrderId { get; set; }
         public Order Order { get; set; } = new Order();
+
         [Column("accessory_id")]
         public long AccessoryId { get; set; }
-        public Accessory Accessory{ get; set; } = new Accessory();
+        public Accessory Accessory { get; set; } = new Accessory();
 
         [Column("score")]
-        public int Score{ get; set; }
+        public int Score { get; set; }
+
         [Column("created_at")]
         public DateTime CreatedAt { get; set; }
+
         [Column("content")]
         public string Content { get; set; } = String.Empty;
-
     }
 }

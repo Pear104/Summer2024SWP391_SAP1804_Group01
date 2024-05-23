@@ -1,3 +1,12 @@
+drop table [diamond_price_list]
+drop table [material_price_list]
+drop table [blog]
+drop table [warranty_request]
+drop table [warranty_card]
+drop table [transaction]
+drop table [feedback]
+drop table [price_rate]
+
 drop table [order_detail]
 drop table [order]
 drop table [promotion]

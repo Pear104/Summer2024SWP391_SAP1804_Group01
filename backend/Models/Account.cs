@@ -47,7 +47,10 @@ namespace backend.Models
         public List<Order> OrdersOfCustomer { get; set; } = new List<Order>();
         public List<Order> OrdersOfSaleStaff { get; set; } = new List<Order>();
         public List<Order> OrdersOfDeliveryStaff { get; set; } = new List<Order>();
-        public List<WarrantyRequest> RequestOfWarrantyStaff { get; set; } = new List<WarrantyRequest>();
+        public List<WarrantyRequest> RequestOfWarrantyStaff { get; set; } =
+            new List<WarrantyRequest>();
+        public List<Blog> Blogs { get; set; } = new List<Blog>();
+        public List<PriceRate> PriceRates { get; set; } = new List<PriceRate>();
 
         //Ánh: Chưa rõ warranty request nên thêm vào ntn.
     }
