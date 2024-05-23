@@ -15,7 +15,7 @@ namespace backend.Models
         [Column("start_time")]
         public DateTime StartTime { get; set; }
         [Column("end_time")]
-        public DateTime Endtime { get; set; }
+        public DateTime EndTime { get; set; }
 
         public List<Order> Orders { get; set; } = new List<Order>();
     }

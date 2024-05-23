@@ -210,6 +210,34 @@ namespace backend.Controllers
             return Ok("ahihi");
         }
 
+        [HttpGet("/crawler/1")]
+        public IActionResult AddShape()
+        {
+            foreach (string shape in this._shapes)
+            {
+                var shapeModel = new Shape { Name = shape };
+                _context.Shapes.Add(shapeModel);
+            }
+            Dictionary<string, double> settingTypes = new Dictionary<string, double>
+            {
+                { "Earrings", 200 },
+                { "Necklaces", 400 },
+                { "Rings", 150 },
+                { "Bracelets", 300 }
+            };
+            foreach (string settingType in settingTypes.Keys)
+            {
+                var settingTypeModel = new AccessoryType
+                {
+                    Name = settingType,
+                    ProcessingPrice = settingTypes[settingType]
+                };
+                _context.AccessoryTypes.Add(settingTypeModel);
+            }
+            _context.SaveChanges();
+            return Ok("add 1 ok");
+        }
+
         [HttpGet("/crawler/2")]
         public async Task<IActionResult> AddDiamond()
         {
@@ -224,7 +252,7 @@ namespace backend.Controllers
             }
             await _context.SaveChangesAsync();
 
-            return Ok("add ok");
+            return Ok("add 2 ok");
         }
 
         [HttpGet("/crawler/3")]
@@ -274,7 +302,7 @@ namespace backend.Controllers
             }
             await _context.SaveChangesAsync();
 
-            return Ok("ahii");
+            return Ok("add 3 ok");
         }
 
         private static string ReplaceCaseInsensitive(
@@ -370,55 +398,7 @@ namespace backend.Controllers
                     await _context.SaveChangesAsync();
                 }
             }
-            return Ok("ok ahihi");
-        }
-
-        //[HttpGet("/crawler/4")]
-        //public async Task<IActionResult> AddAcc1()
-        //{
-        //    await AddRings(
-        //        [
-        //            "Round",
-        //            "Emerald",
-        //            "Heart",
-        //            "Pear",
-        //            "Oval",
-        //            "Cushion",
-        //            "Princess",
-        //            "Radiant",
-        //            "Marquise",
-        //            "Asscher"
-        //        ]
-        //    );
-        //    return Ok("ahihi");
-        //}
-
-        [HttpGet("/crawler/1")]
-        public IActionResult AddShape()
-        {
-            foreach (string shape in this._shapes)
-            {
-                var shapeModel = new Shape { Name = shape };
-                _context.Shapes.Add(shapeModel);
-            }
-            Dictionary<string, double> settingTypes = new Dictionary<string, double>
-            {
-                { "Earrings", 200 },
-                { "Necklaces", 400 },
-                { "Rings", 150 },
-                { "Bracelets", 300 }
-            };
-            foreach (string settingType in settingTypes.Keys)
-            {
-                var settingTypeModel = new AccessoryType
-                {
-                    Name = settingType,
-                    ProcessingPrice = settingTypes[settingType]
-                };
-                _context.AccessoryTypes.Add(settingTypeModel);
-            }
-            _context.SaveChanges();
-            return Ok("add ok");
+            return Ok("add 4 ok");
         }
 
         [HttpGet("/crawler/5")]
@@ -484,7 +464,7 @@ namespace backend.Controllers
                 _context.Accounts.Add(account);
             }
             _context.SaveChanges();
-            return Ok("ahii");
+            return Ok("add 5 ok");
         }
     }
 }

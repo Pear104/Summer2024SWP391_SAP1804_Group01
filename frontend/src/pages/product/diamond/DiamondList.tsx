@@ -6,23 +6,27 @@ const DiamondItem = ({ diamond }: { diamond: any }) => {
   return (
     <a
       className="flex items-center w-full justify-around hover:bg-slate-100"
-      href="#"
+      href="/product/diamond/detail"
     >
       <div
-        className="aspect-square bg-contain bg-no-repeat w-[100px]"
+        className="my-2 aspect-square bg-cover bg-center bg-no-repeat w-[100px]"
         style={{
           // backgroundImage: `url(/images/face-without-mouth_1f636.png)`,
           backgroundImage: `url(${diamond.imageUrl})`,
         }}
       ></div>
-      <div className="">{diamond.carat}</div>
-      <div>Price</div>
-      <div>{diamond.carat}</div>
-      <div>{diamond.color}</div>
-      <div>{diamond.clarity}</div>
-      <div>{diamond.cut}</div>
-      <div>{diamond.lab}</div>
-      <div>View</div>
+      <div className="w-[80px] flex justify-center">{diamond.shape.name}</div>
+      <div className="w-[80px] flex justify-center">Price</div>
+      <div className="w-[80px] flex justify-center">{diamond.carat}</div>
+      <div className="w-[80px] flex justify-center">{diamond.color}</div>
+      <div className="w-[80px] flex justify-center">{diamond.clarity}</div>
+      <div className="w-[80px] flex justify-center">{diamond.cut}</div>
+      <div className="w-[80px] flex justify-center">{diamond.lab}</div>
+      <div className="w-[80px] flex justify-center">
+        <a className="border-2 border-stone-800 hover:font-bold rounded-full px-4 py-2 text-sm hover:bg-black hover:text-white transition-all">
+          VIEW
+        </a>
+      </div>
     </a>
   );
 };
@@ -31,8 +35,7 @@ export default function DiamondList() {
   const [diamonds, setDiamonds] = useState([]);
   useEffect(() => {
     (async () => {
-      const data = await GET("/diamond");
-      console.log(data);
+      const data = await GET("/api/Diamond");
       setDiamonds(data);
     })();
   }, []);
@@ -40,19 +43,19 @@ export default function DiamondList() {
   const params = new URLSearchParams(url.searchParams);
 
   return (
-    <div className="flex items-center flex-col mb-20">
+    <div className="flex items-center justify-around flex-col mb-20">
       <div className="font-bold">Diamond table</div>
       <div className="w-full px-20 mt-10">
         <div className="font-bold mulish-regular flex items-center w-full justify-around mb-4">
-          <div className="w-[100px]"></div>
-          <div>Shape</div>
-          <div>Price</div>
-          <div>Carat</div>
-          <div>Color</div>
-          <div>Clarity</div>
-          <div>Cut</div>
-          <div>Lab</div>
-          <div>View</div>
+          <div className="w-[100px] text-center">View</div>
+          <div className="w-[80px] text-center">Shape</div>
+          <div className="w-[80px] text-center">Price</div>
+          <div className="w-[80px] text-center">Carat</div>
+          <div className="w-[80px] text-center">Color</div>
+          <div className="w-[80px] text-center">Clarity</div>
+          <div className="w-[80px] text-center">Cut</div>
+          <div className="w-[80px] text-center">Lab</div>
+          <div className="w-[80px] text-center">Detail</div>
         </div>
         <div>
           {diamonds.map((diamond: any) => {

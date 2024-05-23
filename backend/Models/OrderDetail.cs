@@ -24,5 +24,9 @@ namespace backend.Models
         public long AccessoryId { get; set; }
         public Accessory Accessory { get; set; } = new Accessory();
 
+        [Column("warranty_card_id")]
+        public long WarrantyCardId { get; set; }
+        public WarrantyCard WarrantyCard { get; set; } = new WarrantyCard();
+
     }
 }
