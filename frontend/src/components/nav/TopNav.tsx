@@ -35,7 +35,7 @@ export default function TopNav() {
   const [jewelryDrop, setJewelryDrop] = useState(false);
   const [diamondDrop, setDiamondDrop] = useState(false);
   return (
-    <div className="top-0 left-0 fixed gap-4 py-3 px-4 bg-white w-full shadow-2xl">
+    <div className="top-0 left-0 relative gap-4 py-3 px-4 bg-white w-full shadow-lg">
       <div className="flex justify-between">
         <div className="flex justify-end gap-4 items-center">
           <div className="flex items-center gap-2">
@@ -61,7 +61,9 @@ export default function TopNav() {
           <SearchBar />
           <Heart size={20} strokeWidth={2} absoluteStrokeWidth />
           <ShoppingCart size={20} strokeWidth={2} />
-          <User size={20} absoluteStrokeWidth />
+          <a href="/authentication/login">
+            <User size={20} absoluteStrokeWidth />
+          </a>
         </div>
       </div>
       <div className="flex gap-4 mt-2">
@@ -70,7 +72,7 @@ export default function TopNav() {
         </div>
         <a
           className="relative mulish-regular flex gap-1 items-center py-1 px-3 border-b-2 border-b-transparent text-base hover:border-b-blue-500 duration-200 transition-all"
-          href={"/jewelry"}
+          href={"/product/accessory"}
           onMouseEnter={() => {
             setJewelryDrop(true);
           }}
@@ -78,9 +80,9 @@ export default function TopNav() {
             setJewelryDrop(false);
           }}
         >
-          Jewelry <ChevronDown size={16} />
+          Accessory <ChevronDown size={16} />
           {jewelryDrop && (
-            <div className="z-20 w-[100vw] fixed mx-auto top-[96px] left-0 right-0 bg-white">
+            <div className="absolute z-50 w-[100vw] mx-auto top-[36px] -left-[184px] right-0 bg-white">
               <div className="mt-4"></div>
               <div className="grid grid-cols-3 px-4 pb-4">
                 <JewelryItem />
@@ -100,7 +102,7 @@ export default function TopNav() {
         </a>
         <a
           className="relative mulish-regular flex gap-1 items-center py-1 px-3 border-b-2 border-b-transparent text-base hover:border-b-blue-500 duration-200 transition-all"
-          href={"/diamond"}
+          href={"/product/diamond"}
           onMouseEnter={() => {
             setDiamondDrop(true);
           }}
@@ -110,7 +112,7 @@ export default function TopNav() {
         >
           Diamond <ChevronDown size={16} />
           {diamondDrop && (
-            <div className="z-20 w-[100vw] fixed mx-auto top-[96px] left-0 right-0 bg-white">
+            <div className="z-50 w-[100vw] absolute mx-auto top-[36px] -left-[326px] right-0 bg-white">
               <div className="mt-4"></div>
               <div className="flex gap-4">
                 <DiamondItem />

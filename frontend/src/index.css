@@ -10,6 +10,12 @@ div#root {
   /* list-style-type: "◆"; */
 }
 
+@layer utilities {
+  .without-ring {
+    @apply focus-visible:outline-none;
+  }
+}
+
 .lobster-regular {
   font-family: "Lobster", sans-serif;
   font-weight: 400;
@@ -160,6 +166,12 @@ div#root {
 }
 
 .playfair-display-regular {
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.pfr {
   font-family: "Playfair Display", serif;
   font-optical-sizing: auto;
   font-style: normal;
