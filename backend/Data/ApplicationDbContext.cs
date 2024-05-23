@@ -19,6 +19,9 @@ namespace backend.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
+        public DbSet<WarrantyCard> WarrantyCards { get; set; }
+        public DbSet<WarrantyRequest> WarrantyRequests { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -39,6 +42,9 @@ namespace backend.Data
             builder.Entity<Order>().Property(o => o.OrderId).ValueGeneratedOnAdd();
             builder.Entity<OrderDetail>().Property(o => o.OrderDetailId).ValueGeneratedOnAdd();
             builder.Entity<Promotion>().Property(o => o.PromotionId).ValueGeneratedOnAdd();
+            builder.Entity<WarrantyCard>().Property(o => o.WarrantyCardId).ValueGeneratedOnAdd();
+            builder.Entity<WarrantyRequest>().Property(o => o.WarrantyRequestId).ValueGeneratedOnAdd();
+            builder.Entity<Transaction>().Property(o => o.TransactionId).ValueGeneratedOnAdd();
 
             //Them khoa ngoai giua Setting voi SettingStyle
             builder
@@ -127,6 +133,20 @@ namespace backend.Data
                 .WithMany(o => o.OrderDetails)
                 .HasForeignKey(o => o.DiamondId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            //Them khoa ngoai giua Order voi Transaction
+            builder
+                .Entity<Transaction>()
+                .HasOne(o => o.Order)
+                .WithMany(o => o.Transactions)
+                .HasForeignKey(o => o.OrderId);
+
+            //Them khoa ngoai giua WarrantyCard voi WarrantyRequest
+            builder
+                .Entity<WarrantyRequest>()
+                .HasOne(o => o.WarrantyCard)
+                .WithMany(o => o.WarrantyRequests)
+                .HasForeignKey(o => o.WarrantyCardId);
 
             //Example
 

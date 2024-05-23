@@ -1,14 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models
 {
-    public class WarrandtyCard
+    public class WarrantyCard
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("warranty_card_id")]
-        public long WarantyCardId { get; set; }
+        public long WarrantyCardId { get; set; }
 
         [Column("order_detail_id")]
         public long OrderDetaiId { get; set; }

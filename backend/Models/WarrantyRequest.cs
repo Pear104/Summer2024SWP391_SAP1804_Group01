@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models
 {
@@ -8,14 +8,14 @@ namespace backend.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("warranty_request_id")]
-        public long WarantyRequestId { get; set; }
+        public long WarrantyRequestId { get; set; }
 
         [Column("warranty_staff_id")]
         public long WarrantyStaffId { get; set; }
         public Account WarrantyStaff { get; set; } = new Account();
         [Column("warranty_card_id")]
         public long WarrantyCardId { get; set; }
-        public WarrandtyCard WarrandtyCard { get; set;} = new WarrandtyCard();
+        public WarrantyCard WarrantyCard { get; set; } = new WarrantyCard();
         [Column("receive_time")]
         public DateTime ReceiveTime { get; set; }
         [Column("return_time")]
