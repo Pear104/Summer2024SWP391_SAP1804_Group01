@@ -20,7 +20,7 @@ namespace backend.DTOs
         public long SaleStaffId { get; set; }
         public long DeliveryStaffId { get; set; }
         public long? PromotionId { get; set; }
-        public List<OrderDetailDTO> OrderDetails { get; set; } 
+        public List<OrderDetailDTO> OrderDetails { get; set; }  = new List<OrderDetailDTO>();
         // public List<TransactionDTO> Transactions { get; set; }
         // public List<FeedbackDTO> Feedbacks { get; set; }
     }
