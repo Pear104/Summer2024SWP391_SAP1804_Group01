@@ -6,7 +6,7 @@ export default function DiamondDetail() {
   const [diamond, setDiamond] = useState<any>();
   useEffect(() => {
     (async () => {
-      const data = await GET("/api/Diamond/5");
+      const data = await GET("/api/Diamonds/5");
       setDiamond(data);
     })();
   }, []);

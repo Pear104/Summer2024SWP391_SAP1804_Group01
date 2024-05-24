@@ -20,7 +20,8 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Diamond>>> GetDiamonds()
         {
-            return await _context.Diamonds.Include(x => x.Shape).ToListAsync();
+            //return await _context.Diamonds.Include(x => x.Shape).ToListAsync();
+            return await _context.Diamonds.ToListAsync();
         }
 
         // GET: api/Diamonds/5

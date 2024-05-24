@@ -35,7 +35,7 @@ export default function DiamondList() {
   const [diamonds, setDiamonds] = useState([]);
   useEffect(() => {
     (async () => {
-      const data = await GET("/api/Diamond");
+      const data = await GET("/api/Diamonds");
       setDiamonds(data);
     })();
   }, []);
