@@ -1,6 +1,6 @@
 ﻿namespace backend.Interfaces
 {
-    public interface IFeedback
+    public interface IWarrantyCardRepository
     {
     }
 }

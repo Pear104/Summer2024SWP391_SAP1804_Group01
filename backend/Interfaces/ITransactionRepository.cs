@@ -1,6 +1,6 @@
 ﻿namespace backend.Interfaces
 {
-    public interface IWarrantyRequest
+    public interface ITransactionRepository
     {
     }
 }

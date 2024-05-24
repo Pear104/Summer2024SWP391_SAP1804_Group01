@@ -1,6 +1,6 @@
 ﻿namespace backend.Interfaces
 {
-    public interface ITransaction
+    public interface IFeedbackRepository
     {
     }
 }
