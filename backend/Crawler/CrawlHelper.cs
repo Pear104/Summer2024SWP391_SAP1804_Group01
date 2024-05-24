@@ -131,6 +131,7 @@ namespace backend.Crawler
             };
         }
 
+
         public static async Task<List<Dictionary<string, string>>> CrawlRing(Shape shapeModel)
         {
             using (EdgeDriver driver = new EdgeDriver())
@@ -140,7 +141,7 @@ namespace backend.Crawler
                     string url =
                         $"https://www.withclarity.com/collections/engagement-rings?q={shapeModel.Name},14KT_Yellow_Gold";
                     driver.Navigate().GoToUrl(url);
-                    Thread.Sleep(6000);
+                    Thread.Sleep(1000);
                     var items = driver.FindElements(By.ClassName("product-card"), 20);
 
                     var result = new List<Dictionary<string, string>>();
