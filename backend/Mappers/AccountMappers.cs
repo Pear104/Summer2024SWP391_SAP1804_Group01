@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend.DTOs;
 using backend.Models;
+using backend.Mappers;
 
 namespace backend.Mappers
 {
@@ -18,27 +19,35 @@ namespace backend.Mappers
                 Email = account.Email,
                 PhoneNumber = account.PhoneNumber,
                 Address = account.Address,
-                Rank = account.Rank.Select(r => r.ToRankDTO()).ToList(),
-                Role = account.Role.Select(r => r.ToRoleDTO()).ToList(),
-                RewardPoint = account.AccountPoint,
-                 = account.AccountStatus
+                Birthday = account.Birthday,
+                Gender = account.Gender,
+                CreatedAt = account.CreatedAt,
+                OrdersOfCustomer = account.OrdersOfCustomer.Select(order => order.ToOrderDTO()).ToList(),
+                OrdersOfSaleStaff = account.OrdersOfSaleStaff.Select(order => order.ToOrderDTO()).ToList(),
+                OrdersOfDeliveryStaff = account.OrdersOfDeliveryStaff.Select(order => order.ToOrderDTO()).ToList(),
+                Rank = account.Rank.ToRankDTO(),
+                Role = account.Role.ToRoleDTO(),
+                RewardPoint = account.RewardPoint
             };
         }
-        public static Account ToAccount(this AccountDTO account)
+
+        public static Account ToAccount(this AccountDTO accountDTO)
         {
             return new Account
             {
-                AccountId = account.AccountId,
-                AccountName = account.AccountName,
-                AccountPassword = account.AccountPassword,
-                AccountEmail = account.AccountEmail,
-                AccountPhone = account.AccountPhone,
-                AccountAddress = account.AccountAddress,
-                AccountRole = account.AccountRole,
-                AccountRank = account.AccountRank,
-                AccountPoint = account.AccountPoint,
-                AccountStatus = account.AccountStatus
+                Name = accountDTO.Name,
+                Email = accountDTO.Email,
+                Password = accountDTO.Password,
+                PhoneNumber = accountDTO.PhoneNumber,
+                Address = accountDTO.Address,
+                Birthday = accountDTO.Birthday,
+                Gender = accountDTO.Gender,
+                CreatedAt = accountDTO.CreatedAt,
+                OrdersOfCustomer = accountDTO.OrdersOfCustomer.Select(order => order.ToOrderDTO()).ToList(),
+                OrdersOfSaleStaff = accountDTO.OrdersOfSaleStaff.Select(order => order.ToOrderDTO()).ToList(),
+                OrdersOfDeliveryStaff = accountDTO.OrdersOfDeliveryStaff.Select(order => order.ToOrderDTO()).ToList(),
+                RewardPoint = accountDTO.RewardPoint
             };
-        } 
+        }
     }
 }

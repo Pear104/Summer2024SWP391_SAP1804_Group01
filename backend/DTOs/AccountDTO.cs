@@ -10,11 +10,10 @@ namespace backend.DTOs
         public long AccountId { get; set; }
 
         public long RoleId { get; set; }
+        public long RankId { get; set; }
 
         public RoleDTO Role { get; set; } = new RoleDTO();
         public RankDTO Rank { get; set; } = new RankDTO();
-
-        public long RankId { get; set; }
 
         public string Name { get; set; } = string.Empty;
 

@@ -48,7 +48,6 @@ namespace backend.Mappers
                 DeliveryStaffId = order.DeliveryStaffId,
                 PromotionId = order.PromotionId,
                 OrderDetails= order.OrderDetails.Select(o => o.ToOrderDetailDTO()).ToList()
-                
             };
         }
     }
