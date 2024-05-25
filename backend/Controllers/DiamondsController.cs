@@ -1,4 +1,6 @@
 ﻿using backend.Data;
+using backend.Interfaces;
+using backend.Mappers;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,36 +12,41 @@ namespace backend.Controllers
     public class DiamondsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IDiamondRepository _diamondRepo;
 
-        public DiamondsController(ApplicationDbContext context)
+        public DiamondsController(ApplicationDbContext context, IDiamondRepository diamondRepo)
         {
             _context = context;
+            _diamondRepo = diamondRepo;
         }
 
-        // GET: api/Diamonds
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Diamond>>> GetDiamonds()
+        public async Task<ActionResult> GetDiamonds()
         {
-            //return await _context.Diamonds.Include(x => x.Shape).ToListAsync();
-            return await _context.Diamonds.ToListAsync();
+            var diamondModels = await _diamondRepo.GetAllDiamondsAsync();
+            var diamondDTOs = diamondModels.Select(x => x.ToDiamondDTO());
+            return Ok(diamondDTOs);
         }
 
-        // GET: api/Diamonds/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Diamond>> GetDiamond(long id)
         {
-            var diamond = await _context.Diamonds.Include(x => x.Shape).FirstOrDefaultAsync(x => x.DiamondId == id);
-
+            var diamond = await _diamondRepo.GetDiamondByIdAsync(id);
             if (diamond == null)
             {
                 return NotFound();
             }
-
             return diamond;
         }
 
-        // PUT: api/Diamonds/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Diamond>> PostDiamond(Diamond diamond)
+        {
+            _context.Diamonds.Add(diamond);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("GetDiamond", new { id = diamond.DiamondId }, diamond);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDiamond(long id, Diamond diamond)
         {
@@ -69,16 +76,7 @@ namespace backend.Controllers
             return NoContent();
         }
 
-        // POST: api/Diamonds
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Diamond>> PostDiamond(Diamond diamond)
-        {
-            _context.Diamonds.Add(diamond);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDiamond", new { id = diamond.DiamondId }, diamond);
-        }
 
         // DELETE: api/Diamonds/5
         [HttpDelete("{id}")]

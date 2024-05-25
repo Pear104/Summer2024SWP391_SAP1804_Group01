@@ -20,25 +20,34 @@ namespace backend.Controllers
         {
             _orderrepo = orderrepo;
         }
-        public async Task<IActionResult> GetAll()
-        {
-            return Ok();
-        }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public async Task<IActionResult> GetByID()
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
         {
             return Ok("Error!");
         }
+
+        [HttpPost]
         public async Task<IActionResult> Create()
         {
             return Ok("Error!");
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByID()
+        {
+            return Ok("Error!");
+        }
+
+
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update()
         {
             return Ok("Error!");
         }
-        public async Task<IActionResult> dd()
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete()
         {
             return Ok("Error!");
         }

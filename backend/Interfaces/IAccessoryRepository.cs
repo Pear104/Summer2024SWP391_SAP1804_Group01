@@ -6,10 +6,10 @@ namespace backend.Interfaces
 {
     public interface IAccessoryRepository
     {
-        Task<IEnumerable<Accessory>> GetAllAccessorysAsync();
-        Task<Accessory> GetAccessoryByIdAsync(long id);
+        Task<IEnumerable<Accessory>> GetAllAccessoriesAsync();
+        Task<Accessory?> GetAccessoryByIdAsync(long id);
         Task<Accessory> CreateAccessoryAsync(Accessory accessory);
-        Task<Accessory> UpdateAccessoryAsync(Accessory accessory);
-        Task DeleteAccessoryAsync(long id);
+        Task<Accessory?> UpdateAccessoryAsync(long id, Accessory accessory);
+        Task<Accessory?> DeleteAccessoryAsync(long id);
     }
 }

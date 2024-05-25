@@ -1,4 +1,6 @@
 ﻿using backend.Data;
+using backend.Interfaces;
+using backend.Mappers;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,37 +12,35 @@ namespace backend.Controllers
     public class AccessoriesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IAccessoryRepository _accessoryRepo;
 
-        public AccessoriesController(ApplicationDbContext context)
+
+        public AccessoriesController(ApplicationDbContext context, IAccessoryRepository accessoryRepo)
         {
             _context = context;
+            _accessoryRepo = accessoryRepo;
         }
 
-        // GET: api/Accessories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Accessory>>> GetAccessories()
+        public async Task<ActionResult> GetAccessories()
         {
-            return await _context.Accessories.ToListAsync();
+            var accessoryModels = await _accessoryRepo.GetAllAccessoriesAsync();
+            var accessoryDTOs = accessoryModels.Select(x => x.ToAccessoryDTO());
+            return Ok(accessoryDTOs);
         }
 
-        // GET: api/Accessories/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Accessory>> GetAccessory(long id)
+        public async Task<ActionResult> GetAccessory(long id)
         {
-            var accessory = await _context
-                .Accessories.Include(a => a.AccessoryImages)
-                .Include(a => a.Shape)
-                .FirstOrDefaultAsync(a => a.AccessoryId == id);
+            var accessory = await _accessoryRepo.GetAccessoryByIdAsync(id);
             if (accessory == null)
             {
                 return NotFound();
             }
 
-            return accessory;
+            return Ok(accessory);
         }
 
-        // PUT: api/Accessories/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccessory(long id, Accessory accessory)
         {
@@ -70,8 +70,6 @@ namespace backend.Controllers
             return NoContent();
         }
 
-        // POST: api/Accessories
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Accessory>> PostAccessory(Accessory accessory)
         {
@@ -81,7 +79,6 @@ namespace backend.Controllers
             return CreatedAtAction("GetAccessory", new { id = accessory.AccessoryId }, accessory);
         }
 
-        // DELETE: api/Accessories/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccessory(long id)
         {

@@ -44,6 +44,8 @@ namespace backend
                 );
             });
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IDiamondRepository, DiamondRepository>();
+            builder.Services.AddScoped<IAccessoryRepository, AccessoryRepository>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
