@@ -1,10 +1,13 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace backend.Models
 {
     [Table("role")]
     public class Role
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("role_id")]
         public long RoleId { get; set; }
 
