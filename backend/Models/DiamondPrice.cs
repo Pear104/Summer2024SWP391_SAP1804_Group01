@@ -12,7 +12,7 @@ namespace backend.Models
         public long DiamondPriceId { get; set; }
 
         [Column("eff_time")]
-        public DateTime EffTime { get; set; }
+        public DateTime EffTime { get; set; } = DateTime.Now;
 
         [Column("min_carat_eff")]
         public float MinCaratEff { get; set; }
@@ -31,6 +31,5 @@ namespace backend.Models
         public double UnitPrice { get; set; }
 
         public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
-
     }
 }

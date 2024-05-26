@@ -14,7 +14,7 @@ namespace backend.Models
         public int Karat { get; set; }
 
         [Column("eff_time")]
-        public DateTime EffTime { get; set; }
+        public DateTime EffTime { get; set; } = DateTime.Now;
 
         [Column("unit_price")]
         [Range(0.01, double.MaxValue)]
