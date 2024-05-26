@@ -12,7 +12,7 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240526052622_init")]
+    [Migration("20240526071221_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -1050,7 +1050,8 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Diamond", b =>
                 {
-                    b.Navigation("OrderDetail");
+                    b.Navigation("OrderDetail")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("backend.Models.DiamondPrice", b =>

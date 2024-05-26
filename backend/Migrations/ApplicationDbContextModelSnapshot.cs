@@ -1047,7 +1047,8 @@ namespace backend.Migrations
 
             modelBuilder.Entity("backend.Models.Diamond", b =>
                 {
-                    b.Navigation("OrderDetail");
+                    b.Navigation("OrderDetail")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("backend.Models.DiamondPrice", b =>

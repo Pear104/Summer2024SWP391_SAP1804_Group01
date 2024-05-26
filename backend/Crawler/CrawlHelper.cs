@@ -1,9 +1,9 @@
-﻿using backend.Models;
+﻿using System.Text;
+using backend.Models;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Edge;
-using System.Text;
 
 namespace backend.Crawler
 {
@@ -131,7 +131,6 @@ namespace backend.Crawler
             };
         }
 
-
         public static async Task<List<Dictionary<string, string>>> CrawlRing(Shape shapeModel)
         {
             using (EdgeDriver driver = new EdgeDriver())
@@ -141,7 +140,7 @@ namespace backend.Crawler
                     string url =
                         $"https://www.withclarity.com/collections/engagement-rings?q={shapeModel.Name},14KT_Yellow_Gold";
                     driver.Navigate().GoToUrl(url);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(4000);
                     var items = driver.FindElements(By.ClassName("product-card"), 20);
 
                     var result = new List<Dictionary<string, string>>();

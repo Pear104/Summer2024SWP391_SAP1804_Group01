@@ -135,7 +135,7 @@ namespace backend.Data
                 .Entity<OrderDetail>()
                 .HasOne(o => o.Diamond)
                 .WithOne(o => o.OrderDetail)
-                .HasForeignKey<Diamond>(w => w.DiamondId)
+                .HasForeignKey<OrderDetail>(w => w.OrderDetailId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Them khoa ngoai giua Order voi Transaction
