@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models
 {
-    [Table("diamond_price_list")]
-    public class DiamondPriceList
+    [Table("diamond_price")]
+    public class DiamondPrice
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("diamond_price_list_id")]
-        public long DiamondPriceListId { get; set; }
+        [Column("diamond_price_id")]
+        public long DiamondPriceId { get; set; }
 
         [Column("eff_time")]
         public DateTime EffTime { get; set; }
@@ -27,6 +27,10 @@ namespace backend.Models
         public string Clarity { get; set; } = string.Empty;
 
         [Column("unit_price")]
+        [Range(0.01, double.MaxValue)]
         public double UnitPrice { get; set; }
+
+        public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+
     }
 }

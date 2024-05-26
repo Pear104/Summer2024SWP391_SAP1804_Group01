@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models
 {
-    [Table("material_price_list")]
-    public class MaterialPriceList
+    [Table("material_price")]
+    public class MaterialPrice
     {
         [Key]
-        [Column("material_price_list_id")]
-        public long MaterialPriceListId { get; set; }
+        [Column("material_price_id")]
+        public long MaterialPriceId { get; set; }
 
         [Column("karat")]
         public int Karat { get; set; }
@@ -17,6 +17,9 @@ namespace backend.Models
         public DateTime EffTime { get; set; }
 
         [Column("unit_price")]
+        [Range(0.01, double.MaxValue)]
         public double UnitPrice { get; set; }
+
+        public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     }
 }

@@ -23,7 +23,7 @@ namespace backend.Models
         public int Score { get; set; }
 
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         [Column("content")]
         public string Content { get; set; } = String.Empty;

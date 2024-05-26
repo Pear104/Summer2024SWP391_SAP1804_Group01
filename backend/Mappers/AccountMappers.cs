@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using backend.DTOs;
+using backend.DTOs.Account;
+using backend.Enums;
 using backend.Models;
-using backend.Mappers;
 
 namespace backend.Mappers
 {
@@ -20,13 +16,19 @@ namespace backend.Mappers
                 PhoneNumber = account.PhoneNumber,
                 Address = account.Address,
                 Birthday = account.Birthday,
-                Gender = account.Gender,
+                Gender = account.Gender.ToString(),
                 CreatedAt = account.CreatedAt,
-                OrdersOfCustomer = account.OrdersOfCustomer.Select(order => order.ToOrderDTO()).ToList(),
-                OrdersOfSaleStaff = account.OrdersOfSaleStaff.Select(order => order.ToOrderDTO()).ToList(),
-                OrdersOfDeliveryStaff = account.OrdersOfDeliveryStaff.Select(order => order.ToOrderDTO()).ToList(),
+                OrdersOfCustomer = account
+                    .OrdersOfCustomer.Select(order => order.ToOrderDTO())
+                    .ToList(),
+                OrdersOfSaleStaff = account
+                    .OrdersOfSaleStaff.Select(order => order.ToOrderDTO())
+                    .ToList(),
+                OrdersOfDeliveryStaff = account
+                    .OrdersOfDeliveryStaff.Select(order => order.ToOrderDTO())
+                    .ToList(),
                 Rank = account.Rank.ToRankDTO(),
-                Role = account.Role.ToRoleDTO(),
+                Role = account.Role.ToString(),
                 RewardPoint = account.RewardPoint
             };
         }
@@ -37,15 +39,11 @@ namespace backend.Mappers
             {
                 Name = accountDTO.Name,
                 Email = accountDTO.Email,
-                Password = accountDTO.Password,
                 PhoneNumber = accountDTO.PhoneNumber,
                 Address = accountDTO.Address,
                 Birthday = accountDTO.Birthday,
-                Gender = accountDTO.Gender,
+                Gender = (Gender)Enum.Parse(typeof(Gender), accountDTO.Gender),
                 CreatedAt = accountDTO.CreatedAt,
-                OrdersOfCustomer = accountDTO.OrdersOfCustomer.Select(order => order.ToOrderDTO()).ToList(),
-                OrdersOfSaleStaff = accountDTO.OrdersOfSaleStaff.Select(order => order.ToOrderDTO()).ToList(),
-                OrdersOfDeliveryStaff = accountDTO.OrdersOfDeliveryStaff.Select(order => order.ToOrderDTO()).ToList(),
                 RewardPoint = accountDTO.RewardPoint
             };
         }

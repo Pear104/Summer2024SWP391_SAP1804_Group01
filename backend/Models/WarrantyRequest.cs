@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using backend.Enums;
 
 namespace backend.Models
 {
@@ -11,19 +12,34 @@ namespace backend.Models
         [Column("warranty_request_id")]
         public long WarrantyRequestId { get; set; }
 
-        [Column("warranty_staff_id")]
-        public long WarrantyStaffId { get; set; }
-        public Account WarrantyStaff { get; set; } = new Account();
+        [Column("customer_id")]
+        public long CustomerId { get; set; }
+        public Account Customer { get; set; } = new Account();
+
+        [Column("sale_staff_id")]
+        public long SaleStaffId { get; set; }
+        public Account SaleStaff { get; set; } = new Account();
+
+        [Column("delivery_staff_id")]
+        public long DeliveryStaffId { get; set; }
+        public Account DeliveryStaff { get; set; } = new Account();
+
         [Column("warranty_card_id")]
         public long WarrantyCardId { get; set; }
         public WarrantyCard WarrantyCard { get; set; } = new WarrantyCard();
+
         [Column("receive_time")]
         public DateTime ReceiveTime { get; set; }
         [Column("return_time")]
         public DateTime ReturnTime { get; set; }
         [Column("warranty_status")]
-        public string WarrantyStatus { get; set; } = String.Empty;
+        public WarrantyStatus WarrantyStatus { get; set; } = WarrantyStatus.Pending;
 
+        [Column("shipping_address")]
+        public string ShippingAddress { get; set; } = string.Empty;
+
+        [Column("phone_number")]
+        public string PhoneNumber { get; set; } = string.Empty;
 
     }
 

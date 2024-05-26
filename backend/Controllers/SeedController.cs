@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using backend.Crawler;
 using backend.Data;
+using backend.Enums;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -206,7 +207,7 @@ namespace backend.Controllers
         [HttpGet("/test")]
         public async Task<IActionResult> Test()
         {
-            //await GetAndLoadHtml();
+            await Console.Out.WriteLineAsync("ahihi");
             return Ok("ahihi");
         }
 
@@ -408,7 +409,7 @@ namespace backend.Controllers
             {
                 new Account
                 {
-                    RoleId = 1,
+                    Role = Role.Customer,
                     RankId = 1,
                     Name = "ToiLaCustomer",
                     Email = "customer@gmail.com",
@@ -416,7 +417,7 @@ namespace backend.Controllers
                 },
                 new Account
                 {
-                    RoleId = 2,
+                    Role = Role.SaleStaff,
                     RankId = 2,
                     Name = "ToiLaSaleStaff",
                     Email = "sale_staff@gmail.com",
@@ -424,7 +425,7 @@ namespace backend.Controllers
                 },
                 new Account
                 {
-                    RoleId = 3,
+                    Role = Role.DeliveryStaff,
                     RankId = 3,
                     Name = "ToiLaDeliverystaff",
                     Email = "delivery_staff@gmail.com",
@@ -432,15 +433,7 @@ namespace backend.Controllers
                 },
                 new Account
                 {
-                    RoleId = 4,
-                    RankId = 4,
-                    Name = "ToiLaWarrantyStaff",
-                    Email = "warranty_staff@gmail.com",
-                    Password = "12345"
-                },
-                new Account
-                {
-                    RoleId = 5,
+                    Role = Role.Manager,
                     RankId = 5,
                     Name = "ToiLaManager",
                     Email = "manager@gmail.com",
@@ -448,7 +441,7 @@ namespace backend.Controllers
                 },
                 new Account
                 {
-                    RoleId = 6,
+                    Role = Role.Administrator,
                     RankId = 6,
                     Name = "ToiLaAdministrator",
                     Email = "administrator@gmail.com",
@@ -457,10 +450,8 @@ namespace backend.Controllers
             };
             foreach (var account in accounts)
             {
-                var role = _context.Roles.Find(account.RoleId);
                 var rank = _context.Ranks.Find(account.RankId);
                 account.Rank = rank;
-                account.Role = role;
                 _context.Accounts.Add(account);
             }
             _context.SaveChanges();

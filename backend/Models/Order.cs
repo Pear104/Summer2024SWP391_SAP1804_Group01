@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using backend.Enums;
 
 namespace backend.Models
 {
@@ -15,26 +16,25 @@ namespace backend.Models
         [Range(0.01, double.MaxValue)]
         public double TotalPrice { get; set; }
 
-        [Column("total_discount_percent")]
-        public float TotalDiscountPercent { get; set; }
+        [Column("rank_id")]
+        public long RankId { get; set; }
+        public Rank Rank { get; set; } = new Rank();
 
-        [Column("contact_status")]
-        public string ContactStatus { get; set; } = string.Empty;
-
-        [Column("confirm_status")]
-        public string ConfirmStatus { get; set; } = string.Empty;
-
-        [Column("delivery_status")]
-        public string DeliveryStatus { get; set; } = string.Empty;
+        [Column("price_rate_id")]
+        public long PriceRateId { get; set; }
+        public PriceRate PriceRate { get; set; } = new PriceRate();
 
         [Column("order_status")]
-        public string OrderStatus { get; set; } = string.Empty;
+        public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
 
         [Column("shipping_address")]
         public string ShippingAddress { get; set; } = string.Empty;
 
+        [Column("phone_number")]
+        public string PhoneNumber { get; set; } = string.Empty;
+
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         [Column("customer_id")]
         public long CustomerId { get; set; }
@@ -51,7 +51,6 @@ namespace backend.Models
         [Column("promotion_id")]
         public long? PromotionId { get; set; }
         public Promotion? Promotion { get; set; } = null;
-
         public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
         public List<Transaction> Transactions { get; set; } = new List<Transaction>();
         public List<Feedback> Feedbacks { get; set; } = new List<Feedback>();

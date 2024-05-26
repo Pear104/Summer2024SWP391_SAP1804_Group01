@@ -15,7 +15,6 @@ namespace backend.Data
         public DbSet<AccessoryImage> AccessoryImages { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Rank> Ranks { get; set; }
-        public DbSet<Role> Roles { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
@@ -24,8 +23,8 @@ namespace backend.Data
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<PriceRate> PriceRates { get; set; }
-        public DbSet<DiamondPriceList> DiamondPriceLists { get; set; }
-        public DbSet<MaterialPriceList> MaterialPriceLists { get; set; }
+        public DbSet<DiamondPrice> DiamondPrices { get; set; }
+        public DbSet<MaterialPrice> MaterialPrices { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -39,7 +38,6 @@ namespace backend.Data
             builder.Entity<AccessoryType>().Property(o => o.AccessoryTypeId).ValueGeneratedOnAdd();
             builder.Entity<Account>().Property(o => o.AccountId).ValueGeneratedOnAdd();
             builder.Entity<Rank>().Property(o => o.RankId).ValueGeneratedOnAdd();
-            builder.Entity<Role>().Property(o => o.RoleId).ValueGeneratedOnAdd();
             builder.Entity<Order>().Property(o => o.OrderId).ValueGeneratedOnAdd();
             builder.Entity<OrderDetail>().Property(o => o.OrderDetailId).ValueGeneratedOnAdd();
             builder.Entity<Promotion>().Property(o => o.PromotionId).ValueGeneratedOnAdd();
@@ -48,14 +46,8 @@ namespace backend.Data
             builder.Entity<Blog>().Property(o => o.BlogId).ValueGeneratedOnAdd();
             builder.Entity<Feedback>().Property(o => o.FeedbackId).ValueGeneratedOnAdd();
             builder.Entity<PriceRate>().Property(o => o.PriceRateId).ValueGeneratedOnAdd();
-            builder
-                .Entity<DiamondPriceList>()
-                .Property(o => o.DiamondPriceListId)
-                .ValueGeneratedOnAdd();
-            builder
-                .Entity<MaterialPriceList>()
-                .Property(o => o.MaterialPriceListId)
-                .ValueGeneratedOnAdd();
+            builder.Entity<DiamondPrice>().Property(o => o.DiamondPriceId).ValueGeneratedOnAdd();
+            builder.Entity<MaterialPrice>().Property(o => o.MaterialPriceId).ValueGeneratedOnAdd();
             builder
                 .Entity<AccessoryImage>()
                 .Property(o => o.AccessoryImageId)
@@ -92,13 +84,6 @@ namespace backend.Data
                 .HasOne(o => o.Shape)
                 .WithMany(o => o.Accessories)
                 .HasForeignKey(o => o.ShapeId);
-
-            //Them khoa ngoai giua Account voi Role
-            builder
-                .Entity<Account>()
-                .HasOne(o => o.Role)
-                .WithMany(o => o.Accounts)
-                .HasForeignKey(o => o.RoleId);
 
             //Them khoa ngoai giua Account voi Rank
             builder
@@ -149,8 +134,8 @@ namespace backend.Data
             builder
                 .Entity<OrderDetail>()
                 .HasOne(o => o.Diamond)
-                .WithMany(o => o.OrderDetails)
-                .HasForeignKey(o => o.DiamondId)
+                .WithOne(o => o.OrderDetail)
+                .HasForeignKey<Diamond>(w => w.DiamondId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Them khoa ngoai giua Order voi Transaction
@@ -159,6 +144,14 @@ namespace backend.Data
                 .HasOne(o => o.Order)
                 .WithMany(o => o.Transactions)
                 .HasForeignKey(o => o.OrderId);
+
+            //Them khoa ngoai giua WarrantyCard voi OrderDetail
+            builder
+                .Entity<OrderDetail>()
+                .HasOne(o => o.WarrantyCard)
+                .WithOne(o => o.OrderDetail)
+                .HasForeignKey<OrderDetail>(w => w.OrderDetailId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //Them khoa ngoai giua WarrantyCard voi WarrantyRequest
             builder
@@ -195,60 +188,69 @@ namespace backend.Data
                 .WithMany(o => o.Feedbacks)
                 .HasForeignKey(o => o.AccessoryId);
 
-            //Example
+            //Them khoa ngoai giua Order voi PriceRate
+            builder
+                .Entity<Order>()
+                .HasOne(o => o.PriceRate)
+                .WithMany(o => o.Orders)
+                .HasForeignKey(o => o.PriceRateId);
 
-            // N-N
+            //Them khoa ngoai giua Order voi Rank
+            builder
+                .Entity<Order>()
+                .HasOne(o => o.Rank)
+                .WithMany(o => o.Orders)
+                .HasForeignKey(o => o.RankId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            //builder.Entity<OrderDetail>()
-            //    .HasKey(od => new { od.OrderID, od.ProductID });
+            //Them khoa ngoai giua OrderDetail voi DiamondPrice
+            builder
+                .Entity<OrderDetail>()
+                .HasOne(o => o.DiamondPrice)
+                .WithMany(o => o.OrderDetails)
+                .HasForeignKey(o => o.DiamondPriceId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            //builder.Entity<OrderDetail>()
-            //    .HasOne(od => od.Order)
-            //    .WithMany(o => o.OrderDetails)
-            //    .HasForeignKey(od => od.OrderID);
+            //Them khoa ngoai giua OrderDetail voi MaterialPrice
+            builder
+                .Entity<OrderDetail>()
+                .HasOne(o => o.MaterialPrice)
+                .WithMany(o => o.OrderDetails)
+                .HasForeignKey(o => o.MaterialPriceId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            //builder.Entity<OrderDetail>()
-            //    .HasOne(od => od.Product)
-            //    .WithMany(p => p.OrderDetails)
-            //    .HasForeignKey(od => od.ProductID);
+            //Them khoa ngoai giua Customer voi WarrantyRequest
+            builder
+                .Entity<WarrantyRequest>()
+                .HasOne(o => o.Customer)
+                .WithMany(o => o.WarrantyRequestsOfCustomer)
+                .HasForeignKey(o => o.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
 
+            //Them khoa ngoai giua SaleStaff voi WarrantyRequest
+            builder
+                .Entity<WarrantyRequest>()
+                .HasOne(o => o.SaleStaff)
+                .WithMany(o => o.WarrantyRequestsOfSaleStaff)
+                .HasForeignKey(o => o.SaleStaffId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-
-            // 1-N
-
-            //builder.Entity<Order>()
-            //    .HasOne(o => o.User)
-            //    .WithMany()
-            //    .HasForeignKey(o => o.UserID);
-
-
-
-            // 1-1
-
-            //builder.Entity<Account>()
-            //    .HasOne(o => o.User)
-            //    .WithOne(o => o.)
-            //    .HasForeignKey(o => o.UserID);
-
+            //Them khoa ngoai giua DeliveryStaff voi WarrantyRequest
+            builder
+                .Entity<WarrantyRequest>()
+                .HasOne(o => o.DeliveryStaff)
+                .WithMany(o => o.WarrantyRequestsOfDeliveryStaff)
+                .HasForeignKey(o => o.DeliveryStaffId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Add test data
-            List<Role> roles = new List<Role>
-            {
-                new Role { RoleId = 1, RoleName = "Customer" },
-                new Role { RoleId = 2, RoleName = "SaleStaff" },
-                new Role { RoleId = 3, RoleName = "DeliveryStaff" },
-                new Role { RoleId = 4, RoleName = "WarrantyStaff" },
-                new Role { RoleId = 5, RoleName = "Manager" },
-                new Role { RoleId = 6, RoleName = "Administrator" },
-            };
-
             List<Rank> ranks = new List<Rank>
             {
                 new Rank
                 {
                     RankId = 1,
                     RankName = "Bronze",
-                    Discount = 0.025f,
+                    Discount = 0,
                     RewardPoint = 0
                 },
                 new Rank
@@ -287,7 +289,6 @@ namespace backend.Data
                     RewardPoint = 2500
                 },
             };
-            builder.Entity<Role>().HasData(roles);
             builder.Entity<Rank>().HasData(ranks);
         }
     }

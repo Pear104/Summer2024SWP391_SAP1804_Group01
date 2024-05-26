@@ -1,5 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using backend.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models
 {
@@ -11,14 +12,12 @@ namespace backend.Models
         [Column("account_id")]
         public long AccountId { get; set; }
 
-        [Column("role_id")]
-        public long RoleId { get; set; }
-
-        public Role Role { get; set; } = new Role();
-        public Rank Rank { get; set; } = new Rank();
+        [Column("role")]
+        public Role Role { get; set; } = Role.Customer;
 
         [Column("rank_id")]
         public long RankId { get; set; }
+        public Rank Rank { get; set; } = new Rank();
 
         [Column("name")]
         public string Name { get; set; } = string.Empty;
@@ -39,22 +38,23 @@ namespace backend.Models
         public DateTime Birthday { get; set; }
 
         [Column("gender")]
-        public string Gender { get; set; } = string.Empty;
+        public Gender Gender { get; set; } = Gender.Other;
 
         [Column("reward_point")]
         public int RewardPoint { get; set; }
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-
         public List<Order> OrdersOfCustomer { get; set; } = new List<Order>();
         public List<Order> OrdersOfSaleStaff { get; set; } = new List<Order>();
         public List<Order> OrdersOfDeliveryStaff { get; set; } = new List<Order>();
-        public List<WarrantyRequest> RequestOfWarrantyStaff { get; set; } =
+        public List<WarrantyRequest> WarrantyRequestsOfCustomer { get; set; } =
+            new List<WarrantyRequest>();
+        public List<WarrantyRequest> WarrantyRequestsOfSaleStaff { get; set; } =
+            new List<WarrantyRequest>();
+        public List<WarrantyRequest> WarrantyRequestsOfDeliveryStaff { get; set; } =
             new List<WarrantyRequest>();
         public List<Blog> Blogs { get; set; } = new List<Blog>();
         public List<PriceRate> PriceRates { get; set; } = new List<PriceRate>();
-
-        //Ánh: Chưa rõ warranty request nên thêm vào ntn.
     }
 }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using backend.Data;
+using backend.Mappers;
+using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using backend.Data;
-using backend.Models;
 
 namespace backend.Controllers
 {
@@ -23,9 +19,10 @@ namespace backend.Controllers
 
         // GET: api/Accounts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
+        public async Task<ActionResult> GetAccounts()
         {
-            return await _context.Accounts.ToListAsync();
+            var accountModels = await _context.Accounts.ToListAsync();
+            return Ok(accountModels.Select(x => x.ToAccountDTO()));
         }
 
         // GET: api/Accounts/5

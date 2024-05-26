@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using backend.DTOs.Account;
 
-namespace backend.DTOs
+namespace backend.DTOs.Rank
 {
     public class RankDTO
     {
