@@ -38,7 +38,7 @@ namespace backend.Service
 
             return new AuthenticationResponse
             {
-                Email = account.Email,
+                AccountId = account.AccountId,
                 Token = _tokenService.CreateToken(account)
             };
         }
@@ -68,7 +68,7 @@ namespace backend.Service
                 return (
                     new AuthenticationResponse
                     {
-                        Email = account.Email,
+                        AccountId = account.AccountId,
                         Token = _tokenService.CreateToken(account)
                     }
                 );

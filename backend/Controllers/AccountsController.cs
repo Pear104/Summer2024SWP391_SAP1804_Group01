@@ -28,7 +28,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Account>> GetAccount(long id)
+        public async Task<ActionResult> GetAccount(long id)
         {
             var account = await _accountRepo.GetAccountByIdAsync(id);
 
@@ -37,7 +37,7 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            return account;
+            return Ok(account.ToAccountDTO());
         }
 
         [HttpPut("{id}")]
