@@ -2,6 +2,7 @@
 using backend.Crawler;
 using backend.Data;
 using backend.Enums;
+using backend.Helper;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -187,6 +188,59 @@ namespace backend.Controllers
                 }
             },
         };
+        public List<Account> accounts = new List<Account>
+        {
+            new Account
+            {
+                Role = Role.Customer,
+                RankId = 1,
+                Name = "ToiLaCustomer",
+                Email = "customer@gmail.com",
+                Password = "12345678",
+                PhoneNumber = "0123456789",
+                Address = "120 ABC Street",
+            },
+            new Account
+            {
+                Role = Role.SaleStaff,
+                RankId = 2,
+                Name = "ToiLaSaleStaff",
+                Email = "sale_staff@gmail.com",
+                Password = "12345678",
+                PhoneNumber = "0123456785",
+                Address = "23 AC Street",
+            },
+            new Account
+            {
+                Role = Role.DeliveryStaff,
+                RankId = 3,
+                Name = "ToiLaDeliverystaff",
+                Email = "delivery_staff@gmail.com",
+                Password = "12345678",
+                PhoneNumber = "0123456783",
+                Address = "12 BC Street",
+            },
+            new Account
+            {
+                Role = Role.Manager,
+                RankId = 5,
+                Name = "ToiLaManager",
+                Email = "manager@gmail.com",
+                Password = "12345678",
+                PhoneNumber = "0123456789",
+                Address = "13 AC Street",
+            },
+            new Account
+            {
+                Role = Role.Administrator,
+                RankId = 6,
+                Name = "ToiLaAdministrator",
+                Email = "administrator@gmail.com",
+                Password = "12345678",
+                PhoneNumber = "0123456789",
+                Address = "213 BAC Street",
+            },
+        };
 
         private static int RandomKarat()
         {
@@ -235,6 +289,16 @@ namespace backend.Controllers
                 };
                 _context.AccessoryTypes.Add(settingTypeModel);
             }
+
+            foreach (var account in accounts)
+            {
+                var rank = _context.Ranks.Find(account.RankId);
+                var hashedPassword = PasswordHasher.HashPassword(account.Password);
+                account.Password = hashedPassword;
+                account.Rank = rank;
+                _context.Accounts.Add(account);
+            }
+
             _context.SaveChanges();
             return Ok("add 1 ok");
         }
@@ -405,55 +469,8 @@ namespace backend.Controllers
         [HttpGet("/crawler/5")]
         public IActionResult AddAccount()
         {
-            List<Account> accounts = new List<Account>
-            {
-                new Account
-                {
-                    Role = Role.Customer,
-                    RankId = 1,
-                    Name = "ToiLaCustomer",
-                    Email = "customer@gmail.com",
-                    Password = "12345"
-                },
-                new Account
-                {
-                    Role = Role.SaleStaff,
-                    RankId = 2,
-                    Name = "ToiLaSaleStaff",
-                    Email = "sale_staff@gmail.com",
-                    Password = "12345"
-                },
-                new Account
-                {
-                    Role = Role.DeliveryStaff,
-                    RankId = 3,
-                    Name = "ToiLaDeliverystaff",
-                    Email = "delivery_staff@gmail.com",
-                    Password = "12345",
-                },
-                new Account
-                {
-                    Role = Role.Manager,
-                    RankId = 5,
-                    Name = "ToiLaManager",
-                    Email = "manager@gmail.com",
-                    Password = "12345"
-                },
-                new Account
-                {
-                    Role = Role.Administrator,
-                    RankId = 6,
-                    Name = "ToiLaAdministrator",
-                    Email = "administrator@gmail.com",
-                    Password = "12345"
-                },
-            };
-            foreach (var account in accounts)
-            {
-                var rank = _context.Ranks.Find(account.RankId);
-                account.Rank = rank;
-                _context.Accounts.Add(account);
-            }
+            var admin = _context.Accounts.FirstOrDefault(x => x.Name == "ToiLaAdministrator");
+            _context.PriceRates.Add(new PriceRate() { Account = admin, Percent = 1.05f });
             _context.SaveChanges();
             return Ok("add 5 ok");
         }

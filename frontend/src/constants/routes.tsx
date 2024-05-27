@@ -13,20 +13,37 @@ import Test from "../pages/test/Test";
 import DiamondDetail from "../pages/product/diamond/DiamondDetail";
 import AccessoryList from "../pages/product/accessory/AccessoryList";
 import AccessoryDetail from "../pages/product/accessory/AccessoryDetail";
+import { Children } from "react";
+import DashBoardLayout from "../layouts/DashBoardLayout";
+import Products from "../pages/dashboard/ProductsManage";
+import EmailLoading from "../pages/authentication/EmailLoading";
 
 const routes = [
   {
     errorElement: <Error />,
     path: "/",
-    element: <MainLayout />,
     children: [
       {
+        element: <DashBoardLayout />,
+        path: "/admin",
         children: [
           {
+<<<<<<< HEAD
             path: "/test",
             element: <Test />,
+=======
+            element: <Products />,
+            path: "/admin/products",
+>>>>>>> 497bf56ce0cfce3c6b524970ed9057fa5736cd4e
           },
+        ],
+      },
+      {
+        element: <MainLayout />,
+        path: "/",
+        children: [
           {
+<<<<<<< HEAD
             path: "/",
             element: <Home />,
           },
@@ -45,36 +62,68 @@ const routes = [
           {
             element: <AccountLayout />,
             path: "account",
+=======
+>>>>>>> 497bf56ce0cfce3c6b524970ed9057fa5736cd4e
             children: [
               {
-                index: true,
-                element: <AccountDetail />,
+                element: <Test />,
+                path: "/test",
               },
               {
-                element: <OrderHistory />,
-                path: "order-history",
-              },
-            ],
-          },
-          {
-            element: <ProductLayout />,
-            path: "product",
-            children: [
-              {
-                path: "diamond",
-                element: <DiamondList />,
+                element: <Home />,
+                path: "/",
               },
               {
-                path: "diamond/detail",
-                element: <DiamondDetail />,
+                element: <Login />,
+                path: "authentication/login",
               },
               {
-                path: "accessory",
-                element: <AccessoryList />,
+                element: <Register />,
+                path: "authentication/register",
               },
               {
-                path: "accessory/detail",
-                element: <AccessoryDetail />,
+                element: <ConfirmEmail />,
+                path: "authentication/email-redirect",
+              },
+              {
+                element: <EmailLoading />,
+                path: "authentication/verify-email",
+              },
+              {
+                element: <AccountLayout />,
+                path: "account",
+                children: [
+                  {
+                    index: true,
+                    element: <AccountDetail />,
+                  },
+                  {
+                    element: <OrderHistory />,
+                    path: "order-history",
+                  },
+                ],
+              },
+              {
+                element: <ProductLayout />,
+                path: "product",
+                children: [
+                  {
+                    path: "diamond",
+                    element: <DiamondList />,
+                  },
+                  {
+                    path: "diamond/detail",
+                    element: <DiamondDetail />,
+                  },
+                  {
+                    path: "accessory",
+                    element: <AccessoryList />,
+                  },
+                  {
+                    path: "accessory/detail",
+                    element: <AccessoryDetail />,
+                  },
+                ],
               },
             ],
           },

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using backend.DTOs;
 using backend.Models;
 
@@ -20,8 +16,8 @@ namespace backend.Mappers
                 ImageUrl = diamond.ImageUrl,
                 Carat = diamond.Carat,
                 Cut = diamond.Cut,
-                Color = diamond.Color,
-                Clarity = diamond.Clarity,
+                Clarity = diamond.Clarity.ToString(),
+                Color = diamond.Color.ToString(),
                 Polish = diamond.Polish,
                 Symmetry = diamond.Symmetry,
                 Fluorescence = diamond.Fluorescence,

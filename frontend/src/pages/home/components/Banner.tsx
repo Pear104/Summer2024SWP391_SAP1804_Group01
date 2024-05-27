@@ -1,12 +1,12 @@
 export default function Banner() {
   return (
     <div
-      className="aspect-[1358/452] bg-contain bg-no-repeat w-full"
+      className="aspect-[1358/452] bg-contain bg-no-repeat w-full flex items-center"
       style={{
         backgroundImage: "url(/images/Banner_1.jpg)",
       }}
     >
-      <div className="pl-16 pt-24">
+      <div className="pl-16">
         <div className="text-6xl playfair-display-regular">
           <div className="mb-8">Form is temporary,</div>
           <span className="">But class is </span>

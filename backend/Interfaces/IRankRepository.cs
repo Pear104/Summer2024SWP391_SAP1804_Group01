@@ -9,9 +9,9 @@ namespace backend.Interfaces
     public interface IRankRepository
     {
         Task<IEnumerable<Rank>> GetAllRanksAsync();
-        Task<Rank> GetRankByIdAsync(long id);
+        Task<Rank?> GetRankByIdAsync(long id);
         Task<Rank> CreateRankAsync(Rank rank);
-        Task<Rank> UpdateRankAsync(Rank rank);
-        Task DeleteRankAsync(long id);
+        Task<Rank?> UpdateRankAsync(long id, Rank rank);
+        Task<Rank?> DeleteRankAsync(long id);
     }
 }

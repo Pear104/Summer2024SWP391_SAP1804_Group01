@@ -1,28 +1,48 @@
 import { Button } from "antd";
-import React from "react";
+import { useEffect, useState } from "react";
+import { GET } from "../../utils/request";
 
 const Field = ({ field, value }: { field: string; value: string }) => {
   return (
     <div className="flex items-center gap-4">
-      <div className="font-semibold playfair-display-regular text-lg">
-        {field}:
-      </div>
+      <div className="font-bold mulish-regular text-lg">{field}:</div>
       <div>{value}</div>
     </div>
   );
 };
 
 export default function AccountDetail() {
+  const [userInfo, setUserInfo] = useState<any>();
+  const field = [
+    "name",
+    "email",
+    "phoneNumber",
+    "address",
+    "birthday",
+    "gender",
+    "rewardPoint",
+    "createdAt",
+  ];
+  useEffect(() => {
+    (async () => {
+      const data = await GET(`/api/Accounts/me`);
+      setUserInfo(data);
+    })();
+  }, []);
+
   return (
-    <div>
-      <div className="font-semibold playfair-display-regular text-2xl">
+    <div className="ml-20">
+      <div className="font-semibold mulish-regular text-2xl">
         ACCOUNT DETAIL
       </div>
       <div className="pt-6 flex flex-col gap-3">
-        <Field field="Email" value="abcd@gmail.com" />
-        <Field field="Phone number" value="0123.456.789" />
-        <Field field="Address" value="123/456 District 8, Ho Chi Minh City" />
-        <Field field="Birthday" value="01/01/2000" />
+        {userInfo && (
+          <>
+            {field.map((key) => {
+              return <Field key={key} field={key} value={userInfo[key]} />;
+            })}
+          </>
+        )}
       </div>
       <div className="mt-6">
         <Button className="">EDIT</Button>

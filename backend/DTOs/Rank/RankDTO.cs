@@ -8,6 +8,5 @@ namespace backend.DTOs.Rank
         public string RankName { get; set; } = string.Empty;
         public float Discount { get; set; }
         public int RewardPoint { get; set; }
-        public List<AccountDTO> Accounts { get; set; } = new List<AccountDTO>();
     }
 }

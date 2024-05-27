@@ -9,9 +9,9 @@ namespace backend.Interfaces
     public interface IAccountRepository
     {
         Task<IEnumerable<Account>> GetAllAccountsAsync();
-        Task<Account> GetAccountByIdAsync(long id);
+        Task<Account?> GetAccountByIdAsync(long id);
         Task<Account> CreateAccountAsync(Account account);
-        Task<Account> UpdateAccountAsync(Account account);
-        Task DeleteAccountAsync(long id);
+        Task<Account?> UpdateAccountAsync(long id, Account account);
+        // Task<Account?> DeleteAccountAsync(long id);
     }
 }

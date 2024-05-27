@@ -14,8 +14,10 @@ namespace backend.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IAccessoryRepository _accessoryRepo;
 
-
-        public AccessoriesController(ApplicationDbContext context, IAccessoryRepository accessoryRepo)
+        public AccessoriesController(
+            ApplicationDbContext context,
+            IAccessoryRepository accessoryRepo
+        )
         {
             _context = context;
             _accessoryRepo = accessoryRepo;
