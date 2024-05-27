@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using backend.DTOs.Authentication;
-using backend.Models;
 
 namespace backend.Interfaces
 {
@@ -9,5 +6,8 @@ namespace backend.Interfaces
     {
         Task<AuthenticationResponse?> Login(LoginDTO loginDto);
         Task<AuthenticationResponse?> Register(RegisterDTO registerDto);
+
+        Task<AuthenticationResponse?> VerifyGmail(string token);
+        //Task<RegisterDTO?> VerifyGmail(string token);
     }
 }

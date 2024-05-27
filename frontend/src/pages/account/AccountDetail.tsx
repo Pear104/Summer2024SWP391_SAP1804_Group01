@@ -1,7 +1,6 @@
 import { Button } from "antd";
 import { useEffect, useState } from "react";
 import { GET } from "../../utils/request";
-import { getCookie } from "../../utils/cookie";
 
 const Field = ({ field, value }: { field: string; value: string }) => {
   return (
@@ -26,13 +25,11 @@ export default function AccountDetail() {
   ];
   useEffect(() => {
     (async () => {
-      const data = await GET(`/api/Accounts/${getCookie("accountId")}`);
+      const data = await GET(`/api/Accounts/me`);
       setUserInfo(data);
     })();
   }, []);
-  if (userInfo != null) {
-    console.log(userInfo["email"]);
-  }
+
   return (
     <div className="ml-20">
       <div className="font-semibold mulish-regular text-2xl">

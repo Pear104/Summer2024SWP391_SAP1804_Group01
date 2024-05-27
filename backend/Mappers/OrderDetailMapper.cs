@@ -9,17 +9,17 @@ namespace backend.Mappers
 {
     public static class OrderDetailMapper
     {
-        public static CreateOrderDetailDTO ToCreateOrderDetailDTO(this OrderDetail orderDetail)
-        {
+        public static CreateOrderDetailDTO ToCreateOrderDetailDTO(this OrderDetail orderDetail) 
+        { 
             return new CreateOrderDetailDTO
             {
                 Size = orderDetail.Size,
-                DiamondId = orderDetail.DiamondId,
+                DiamondId =orderDetail.DiamondId,
                 AccessoryId = orderDetail.AccessoryId
             };
         }
-        public static OrderDetail ToOrderDetailFromCreate(this CreateOrderDetailDTO orderDetailDTO, int orderID)
-        {
+        public static OrderDetail ToOrderDetailFromCreate(this CreateOrderDetailDTO orderDetailDTO, int orderID) 
+        { 
             return new OrderDetail
             {
                 Size = orderDetailDTO.Size,
@@ -28,9 +28,19 @@ namespace backend.Mappers
                 OrderId = orderID
             };
         }
-
-        public static OrderDetailDTO ToOrderDetailDTO(this OrderDetail orderDetail)
-        {
+        
+        // public static UpdateOrderDetail ToOrderDetailFromUpdate(this OrderDetailDTO orderDetailDTO, int orderID) 
+        // { 
+        //     return new OrderDetail
+        //     {
+        //         Size = orderDetailDTO.Size,
+        //         DiamondId = orderDetailDTO.DiamondId,
+        //         AccessoryId = (long)orderDetailDTO.AccessoryId,
+        //         OrderId = orderID
+        //     };
+        // }
+        public static OrderDetailDTO ToOrderDetailDTO(this OrderDetail orderDetail) 
+        { 
             return new OrderDetailDTO
             {
                 OrderDetailId = orderDetail.OrderDetailId,

@@ -16,6 +16,7 @@ import AccessoryDetail from "../pages/product/accessory/AccessoryDetail";
 import { Children } from "react";
 import DashBoardLayout from "../layouts/DashBoardLayout";
 import Products from "../pages/dashboard/ProductsManage";
+import EmailLoading from "../pages/authentication/EmailLoading";
 
 const routes = [
   {
@@ -56,7 +57,11 @@ const routes = [
               },
               {
                 element: <ConfirmEmail />,
-                path: "authentication/confirm-email",
+                path: "authentication/email-redirect",
+              },
+              {
+                element: <EmailLoading />,
+                path: "authentication/verify-email",
               },
               {
                 element: <AccountLayout />,

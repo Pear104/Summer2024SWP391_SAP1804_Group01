@@ -12,6 +12,7 @@ import SearchBar from "../SearchBar";
 import { useState } from "react";
 import JewelryItem from "./components/JewelryItem";
 import DiamondItem from "./components/DiamondItem";
+import { getCookie } from "../../utils/cookie";
 
 const TopNavItem = ({
   children,
@@ -61,7 +62,11 @@ export default function TopNav() {
           <SearchBar />
           <Heart size={20} strokeWidth={2} absoluteStrokeWidth />
           <ShoppingCart size={20} strokeWidth={2} />
-          <a href="/authentication/login">
+          <a
+            href={
+              !getCookie("accessToken") ? "/authentication/login" : "/account"
+            }
+          >
             <User size={20} absoluteStrokeWidth />
           </a>
         </div>

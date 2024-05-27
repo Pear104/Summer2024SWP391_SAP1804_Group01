@@ -38,6 +38,7 @@ export default function AccountLayout() {
           className="mt-14 w-full"
           onClick={() => {
             setCookie("accessToken", "", 0);
+            setCookie("accountId", "", 0);
             location.href = "/authentication/login";
           }}
         >

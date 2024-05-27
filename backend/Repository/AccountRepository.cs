@@ -45,7 +45,7 @@ namespace backend.Repository
         public async Task<Account?> UpdateAccountAsync(long id, Account account)
         {
             var existedAccount = await _context.Accounts.FindAsync(account.AccountId);
-            if (existedAccount == null) 
+            if (existedAccount == null)
             {
                 return null;
             }
@@ -56,10 +56,7 @@ namespace backend.Repository
 
         public async Task<IEnumerable<Account>> GetAllAccountsAsync()
         {
-            return await _context.Accounts
-            .Include(x => x.ToAccountDTO())
-            .ToListAsync();
+            return await _context.Accounts.ToListAsync();
         }
-
     }
 }

@@ -1,10 +1,10 @@
 ﻿using backend.Data;
+using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging.Core;
-using backend.Interfaces;
 
 namespace backend.Controllers
 {
@@ -25,6 +25,14 @@ namespace backend.Controllers
             var accountModels = await _accountRepo.GetAllAccountsAsync();
             var accountDTOs = accountModels.Select(x => x.ToAccountDTO());
             return Ok(accountDTOs);
+        }
+
+        [HttpGet("me")]
+        public async Task<ActionResult> GetCurrentAccount()
+        {
+            string accountId = User.FindFirst("accountId")?.Value;
+            var accountModels = await _accountRepo.GetAccountByIdAsync(long.Parse(accountId));
+            return Ok(accountModels.ToAccountDTO());
         }
 
         [HttpGet("{id}")]
@@ -49,7 +57,7 @@ namespace backend.Controllers
             }
 
             // _context.Entry(account).State = EntityState.Modified;
-            
+
             try
             {
                 await _accountRepo.UpdateAccountAsync(id, account);

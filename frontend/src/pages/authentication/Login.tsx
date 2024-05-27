@@ -11,9 +11,12 @@ import { setCookie } from "../../utils/cookie";
 const schema = z.object({
   email: z
     .string()
-    .min(1, { message: "Required" })
-    .max(32, { message: "Email should be less than 32 characters" }),
-  password: z.string().min(1, { message: "Required" }),
+    .email()
+    .min(8, { message: "Invalid email!" })
+    .max(32, { message: "Invalid email!" }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters" }),
 });
 export default function Login() {
   const { control, handleSubmit, setError } = useForm({
@@ -47,7 +50,6 @@ export default function Login() {
               );
               if (authResponse.token) {
                 setCookie("accessToken", authResponse.token, 7);
-                setCookie("accountId", authResponse.accountId, 7);
                 location.href = "/account";
               } else {
                 setError("password", {

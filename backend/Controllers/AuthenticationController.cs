@@ -1,10 +1,6 @@
-﻿using backend.Data;
-using backend.DTOs.Authentication;
-using backend.Enums;
+﻿using backend.DTOs.Authentication;
 using backend.Interfaces;
-using backend.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
@@ -13,10 +9,15 @@ namespace backend.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;
+        private readonly IEmailSender _emailSender;
 
-        public AuthenticationController(IAuthenticationService authenticationService)
+        public AuthenticationController(
+            IAuthenticationService authenticationService,
+            IEmailSender emailSender
+        )
         {
             _authenticationService = authenticationService;
+            _emailSender = emailSender;
         }
 
         [HttpPost("login")]
@@ -39,12 +40,30 @@ namespace backend.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var token = await _authenticationService.Register(registerDto);
-            if (token == null)
+            var verifyGmailToken = await _authenticationService.Register(registerDto);
+            if (verifyGmailToken == null)
             {
                 return Unauthorized("Email already be used");
             }
-            return Ok(token);
+            var result = _emailSender.SendEmail(
+                registerDto.Email,
+                registerDto.Name,
+                verifyGmailToken.Token,
+                "[DATJ Diamond]: Verify your account"
+            );
+
+            return Ok(result);
+        }
+
+        [HttpGet("verify-gmail/{verifyGmailToken}")]
+        public async Task<IActionResult> VerifyGmail([FromRoute] string verifyGmailToken)
+        {
+            var accessToken = await _authenticationService.VerifyGmail(verifyGmailToken);
+            if (accessToken == null)
+            {
+                return Unauthorized("Email already be used");
+            }
+            return Ok(accessToken);
         }
     }
 }

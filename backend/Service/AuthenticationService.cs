@@ -36,11 +36,7 @@ namespace backend.Service
             if (!isPasswordValid)
                 return null;
 
-            return new AuthenticationResponse
-            {
-                AccountId = account.AccountId,
-                Token = _tokenService.CreateToken(account)
-            };
+            return new AuthenticationResponse { Token = _tokenService.CreateToken(account) };
         }
 
         public async Task<AuthenticationResponse?> Register(RegisterDTO registerDto)
@@ -48,35 +44,43 @@ namespace backend.Service
             var existingAccount = await _context.Accounts.FirstOrDefaultAsync(x =>
                 x.Email == registerDto.Email
             );
-            var rank = await _context.Ranks.FirstOrDefaultAsync(x => x.RankName == "Bronze");
-            if (existingAccount == null)
-            {
-                var account = new Account
-                {
-                    Name = registerDto.Name,
-                    Email = registerDto.Email,
-                    Password = PasswordHasher.HashPassword(registerDto.Password),
-                    Role = Role.Customer,
-                    Gender = registerDto.Gender,
-                    Rank = rank,
-                    PhoneNumber = registerDto.PhoneNumber,
-                    Address = registerDto.Address,
-                    Birthday = registerDto.Birthday,
-                };
-                _context.Accounts.Add(account);
-                await _context.SaveChangesAsync();
-                return (
-                    new AuthenticationResponse
-                    {
-                        AccountId = account.AccountId,
-                        Token = _tokenService.CreateToken(account)
-                    }
-                );
-            }
-            else
+            if (existingAccount != null)
             {
                 return null;
             }
+            return new AuthenticationResponse()
+            {
+                Token = _tokenService.CreateVerifyToken(registerDto)
+            };
+        }
+
+        public async Task<AuthenticationResponse?> VerifyGmail(string token)
+        {
+            var registerDto = _tokenService.ParseToken(token);
+            var existingAccount = await _context.Accounts.FirstOrDefaultAsync(x =>
+                x.Email == registerDto.Email
+            );
+            if (existingAccount != null)
+            {
+                return null;
+            }
+            var rank = await _context.Ranks.FirstOrDefaultAsync(x => x.RankName == "Bronze");
+            var account = new Account()
+            {
+                Name = registerDto.Name,
+                Email = registerDto.Email,
+                Password = PasswordHasher.HashPassword(registerDto.Password),
+                Role = Role.Customer,
+                Gender = registerDto.Gender,
+                Rank = rank,
+                PhoneNumber = registerDto.PhoneNumber,
+                Address = registerDto.Address,
+                Birthday = registerDto.Birthday,
+            };
+            _context.Accounts.Add(account);
+            await _context.SaveChangesAsync();
+
+            return (new AuthenticationResponse { Token = _tokenService.CreateToken(account) });
         }
     }
 }

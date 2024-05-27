@@ -16,16 +16,21 @@ const schema = z
     email: z
       .string()
       .email()
-      .min(5, { message: "Invalid email" })
+      .min(8, { message: "Invalid email" })
       .max(32, { message: "Email should be less than 32 characters" }),
-    password: z.string().min(1, { message: "Required" }),
-    confirmPassword: z.string().min(1, { message: "Required" }),
-    name: z.string().min(1, { message: "Required" }),
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters" }),
+    confirmPassword: z.string().min(8, { message: "Required" }),
+    name: z
+      .string()
+      .min(6, { message: "Name should be at least 6 characters" })
+      .max(32, { message: "Name should be less than 32 characters" }),
     phoneNumber: z
       .string()
       .regex(phoneRegex, "Invalid phone number!")
       .min(10, "Invalid phone number!")
-      .max(14, "Invalid phone number!"),
+      .max(16, "Invalid phone number!"),
     address: z.string().min(1, { message: "Required" }),
     birthday: z.coerce.date(),
     gender: z.string().min(1, { message: "Required" }),
@@ -60,7 +65,6 @@ export default function Register() {
         <div
           className="rotate-180 bg-cover bg-center bg-no-repeat h-full"
           style={{
-            // backgroundImage: "url(/images/bracelets.6c0c2.jpg)",
             backgroundImage: "url(/images/diamond-desktop2.png)",
           }}
         ></div>
@@ -81,9 +85,10 @@ export default function Register() {
                 "/api/Authentication/register",
                 data
               );
-              if (authResponse.token) {
-                setCookie("accessToken", authResponse.token, 7);
-                location.href = "/account";
+              console.log(authResponse);
+              if (authResponse) {
+                // setCookie("accessToken", authResponse.token, 7);
+                location.href = "/authentication/email-redirect";
               } else {
                 setError("email", {
                   type: "manual",
