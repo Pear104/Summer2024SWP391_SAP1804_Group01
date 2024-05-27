@@ -2,6 +2,7 @@
 using backend.Crawler;
 using backend.Data;
 using backend.Enums;
+using backend.Helper;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -195,7 +196,9 @@ namespace backend.Controllers
                 RankId = 1,
                 Name = "ToiLaCustomer",
                 Email = "customer@gmail.com",
-                Password = "12345"
+                Password = "12345",
+                PhoneNumber = "0123456789",
+                Address = "120 ABC Street",
             },
             new Account
             {
@@ -203,7 +206,9 @@ namespace backend.Controllers
                 RankId = 2,
                 Name = "ToiLaSaleStaff",
                 Email = "sale_staff@gmail.com",
-                Password = "12345"
+                Password = "12345",
+                PhoneNumber = "0123456785",
+                Address = "23 AC Street",
             },
             new Account
             {
@@ -212,6 +217,8 @@ namespace backend.Controllers
                 Name = "ToiLaDeliverystaff",
                 Email = "delivery_staff@gmail.com",
                 Password = "12345",
+                PhoneNumber = "0123456783",
+                Address = "12 BC Street",
             },
             new Account
             {
@@ -219,7 +226,9 @@ namespace backend.Controllers
                 RankId = 5,
                 Name = "ToiLaManager",
                 Email = "manager@gmail.com",
-                Password = "12345"
+                Password = "12345",
+                PhoneNumber = "0123456789",
+                Address = "13 AC Street",
             },
             new Account
             {
@@ -227,7 +236,9 @@ namespace backend.Controllers
                 RankId = 6,
                 Name = "ToiLaAdministrator",
                 Email = "administrator@gmail.com",
-                Password = "12345"
+                Password = "12345",
+                PhoneNumber = "0123456789",
+                Address = "213 BAC Street",
             },
         };
 
@@ -282,13 +293,11 @@ namespace backend.Controllers
             foreach (var account in accounts)
             {
                 var rank = _context.Ranks.Find(account.RankId);
+                var hashedPassword = PasswordHasher.HashPassword(account.Password);
+                account.Password = hashedPassword;
                 account.Rank = rank;
                 _context.Accounts.Add(account);
             }
-            var admin = _context.Accounts.FirstOrDefault(x => x.Name == "ToiLaAdministrator");
-            _context.PriceRates.Add(new PriceRate() { Account = admin, Percent = 1.05f });
-            // _context.DiamondPrices.Add(new PriceRate() { Account = admin, Percent = 1.05f });
-            // _context.MaterialPrices.Add(new PriceRate() { Account = admin, Percent = 1.05f });
 
             _context.SaveChanges();
             return Ok("add 1 ok");
@@ -460,6 +469,8 @@ namespace backend.Controllers
         [HttpGet("/crawler/5")]
         public IActionResult AddAccount()
         {
+            var admin = _context.Accounts.FirstOrDefault(x => x.Name == "ToiLaAdministrator");
+            _context.PriceRates.Add(new PriceRate() { Account = admin, Percent = 1.05f });
             _context.SaveChanges();
             return Ok("add 5 ok");
         }

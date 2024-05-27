@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using backend.Enums;
 
 namespace backend.Models
 {
@@ -21,10 +22,10 @@ namespace backend.Models
         public float MaxCaratEff { get; set; }
 
         [Column("color")]
-        public string Color { get; set; } = string.Empty;
+        public Color Color { get; set; } = Color.V;
 
         [Column("clarity")]
-        public string Clarity { get; set; } = string.Empty;
+        public Clarity Clarity { get; set; } = Clarity.I3;
 
         [Column("unit_price")]
         [Range(0.01, double.MaxValue)]

@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using backend.Enums;
 using backend.Models;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
@@ -81,8 +82,8 @@ namespace backend.Crawler
                     {
                         Carat = (float)diamond.size,
                         Cut = diamond.cut,
-                        Clarity = diamond.clarity,
-                        Color = diamond.color,
+                        Clarity = (Clarity)Enum.Parse(typeof(Clarity), diamond.clarity),
+                        Color = (Color)Enum.Parse(typeof(Color), diamond.color),
                         Polish = diamond.polish,
                         Symmetry = diamond.symmetry,
                         Fluorescence = diamond.fluor_intensity,

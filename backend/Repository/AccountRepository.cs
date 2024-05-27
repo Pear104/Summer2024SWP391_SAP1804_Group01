@@ -39,16 +39,7 @@ namespace backend.Repository
 
         public async Task<Account?> GetAccountByIdAsync(long id)
         {
-            return await _context.Accounts
-            .Include(x => x.ToAccountDTO())
-            .FirstOrDefaultAsync(x => x.AccountId == id);
-        }
-
-        public async Task<IEnumerable<Account>> GetAllAccountsAsync()
-        {
-            return await _context.Accounts
-            .Include(x => x.ToAccountDTO())
-            .ToListAsync();
+            return await _context.Accounts.FindAsync(id);
         }
 
         public async Task<Account?> UpdateAccountAsync(long id, Account account)
@@ -61,6 +52,13 @@ namespace backend.Repository
             existedAccount = account;
             await _context.SaveChangesAsync();
             return existedAccount;
+        }
+
+        public async Task<IEnumerable<Account>> GetAllAccountsAsync()
+        {
+            return await _context.Accounts
+            .Include(x => x.ToAccountDTO())
+            .ToListAsync();
         }
 
     }

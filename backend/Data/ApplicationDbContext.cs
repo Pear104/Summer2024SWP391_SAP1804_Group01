@@ -31,6 +31,19 @@ namespace backend.Data
         {
             base.OnModelCreating(builder);
 
+            // Config enum conversion to string
+            builder.Entity<Account>().Property(d => d.Role).HasConversion<string>();
+            builder.Entity<Account>().Property(d => d.Gender).HasConversion<string>();
+            builder.Entity<DiamondPrice>().Property(d => d.Clarity).HasConversion<string>();
+            builder.Entity<DiamondPrice>().Property(d => d.Color).HasConversion<string>();
+            builder.Entity<Diamond>().Property(d => d.Clarity).HasConversion<string>();
+            builder.Entity<Diamond>().Property(d => d.Color).HasConversion<string>();
+            builder.Entity<Order>().Property(d => d.OrderStatus).HasConversion<string>();
+            builder
+                .Entity<WarrantyRequest>()
+                .Property(d => d.WarrantyStatus)
+                .HasConversion<string>();
+
             // Set Id auto increment
             builder.Entity<Shape>().Property(o => o.ShapeId).ValueGeneratedOnAdd();
             builder.Entity<Diamond>().Property(o => o.DiamondId).ValueGeneratedOnAdd();

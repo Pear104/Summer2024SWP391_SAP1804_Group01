@@ -10,9 +10,8 @@ namespace backend.Interfaces
     {
         Task<IEnumerable<Account>> GetAllAccountsAsync();
         Task<Account?> GetAccountByIdAsync(long id);
-        bool AccountExisted(long id);
         Task<Account> CreateAccountAsync(Account account);
         Task<Account?> UpdateAccountAsync(long id, Account account);
-        Task DeleteAccountAsync(long id);
+        // Task<Account?> DeleteAccountAsync(long id);
     }
 }

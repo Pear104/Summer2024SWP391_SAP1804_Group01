@@ -12,82 +12,39 @@ namespace backend.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-        private readonly ITokenService _tokenService;
+        private readonly IAuthenticationService _authenticationService;
 
-        public AuthenticationController(ApplicationDbContext context, ITokenService tokenService)
+        public AuthenticationController(IAuthenticationService authenticationService)
         {
-            _context = context;
-            _tokenService = tokenService;
+            _authenticationService = authenticationService;
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
         {
-            var account = await _context.Accounts.FirstOrDefaultAsync(x =>
-                x.Email == loginDto.Email
-            );
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            if (account == null)
-                return Unauthorized("User not found");
-            else
+            var token = await _authenticationService.Login(loginDto);
+            if (token == null)
             {
-                var result = await _context.Accounts.FirstOrDefaultAsync(x =>
-                    (x.Email == loginDto.Email && loginDto.Password == x.Password)
-                );
-                if (account.Password != loginDto.Password)
-                {
-                    return Unauthorized("Username not found and/or password incorrect");
-                }
-                else
-                {
-                    return Ok(
-                        new AuthenticationResponse
-                        {
-                            Email = account.Email,
-                            Token = await _tokenService.CreateToken(account)
-                        }
-                    );
-                }
+                return Unauthorized("Email not found or password incorrect");
             }
+            return Ok(token);
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO registerDto)
         {
-            try
-            {
-                var existingAccount = await _context.Accounts.FirstOrDefaultAsync(x =>
-                    x.Email == registerDto.Email
-                );
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-                if (existingAccount == null)
-                {
-                    var account = new Account
-                    {
-                        Email = registerDto.Email,
-                        Password = registerDto.Password,
-                        Role = Role.Customer,
-                    };
-                    _context.Accounts.Add(account);
-                    await _context.SaveChangesAsync();
-                    return Ok(
-                        new AuthenticationResponse
-                        {
-                            Email = account.Email,
-                            Token = await _tokenService.CreateToken(account)
-                        }
-                    );
-                }
-                else
-                {
-                    return BadRequest("Your gmail already used");
-                }
-            }
-            catch (Exception e)
+            var token = await _authenticationService.Register(registerDto);
+            if (token == null)
             {
-                return BadRequest(e);
+                return Unauthorized("Email already be used");
             }
+            return Ok(token);
         }
     }
 }

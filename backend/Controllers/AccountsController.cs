@@ -21,7 +21,6 @@ namespace backend.Controllers
             _accountRepo = accountRepo;
         }
 
-        // GET: api/Accounts
         [HttpGet]
         public async Task<ActionResult> GetAccounts()
         {
@@ -30,7 +29,6 @@ namespace backend.Controllers
             return Ok(accountDTOs);
         }
 
-        // GET: api/Accounts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetAccount(long id)
         {
@@ -44,8 +42,6 @@ namespace backend.Controllers
             return account;
         }
 
-        // PUT: api/Accounts/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccount(long id, Account account)
         {
@@ -75,8 +71,6 @@ namespace backend.Controllers
             return NoContent();
         }
 
-        // POST: api/Accounts
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount(Account account)
         {
@@ -87,7 +81,6 @@ namespace backend.Controllers
             return CreatedAtAction("GetAccount", new { id = newAccount.AccountId }, newAccount);
         }
 
-        // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount(long id)
         {
@@ -102,11 +95,9 @@ namespace backend.Controllers
 
             return NoContent();
         }
-
         private bool AccountExists(long id)
         {
-            // return _context.Accounts.Any(e => e.AccountId == id);
-            return _accountRepo.AccountExisted(id);
+            return _context.Accounts.Any(e => e.AccountId == id);
         }
     }
 }
