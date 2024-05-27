@@ -1,10 +1,12 @@
-using backend.DTOs.Account;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace backend.DTOs.Rank
 {
-    public class RankDTO
+    public class UpdateRankDTO
     {
-        public long RankId { get; set; }
         public string RankName { get; set; } = string.Empty;
         public float Discount { get; set; }
         public int RewardPoint { get; set; }

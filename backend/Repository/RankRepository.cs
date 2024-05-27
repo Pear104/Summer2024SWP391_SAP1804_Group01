@@ -2,36 +2,61 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using backend.Data;
 using backend.Interfaces;
 using backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repository
 {
     public class RankRepository : IRankRepository
     {
-        public Task<Rank> CreateRankAsync(Rank rank)
+        private readonly ApplicationDbContext _context;
+
+        public RankRepository(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task DeleteRankAsync(long id)
+        public async Task<Rank> CreateRankAsync(Rank rank)
         {
-            throw new NotImplementedException();
+            await _context.Ranks.AddAsync(rank);
+            await _context.SaveChangesAsync();
+            return rank;
         }
 
-        public Task<IEnumerable<Rank>> GetAllRanksAsync()
+        public async Task<Rank?> DeleteRankAsync(long id)
         {
-            throw new NotImplementedException();
+            var deletedModel = await _context.Ranks.FirstOrDefaultAsync(x => x.RankId == id);
+            if (deletedModel != null)
+            {
+                _context.Ranks.Remove(deletedModel);
+                await _context.SaveChangesAsync();
+                return deletedModel;
+            }
+            return null;
         }
 
-        public Task<Rank> GetRankByIdAsync(long id)
+        public async Task<IEnumerable<Rank>> GetAllRanksAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Ranks.ToListAsync();
         }
 
-        public Task<Rank> UpdateRankAsync(Rank rank)
+        public async Task<Rank?> GetRankByIdAsync(long id)
         {
-            throw new NotImplementedException();
+            return await _context.Ranks.FirstOrDefaultAsync(x => x.RankId == id);
+        }
+
+        public async Task<Rank?> UpdateRankAsync(long id, Rank rank)
+        {
+            var existingRank = await _context.Ranks.FindAsync(id);
+            if (existingRank == null)
+            {
+                return null;
+            }
+            existingRank = rank;
+            await _context.SaveChangesAsync();
+            return existingRank;
         }
     }
 }

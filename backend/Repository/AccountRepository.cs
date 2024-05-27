@@ -16,17 +16,18 @@ namespace backend.Repository
         {
             _context = context;
         }
+
         public Task<Account> CreateAccountAsync(Account account)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAccountAsync(long id)
+        public Task<Account?> DeleteAccountAsync(long id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Account> GetAccountByIdAsync(long id)
+        public Task<Account?> GetAccountByIdAsync(long id)
         {
             throw new NotImplementedException();
         }
@@ -36,7 +37,7 @@ namespace backend.Repository
             throw new NotImplementedException();
         }
 
-        public Task<Account> UpdateAccountAsync(Account account)
+        public Task<Account?> UpdateAccountAsync(long id, Account account)
         {
             throw new NotImplementedException();
         }

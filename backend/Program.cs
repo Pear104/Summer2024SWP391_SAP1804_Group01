@@ -99,8 +99,10 @@ namespace backend
 
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IDiamondRepository, DiamondRepository>();
+            builder.Services.AddScoped<IRankRepository, RankRepository>();
             builder.Services.AddScoped<IAccessoryRepository, AccessoryRepository>();
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

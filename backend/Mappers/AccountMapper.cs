@@ -4,7 +4,7 @@ using backend.Models;
 
 namespace backend.Mappers
 {
-    public static class AccountMappers
+    public static class AccountMapper
     {
         public static AccountDTO ToAccountDTO(this Account account)
         {

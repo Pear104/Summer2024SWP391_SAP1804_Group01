@@ -17,7 +17,6 @@ namespace backend.Controllers
             _context = context;
         }
 
-        // GET: api/Accounts
         [HttpGet]
         public async Task<ActionResult> GetAccounts()
         {
@@ -25,7 +24,6 @@ namespace backend.Controllers
             return Ok(accountModels.Select(x => x.ToAccountDTO()));
         }
 
-        // GET: api/Accounts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetAccount(long id)
         {
@@ -39,8 +37,6 @@ namespace backend.Controllers
             return account;
         }
 
-        // PUT: api/Accounts/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccount(long id, Account account)
         {
@@ -70,8 +66,6 @@ namespace backend.Controllers
             return NoContent();
         }
 
-        // POST: api/Accounts
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount(Account account)
         {
@@ -81,7 +75,6 @@ namespace backend.Controllers
             return CreatedAtAction("GetAccount", new { id = account.AccountId }, account);
         }
 
-        // DELETE: api/Accounts/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccount(long id)
         {

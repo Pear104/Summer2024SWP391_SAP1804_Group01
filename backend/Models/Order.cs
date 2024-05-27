@@ -16,6 +16,10 @@ namespace backend.Models
         [Range(0.01, double.MaxValue)]
         public double TotalPrice { get; set; }
 
+        [Column("total_discount_percent")]
+        [Range(0.01, float.MaxValue)]
+        public float TotalDiscountPercent { get; set; }
+
         [Column("rank_id")]
         public long RankId { get; set; }
         public Rank Rank { get; set; } = new Rank();
