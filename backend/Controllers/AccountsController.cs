@@ -12,12 +12,10 @@ namespace backend.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
         private readonly IAccountRepository _accountRepo;
 
-        public AccountsController(ApplicationDbContext context, IAccountRepository accountRepo)
+        public AccountsController(IAccountRepository accountRepo)
         {
-            _context = context;
             _accountRepo = accountRepo;
         }
 
@@ -58,7 +56,7 @@ namespace backend.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AccountExists(id))
+                if (_accountRepo.GetAccountByIdAsync(id) == null)
                 {
                     return NotFound();
                 }
@@ -81,23 +79,19 @@ namespace backend.Controllers
             return CreatedAtAction("GetAccount", new { id = newAccount.AccountId }, newAccount);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAccount(long id)
-        {
-            var account = await _context.Accounts.FindAsync(id);
-            if (account == null)
-            {
-                return NotFound();
-            }
+        // [HttpDelete("{id}")]
+        // public async Task<IActionResult> DeleteAccount(long id)
+        // {
+        //     var account = await _accountRepo.Fin;
+        //     if (account == null)
+        //     {
+        //         return NotFound();
+        //     }
 
-            _context.Accounts.Remove(account);
-            await _context.SaveChangesAsync();
+        //     _context.Accounts.Remove(account);
+        //     await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
-        private bool AccountExists(long id)
-        {
-            return _context.Accounts.Any(e => e.AccountId == id);
-        }
+        //     return NoContent();
+        // }
     }
 }
