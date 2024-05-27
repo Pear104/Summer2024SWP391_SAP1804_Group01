@@ -98,6 +98,7 @@ namespace backend
                 });
 
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IAccountRepository, AccountRepository>();
             builder.Services.AddScoped<IDiamondRepository, DiamondRepository>();
             builder.Services.AddScoped<IRankRepository, RankRepository>();
             builder.Services.AddScoped<IAccessoryRepository, AccessoryRepository>();

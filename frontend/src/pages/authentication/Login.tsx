@@ -41,20 +41,19 @@ export default function Login() {
             autoComplete="off"
             className="w-[440px] flex flex-col gap-1"
             onFinish={handleSubmit(async (data) => {
-              console.log("data", data);
               const authResponse = await POST(
                 "/api/Authentication/login",
                 data
               );
               if (authResponse.token) {
                 setCookie("accessToken", authResponse.token, 7);
-                location.href = "/";
+                setCookie("accountId", authResponse.accountId, 7);
+                location.href = "/account";
               } else {
                 setError("password", {
                   type: "manual",
                   message: "Email not found or password incorrect!",
                 });
-                console.log("Email not found or password incorrect!");
               }
             })}
           >
@@ -71,7 +70,7 @@ export default function Login() {
                 className="border text-base border-primary py-2 px-4 without-ring w-[440px] rounded-none"
               />
             </FormItem>
-            <Form.Item name="password" required>
+            <Form.Item>
               <Button
                 className="w-full hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
                 type="default"

@@ -2,7 +2,7 @@
 {
     public class AuthenticationResponse
     {
-        public string Email { get; set; } = string.Empty;
+        public long AccountId { get; set; }
         public string Token { get; set; } = string.Empty;
     }
 }
