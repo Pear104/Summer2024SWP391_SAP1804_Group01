@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend.Data;
 using backend.Interfaces;
+using backend.Mappers;
 using backend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repository
 {
@@ -16,29 +18,50 @@ namespace backend.Repository
         {
             _context = context;
         }
-        public Task<Account> CreateAccountAsync(Account account)
+
+        public bool AccountExisted(long id)
+        {
+            return _context.Accounts.Any(e => e.AccountId == id);
+        }
+
+        public async Task<Account> CreateAccountAsync(Account account)
+        {
+            await _context.Accounts.AddAsync(account);
+            await _context.SaveChangesAsync();
+            return account;
+        }
+
+        //delete account xem xet
+        public async Task DeleteAccountAsync(long id)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAccountAsync(long id)
+        public async Task<Account?> GetAccountByIdAsync(long id)
         {
-            throw new NotImplementedException();
+            return await _context.Accounts
+            .Include(x => x.ToAccountDTO())
+            .FirstOrDefaultAsync(x => x.AccountId == id);
         }
 
-        public Task<Account> GetAccountByIdAsync(long id)
+        public async Task<IEnumerable<Account>> GetAllAccountsAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Accounts
+            .Include(x => x.ToAccountDTO())
+            .ToListAsync();
         }
 
-        public Task<IEnumerable<Account>> GetAllAccountsAsync()
+        public async Task<Account?> UpdateAccountAsync(long id, Account account)
         {
-            throw new NotImplementedException();
+            var existedAccount = await _context.Accounts.FindAsync(account.AccountId);
+            if (existedAccount == null) 
+            {
+                return null;
+            }
+            existedAccount = account;
+            await _context.SaveChangesAsync();
+            return existedAccount;
         }
 
-        public Task<Account> UpdateAccountAsync(Account account)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
