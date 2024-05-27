@@ -23,16 +23,16 @@ const routes = [
       {
         children: [
           {
-            element: <Test />,
             path: "/test",
+            element: <Test />,
           },
           {
-            element: <Home />,
             path: "/",
+            element: <Home />,
           },
           {
-            element: <Login />,
             path: "authentication/login",
+            element: <Login />,
           },
           {
             element: <Register />,

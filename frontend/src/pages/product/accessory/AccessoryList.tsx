@@ -5,27 +5,20 @@ import { GET } from "../../../utils/request";
 const AccessoryItem = ({ accessory }: { accessory: any }) => {
   return (
     <a
-      className="flex items-center w-full justify-around hover:bg-slate-100"
+      className="items-center w-full justify-around hover:shadow-xl p-2 m-2 duration-150"
       href="/product/accessory/detail"
     >
       <div
-        className="my-2 aspect-square bg-cover bg-center bg-no-repeat w-[100px]"
+        className="my-2 aspect-square bg-cover bg-center bg-no-repeat w-full"
         style={{
-          // backgroundImage: `url(/images/face-without-mouth_1f636.png)`,
-          backgroundImage: `url(${accessory.imageUrl})`,
+          backgroundImage: `url(${accessory.accessoryImages[0].url})`,
         }}
       ></div>
-      <div className="w-[80px] flex justify-center">{accessory.name}</div>
-      <div className="w-[80px] flex justify-center">Price</div>
-      <div className="w-[80px] flex justify-center">{accessory.carat}</div>
-      <div className="w-[80px] flex justify-center">{accessory.color}</div>
-      <div className="w-[80px] flex justify-center">{accessory.clarity}</div>
-      <div className="w-[80px] flex justify-center">{accessory.cut}</div>
-      <div className="w-[80px] flex justify-center">{accessory.lab}</div>
-      <div className="w-[80px] flex justify-center">
-        <a className="border-2 border-stone-800 hover:font-bold rounded-full px-4 py-2 text-sm hover:bg-black hover:text-white transition-all">
-          VIEW
-        </a>
+      <div>
+        <div className="w-full flex ">{accessory.name}</div>
+
+        {/* luc nao co gia thi thay karat = price*/}
+        <div className="w-full flex ">{accessory.karat}</div>
       </div>
     </a>
   );
@@ -33,22 +26,26 @@ const AccessoryItem = ({ accessory }: { accessory: any }) => {
 
 export default function AccessoryList() {
   const [accessories, setAccessories] = useState([]);
+  // const [lastAccessoryId, setLastAccessoryId] = useState(null);
 
   useEffect(() => {
     (async () => {
       const data = await GET("/api/Accessories");
       setAccessories(data);
+      // const lastAccessoryId = data[data.length - 1].id;
+      // setLastAccessoryId(lastAccessoryId);
     })();
   }, []);
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
   return (
-    <div className="flex items-center justify-around flex-col mb-20">
-      <div className="w-full px-20 mt-10">
+    <div className="flex items-center justify-around flex-col mb-20 px-36">
+      <div className="w-[400] px-20">
+        <div>Showing {accessories.length} of products</div>
         <div className="font-bold mulish-regular flex items-center w-full justify-around mb-4">
-          Ahihi
+          Accessory
         </div>
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-3 gap-3">
           {accessories.map((accessory: any) => {
             return <AccessoryItem accessory={accessory} />;
           })}
