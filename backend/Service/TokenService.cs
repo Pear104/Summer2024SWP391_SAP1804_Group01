@@ -21,6 +21,32 @@ namespace backend.Service
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:SigningKey"]));
         }
 
+        public string CreateResetToken(ResetPasswordDTO resetPasswordDto)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Email, resetPasswordDto.Email),
+                new Claim(ClaimTypes.Role, Role.Customer.ToString()),
+            };
+
+            var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddMinutes(10),
+                SigningCredentials = creds,
+                Issuer = _config["JWT:Issuer"],
+                Audience = _config["JWT:Audience"]
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
+        }
+
         public string CreateToken(Account account)
         {
             var claims = new List<Claim>
@@ -66,7 +92,7 @@ namespace backend.Service
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddMinutes(2),
+                Expires = DateTime.Now.AddMinutes(30),
                 SigningCredentials = creds,
                 Issuer = _config["JWT:Issuer"],
                 Audience = _config["JWT:Audience"]
@@ -96,15 +122,17 @@ namespace backend.Service
                 jwt.Claims.FirstOrDefault(c => c.Type == "gender")?.Value
             );
 
-            var registerDto = new RegisterDTO();
+            var registerDto = new RegisterDTO()
+            {
+                Name = name,
+                Password = password,
+                PhoneNumber = phoneNumber,
+                Address = address,
+                Email = email,
+                Birthday = birthday,
+                Gender = gender,
+            };
 
-            registerDto.Name = name;
-            registerDto.Password = password;
-            registerDto.PhoneNumber = phoneNumber;
-            registerDto.Address = address;
-            registerDto.Email = email;
-            registerDto.Birthday = birthday;
-            registerDto.Gender = gender;
             return registerDto;
         }
     }

@@ -5,7 +5,6 @@ import { FormItem } from "react-hook-form-antd";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { POST } from "../../utils/request";
-import { setCookie } from "../../utils/cookie";
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/

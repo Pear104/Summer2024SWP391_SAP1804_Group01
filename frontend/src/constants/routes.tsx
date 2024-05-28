@@ -9,11 +9,9 @@ import AccountDetail from "../pages/account/AccountDetail";
 import OrderHistory from "../pages/account/OrderHistory";
 import ProductLayout from "../layouts/ProductLayout";
 import DiamondList from "../pages/product/diamond/DiamondList";
-import Test from "../pages/test/Test";
 import DiamondDetail from "../pages/product/diamond/DiamondDetail";
 import AccessoryList from "../pages/product/accessory/AccessoryList";
 import AccessoryDetail from "../pages/product/accessory/AccessoryDetail";
-import { Children } from "react";
 import DashBoardLayout from "../layouts/DashBoardLayout";
 import Products from "../pages/dashboard/ProductsManage";
 import EmailLoading from "../pages/authentication/EmailLoading";
@@ -40,74 +38,72 @@ const routes = [
         path: "/",
         children: [
           {
+            path: "/",
+            element: <Home />,
+          },
+          {
+            path: "/authentication",
             children: [
               {
-                element: <Test />,
-                path: "/test",
-              },
-              {
-                element: <Home />,
-                path: "/",
-              },
-              {
+                path: "/authentication/login",
                 element: <Login />,
-                path: "authentication/login",
               },
               {
                 element: <Register />,
-                path: "authentication/register",
-              },
-              {
-                element: <ResetPasswordForm />,
-                path: "authentication/reset-password",
-              },
-              {
-                element: <ForgetPassword />,
-                path: "authentication/forget-password",
-              },
-              {
-                element: <ConfirmEmail />,
-                path: "authentication/email-redirect",
+                path: "/authentication/register",
               },
               {
                 element: <EmailLoading />,
-                path: "authentication/verify-email",
+                path: "/authentication/verify-gmail",
               },
               {
-                element: <AccountLayout />,
-                path: "account",
-                children: [
-                  {
-                    index: true,
-                    element: <AccountDetail />,
-                  },
-                  {
-                    element: <OrderHistory />,
-                    path: "order-history",
-                  },
-                ],
+                element: <ConfirmEmail />,
+                path: "/authentication/email-redirect",
               },
               {
-                element: <ProductLayout />,
-                path: "product",
-                children: [
-                  {
-                    path: "diamond",
-                    element: <DiamondList />,
-                  },
-                  {
-                    path: "diamond/detail",
-                    element: <DiamondDetail />,
-                  },
-                  {
-                    path: "accessory",
-                    element: <AccessoryList />,
-                  },
-                  {
-                    path: "accessory/detail",
-                    element: <AccessoryDetail />,
-                  },
-                ],
+                element: <ResetPasswordForm />,
+                path: "/authentication/reset-password",
+              },
+              {
+                element: <ForgetPassword />,
+                path: "/authentication/forget-password",
+              },
+            ],
+          },
+
+          {
+            element: <AccountLayout />,
+            path: "account",
+            children: [
+              {
+                index: true,
+                element: <AccountDetail />,
+              },
+              {
+                element: <OrderHistory />,
+                path: "order-history",
+              },
+            ],
+          },
+          {
+            element: <ProductLayout />,
+            path: "product",
+            children: [
+              {
+                path: "/product/diamond",
+                element: <DiamondList />,
+              },
+              {
+                path: "/product/diamond/detail",
+                element: <DiamondDetail />,
+              },
+              {
+                path: "/product/accessory",
+                element: <AccessoryList />,
+              },
+              {
+                path: "/product/accessory/detail",
+                element: <AccessoryDetail />,
               },
             ],
           },

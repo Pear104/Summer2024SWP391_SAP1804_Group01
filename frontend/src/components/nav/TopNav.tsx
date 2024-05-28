@@ -1,6 +1,8 @@
 import {
+  AreaChart,
   ChevronDown,
   Heart,
+  LineChart,
   Mail,
   MapPin,
   Phone,
@@ -42,7 +44,7 @@ export default function TopNav() {
           <div className="flex items-center gap-2">
             <MapPin size={20} absoluteStrokeWidth />
             <span className="mulish-regular font-bold text-base">
-              DS chi nhánh
+              District 9, Ho Chi Minh City
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -60,6 +62,9 @@ export default function TopNav() {
         </div>
         <div className="flex justify-end gap-4 items-center">
           <SearchBar />
+          <a href="/admin">
+            <LineChart size={20} strokeWidth={2} absoluteStrokeWidth />
+          </a>
           <Heart size={20} strokeWidth={2} absoluteStrokeWidth />
           <ShoppingCart size={20} strokeWidth={2} />
           <a

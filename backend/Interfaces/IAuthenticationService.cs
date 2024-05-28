@@ -8,6 +8,11 @@ namespace backend.Interfaces
         Task<AuthenticationResponse?> Register(RegisterDTO registerDto);
 
         Task<AuthenticationResponse?> VerifyGmail(string token);
+        Task<AuthenticationResponse?> GetResetToken(ResetPasswordDTO resetPasswordDto);
+        Task<AuthenticationResponse?> ResetPassword(
+            string email,
+            UpdatePasswordDTO updatePasswordDto
+        );
         //Task<RegisterDTO?> VerifyGmail(string token);
     }
 }

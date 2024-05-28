@@ -45,24 +45,72 @@ namespace backend.Controllers
             {
                 return Unauthorized("Email already be used");
             }
-            var result = _emailSender.SendEmail(
+            var result = _emailSender.SendVerifyEmail(
                 registerDto.Email,
                 registerDto.Name,
                 verifyGmailToken.Token,
-                "[DATJ Diamond]: Verify your account"
+                "[DATJ Diamond] – Email verification"
             );
 
             return Ok(result);
         }
 
-        [HttpGet("verify-gmail/{verifyGmailToken}")]
-        public async Task<IActionResult> VerifyGmail([FromRoute] string verifyGmailToken)
+        [HttpPost("verify-gmail")]
+        public async Task<IActionResult> VerifyGmail()
         {
-            var accessToken = await _authenticationService.VerifyGmail(verifyGmailToken);
-            if (accessToken == null)
+            try
             {
-                return Unauthorized("Email already be used");
+                if (HttpContext.Request.Headers.TryGetValue("Authorization", out var headerAuth))
+                {
+                    var verifyGmailToken = headerAuth
+                        .First()
+                        .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1];
+                    System.Console.WriteLine("token:" + verifyGmailToken);
+                    var accessToken = await _authenticationService.VerifyGmail(verifyGmailToken);
+                    if (accessToken == null)
+                    {
+                        return Unauthorized("Email already be used");
+                    }
+                    return Ok(accessToken);
+                }
+                return BadRequest();
             }
+            catch (System.Exception)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO resetPasswordDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var resetToken = await _authenticationService.GetResetToken(resetPasswordDto);
+            if (resetToken == null)
+            {
+                return Unauthorized("Email hasn't been registered");
+            }
+            var result = _emailSender.SendResetEmail(
+                resetPasswordDto.Email,
+                "",
+                resetToken.Token,
+                "[DATJ Diamond] – Reset password verification"
+            );
+
+            return Ok(result);
+        }
+
+        [HttpPost("confirm-password")]
+        public async Task<IActionResult> ConfirmPassword(
+            [FromBody] UpdatePasswordDTO updatePasswordDto
+        )
+        {
+            var accessToken = await _authenticationService.ResetPassword(
+                updatePasswordDto.Email,
+                updatePasswordDto
+            );
             return Ok(accessToken);
         }
     }

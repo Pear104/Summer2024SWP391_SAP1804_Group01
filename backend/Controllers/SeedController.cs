@@ -316,6 +316,15 @@ namespace backend.Controllers
                 }
             }
             await _context.SaveChangesAsync();
+            var diamond1 = await _context.Diamonds.FindAsync(1);
+            diamond1.ImageUrl = "https://video.diamondasset.in:8080/imagesM/632443228.jpg";
+            var diamond2 = await _context.Diamonds.FindAsync(2);
+            diamond2.ImageUrl = "https://video.diamondasset.in:8080/imagesM/631455159.jpg";
+            var diamond3 = await _context.Diamonds.FindAsync(3);
+            diamond3.ImageUrl = "https://video.diamondasset.in:8080/imagesM/632416490.jpg";
+            var diamond4 = await _context.Diamonds.FindAsync(4);
+            diamond4.ImageUrl = "https://magnifier.s3.us-west-1.amazonaws.com/5493332667.jpg";
+            await _context.SaveChangesAsync();
 
             return Ok("add 2 ok");
         }

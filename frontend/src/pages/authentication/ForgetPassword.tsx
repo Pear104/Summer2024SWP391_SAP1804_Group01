@@ -14,9 +14,6 @@ const schema = z.object({
     .email({ message: "Invalid email!" })
     .min(8, { message: "Email must be at least 8 characters" })
     .max(32, { message: "Email must be at most 32 characters" }),
-  // password: z
-  //   .string()
-  //   .min(8, { message: "Password must be at least 8 characters" }),
 });
 export default function ForgetPassword() {
   const { control, handleSubmit, setError } = useForm({
@@ -45,16 +42,16 @@ export default function ForgetPassword() {
             className="w-[440px] flex flex-col gap-1"
             onFinish={handleSubmit(async (data) => {
               const authResponse = await POST(
-                "/api/Authentication/login",
+                "/api/Authentication/reset-password",
                 data
               );
-              if (authResponse.token) {
-                setCookie("accessToken", authResponse.token, 7);
-                location.href = "/account";
+              if (authResponse) {
+                // setCookie("accessToken", authResponse.token, 7);
+                location.href = "/authentication/email-redirect";
               } else {
                 setError("email", {
                   type: "manual",
-                  message: "Email not found!",
+                  message: "Email hasn't been registered",
                 });
               }
             })}
@@ -66,20 +63,11 @@ export default function ForgetPassword() {
                 placeholder="Email"
               />
             </FormItem>
-            {/* <FormItem name="password" control={control} required>
-              <Input.Password
-                placeholder="Password"
-                className="border text-base border-primary py-2 px-4 without-ring w-[440px] rounded-none"
-              />
-            </FormItem> */}
             <Form.Item>
               <Button
                 className="w-full hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
                 type="default"
                 htmlType="submit"
-                onClick={() => {
-                  location.href = "/authentication/email-redirect";
-                }}
               >
                 RESET PASSWORD
               </Button>

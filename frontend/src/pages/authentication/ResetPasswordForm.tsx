@@ -5,8 +5,9 @@ import { POST } from "../../utils/request";
 import { setCookie } from "../../utils/cookie";
 import { FormItem } from "react-hook-form-antd";
 import { UserOutlined } from "@ant-design/icons";
-import { CircleArrowRight } from "lucide-react";
+import { CircleArrowLeft, CircleArrowRight } from "lucide-react";
 import * as z from "zod";
+import { jwtDecode } from "jwt-decode";
 
 const schema = z
   .object({
@@ -22,13 +23,23 @@ const schema = z
       .string()
       .min(8, { message: "Confirm Password must be at least 8 characters" }),
   })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ["confirmPassword"],
-    message: "Passwords don't match",
+  .superRefine(({ confirmPassword, password }, ctx) => {
+    if (confirmPassword !== password) {
+      ctx.addIssue({
+        code: "custom",
+        message: "The passwords did not match",
+        path: ["confirmPassword"],
+      });
+    }
   });
 export default function ResetPasswordForm() {
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.searchParams);
+  const decoded = jwtDecode(params.get("token") || "") as any;
+  setCookie("accessToken", params.get("token") || "", 7);
+
   const { control, handleSubmit, setError } = useForm({
-    defaultValues: { email: "", password: "", confirmPassword: "" },
+    defaultValues: { email: decoded.email, password: "", confirmPassword: "" },
     resolver: zodResolver(schema),
   });
 
@@ -51,10 +62,11 @@ export default function ResetPasswordForm() {
             layout="vertical"
             autoComplete="off"
             className="w-[440px] flex flex-col gap-1"
-            //check
             onFinish={handleSubmit(async (data) => {
+              console.log(data);
+
               const authResponse = await POST(
-                "/api/Authentication/login",
+                "/api/Authentication/confirm-password",
                 data
               );
               if (authResponse.token) {
@@ -70,9 +82,10 @@ export default function ResetPasswordForm() {
           >
             <FormItem name="email" control={control} required>
               <Input
-                className="border text-base border-primary py-2 px-4 without-ring w-[440px] rounded-none"
+                className="text-black border text-base border-primary py-2 px-4 without-ring w-[440px] rounded-none"
                 suffix={<UserOutlined className="opacity-50" />}
                 placeholder="Email"
+                disabled
                 // value={}
               />
             </FormItem>
@@ -93,9 +106,6 @@ export default function ResetPasswordForm() {
                 className="w-full hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
                 type="default"
                 htmlType="submit"
-                onClick={() => {
-                  location.href = "/authentication/email-redirect";
-                }}
               >
                 RESET PASSWORD
               </Button>
@@ -104,9 +114,12 @@ export default function ResetPasswordForm() {
           <div className="flex justify-between">
             <a
               href="/authentication/login"
-              className="text-primary font-semibold border-b transition-all duration-200 border-b-transparent hover:border-b-primary"
+              className="text-primary items-center flex gap-2 pb-1 font-semibold border-b transition-all duration-200 "
             >
-              Login
+              <CircleArrowLeft size={20} absoluteStrokeWidth />
+              <div className="border-b border-b-transparent hover:border-b-primary">
+                Login
+              </div>
             </a>
             <a
               href="/authentication/register"
@@ -115,7 +128,7 @@ export default function ResetPasswordForm() {
               <span className="text-primary border-b border-transparent transition-all group-hover:border-primary">
                 Create Account
               </span>
-              <CircleArrowRight />
+              <CircleArrowRight size={20} absoluteStrokeWidth />
             </a>
           </div>
         </div>

@@ -80,7 +80,42 @@ namespace backend.Service
             _context.Accounts.Add(account);
             await _context.SaveChangesAsync();
 
-            return (new AuthenticationResponse { Token = _tokenService.CreateToken(account) });
+            return new AuthenticationResponse { Token = _tokenService.CreateToken(account) };
+        }
+
+        public async Task<AuthenticationResponse?> GetResetToken(ResetPasswordDTO resetPasswordDto)
+        {
+            var existingAccount = await _context.Accounts.FirstOrDefaultAsync(x =>
+                x.Email == resetPasswordDto.Email
+            );
+            if (existingAccount == null)
+            {
+                return null;
+            }
+            return new AuthenticationResponse()
+            {
+                Token = _tokenService.CreateResetToken(resetPasswordDto)
+            };
+        }
+
+        public async Task<AuthenticationResponse?> ResetPassword(
+            string email,
+            UpdatePasswordDTO updatePasswordDto
+        )
+        {
+            var existingAccount = await _context.Accounts.FirstOrDefaultAsync(x =>
+                x.Email == email
+            );
+            if (existingAccount == null)
+            {
+                return null;
+            }
+            existingAccount.Password = PasswordHasher.HashPassword(updatePasswordDto.Password);
+            await _context.SaveChangesAsync();
+            return new AuthenticationResponse()
+            {
+                Token = _tokenService.CreateToken(existingAccount)
+            };
         }
     }
 }

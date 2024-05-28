@@ -7,6 +7,7 @@ namespace backend.Interfaces
     {
         string CreateToken(Account account);
         string CreateVerifyToken(RegisterDTO registerDto);
+        string CreateResetToken(ResetPasswordDTO resetPasswordDto);
         RegisterDTO ParseToken(string verifyGmailToken);
     }
 }
