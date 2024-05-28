@@ -1,5 +1,5 @@
 import { Pagination } from "antd";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GET } from "../../../utils/request";
 
 const AccessoryItem = ({ accessory }: { accessory: any }) => {
@@ -54,7 +54,7 @@ export default function AccessoryList() {
           <Pagination
             defaultCurrent={Number.parseInt(params.get("page") || "1")}
             total={500}
-            onChange={(page, pageSize) => {
+            onChange={(page, _pageSize) => {
               const url = new URL(window.location.href);
               const params = new URLSearchParams(url.searchParams);
               params.set("page", page.toString());

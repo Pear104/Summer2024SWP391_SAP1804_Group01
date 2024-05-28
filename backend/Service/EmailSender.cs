@@ -16,7 +16,7 @@ namespace backend.Service
                     Subject = subject,
                     IsBodyHtml = true,
                     Body =
-                        $"Hello {name}, click in the link to verify your account: <a href='http://localhost:3000/authentication/verify-email?token={body}'></a>",
+                        $"Hello {name}, click in the link to verify your account: http://localhost:3000/authentication/verify-email?token={body}",
                 };
                 message.To.Add(toEmail);
                 var smtp = new SmtpClient("smtp.gmail.com")

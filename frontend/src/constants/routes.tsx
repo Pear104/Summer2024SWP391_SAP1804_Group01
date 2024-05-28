@@ -17,6 +17,7 @@ import { Children } from "react";
 import DashBoardLayout from "../layouts/DashBoardLayout";
 import Products from "../pages/dashboard/ProductsManage";
 import EmailLoading from "../pages/authentication/EmailLoading";
+import ForgetPassword from "../pages/authentication/ForgetPassword";
 
 const routes = [
   {
@@ -88,6 +89,10 @@ const routes = [
               {
                 element: <EmailLoading />,
                 path: "authentication/verify-email",
+              },
+              {
+                element: <ForgetPassword />,
+                path: "authentication/forget-password",
               },
               {
                 element: <AccountLayout />,

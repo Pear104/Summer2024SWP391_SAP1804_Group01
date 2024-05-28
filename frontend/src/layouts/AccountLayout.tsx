@@ -1,5 +1,5 @@
 import { ShoppingOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Menu } from "antd";
+import { Menu } from "antd";
 import { Outlet } from "react-router-dom";
 import { setCookie } from "../utils/cookie";
 
@@ -34,16 +34,15 @@ export default function AccountLayout() {
           items={items}
           className="border-r-0"
         />
-        <Button
-          className="mt-14 w-full"
+        <div
+          className="mt-14 w-full flex justify-center text-lg text-white cursor-pointer bg-black rounded-md py-2 hover:bg-black/80 transition-all duration-200"
           onClick={() => {
             setCookie("accessToken", "", 0);
-            setCookie("accountId", "", 0);
             location.href = "/authentication/login";
           }}
         >
           Logout
-        </Button>
+        </div>
       </div>
 
       <div className="w-full min-h-[400px]">

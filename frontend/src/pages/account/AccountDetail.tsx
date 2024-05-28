@@ -31,7 +31,7 @@ export default function AccountDetail() {
   }, []);
 
   return (
-    <div className="ml-20">
+    <div className="ml-10">
       <div className="font-semibold mulish-regular text-2xl">
         ACCOUNT DETAIL
       </div>

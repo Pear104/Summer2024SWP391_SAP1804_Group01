@@ -13,8 +13,10 @@ export default function EmailLoading() {
         `/api/Authentication/verify-gmail/${params.get("token")}`
       );
       if (data.token) {
-        location.href = "/";
         setCookie("accessToken", data.token, 7);
+        location.href = "/account";
+      } else {
+        location.href = "/";
       }
     })();
   }, []);

@@ -1,12 +1,12 @@
-import { UserOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Form, Input } from "antd";
-import { CircleArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { FormItem } from "react-hook-form-antd";
-import * as z from "zod";
 import { POST } from "../../utils/request";
 import { setCookie } from "../../utils/cookie";
+import { FormItem } from "react-hook-form-antd";
+import { UserOutlined } from "@ant-design/icons";
+import { CircleArrowRight } from "lucide-react";
+import * as z from "zod";
 
 const schema = z.object({
   email: z
@@ -18,7 +18,7 @@ const schema = z.object({
     .string()
     .min(8, { message: "Password must be at least 8 characters" }),
 });
-export default function Login() {
+export default function ForgetPassword() {
   const { control, handleSubmit, setError } = useForm({
     defaultValues: { email: "", password: "" },
     resolver: zodResolver(schema),
