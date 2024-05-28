@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../pages/dashboard/Sidebar";
 import DashboardHeader from "../pages/dashboard/DashboardHeader";
+import Dashboard from "../pages/dashboard/Dashboard";
 
 export default function DashBoardLayout() {
   return (

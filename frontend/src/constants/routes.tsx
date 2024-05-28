@@ -17,6 +17,7 @@ import Products from "../pages/dashboard/ProductsManage";
 import EmailLoading from "../pages/authentication/EmailLoading";
 import ForgetPassword from "../pages/authentication/ForgetPassword";
 import ResetPasswordForm from "../pages/authentication/ResetPasswordForm";
+import Dashboard from "../pages/dashboard/Dashboard";
 
 const routes = [
   {
@@ -27,6 +28,10 @@ const routes = [
         element: <DashBoardLayout />,
         path: "/admin",
         children: [
+          {
+            index: true,
+            element: <Dashboard />,
+          },
           {
             element: <Products />,
             path: "/admin/products",
