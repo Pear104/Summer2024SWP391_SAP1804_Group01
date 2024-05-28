@@ -14,10 +14,11 @@ export default function DiamondDetail() {
     <div className="flex justify-center">
       <div className="w-[1200px] grid grid-cols-6 gap-10">
         <div
-          className="col-span-4 place-self-center aspect-square bg-contain bg-top bg-no-repeat w-4/5 border"
+          className="col-span-4 place-self-center aspect-square bg-contain bg-top bg-no-repeat w-4/5 border "
           style={{
             backgroundImage: `url(${diamond?.imageUrl})`,
-            // backgroundImage: `url(${diamond.imageUrl})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
         ></div>
         <div className="col-span-2">
