@@ -4,9 +4,9 @@ import {
   HiOutlineShoppingCart,
   HiOutlineUsers,
   HiOutlineDocumentText,
-  HiOutlineAnnotation,
   HiOutlineQuestionMarkCircle,
   HiOutlineCog,
+  HiCurrencyDollar,
 } from "react-icons/hi";
 
 export const DASHBOARD_SIDEBAR_LINKS = [
@@ -41,10 +41,16 @@ export const DASHBOARD_SIDEBAR_LINKS = [
     icon: <HiOutlineDocumentText />,
   },
   {
-    key: "messages",
-    label: "Messages",
-    path: "/admin/messages",
-    icon: <HiOutlineAnnotation />,
+    key: "diamond-price",
+    label: "Diamond Price",
+    path: "/admin/diamond-price",
+    icon: <HiCurrencyDollar />,
+  },
+  {
+    key: "accessory-price",
+    label: "Accessory Price",
+    path: "/admin/accessory-price",
+    icon: <HiCurrencyDollar />,
   },
 ];
 
