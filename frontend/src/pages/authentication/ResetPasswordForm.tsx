@@ -8,19 +8,27 @@ import { UserOutlined } from "@ant-design/icons";
 import { CircleArrowRight } from "lucide-react";
 import * as z from "zod";
 
-const schema = z.object({
-  email: z
-    .string()
-    .email({ message: "Invalid email!" })
-    .min(8, { message: "Email must be at least 8 characters" })
-    .max(32, { message: "Email must be at most 32 characters" }),
-  // password: z
-  //   .string()
-  //   .min(8, { message: "Password must be at least 8 characters" }),
-});
-export default function ForgetPassword() {
+const schema = z
+  .object({
+    email: z
+      .string()
+      .email({ message: "Invalid email!" })
+      .min(8, { message: "Email must be at least 8 characters" })
+      .max(32, { message: "Email must be at most 32 characters" }),
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters" }),
+    confirmPassword: z
+      .string()
+      .min(8, { message: "Confirm Password must be at least 8 characters" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords don't match",
+  });
+export default function ResetPasswordForm() {
   const { control, handleSubmit, setError } = useForm({
-    defaultValues: { email: "" },
+    defaultValues: { email: "", password: "", confirmPassword: "" },
     resolver: zodResolver(schema),
   });
 
@@ -43,6 +51,7 @@ export default function ForgetPassword() {
             layout="vertical"
             autoComplete="off"
             className="w-[440px] flex flex-col gap-1"
+            //check
             onFinish={handleSubmit(async (data) => {
               const authResponse = await POST(
                 "/api/Authentication/login",
@@ -64,14 +73,21 @@ export default function ForgetPassword() {
                 className="border text-base border-primary py-2 px-4 without-ring w-[440px] rounded-none"
                 suffix={<UserOutlined className="opacity-50" />}
                 placeholder="Email"
+                // value={}
               />
             </FormItem>
-            {/* <FormItem name="password" control={control} required>
+            <FormItem name="password" control={control} required>
               <Input.Password
-                placeholder="Password"
+                placeholder="New Password"
                 className="border text-base border-primary py-2 px-4 without-ring w-[440px] rounded-none"
               />
-            </FormItem> */}
+            </FormItem>
+            <FormItem name="confirmPassword" control={control} required>
+              <Input.Password
+                placeholder="Confirm Password"
+                className="border text-base border-primary py-2 px-4 without-ring w-[440px] rounded-none"
+              />
+            </FormItem>
             <Form.Item>
               <Button
                 className="w-full hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"

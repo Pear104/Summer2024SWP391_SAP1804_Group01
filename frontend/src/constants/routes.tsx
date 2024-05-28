@@ -18,6 +18,7 @@ import DashBoardLayout from "../layouts/DashBoardLayout";
 import Products from "../pages/dashboard/ProductsManage";
 import EmailLoading from "../pages/authentication/EmailLoading";
 import ForgetPassword from "../pages/authentication/ForgetPassword";
+import ResetPasswordForm from "../pages/authentication/ResetPasswordForm";
 
 const routes = [
   {
@@ -29,13 +30,8 @@ const routes = [
         path: "/admin",
         children: [
           {
-<<<<<<< HEAD
-            path: "/test",
-            element: <Test />,
-=======
             element: <Products />,
             path: "/admin/products",
->>>>>>> 497bf56ce0cfce3c6b524970ed9057fa5736cd4e
           },
         ],
       },
@@ -44,27 +40,6 @@ const routes = [
         path: "/",
         children: [
           {
-<<<<<<< HEAD
-            path: "/",
-            element: <Home />,
-          },
-          {
-            path: "authentication/login",
-            element: <Login />,
-          },
-          {
-            element: <Register />,
-            path: "authentication/register",
-          },
-          {
-            element: <ConfirmEmail />,
-            path: "authentication/confirm-email",
-          },
-          {
-            element: <AccountLayout />,
-            path: "account",
-=======
->>>>>>> 497bf56ce0cfce3c6b524970ed9057fa5736cd4e
             children: [
               {
                 element: <Test />,
@@ -83,16 +58,20 @@ const routes = [
                 path: "authentication/register",
               },
               {
+                element: <ResetPasswordForm />,
+                path: "authentication/reset-password",
+              },
+              {
+                element: <ForgetPassword />,
+                path: "authentication/forget-password",
+              },
+              {
                 element: <ConfirmEmail />,
                 path: "authentication/email-redirect",
               },
               {
                 element: <EmailLoading />,
                 path: "authentication/verify-email",
-              },
-              {
-                element: <ForgetPassword />,
-                path: "authentication/forget-password",
               },
               {
                 element: <AccountLayout />,
