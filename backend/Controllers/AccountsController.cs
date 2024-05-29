@@ -2,6 +2,7 @@
 using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging.Core;
@@ -28,9 +29,10 @@ namespace backend.Controllers
         }
 
         [HttpGet("me")]
+        [Authorize(Roles = ("Customer"))]
         public async Task<ActionResult> GetCurrentAccount()
         {
-            string accountId = User.FindFirst("accountId")?.Value;
+            var accountId = User.FindFirst("accountId")?.Value;
             var accountModels = await _accountRepo.GetAccountByIdAsync(long.Parse(accountId));
             return Ok(accountModels.ToAccountDTO());
         }

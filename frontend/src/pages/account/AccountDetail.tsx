@@ -26,7 +26,11 @@ export default function AccountDetail() {
   useEffect(() => {
     (async () => {
       const data = await GET(`/api/Accounts/me`);
-      setUserInfo(data);
+      if (data) {
+        setUserInfo(data);
+      } else {
+        location.href = "/authentication/login";
+      }
     })();
   }, []);
 

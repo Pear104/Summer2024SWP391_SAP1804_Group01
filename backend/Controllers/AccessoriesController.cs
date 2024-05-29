@@ -2,6 +2,7 @@
 using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,12 +33,13 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = ("Customer"))]
         public async Task<ActionResult> GetAccessory(long id)
         {
             var accessory = await _accessoryRepo.GetAccessoryByIdAsync(id);
             if (accessory == null)
             {
-                return NotFound();
+                return NotFound("The accessory does not exist");
             }
 
             return Ok(accessory);

@@ -1,18 +1,23 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 import { useEffect } from "react";
-import { GET } from "../../utils/request";
-import { setCookie } from "../../utils/cookie";
+import { POST } from "../../utils/request";
+import { getCookie, setCookie } from "../../utils/cookie";
 
 export default function EmailLoading() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
   useEffect(() => {
     (async () => {
-      const data = await GET(
-        `/api/Authentication/verify-gmail/${params.get("token")}`
-      );
+      if (getCookie("accessToken") != "") {
+        location.href = "/account";
+        return;
+      }
+      setCookie("accessToken", params.get("token") || "", 7);
+      const data = await POST("/api/Authentication/verify-gmail");
+      // console.log(params.get("token"));
       if (data.token) {
+        // console.log(data.token);
         setCookie("accessToken", data.token, 7);
         location.href = "/account";
       } else {
