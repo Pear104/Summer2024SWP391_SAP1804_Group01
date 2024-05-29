@@ -44,7 +44,6 @@ export default function AccountLayout() {
           Logout
         </div>
       </div>
-
       <div className="w-full min-h-[400px]">
         <div className="px-4">
           <Outlet />
