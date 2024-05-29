@@ -35,7 +35,7 @@ namespace backend.Service
                 string url = $"http://localhost:3000/authentication/verify-gmail?token={body}";
                 var message = new MailMessage()
                 {
-                    From = new MailAddress("datj.company@gmail.com"),
+                    From = new MailAddress("datj.company@gmail.com", "DATJ DIAMOND"),
                     Subject = subject,
                     IsBodyHtml = true,
                     Body = GetVerifyContent(name, url),
@@ -67,7 +67,7 @@ namespace backend.Service
                 string url = $"http://localhost:3000/authentication/reset-password?token={body}";
                 var message = new MailMessage()
                 {
-                    From = new MailAddress("datj.company@gmail.com"),
+                    From = new MailAddress("datj.company@gmail.com", "DATJ DIAMOND"),
                     Subject = subject,
                     IsBodyHtml = true,
                     Body = GetResetContent(name, url),

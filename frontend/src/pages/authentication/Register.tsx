@@ -5,6 +5,10 @@ import { FormItem } from "react-hook-form-antd";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { POST } from "../../utils/request";
+import { useEffect, useState } from "react";
+import Loading from "../../components/Loading";
+import { useAuthStore } from "../../store/authStore";
+import { setCookie } from "../../utils/cookie";
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
@@ -45,21 +49,41 @@ const schema = z
   });
 
 export default function Register() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLogin, setIsGoogleLogin] = useState(false);
+  const [profile, setProfile] = useState<any>(null);
+  const googleProfile = useAuthStore((state) => state.googleProfile);
+  const setGoogleProfile = useAuthStore((state) => state.setGoogleProfile);
   const { control, handleSubmit, setError } = useForm({
     defaultValues: {
-      email: "",
+      email: googleProfile.email || "",
       password: "",
       confirmPassword: "",
       gender: "Other",
-      name: "",
+      name: googleProfile.name || "",
       phoneNumber: "",
       address: "",
       birthday: "",
     },
     resolver: zodResolver(schema),
   });
+
+  useEffect(() => {
+    if (googleProfile.email) {
+      setIsGoogleLogin(true);
+      setProfile(googleProfile);
+      setGoogleProfile({
+        email: "",
+        name: "",
+      });
+    } else {
+      setIsGoogleLogin(false);
+    }
+  }, []);
+
   return (
     <div className="grid grid-cols-2 gap-4 py-16 px-32">
+      {isLoading && <Loading />}
       <div className="col-span-1">
         <div
           className="rotate-180 bg-cover bg-center bg-no-repeat h-full"
@@ -79,16 +103,23 @@ export default function Register() {
             layout="vertical"
             autoComplete="off"
             className="w-[440px] flex flex-col gap-[2px]"
-            onFinish={handleSubmit(async (data) => {
+            onFinish={handleSubmit(async (formData) => {
+              setIsLoading(true);
               const authResponse = await POST(
-                "/api/Authentication/register",
-                data
+                isGoogleLogin
+                  ? "/api/Authentication/register-google"
+                  : "/api/Authentication/register",
+                formData
               );
-              console.log(authResponse);
               if (authResponse) {
-                // setCookie("accessToken", authResponse.token, 7);
-                location.href = "/authentication/email-redirect";
+                if (authResponse.token) {
+                  setCookie("accessToken", authResponse.token, 7);
+                  location.href = "/account";
+                } else {
+                  location.href = "/authentication/email-redirect";
+                }
               } else {
+                setIsLoading(false);
                 setError("email", {
                   type: "manual",
                   message: "Email already be used!",
@@ -98,8 +129,9 @@ export default function Register() {
           >
             <FormItem label="Email" name="email" control={control} required>
               <Input
+                disabled={profile?.email ? true : false}
                 placeholder="Your email"
-                className="text-sm border border-primary py-2 px-4 without-ring w-full rounded-none"
+                className="text-black text-sm border border-primary py-2 px-4 without-ring w-full rounded-none"
               />
             </FormItem>
             <FormItem
@@ -127,8 +159,9 @@ export default function Register() {
             <Divider orientation="left">User info</Divider>
             <FormItem label="Name" name="name" control={control} required>
               <Input
+                disabled={profile?.name ? true : false}
                 placeholder="Your name"
-                className="border text-sm border-primary py-2 px-4 without-ring w-full rounded-none"
+                className="text-black border text-sm border-primary py-2 px-4 without-ring w-full rounded-none"
               />
             </FormItem>
             <div className="flex justify-between">
@@ -139,6 +172,7 @@ export default function Register() {
                   options={[
                     { value: "Female", label: "Female" },
                     { value: "Male", label: "Male" },
+                    { value: "Gay", label: "Gay" },
                     { value: "Other", label: "Other" },
                   ]}
                   defaultValue="Other"

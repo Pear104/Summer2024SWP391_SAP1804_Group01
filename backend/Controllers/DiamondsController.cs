@@ -76,8 +76,6 @@ namespace backend.Controllers
             return NoContent();
         }
 
-
-
         // DELETE: api/Diamonds/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDiamond(long id)

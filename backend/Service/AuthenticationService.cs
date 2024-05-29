@@ -117,5 +117,48 @@ namespace backend.Service
                 Token = _tokenService.CreateToken(existingAccount)
             };
         }
+
+        public async Task<AuthenticationResponse?> LoginGoogle(LoginGoogleDTO loginGoogleDto)
+        {
+            var existingAccount = await _context.Accounts.FirstOrDefaultAsync(x =>
+                x.Email == loginGoogleDto.Email
+            );
+            if (existingAccount == null)
+            {
+                return null;
+            }
+            return new AuthenticationResponse()
+            {
+                Token = _tokenService.CreateToken(existingAccount)
+            };
+        }
+
+        public async Task<AuthenticationResponse?> RegisterGoogle(RegisterDTO registerGoogleDto)
+        {
+            var existingAccount = await _context.Accounts.FirstOrDefaultAsync(x =>
+                x.Email == registerGoogleDto.Email
+            );
+            if (existingAccount != null)
+            {
+                return null;
+            }
+            var rank = await _context.Ranks.FirstOrDefaultAsync(x => x.RankName == "Bronze");
+            var account = new Account()
+            {
+                Name = registerGoogleDto.Name,
+                Email = registerGoogleDto.Email,
+                Password = PasswordHasher.HashPassword(registerGoogleDto.Password),
+                Role = Role.Customer,
+                Gender = registerGoogleDto.Gender,
+                Rank = rank,
+                PhoneNumber = registerGoogleDto.PhoneNumber,
+                Address = registerGoogleDto.Address,
+                Birthday = registerGoogleDto.Birthday,
+            };
+            _context.Accounts.Add(account);
+            await _context.SaveChangesAsync();
+
+            return new AuthenticationResponse { Token = _tokenService.CreateToken(account) };
+        }
     }
 }
