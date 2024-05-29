@@ -15,5 +15,6 @@ namespace backend.DTOs
         public long DiamondId { get; set; }
         public long AccessoryId { get; set; }
         public double ItemPrice { get; set; }
+        public long WarrantyCardId { get; set; }
     }
 }

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using backend.Data;
 using backend.Interfaces;
-using backend.Mappers;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -57,6 +52,11 @@ namespace backend.Repository
         public async Task<IEnumerable<Account>> GetAllAccountsAsync()
         {
             return await _context.Accounts.ToListAsync();
+        }
+
+        public async Task<Account?> GetAccountByEmailAsync(string email)
+        {
+            return await _context.Accounts.FirstOrDefaultAsync(x => x.Email == email);
         }
     }
 }

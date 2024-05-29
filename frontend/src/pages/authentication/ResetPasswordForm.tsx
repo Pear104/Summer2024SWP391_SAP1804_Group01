@@ -63,8 +63,6 @@ export default function ResetPasswordForm() {
             autoComplete="off"
             className="w-[440px] flex flex-col gap-1"
             onFinish={handleSubmit(async (data) => {
-              console.log(data);
-
               const authResponse = await POST(
                 "/api/Authentication/confirm-password",
                 data

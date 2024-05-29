@@ -18,6 +18,7 @@ import EmailLoading from "../pages/authentication/EmailLoading";
 import ForgetPassword from "../pages/authentication/ForgetPassword";
 import ResetPasswordForm from "../pages/authentication/ResetPasswordForm";
 import Dashboard from "../pages/dashboard/Dashboard";
+import Test from "../pages/test/Test";
 
 const routes = [
   {
@@ -111,6 +112,10 @@ const routes = [
                 element: <AccessoryDetail />,
               },
             ],
+          },
+          {
+            path: "/test",
+            element: <Test />,
           },
         ],
       },

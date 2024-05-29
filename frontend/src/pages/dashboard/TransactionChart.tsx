@@ -81,7 +81,7 @@ export default function TransactionChart() {
         {/* <ResponsiveContainer width="100%" height="100%"> */}
         <BarChart
           className="items-center"
-          width={2000}
+          width={1800}
           height={700}
           data={data}
           margin={{
