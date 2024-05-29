@@ -11,6 +11,14 @@ export default function OrderHistory() {
           You haven't placed any orders yet
         </p>
       </div>
+      <div>hehe</div>
+      <div>
+        <div className="flex justify-center mt-10">
+          <div className="w-96 h-12 bg-black text-white text-lg flex justify-center items-center rounded-md cursor-pointer">
+            Continue Shopping
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
