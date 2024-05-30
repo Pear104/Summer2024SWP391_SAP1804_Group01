@@ -33,7 +33,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = ("Customer"))]
+        // [Authorize(Roles = ("Customer"))]
         public async Task<ActionResult> GetAccessory(long id)
         {
             var accessory = await _accessoryRepo.GetAccessoryByIdAsync(id);

@@ -43,14 +43,18 @@ export default function AccessoryDetail() {
             <div className="text-3xl">$ {accessory?.materialWeight}</div>
             <div className="w-full grid grid-cols-2 gap-4 my-4 mulish-regular text-slate-950 ">
               <div className="flex flex-col gap-2">
-                <div>PRICE</div>
-                <div>DESCRIPTION</div>
-                <div>STOCK</div>
+                <div>TYPE</div>
               </div>
               <div className="flex flex-col gap-2">
-                <div>{accessory?.price}</div>
-                <div>{accessory?.description}</div>
-                <div>{accessory?.stock}</div>
+                <div>{accessory?.accessoryType.name}</div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-4">
+              <div className="text-xl w-full flex justify-center px-4 py-3 bg-cyan-900 text-white hover:scale-95 transition-all">
+                CHOOSE THIS ACCESSORY
+              </div>
+              <div className="text-xl w-full flex justify-center border border-black px-4 py-3 bg-white hover:scale-95 transition-all">
+                ADD TO CART
               </div>
             </div>
           </div>

@@ -19,6 +19,7 @@ import ForgetPassword from "../pages/authentication/ForgetPassword";
 import ResetPasswordForm from "../pages/authentication/ResetPasswordForm";
 import Dashboard from "../pages/dashboard/Dashboard";
 import Test from "../pages/test/Test";
+import OrderDetail from "../pages/account/OrderDetail";
 
 const routes = [
   {
@@ -88,6 +89,10 @@ const routes = [
               {
                 element: <OrderHistory />,
                 path: "order-history",
+              },
+              {
+                element: <OrderDetail />,
+                path: "order-history/detail",
               },
             ],
           },
