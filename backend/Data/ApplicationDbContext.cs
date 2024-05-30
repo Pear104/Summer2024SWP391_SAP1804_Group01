@@ -1,4 +1,5 @@
 ﻿using backend.Models;
+using backend.Models.Payment.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Data
@@ -26,6 +27,10 @@ namespace backend.Data
         public DbSet<DiamondPrice> DiamondPrices { get; set; }
         public DbSet<MaterialPrice> MaterialPrices { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
+
+        //Start payment
+        public DbSet<Merchant> Merchants { get; set; }
+        //End payment
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

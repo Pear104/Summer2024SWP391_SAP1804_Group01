@@ -1,6 +1,6 @@
-﻿using backend.Payment_src.core.Payment.Domain.Common;
+﻿using backend.Models.Payment.Domain;
 
-namespace backend.Payment_src.core.Payment.Domain.Entities
+namespace backend.Models.Payment.Domain.Entities
 {
     public class PaymentDestination : BaseAuditableEntity
     {

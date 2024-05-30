@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using backend.Data;
 
@@ -11,9 +12,11 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240530101601_RefactorMerchant")]
+    partial class RefactorMerchant
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -515,60 +518,6 @@ namespace backend.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("order_detail");
-                });
-
-            modelBuilder.Entity("backend.Models.Payment.Domain.Entities.Merchant", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("Id");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CreatedAt");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("CreatedBy");
-
-                    b.Property<string>("IsActive")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("IsActive");
-
-                    b.Property<DateTime?>("LastUpdateAt")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("LastUpdateAt");
-
-                    b.Property<string>("LastUpdatedBy")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("LastUpdatedBy");
-
-                    b.Property<string>("MerchantName")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("MerchantName");
-
-                    b.Property<string>("MerchantReturnUrl")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("MerchantReturnUrl");
-
-                    b.Property<string>("MerchantWebLink")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("MerchantWebLink");
-
-                    b.Property<string>("MerchentIpnUrl")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("MerchentIpnUrl");
-
-                    b.Property<string>("SecretKey")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("SecretKey");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Merchant");
                 });
 
             modelBuilder.Entity("backend.Models.PriceRate", b =>

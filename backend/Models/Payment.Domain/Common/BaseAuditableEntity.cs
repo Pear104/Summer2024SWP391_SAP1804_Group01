@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace backend.Payment_src.core.Payment.Domain.Common
+namespace backend.Models.Payment.Domain
 {
     public class BaseAuditableEntity
     {
@@ -9,9 +9,9 @@ namespace backend.Payment_src.core.Payment.Domain.Common
         [Column("CreatedAt")]
         public DateTime? CreatedAt { get; set; }
         [Column("LastUpdatedBy")]
-        public string? LastUpdatedBy{ get; set; } = string.Empty;
+        public string? LastUpdatedBy { get; set; } = string.Empty;
         [Column("LastUpdateAt")]
-        public DateTime? LastUpdateAt { get; set; } 
+        public DateTime? LastUpdateAt { get; set; }
 
     }
 }

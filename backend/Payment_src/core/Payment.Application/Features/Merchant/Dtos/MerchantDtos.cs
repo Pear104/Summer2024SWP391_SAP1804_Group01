@@ -1,4 +1,4 @@
-﻿using backend.Payment_src.core.Payment.Domain.Entities;
+﻿using backend.Models.Payment.Domain.Entities;
 
 namespace backend.Payment_src.core.Payment.Application.Features.Dtos
 {

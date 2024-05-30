@@ -1,4 +1,4 @@
-﻿namespace backend.Payment_src.core.Payment.Domain.Entities
+﻿namespace backend.Models.Payment.Domain.Entities
 {
     public class PaymentTransaction
     {

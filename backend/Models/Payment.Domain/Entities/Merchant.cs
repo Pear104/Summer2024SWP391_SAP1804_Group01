@@ -1,10 +1,10 @@
-﻿using backend.Payment_src.core.Payment.Domain.Common;
+﻿using backend.Models.Payment.Domain;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace backend.Payment_src.core.Payment.Domain.Entities
+namespace backend.Models.Payment.Domain.Entities
 {
-    [Table("Merchant")]
+    [Table("merchant")]
     public class Merchant : BaseAuditableEntity
     {
         [Key]
