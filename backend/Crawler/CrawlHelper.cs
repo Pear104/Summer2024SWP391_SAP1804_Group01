@@ -253,7 +253,6 @@ namespace backend.Crawler
         }
         public static void SeedMaterialPrice()
         {
-
             double[] materialPrices18k = [75.75f, 78f, 73.3f, 71.5f, 72.4f, 77.95f, 80.1f, 81.5f];
             double[] materialPrices24k = [105.75f, 100.1f, 106.3f, 103.5f, 109.4f, 115.45f, 98.1f, 118.5f];
             foreach (var materialPrice in materialPrices18k)

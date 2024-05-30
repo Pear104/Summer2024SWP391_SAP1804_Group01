@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GET } from "../../utils/request";
 
-const OrderList = ({order} : {order: any}) => {
+const OrderList = ({ order }: { order: any }) => {
   console.log(order.name);
   return (
     <a
@@ -9,28 +9,28 @@ const OrderList = ({order} : {order: any}) => {
       href="/account/order-history/detail"
     >
       <div
-        className="my-2 aspect-square bg-no-repeat w-full col-span-4 bg-cover"
+        className="my-2 aspect-square bg-no-repeat col-span-4 bg-cover w-[400px]"
         style={{
           backgroundImage: `url(${order.accessoryImages[0].url})`,
         }}
       ></div>
       <div className="col-span-4 p-10 mt-3">
-        <div className="libre-baskerville-regular">
-          {order.name}
-        </div>
+        <div className="libre-baskerville-regular">{order.name}</div>
         {/* luc nao co gia thi thay karat = price*/}
         <div className="libre-baskerville-regular mt-5">Status: </div>
         <div className="libre-baskerville-regular mt-5">Diamond Price: </div>
         <div className="libre-baskerville-regular mt-5">Delivery Price: </div>
         <div className="libre-baskerville-regular mt-5">Total Price: </div>
-        <a className="mt-14 w-32 h-12 bg-orange-600 text-white text-lg flex justify-center items-center rounded-md cursor-pointer"
-        href="#">
-            Evaluating
-          </a>
+        <a
+          className="mt-14 w-32 h-12 bg-black text-white text-lg flex justify-center items-center rounded-md cursor-pointer"
+          href="#"
+        >
+          Evaluating
+        </a>
       </div>
     </a>
   );
-}
+};
 
 export default function OrderHistory() {
   const [orderHistories, setOrderHistories] = useState([]);
@@ -38,12 +38,12 @@ export default function OrderHistory() {
     (async () => {
       const data = await GET("/api/Accessories");
       setOrderHistories(data);
-    })()
-  },[]);
+    })();
+  }, []);
   // console.log(orderHistories);
 
   return (
-    <div className="divide-y max-w-4xl p-4">
+    <div className="divide-y p-4 w-full">
       <div className="Order-header libre-baskerville-regular mb-6">
         ORDER HISTORY
       </div>
@@ -52,8 +52,8 @@ export default function OrderHistory() {
           You haven't placed any orders yet
         </p>
       </div>
-      <div className="Order-body-exist">
-        {orderHistories.map((order : any) => {
+      <div className="Order-body-exist w-full">
+        {orderHistories.map((order: any) => {
           console.log(order);
           return <OrderList order={order} />;
         })}

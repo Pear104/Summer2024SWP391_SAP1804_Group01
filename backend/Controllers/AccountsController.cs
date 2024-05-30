@@ -33,8 +33,8 @@ namespace backend.Controllers
         public async Task<ActionResult> GetCurrentAccount()
         {
             var accountId = User.FindFirst("accountId")?.Value;
-            var accountModels = await _accountRepo.GetAccountByIdAsync(long.Parse(accountId));
-            return Ok(accountModels.ToAccountDTO());
+            var accountModels = await _accountRepo.GetAccountByIdAsync(long.Parse(accountId ?? "0"));
+            return Ok(accountModels?.ToAccountDTO());
         }
 
         [HttpGet("{id}")]
