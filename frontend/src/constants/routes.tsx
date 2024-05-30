@@ -18,12 +18,9 @@ import EmailLoading from "../pages/authentication/EmailLoading";
 import ForgetPassword from "../pages/authentication/ForgetPassword";
 import ResetPasswordForm from "../pages/authentication/ResetPasswordForm";
 import Dashboard from "../pages/dashboard/Dashboard";
-<<<<<<< HEAD
 import Cart from "../pages/cart/Cart";
-=======
 import Test from "../pages/test/Test";
 import OrderDetail from "../pages/account/OrderDetail";
->>>>>>> f5a444eb3c372e8c09399e988da1cd0dd74d95f2
 
 const routes = [
   {
