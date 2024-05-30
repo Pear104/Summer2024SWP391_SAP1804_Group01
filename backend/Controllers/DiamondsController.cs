@@ -1,4 +1,6 @@
 ﻿using backend.Data;
+using backend.DTOs.Diamond;
+using backend.Helper;
 using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
@@ -11,90 +13,66 @@ namespace backend.Controllers
     [ApiController]
     public class DiamondsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
         private readonly IDiamondRepository _diamondRepo;
 
-        public DiamondsController(ApplicationDbContext context, IDiamondRepository diamondRepo)
+        public DiamondsController(IDiamondRepository diamondRepo)
         {
-            _context = context;
             _diamondRepo = diamondRepo;
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetDiamonds()
+        public async Task<ActionResult> GetDiamonds([FromQuery] DiamondQuery query)
         {
-            var diamondModels = await _diamondRepo.GetAllDiamondsAsync();
-            var diamondDTOs = diamondModels.Select(x => x.ToDiamondDTO());
-            return Ok(diamondDTOs);
+            var diamondResult = await _diamondRepo.GetAllDiamondsAsync(query);
+            // return Ok(diamondResult.Select(x => x.ToDiamondDTO()));
+            return Ok(diamondResult);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Diamond>> GetDiamond(long id)
+        public async Task<ActionResult> GetDiamond(long id)
         {
             var diamond = await _diamondRepo.GetDiamondByIdAsync(id);
             if (diamond == null)
             {
                 return NotFound();
             }
-            return diamond;
+            return Ok(diamond.ToDiamondDTO());
         }
 
         [HttpPost]
-        public async Task<ActionResult<Diamond>> PostDiamond(Diamond diamond)
+        public async Task<ActionResult> CreateDiamond([FromBody] CreateDiamondDTO diamond)
         {
-            _context.Diamonds.Add(diamond);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction("GetDiamond", new { id = diamond.DiamondId }, diamond);
+            var diamondModel = await _diamondRepo.CreateDiamondAsync(diamond);
+            if (diamondModel == null)
+            {
+                return BadRequest("The diamond's certificate number already exists.");
+            }
+            return Ok(diamondModel);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDiamond(long id, Diamond diamond)
+        public async Task<IActionResult> UpdateDiamond(
+            [FromRoute] long id,
+            [FromBody] UpdateDiamondDTO diamondDto
+        )
         {
-            if (id != diamond.DiamondId)
+            var diamondModel = await _diamondRepo.UpdateDiamondAsync(id, diamondDto);
+            if (diamondModel == null)
             {
-                return BadRequest();
+                return NotFound("Diamond not found.");
             }
-
-            _context.Entry(diamond).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DiamondExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(diamondModel);
         }
 
-        // DELETE: api/Diamonds/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDiamond(long id)
+        public async Task<IActionResult> DeleteDiamond([FromRoute] long id)
         {
-            var diamond = await _context.Diamonds.FindAsync(id);
-            if (diamond == null)
+            var diamondModel = await _diamondRepo.DeleteDiamondAsync(id);
+            if (diamondModel == null)
             {
-                return NotFound();
+                return NotFound("Diamond not found.");
             }
-
-            _context.Diamonds.Remove(diamond);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool DiamondExists(long id)
-        {
-            return _context.Diamonds.Any(e => e.DiamondId == id);
+            return Ok(diamondModel);
         }
     }
 }

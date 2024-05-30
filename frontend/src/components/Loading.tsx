@@ -5,7 +5,7 @@ const ArrowSpinner = () => {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
-      className="w-14 h-14 animate-spin"
+      className="w-40 h-40 animate-spin"
       viewBox="0 0 16 16"
     >
       <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z" />
@@ -18,12 +18,11 @@ const ArrowSpinner = () => {
 };
 
 export default function Loading() {
-  console.log("Loading...");
   return (
-    <div className="gap-4 fixed z-10 top-0 left-0 w-full h-screen flex justify-center items-center bg-white/45">
+    <div className="bg-black/35 gap-4 fixed z-10 top-0 left-0 w-full h-screen flex justify-center items-center bg-white/45">
       {/* <div className="relative w-[200px] h-[200px]"> */}
       <Spin className="" size="large" indicator={<ArrowSpinner />} />
-      <div className="text-xl font-semibold">Loading ...</div>
+      {/* <div className="text-xl font-semibold text-white">Loading ...</div> */}
       {/* </div> */}
     </div>
   );

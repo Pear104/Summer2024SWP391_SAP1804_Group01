@@ -1,15 +1,19 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using backend.DTOs.Diamond;
+using backend.Helper;
 using backend.Models;
 
 namespace backend.Interfaces
 {
     public interface IDiamondRepository
     {
-        Task<IEnumerable<Diamond>> GetAllDiamondsAsync();
+        Task<DiamondResult> GetAllDiamondsAsync(DiamondQuery query);
+
+        // Task<IEnumerable<Diamond>> GetAllDiamondsAsync(DiamondQuery query);
         Task<Diamond?> GetDiamondByIdAsync(long id);
-        Task<Diamond> CreateDiamondAsync(Diamond diamond);
-        Task<Diamond?> UpdateDiamondAsync(long id, Diamond diamond);
+        Task<Diamond?> CreateDiamondAsync(CreateDiamondDTO diamondDTO);
+        Task<Diamond?> UpdateDiamondAsync(long id, UpdateDiamondDTO diamondDTO);
         Task<Diamond?> DeleteDiamondAsync(long id);
     }
 }

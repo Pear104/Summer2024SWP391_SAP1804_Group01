@@ -19,7 +19,6 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Customer")]
         public async Task<ActionResult> GetRanks()
         {
             var rankModels = await _rankRepo.GetAllRanksAsync();

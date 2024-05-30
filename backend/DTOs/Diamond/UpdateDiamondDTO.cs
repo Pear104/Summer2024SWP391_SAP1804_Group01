@@ -1,27 +1,51 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.DTOs.Shape;
-using backend.Models;
+using backend.Enums;
 
-namespace backend.DTOs
+namespace backend.DTOs.Diamond
 {
-    public class DiamondDTO
+    public class UpdateDiamondDTO
     {
-        public long DiamondId { get; set; }
+        [Required]
         public string Lab { get; set; } = string.Empty;
+
+        [Required]
         public long CertificateNumber { get; set; }
+
+        [Required]
         public string CertificateUrl { get; set; } = string.Empty;
+
+        [Required]
         public string ImageUrl { get; set; } = string.Empty;
+
+        [Required]
         public float Carat { get; set; }
+
+        [Required]
         public string Cut { get; set; } = string.Empty;
-        public string Color { get; set; } = string.Empty;
-        public string Clarity { get; set; } = string.Empty;
+
+        [Required]
+        public Color Color { get; set; } = Color.V;
+
+        [Required]
+        public Clarity Clarity { get; set; } = Clarity.I3;
+
+        [Required]
         public string Polish { get; set; } = string.Empty;
+
+        [Required]
         public string Symmetry { get; set; } = string.Empty;
+
+        [Required]
         public string Fluorescence { get; set; } = string.Empty;
+
+        [Required]
         public bool Availability { get; set; } = true;
-        public string Shape { get; set; }
+
+        [Required]
+        public long ShapeId { get; set; }
     }
 }
