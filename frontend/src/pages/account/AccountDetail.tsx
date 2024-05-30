@@ -1,6 +1,7 @@
 import { Button } from "antd";
 import { useEffect, useState } from "react";
 import { GET } from "../../utils/request";
+import { setCookie } from "../../utils/cookie";
 
 const Field = ({ field, value }: { field: string; value: string }) => {
   return (
@@ -29,6 +30,7 @@ export default function AccountDetail() {
       if (data) {
         setUserInfo(data);
       } else {
+        setCookie("accessToken", "", 0);
         location.href = "/authentication/login";
       }
     })();

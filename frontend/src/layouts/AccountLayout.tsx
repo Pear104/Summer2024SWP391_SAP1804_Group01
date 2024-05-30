@@ -5,18 +5,20 @@ import { setCookie } from "../utils/cookie";
 
 export default function AccountLayout() {
   const onClick = (e: any) => {
-    console.log("click ", e);
+    location.href = e.item.props.path;
   };
   const items = [
     {
       key: "1",
       label: "Account Detail",
       icon: <UserOutlined />,
+      path: "/account",
     },
     {
       key: "2",
       icon: <ShoppingOutlined />,
       label: "Order History",
+      path: "/account/order-history",
     },
   ];
 
@@ -44,7 +46,6 @@ export default function AccountLayout() {
           Logout
         </div>
       </div>
-
       <div className="w-full min-h-[400px]">
         <div className="px-4">
           <Outlet />

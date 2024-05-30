@@ -111,6 +111,32 @@ namespace backend.Controllers
                 updatePasswordDto.Email,
                 updatePasswordDto
             );
+            if (accessToken == null)
+            {
+                return Unauthorized("Email already be used");
+            }
+            return Ok(accessToken);
+        }
+
+        [HttpPost("login-google")]
+        public async Task<IActionResult> LoginGoogle([FromBody] LoginGoogleDTO loginGoogleDto)
+        {
+            var accessToken = await _authenticationService.LoginGoogle(loginGoogleDto);
+            if (accessToken == null)
+            {
+                return Unauthorized("Email not existing!");
+            }
+            return Ok(accessToken);
+        }
+
+        [HttpPost("register-google")]
+        public async Task<IActionResult> RegisterGoogle([FromBody] RegisterDTO registerGoogleDto)
+        {
+            var accessToken = await _authenticationService.RegisterGoogle(registerGoogleDto);
+            if (accessToken == null)
+            {
+                return Unauthorized("Email already be used");
+            }
             return Ok(accessToken);
         }
     }

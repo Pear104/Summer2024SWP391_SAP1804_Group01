@@ -74,3 +74,19 @@ export const DELETE = async (url: string, body: any) => {
     return null;
   }
 };
+
+export const GOOGLE_GET_INFO = async (url: string, user: any) => {
+  try {
+    const result = await fetch(`${url}?access_token=${user.access_token}`, {
+      headers: {
+        Authorization: `Bearer ${user.access_token}`,
+        Accept: "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => data);
+    return result;
+  } catch {
+    return null;
+  }
+};

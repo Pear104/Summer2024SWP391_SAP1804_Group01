@@ -1,10 +1,10 @@
-﻿using System.Text.RegularExpressions;
-using backend.Crawler;
+﻿using backend.Crawler;
 using backend.Data;
 using backend.Enums;
 using backend.Helper;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 namespace backend.Controllers
 {
@@ -316,13 +316,13 @@ namespace backend.Controllers
                 }
             }
             await _context.SaveChangesAsync();
-            var diamond1 = await _context.Diamonds.FindAsync(1);
+            var diamond1 = await _context.Diamonds.FindAsync((long)1);
             diamond1.ImageUrl = "https://video.diamondasset.in:8080/imagesM/632443228.jpg";
-            var diamond2 = await _context.Diamonds.FindAsync(2);
+            var diamond2 = await _context.Diamonds.FindAsync((long)2);
             diamond2.ImageUrl = "https://video.diamondasset.in:8080/imagesM/631455159.jpg";
-            var diamond3 = await _context.Diamonds.FindAsync(3);
+            var diamond3 = await _context.Diamonds.FindAsync((long)3);
             diamond3.ImageUrl = "https://video.diamondasset.in:8080/imagesM/632416490.jpg";
-            var diamond4 = await _context.Diamonds.FindAsync(4);
+            var diamond4 = await _context.Diamonds.FindAsync((long)4);
             diamond4.ImageUrl = "https://magnifier.s3.us-west-1.amazonaws.com/5493332667.jpg";
             await _context.SaveChangesAsync();
 
@@ -475,12 +475,44 @@ namespace backend.Controllers
             return Ok("add 4 ok");
         }
 
+        //[HttpGet("/crawler/5")]
+        //public IActionResult AddPriceRate()
+        //{
+        //    float[] percents = [105.75f, 100.1f, 106.3f, 103.5f, 109.4f, 115.45f, 98.1f, 118.5f];
+
+        //    var admin = _context.Accounts.FirstOrDefault(x => x.Name == "ToiLaAdministrator");
+        //    foreach (var percent in percents)
+        //    {
+        //        _context.PriceRates.Add(new PriceRate() { Account = admin, Percent = percent });
+        //        _context.SaveChanges();
+        //    }
+        //    return Ok("add 5 ok");
+        //}
+
         [HttpGet("/crawler/5")]
-        public IActionResult AddAccount()
+        public IActionResult AddPrice()
         {
+            float[] percents = [105.75f, 100.1f, 106.3f, 103.5f, 109.4f, 115.45f, 98.1f, 118.5f];
+
             var admin = _context.Accounts.FirstOrDefault(x => x.Name == "ToiLaAdministrator");
-            _context.PriceRates.Add(new PriceRate() { Account = admin, Percent = 1.05f });
-            _context.SaveChanges();
+            foreach (var percent in percents)
+            {
+                _context.PriceRates.Add(new PriceRate() { Account = admin, Percent = percent });
+                _context.SaveChanges();
+            }
+            var crawler = new CrawlHelper(_context);
+            CrawlHelper.SeedDiamondPrice("SeedData\\0_39.csv", 0, 0.3999f);
+            CrawlHelper.SeedDiamondPrice("SeedData\\40_49.csv", 0.4f, 0.4999f);
+            CrawlHelper.SeedDiamondPrice("SeedData\\50_69.csv", 0.5f, 0.6999f);
+            CrawlHelper.SeedDiamondPrice("SeedData\\70_89.csv", 0.7f, 0.8999f);
+            CrawlHelper.SeedDiamondPrice("SeedData\\90_99.csv", 0.9f, 0.9999f);
+            CrawlHelper.SeedDiamondPrice("SeedData\\100_149.csv", 1.0f, 1.4999f);
+            CrawlHelper.SeedDiamondPrice("SeedData\\150_199.csv", 1.5f, 1.9999f);
+            CrawlHelper.SeedDiamondPrice("SeedData\\200_299.csv", 2.0f, 2.9999f);
+            CrawlHelper.SeedDiamondPrice("SeedData\\300_399.csv", 3.0f, 3.9999f);
+            CrawlHelper.SeedDiamondPrice("SeedData\\400_499.csv", 4.0f, 4.9999f);
+            CrawlHelper.SeedDiamondPrice("SeedData\\500_599.csv", 5.0f, 5.9999f);
+            CrawlHelper.SeedMaterialPrice();
             return Ok("add 5 ok");
         }
     }

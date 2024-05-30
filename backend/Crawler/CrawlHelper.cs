@@ -1,15 +1,24 @@
-﻿using System.Text;
+﻿using backend.Data;
 using backend.Enums;
 using backend.Models;
 using HtmlAgilityPack;
+using Microsoft.VisualBasic.FileIO;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Edge;
+using System.Text;
 
 namespace backend.Crawler
 {
     public class CrawlHelper
     {
+        private static ApplicationDbContext _context;
+
+        public CrawlHelper(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
         private static async Task<HtmlDocument?> GetAndLoadHtml(string url)
         {
             HttpClient client = new HttpClient();
@@ -189,5 +198,85 @@ namespace backend.Crawler
                 }
             }
         }
+
+        public static void SeedDiamondPrice(string filepath, float minCt, float maxCt)
+        {
+            string filePath = "SeedData\\0_39.csv";
+            string[] colors = ["D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
+            string[] clarities = ["IF", "VVS1", "VVS2", "VS1", "VS2", "SI1", "SI2", "SI3", "I1", "I2", "I3",];
+            Dictionary<string, Dictionary<string, string>> data =
+                new Dictionary<string, Dictionary<string, string>>();
+
+            using (TextFieldParser parser = new TextFieldParser(filePath))
+            {
+                parser.TextFieldType = FieldType.Delimited;
+                parser.SetDelimiters(",");
+
+                string[] headers = parser.ReadFields(); // Read the header row
+
+                while (!parser.EndOfData)
+                {
+                    string[] fields = parser.ReadFields();
+
+                    Dictionary<string, string> rowData = new Dictionary<string, string>();
+
+                    for (int i = 1; i < fields.Length; i++)
+                    {
+                        rowData[headers[i]] = fields[i];
+                    }
+
+                    data[fields[0]] = rowData;
+                }
+                Console.WriteLine(string.Join("\t", headers)); // Print the header row
+
+                foreach (var color in colors)
+                {
+                    foreach (var clarity in clarities)
+                    {
+                        Console.Write(data[color][clarity] + "\t");
+                        var diamondPrice = new DiamondPrice()
+                        {
+                            Clarity = (Clarity)Enum.Parse(typeof(Clarity), clarity),
+                            Color = (Color)Enum.Parse(typeof(Color), color),
+                            UnitPrice = double.Parse(data[color][clarity]),
+                            MinCaratEff = minCt,
+                            MaxCaratEff = maxCt
+                        };
+                        _context.DiamondPrices.Add(diamondPrice);
+                    }
+                    Console.WriteLine();
+                }
+                _context.SaveChanges();
+                //Console.WriteLine(data["D"]["IF"]);
+            }
+
+        }
+        public static void SeedMaterialPrice()
+        {
+
+            double[] materialPrices18k = [75.75f, 78f, 73.3f, 71.5f, 72.4f, 77.95f, 80.1f, 81.5f];
+            double[] materialPrices24k = [105.75f, 100.1f, 106.3f, 103.5f, 109.4f, 115.45f, 98.1f, 118.5f];
+            foreach (var materialPrice in materialPrices18k)
+            {
+                var price = new MaterialPrice()
+                {
+                    UnitPrice = materialPrice,
+                    Karat = 18,
+                };
+                _context.MaterialPrices.Add(price);
+            }
+
+            foreach (var materialPrice in materialPrices24k)
+            {
+                var price = new MaterialPrice()
+                {
+                    UnitPrice = materialPrice,
+                    Karat = 24,
+                };
+                _context.MaterialPrices.Add(price);
+            }
+            _context.SaveChanges();
+        }
+
     }
 }

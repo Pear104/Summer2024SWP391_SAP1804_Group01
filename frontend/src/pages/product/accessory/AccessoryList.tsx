@@ -15,7 +15,9 @@ const AccessoryItem = ({ accessory }: { accessory: any }) => {
         }}
       ></div>
       <div>
-        <div className="w-full flex ">{accessory.name}</div>
+        <div className="w-full flex libre-baskerville-regular">
+          {accessory.name}
+        </div>
 
         {/* luc nao co gia thi thay karat = price*/}
         <div className="w-full flex ">{accessory.karat}</div>

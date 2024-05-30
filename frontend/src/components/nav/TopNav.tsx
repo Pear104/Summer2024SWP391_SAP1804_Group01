@@ -1,5 +1,4 @@
 import {
-  AreaChart,
   ChevronDown,
   Heart,
   LineChart,
