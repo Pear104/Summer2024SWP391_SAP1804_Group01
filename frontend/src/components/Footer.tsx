@@ -72,7 +72,13 @@ export default function Footer() {
               strokeWidth={1.25}
               absoluteStrokeWidth
             />
-            <a className="hover:opacity-40 cursor-pointer">Facebook</a>
+            <a
+              className="hover:opacity-40 cursor-pointer"
+              target="_blank"
+              href="https://www.facebook.com/datj.company/"
+            >
+              Facebook
+            </a>
           </div>
           <div className="flex items-center gap-2">
             <Instagram
