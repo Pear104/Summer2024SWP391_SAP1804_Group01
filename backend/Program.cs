@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace backend
 {
@@ -33,7 +34,14 @@ namespace backend
 
             builder.Services.AddSwaggerGen(option =>
             {
-                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
+                option.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Demo API",
+                    Version = "v1"
+                });
+                var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var path = Path.Combine(AppContext.BaseDirectory,xmlFileName);
+                option.IncludeXmlComments(path);
                 option.AddSecurityDefinition(
                     "Bearer",
                     new OpenApiSecurityScheme

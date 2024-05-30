@@ -4,6 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>\bin\api\backend.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +26,19 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Selenium.WebDriver" Version="4.21.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Payment_src\core\Payment.Application\Features\PaymentSignature\Commands\" />
+    <Folder Include="Payment_src\core\Payment.Application\Features\PaymentSignature\Queries\" />
+    <Folder Include="Payment_src\core\Payment.Application\Features\PaymentTransaction\Commands\" />
+    <Folder Include="Payment_src\core\Payment.Application\Features\PaymentTransaction\Queries\" />
+    <Folder Include="Payment_src\core\Payment.Application\Features\PaymentNotification\Commands\" />
+    <Folder Include="Payment_src\core\Payment.Application\Features\PaymentNotification\Queries\" />
+    <Folder Include="Payment_src\core\Payment.Application\Features\Merchant\Queries\" />
+    <Folder Include="Payment_src\core\Payment.Application\Features\PaymentDestination\" />
+    <Folder Include="Payment_src\infas\Payment.Persistence\" />
+    <Folder Include="Payment_src\shared\Payment.Ultils\" />
   </ItemGroup>
 
 </Project>
