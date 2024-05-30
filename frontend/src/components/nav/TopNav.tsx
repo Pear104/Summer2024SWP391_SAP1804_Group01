@@ -66,7 +66,9 @@ export default function TopNav() {
             <LineChart size={20} strokeWidth={2} absoluteStrokeWidth />
           </a>
           <Heart size={20} strokeWidth={2} absoluteStrokeWidth />
+          <a href="/cart">
           <ShoppingCart size={20} strokeWidth={2} />
+          </a>
           <a
             href={
               !getCookie("accessToken") ? "/authentication/login" : "/account"

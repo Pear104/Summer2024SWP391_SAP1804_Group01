@@ -18,6 +18,7 @@ import EmailLoading from "../pages/authentication/EmailLoading";
 import ForgetPassword from "../pages/authentication/ForgetPassword";
 import ResetPasswordForm from "../pages/authentication/ResetPasswordForm";
 import Dashboard from "../pages/dashboard/Dashboard";
+import Cart from "../pages/cart/Cart";
 
 const routes = [
   {
@@ -75,7 +76,10 @@ const routes = [
               },
             ],
           },
-
+          {
+            path: "/cart",
+            element: <Cart />,
+          },
           {
             element: <AccountLayout />,
             path: "account",
