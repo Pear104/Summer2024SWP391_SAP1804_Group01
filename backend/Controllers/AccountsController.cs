@@ -1,4 +1,5 @@
 ﻿using backend.Data;
+using backend.DTOs.Account;
 using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
@@ -50,22 +51,22 @@ namespace backend.Controllers
             return Ok(account.ToAccountDTO());
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAccount(long id, Account account)
+        [HttpPut]
+        [Route("{id: long}")]
+        public async Task<IActionResult> PutAccount([FromRoute] long id, [FromBody] UpdateAccountDTO accountDto)
         {
-            if (id != account.AccountId)
-            {
-                return BadRequest();
-            }
+            
 
             // _context.Entry(account).State = EntityState.Modified;
 
             try
             {
-                await _accountRepo.UpdateAccountAsync(id, account);
+                System.Console.WriteLine("hello");
+                return Ok( _accountRepo.UpdateAccountAsync(id, accountDto));
             }
             catch (DbUpdateConcurrencyException)
             {
+                System.Console.WriteLine("hello2");
                 if (_accountRepo.GetAccountByIdAsync(id) == null)
                 {
                     return NotFound();

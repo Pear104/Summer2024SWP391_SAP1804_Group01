@@ -52,7 +52,12 @@ export default function AccountDetail() {
       </div>
       <div className="mt-6">
         <a href="/account/edit">
-          <Button className="">EDIT</Button>
+          <Button
+            className="w-[100px] hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
+            htmlType="submit"
+          >
+            EDIT
+          </Button>
         </a>
       </div>
     </div>

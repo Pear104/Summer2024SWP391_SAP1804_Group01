@@ -47,5 +47,16 @@ namespace backend.Mappers
                 RewardPoint = accountDTO.RewardPoint
             };
         }
+        public static Account ToUpdateAccountDTO(this UpdateAccountDTO accountDTO)
+        {
+            return new Account
+            {
+                Name = accountDTO.Name,
+                PhoneNumber = accountDTO.PhoneNumber,
+                Address = accountDTO.Address,
+                Birthday = accountDTO.Birthday,
+                Gender = (Gender)Enum.Parse(typeof(Gender), accountDTO.Gender),
+            };
+        }
     }
 }

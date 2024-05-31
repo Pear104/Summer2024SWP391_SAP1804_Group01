@@ -1,4 +1,6 @@
 using backend.Data;
+using backend.DTOs.Account;
+using backend.Enums;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -37,14 +39,20 @@ namespace backend.Repository
             return await _context.Accounts.FindAsync(id);
         }
 
-        public async Task<Account?> UpdateAccountAsync(long id, Account account)
+        public async Task<Account?> UpdateAccountAsync(long id, UpdateAccountDTO accountDto)
         {
-            var existedAccount = await _context.Accounts.FindAsync(account.AccountId);
+            System.Console.WriteLine("hello");
+            var existedAccount = await _context.Accounts.FindAsync(id);
             if (existedAccount == null)
             {
                 return null;
             }
-            existedAccount = account;
+            existedAccount.Name = accountDto.Name;
+            existedAccount.Address = accountDto.Address;
+            existedAccount.Birthday = accountDto.Birthday;
+            existedAccount.Gender = (Gender)Enum.Parse(typeof(Gender), accountDto.Gender);
+            existedAccount.PhoneNumber = accountDto.PhoneNumber;
+            
             await _context.SaveChangesAsync();
             return existedAccount;
         }

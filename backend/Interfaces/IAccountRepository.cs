@@ -1,3 +1,4 @@
+using backend.DTOs.Account;
 using backend.Models;
 
 namespace backend.Interfaces
@@ -8,7 +9,7 @@ namespace backend.Interfaces
         Task<Account?> GetAccountByIdAsync(long id);
         Task<Account?> GetAccountByEmailAsync(string email);
         Task<Account> CreateAccountAsync(Account account);
-        Task<Account?> UpdateAccountAsync(long id, Account account);
+        Task<Account?> UpdateAccountAsync(long id, UpdateAccountDTO account);
         // Task<Account?> DeleteAccountAsync(long id);
     }
 }
