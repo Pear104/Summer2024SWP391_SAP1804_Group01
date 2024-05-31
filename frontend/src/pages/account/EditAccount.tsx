@@ -71,10 +71,7 @@ export default function EditAccount() {
           className="w-[440px] flex flex-col gap-[2px]"
           onFinish={handleSubmit(async (formData) => {
             // setIsLoading(true);
-            console.log(formData);
-            console.log("Ahihi");
             const data = await PUT("/api/Accounts/" + formData.id, formData);
-            console.log("put data: " + data);
             window.location.reload();
           })}
         >
