@@ -34,7 +34,9 @@ namespace backend.Controllers
         public async Task<ActionResult> GetCurrentAccount()
         {
             var accountId = User.FindFirst("accountId")?.Value;
-            var accountModels = await _accountRepo.GetAccountByIdAsync(long.Parse(accountId ?? "0"));
+            var accountModels = await _accountRepo.GetAccountByIdAsync(
+                long.Parse(accountId ?? "0")
+            );
             return Ok(accountModels?.ToAccountDTO());
         }
 
@@ -42,7 +44,6 @@ namespace backend.Controllers
         public async Task<ActionResult> GetAccount(long id)
         {
             var account = await _accountRepo.GetAccountByIdAsync(id);
-
             if (account == null)
             {
                 return NotFound();
@@ -53,41 +54,28 @@ namespace backend.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> PutAccount([FromRoute] long id, [FromBody] UpdateAccountDTO accountDto)
+        public async Task<IActionResult> PutAccount(
+            [FromRoute] long id,
+            [FromBody] UpdateAccountDTO accountDto
+        )
         {
-            
-
-            // _context.Entry(account).State = EntityState.Modified;
-
-            try
+            var account = await _accountRepo.UpdateAccountAsync(id, accountDto);
+            if (account == null)
             {
-                System.Console.WriteLine("hello");
-                return Ok(await _accountRepo.UpdateAccountAsync(id, accountDto));
+                return NotFound("Account not found.");
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                System.Console.WriteLine("hello2");
-                if (_accountRepo.GetAccountByIdAsync(id) == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(account);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Account>> PostAccount(Account account)
+        public async Task<IActionResult> PostAccount(Account account)
         {
-            // _context.Accounts.Add(account);
-            // await _context.SaveChangesAsync();
-            Account newAccount = await _accountRepo.CreateAccountAsync(account);
-
-            return CreatedAtAction("GetAccount", new { id = newAccount.AccountId }, newAccount);
+            var newAccount = await _accountRepo.CreateAccountAsync(account);
+            if (newAccount == null)
+            {
+                return BadRequest("The diamond's certificate number already exists.");
+            }
+            return Ok(newAccount);
         }
 
         // [HttpDelete("{id}")]

@@ -4,15 +4,19 @@ namespace backend.DTOs.Account
 {
     public class UpdateAccountDTO
     {
-        // [Required]
+        [Required]
         public string Name { get; set; } = string.Empty;
-        // [Required]
+
+        [Required]
         public string PhoneNumber { get; set; } = string.Empty;
-        // [Required]
+
+        [Required]
         public string Address { get; set; } = string.Empty;
-        // [Required]
+
+        [Required]
         public DateTime Birthday { get; set; }
-        // [Required]
+
+        [Required]
         public string Gender { get; set; } = string.Empty;
     }
 }

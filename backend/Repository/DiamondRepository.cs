@@ -64,7 +64,7 @@ namespace backend.Repository
                 bool isDescending = query.IsDecsending;
                 diamondsQuery = query.SortBy.ToLower() switch
                 {
-                    "Lab"
+                    "lab"
                         => isDescending
                             ? diamondsQuery.OrderByDescending(x => x.Lab)
                             : diamondsQuery.OrderBy(x => x.Lab),
@@ -72,19 +72,19 @@ namespace backend.Repository
                         => isDescending
                             ? diamondsQuery.OrderByDescending(x => x.Carat)
                             : diamondsQuery.OrderBy(x => x.Carat),
-                    "Color"
+                    "color"
                         => isDescending
                             ? diamondsQuery.OrderByDescending(x => x.Color)
                             : diamondsQuery.OrderBy(x => x.Color),
-                    "Clarity"
+                    "clarity"
                         => isDescending
                             ? diamondsQuery.OrderByDescending(x => x.Clarity)
                             : diamondsQuery.OrderBy(x => x.Clarity),
-                    "Shape"
+                    "shape"
                         => isDescending
                             ? diamondsQuery.OrderByDescending(x => x.ShapeId)
                             : diamondsQuery.OrderBy(x => x.ShapeId),
-                    "Cut"
+                    "cut"
                         => isDescending
                             ? diamondsQuery.OrderByDescending(x => x.Cut)
                             : diamondsQuery.OrderBy(x => x.Cut),
@@ -113,18 +113,19 @@ namespace backend.Repository
                 .Skip(skipNumber)
                 .Take(query.PageSize)
                 .Select(x =>
-                // x.ToDiamondDTO()
-                new DiamondDTO()
-                {
-                    ImageUrl = x.ImageUrl,
-                    DiamondId = x.DiamondId,
-                    Lab = x.Lab,
-                    Carat = x.Carat,
-                    Cut = x.Cut,
-                    Color = x.Color.ToString(),
-                    Clarity = x.Clarity.ToString(),
-                    // Shape = x.ShapeId.ToString(),
-                })
+                    x.ToDiamondDTO()
+                // new DiamondDTO()
+                // {
+                //     ImageUrl = x.ImageUrl,
+                //     DiamondId = x.DiamondId,
+                //     Lab = x.Lab,
+                //     Carat = x.Carat,
+                //     Cut = x.Cut,
+                //     Color = x.Color.ToString(),
+                //     Clarity = x.Clarity.ToString(),
+                //     Shape = x.ShapeId.ToString(),
+                // }
+                )
                 .ToListAsync();
 
             // Calculate the total number of pages
@@ -154,6 +155,7 @@ namespace backend.Repository
             {
                 return null;
             }
+            var shape = await _context.Shapes.FindAsync(diamondDto.ShapeId);
 
             existingDiamond.Lab = diamondDto.Lab;
             existingDiamond.CertificateUrl = diamondDto.CertificateUrl;
@@ -167,9 +169,9 @@ namespace backend.Repository
             existingDiamond.Symmetry = diamondDto.Symmetry;
             existingDiamond.Polish = diamondDto.Polish;
             existingDiamond.Fluorescence = diamondDto.Fluorescence;
-            existingDiamond.ShapeId = diamondDto.ShapeId;
-            existingDiamond.Shape = await _context.Shapes.FindAsync(diamondDto.ShapeId);
+            existingDiamond.Shape = shape;
 
+            _context.Entry(existingDiamond).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return existingDiamond;
         }

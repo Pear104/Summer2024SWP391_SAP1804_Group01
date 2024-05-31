@@ -1,6 +1,7 @@
-export default function Heart() {
+export default function Heart({ className }: { className?: string }) {
   return (
     <svg
+      className={className}
       width="128"
       height="128"
       viewBox="0 0 128 128"

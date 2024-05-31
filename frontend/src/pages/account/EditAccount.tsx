@@ -75,8 +75,18 @@ export default function EditAccount() {
             window.location.reload();
           })}
         >
-          <Input hidden defaultValue={profile?.id} />
-
+          <FormItem
+            className="hidden"
+            label="Account Id"
+            name="accountId"
+            control={control}
+          >
+            <Input
+              className="hidden"
+              disabled
+              defaultValue={profile?.accountId}
+            />
+          </FormItem>
           <FormItem label="Name" name="name" control={control}>
             <Input defaultValue={profile?.name} />
           </FormItem>
