@@ -13,12 +13,12 @@ const OrderList = ({ order }: { order: any }) => {
           backgroundImage: `url(${order.accessory.accessoryImages[0].url})`,
         }}
       ></div>
-      {/* <div
+      <div
         className="my-2 aspect-square bg-no-repeat col-span-4 bg-cover w-[400px]"
         style={{
           backgroundImage: `url(${order.diamond.imageUrl})`,
         }}
-      ></div> */}
+      ></div>
       <div className="col-span-4 p-10">
         <div className="libre-baskerville-regular">{order.accessory.name}</div>
         <div className="libre-baskerville-regular mt-5">Status: </div>
@@ -43,7 +43,10 @@ export default function OrderHistory() {
   useEffect(() => {
     (async () => {
       const accessories = (await GET("/api/Accessories")).slice(0, 10);
-      const diamonds = (await GET("/api/Diamonds")).slice(0, 10);
+      console.log(accessories);
+      const diamonds = (await GET("/api/Diamonds")).diamonds.slice(0, 10);
+      console.log(diamonds);
+
       const data: any[] = [];
       for (let i = 0; i < 10; i++) {
         data.push({
@@ -54,7 +57,7 @@ export default function OrderHistory() {
       setOrderHistories(data);
     })();
   }, []);
-  // console.log(orderHistories);
+  console.log(orderHistories);
 
   return (
     <div className="p-4 w-full">

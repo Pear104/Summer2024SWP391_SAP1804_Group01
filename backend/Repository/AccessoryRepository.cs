@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Data;
+using backend.Helper;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -36,12 +37,36 @@ namespace backend.Repository
             return null;
         }
 
-        public async Task<IEnumerable<Accessory>> GetAllAccessoriesAsync()
+        public async Task<IEnumerable<Accessory>> GetAllAccessoriesAsync(AccessoryQuery query)
         {
-            return await _context.Accessories
+            var accessoriesQuery = _context.Accessories
                 .Include(x => x.Shape)
                 .Include(x => x.AccessoryType)
                 .Include(x => x.AccessoryImages)
+                .AsQueryable();
+            if(query.Karat != 0)
+            {
+                accessoriesQuery = accessoriesQuery.Where(x => x.Karat == query.Karat);
+            }
+
+            if(!string.IsNullOrEmpty(query.NameType))
+            {
+                accessoriesQuery = accessoriesQuery.Where(x => x.AccessoryType.Name.ToLower() == query.NameType.ToLower());
+            }
+
+            if(!string.IsNullOrEmpty(query.ShapeType))
+            {
+                accessoriesQuery = accessoriesQuery.Where(x => x.Shape.Name.ToLower() == query.ShapeType.ToLower());
+            }
+
+            if(query.MinMaterialWeight != 0 || query.MaxMaterialWeight != 100)
+            {
+                accessoriesQuery = accessoriesQuery.Where(x => x.MaterialWeight >= query.MinMaterialWeight && x.MaterialWeight <= query.MaxMaterialWeight);
+            }
+
+            return await accessoriesQuery
+                .Skip((query.PageNumber - 1) * query.PageSize)
+                .Take(query.PageSize)
                 .ToListAsync();
         }
 

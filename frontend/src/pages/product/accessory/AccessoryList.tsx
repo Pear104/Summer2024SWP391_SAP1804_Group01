@@ -47,7 +47,7 @@ export default function AccessoryList() {
         <div className="font-bold mulish-regular flex items-center w-full justify-around mb-4">
           Accessory
         </div>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-4 gap-3">
           {accessories.map((accessory: any) => {
             return <AccessoryItem accessory={accessory} />;
           })}

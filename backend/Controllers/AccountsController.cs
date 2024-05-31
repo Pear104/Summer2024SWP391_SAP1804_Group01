@@ -1,5 +1,6 @@
 ﻿using backend.Data;
 using backend.DTOs.Account;
+using backend.Helper;
 using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
@@ -22,9 +23,9 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAccounts()
+        public async Task<ActionResult> GetAccounts([FromQuery] AccountQuery query)
         {
-            var accountModels = await _accountRepo.GetAllAccountsAsync();
+            var accountModels = await _accountRepo.GetAllAccountsAsync(query);
             var accountDTOs = accountModels.Select(x => x.ToAccountDTO());
             return Ok(accountDTOs);
         }

@@ -1,4 +1,5 @@
 ﻿using backend.Data;
+using backend.Helper;
 using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
@@ -25,9 +26,9 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAccessories()
+        public async Task<ActionResult> GetAccessories([FromQuery] AccessoryQuery query)
         {
-            var accessoryModels = await _accessoryRepo.GetAllAccessoriesAsync();
+            var accessoryModels = await _accessoryRepo.GetAllAccessoriesAsync(query);
             var accessoryDTOs = accessoryModels.Select(x => x.ToAccessoryDTO());
             return Ok(accessoryDTOs);
         }
