@@ -40,7 +40,7 @@ export default function EditAccount() {
     (async () => {
       const data = await GET("/api/Accounts/me");
       if (data) {
-        console.log(data);
+        console.log(data); //asdad
         setProfile(data);
         reset({
           email: data.email,
@@ -49,7 +49,7 @@ export default function EditAccount() {
           phoneNumber: data.phoneNumber,
           address: data.address,
           birthday: moment(data.birthday),
-          accountId: data.accountId,
+          id: data.accountId,
         });
       } else {
         setCookie("accessToken", "", 0);
@@ -73,17 +73,13 @@ export default function EditAccount() {
             // setIsLoading(true);
             console.log(formData);
             console.log("Ahihi");
-            const data = await PUT(
-              "/api/Accounts/" + formData.accountId,
-              formData
-            );
+            const data = await PUT("/api/Accounts/" + formData.id, formData);
             console.log("put data: " + data);
-            // window.location.reload();
+            window.location.reload();
           })}
         >
-          <FormItem label="Account Id" name="id" control={control}>
-            <Input disabled defaultValue={profile?.accountId} />
-          </FormItem>
+          <Input hidden defaultValue={profile?.id} />
+
           <FormItem label="Name" name="name" control={control}>
             <Input defaultValue={profile?.name} />
           </FormItem>
@@ -105,7 +101,6 @@ export default function EditAccount() {
               options={[
                 { value: "Female", label: "Female" },
                 { value: "Male", label: "Male" },
-                { value: "Gay", label: "Gay" },
                 { value: "Other", label: "Other" },
               ]}
               defaultValue={profile?.gender}

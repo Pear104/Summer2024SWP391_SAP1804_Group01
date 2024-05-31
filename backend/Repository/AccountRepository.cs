@@ -41,8 +41,10 @@ namespace backend.Repository
 
         public async Task<Account?> UpdateAccountAsync(long id, UpdateAccountDTO accountDto)
         {
-            System.Console.WriteLine("hello");
+            Console.WriteLine("hello");
+            Console.WriteLine(id);
             var existedAccount = await _context.Accounts.FindAsync(id);
+            Console.WriteLine("Context ahihi");
             if (existedAccount == null)
             {
                 return null;
@@ -52,7 +54,8 @@ namespace backend.Repository
             existedAccount.Birthday = accountDto.Birthday;
             existedAccount.Gender = (Gender)Enum.Parse(typeof(Gender), accountDto.Gender);
             existedAccount.PhoneNumber = accountDto.PhoneNumber;
-            
+
+            _context.Entry(existedAccount).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return existedAccount;
         }

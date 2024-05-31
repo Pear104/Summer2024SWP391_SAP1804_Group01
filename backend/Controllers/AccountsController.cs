@@ -52,7 +52,7 @@ namespace backend.Controllers
         }
 
         [HttpPut]
-        [Route("{id: long}")]
+        [Route("{id}")]
         public async Task<IActionResult> PutAccount([FromRoute] long id, [FromBody] UpdateAccountDTO accountDto)
         {
             
@@ -62,7 +62,7 @@ namespace backend.Controllers
             try
             {
                 System.Console.WriteLine("hello");
-                return Ok( _accountRepo.UpdateAccountAsync(id, accountDto));
+                return Ok(await _accountRepo.UpdateAccountAsync(id, accountDto));
             }
             catch (DbUpdateConcurrencyException)
             {
