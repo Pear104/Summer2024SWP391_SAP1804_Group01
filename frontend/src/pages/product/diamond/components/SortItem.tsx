@@ -5,19 +5,20 @@ const SortItem = ({
   property,
   params,
   setFilterProperty,
+  setQueryUrl,
 }: {
   property: string;
   params: URLSearchParams;
   setFilterProperty: any;
+  setQueryUrl: any;
 }) => {
   const navigate = useNavigate();
   return (
     <div
-      className="w-[80px] text-center flex gap-2 items-center"
+      className="w-[80px] text-center flex items-center justify-center"
       onClick={() => {
         setFilterProperty(property);
         params.set("SortBy", property);
-        console.log(params.toString());
         navigate("/product/diamond?" + params.toString());
       }}
     >

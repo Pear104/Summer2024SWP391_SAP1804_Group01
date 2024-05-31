@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GET } from "../../utils/request";
 
 const OrderList = ({ order }: { order: any }) => {

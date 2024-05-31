@@ -116,7 +116,7 @@ const routes = [
                 element: <DiamondList />,
               },
               {
-                path: "/product/diamond/detail",
+                path: "/product/diamond/detail/:diamondId",
                 element: <DiamondDetail />,
               },
               {

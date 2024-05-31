@@ -1,10 +1,32 @@
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import ChooseItem from "../pages/product/components/ChooseItem";
+import { Breadcrumb } from "antd";
 
 export default function ProductLayout() {
+  const url = new URL(window.location.href);
   return (
-    <div className="flex justify-center flex-col items-center mt-20">
-      <ChooseItem />
+    <div className="flex justify-center flex-col items-center">
+      <div>
+        <div className="justify-self-start w-full">
+          {url.pathname.includes("product") && (
+            <Breadcrumb
+              className="mt-10 mb-4"
+              items={[
+                {
+                  title: "Product",
+                },
+                {
+                  title: <a href="">Diamond</a>,
+                },
+                {
+                  title: <a href="">Shape</a>,
+                },
+              ]}
+            />
+          )}
+        </div>
+        <ChooseItem />
+      </div>
       <div className="mt-10 w-full">
         <Outlet />
       </div>

@@ -1,15 +1,49 @@
 import { Pagination, Skeleton } from "antd";
-import { useState } from "react";
 import { GET } from "../../../utils/request";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import DiamondItem from "./components/DiamondItem";
-import SortItem from "./components/SortItem";
+// import SortItem from "./components/SortItem";
 import Filter from "./components/Filter";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { useSearchStore } from "../../../store/searchStore";
+
+const SortItem = ({
+  property,
+  params,
+  setQueryUrl,
+}: {
+  property: string;
+  params: URLSearchParams;
+  setQueryUrl: any;
+}) => {
+  const navigate = useNavigate();
+  return (
+    <div
+      className="w-[80px] text-center flex items-center justify-center"
+      onClick={() => {
+        const isDescending = params.get("IsDescending") === "true";
+        params.set("IsDescending", (!isDescending).toString());
+        params.set("SortBy", property);
+        navigate("/product/diamond?" + params.toString());
+        setQueryUrl("/api/Diamonds?" + params.toString());
+      }}
+    >
+      {property}{" "}
+      {params.get("SortBy") == property &&
+      params.get("IsDescending") === "false" ? (
+        <ChevronUp size={20} />
+      ) : (
+        <ChevronDown size={20} />
+      )}
+    </div>
+  );
+};
 
 export default function DiamondList() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
+
   const properties = [
     "Shape",
     "Price",
@@ -21,37 +55,37 @@ export default function DiamondList() {
   ];
 
   const navigate = useNavigate();
-
-  const [filterProperty, setFilterProperty] = useState();
-  const [queryUrl, setQueryUrl] = useState(
-    "/api/Diamonds?" + params.toString()
-  );
-
+  const queryUrl = useSearchStore((state) => state.queryUrl);
+  const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
+  console.log("query url: " + queryUrl);
   const { data, isLoading } = useQuery({
-    queryKey: ["diamonds", filterProperty, queryUrl],
+    queryKey: ["diamonds", queryUrl],
     queryFn: () => GET(queryUrl),
   });
 
   return (
     <div className="flex items-center justify-around flex-col mb-20">
       <Filter />
-      <div className="font-bold" id="table-header">
-        Diamond table
+      <div
+        className="font-bold text-3xl libre-baskerville-regular"
+        id="table-header"
+      >
+        DATJ's DIAMOND PRODUCTS
       </div>
       <div className="w-full px-20 mt-10">
-        <div className="font-bold mulish-regular flex items-center w-full justify-around mb-4">
-          <div className="w-[100px] text-center">View</div>
+        <div className="border-y border-black py-5 font-bold mulish-regular flex items-center w-full justify-around mb-4">
+          <div className="w-[100px] text-center justify-center">View</div>
           {properties.map((property) => {
             return (
               <SortItem
                 key={property}
                 property={property}
                 params={params}
-                setFilterProperty={setFilterProperty}
+                setQueryUrl={setQueryUrl}
               />
             );
           })}
-          <div className="w-[80px] text-center flex gap-2 items-center">
+          <div className="w-[80px] text-center flex gap-2 items-center justify-center">
             Detail
           </div>
         </div>
@@ -87,11 +121,10 @@ export default function DiamondList() {
             onChange={(page, _pageSize) => {
               document
                 .getElementById("table-header")
-                ?.scrollIntoView({ block: "end", behavior: "smooth" });
+                ?.scrollIntoView({ block: "start", behavior: "smooth" });
               params.set("PageNumber", page.toString());
-              url.search = params.toString();
-              setQueryUrl("/api/Diamonds?" + params.toString());
               navigate(url.pathname + "?" + params.toString());
+              setQueryUrl("/api/Diamonds?" + params.toString());
             }}
           />
         </div>

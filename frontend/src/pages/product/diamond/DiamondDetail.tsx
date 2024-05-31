@@ -1,35 +1,39 @@
 import { useEffect, useState } from "react";
 import { GET } from "../../../utils/request";
 import { ExternalLink } from "lucide-react";
-
+import { useParams } from "react-router-dom";
+import { Image } from "antd";
 export default function DiamondDetail() {
   const [diamond, setDiamond] = useState<any>();
+  const { diamondId } = useParams();
+  console.log(diamondId);
   useEffect(() => {
     (async () => {
-      const data = await GET("/api/Diamonds/5");
+      const data = await GET(`/api/Diamonds/${diamondId}`);
       setDiamond(data);
     })();
   }, []);
   return (
     <div className="flex justify-center">
       <div className="w-[1200px] grid grid-cols-6 gap-10">
-        <div
-          className="col-span-4 place-self-center aspect-square bg-contain bg-top bg-no-repeat w-4/5 border "
+        {/* <div
+          className="col-span-4 place-self-center aspect-square bg-cover bg-top bg-no-repeat w-4/5 border "
           style={{
             backgroundImage: `url(${diamond?.imageUrl})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
           }}
-        ></div>
+        ></div> */}
+        <div className="col-span-4 place-self-center aspect-square bg-cover bg-top bg-no-repeat w-4/5">
+          <Image style={{ height: "100%" }} src={`${diamond?.imageUrl}`} />
+        </div>
         <div className="col-span-2">
           <div className="mulish-regular text-2xl">
-            {`${diamond?.carat} Carat ${diamond?.shape.name} Shape Lab Diamond`}
+            {`${diamond?.carat} Carat ${diamond?.shape} Shape Lab Diamond`}
           </div>
           <div className="text-sm">
             Certificate Number#:
             <span className="ml-2">{diamond?.certificateNumber}</span>
           </div>
-          <div className="text-3xl">$ 1.200</div>
+          <div className="text-3xl my-2">$ 1.200</div>
           <div className="w-full grid grid-cols-2 gap-4 my-4 mulish-regular text-slate-950 ">
             <div className="flex flex-col gap-2">
               <div>LAB</div>
@@ -53,7 +57,7 @@ export default function DiamondDetail() {
                 {diamond?.certificateNumber}
                 <ExternalLink size={12} />
               </a>
-              <div>{diamond?.shape.name}</div>
+              <div>{diamond?.shape}</div>
               <div>{diamond?.carat}</div>
               <div>{diamond?.cut}</div>
               <div>{diamond?.color}</div>

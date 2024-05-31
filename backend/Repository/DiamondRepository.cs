@@ -61,7 +61,9 @@ namespace backend.Repository
             // Sorting
             if (!string.IsNullOrEmpty(query.SortBy))
             {
-                bool isDescending = query.IsDecsending;
+                bool isDescending = query.IsDescending;
+                System.Console.WriteLine(query.SortBy.ToLower());
+                System.Console.WriteLine(query.IsDescending);
                 diamondsQuery = query.SortBy.ToLower() switch
                 {
                     "lab"
@@ -88,24 +90,26 @@ namespace backend.Repository
                         => isDescending
                             ? diamondsQuery.OrderByDescending(x => x.Cut)
                             : diamondsQuery.OrderBy(x => x.Cut),
-                    _ => diamondsQuery
+                    _ => diamondsQuery.OrderBy(x => x.Carat),
                 };
             }
 
             // Filtering
-            if (!string.IsNullOrEmpty(query.MinCarat))
+            if (query.MinCarat != null)
             {
-                var minCarat = float.Parse(query.MinCarat);
-                diamondsQuery = diamondsQuery.Where(x => x.Carat >= minCarat);
+                diamondsQuery = diamondsQuery.Where(x => x.Carat >= (float)query.MinCarat);
             }
-            if (!string.IsNullOrEmpty(query.MaxCarat))
+            if (query.MaxCarat != null)
             {
-                var maxCarat = float.Parse(query.MaxCarat);
-                diamondsQuery = diamondsQuery.Where(x => x.Carat <= maxCarat);
+                diamondsQuery = diamondsQuery.Where(x => x.Carat <= (float)query.MaxCarat);
+            }
+            if (!string.IsNullOrEmpty(query.Shape))
+            {
+                diamondsQuery = diamondsQuery.Where(x => x.Shape.Name == query.Shape);
             }
 
-            // Get the total count of filtered records
             var totalCount = await diamondsQuery.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalCount / (double)query.PageSize);
 
             // Pagination
             var skipNumber = (query.PageNumber - 1) * query.PageSize;
@@ -127,9 +131,6 @@ namespace backend.Repository
                 // }
                 )
                 .ToListAsync();
-
-            // Calculate the total number of pages
-            var totalPages = (int)Math.Ceiling(totalCount / (double)query.PageSize);
 
             return new DiamondResult
             {

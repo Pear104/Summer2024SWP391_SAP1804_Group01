@@ -10,21 +10,8 @@ import Oval from "../../../../components/svg/Oval";
 import Princess from "../../../../components/svg/Princess";
 import Heart from "../../../../components/svg/Heart";
 import SliderItem from "./SliderItem";
-
-const DiamondItem = ({
-  children,
-  title,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) => {
-  return (
-    <div className="hover:border-black transition-all px-6 py-2 border rounded-md flex flex-col items-center gap-2">
-      <div className="">{children}</div>
-      <div className="text-xs">{title}</div>
-    </div>
-  );
-};
+import { useSearchStore } from "../../../../store/searchStore";
+import { useNavigate } from "react-router-dom";
 
 const clarity: { [key: number]: string } = {
   0: "I3",
@@ -65,41 +52,87 @@ const carat: { [key: number]: string } = {
   6: "6",
 };
 
+const items = [
+  {
+    element: <Round className="w-[50px] h-[50px]" />,
+    name: "Round",
+  },
+  {
+    element: <Pear className="w-[50px] h-[50px]" />,
+    name: "Pear",
+  },
+  {
+    element: <Heart className="w-[50px] h-[50px]" />,
+    name: "Heart",
+  },
+  {
+    element: <Marquise className="w-[50px] h-[50px]" />,
+    name: "Marquise",
+  },
+  {
+    element: <Emerald className="w-[50px] h-[50px]" />,
+    name: "Emerald",
+  },
+  {
+    element: <Cushion className="w-[50px] h-[50px]" />,
+    name: "Cushion",
+  },
+  {
+    element: <Radiant className="w-[50px] h-[50px]" />,
+    name: "Radiant",
+  },
+  {
+    element: <Asscher className="w-[50px] h-[50px]" />,
+    name: "Asscher",
+  },
+  {
+    element: <Oval className="w-[50px] h-[50px]" />,
+    name: "Oval",
+  },
+  {
+    element: <Princess className="w-[50px] h-[50px]" />,
+    name: "Princess",
+  },
+];
+
+const DiamondItem = ({
+  children,
+  title,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) => {
+  const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
+  const navigate = useNavigate();
+  return (
+    <div
+      className="hover:border-black transition-all px-6 py-2 border rounded-md flex flex-col items-center gap-2"
+      onClick={() => {
+        const url = new URL(window.location.href);
+        const params = new URLSearchParams(url.searchParams);
+        params.set("Shape", title);
+        navigate("/product/diamond?" + params.toString());
+        setQueryUrl(`/api/Diamonds?${params.toString()}`);
+      }}
+    >
+      <div className="">{children}</div>
+      <div className="text-xs">{title}</div>
+    </div>
+  );
+};
+
 export default function Filter() {
   return (
     <div className="w-full px-20">
       <div className="font-bold mulish-regular mb-4">BY SHAPE</div>
       <div className="flex justify-between">
-        <DiamondItem title="Round">
-          <Round className="w-[50px] h-[50px]" />
-        </DiamondItem>
-        <DiamondItem title="Pear">
-          <Pear className="w-[50px] h-[50px]" />
-        </DiamondItem>
-        <DiamondItem title="Heart">
-          <Heart className="w-[50px] h-[50px]" />
-        </DiamondItem>
-        <DiamondItem title="Marquise">
-          <Marquise className="w-[50px] h-[50px]" />
-        </DiamondItem>
-        <DiamondItem title="Emerald">
-          <Emerald className="w-[50px] h-[50px]" />
-        </DiamondItem>
-        <DiamondItem title="Cushion">
-          <Cushion className="w-[50px] h-[50px]" />
-        </DiamondItem>
-        <DiamondItem title="Radiant">
-          <Radiant className="w-[50px] h-[50px]" />
-        </DiamondItem>
-        <DiamondItem title="Asscher">
-          <Asscher className="w-[50px] h-[50px]" />
-        </DiamondItem>
-        <DiamondItem title="Oval">
-          <Oval className="w-[50px] h-[50px]" />
-        </DiamondItem>
-        <DiamondItem title="Princess">
-          <Princess className="w-[50px] h-[50px]" />
-        </DiamondItem>
+        {items.map((item) => {
+          return (
+            <DiamondItem key={item.name} title={item.name}>
+              {item.element}
+            </DiamondItem>
+          );
+        })}
       </div>
 
       <div className="grid grid-cols-2 gap-16">
@@ -134,7 +167,9 @@ export default function Filter() {
         defaultValue={[0, 9]}
       />
       <div></div>
-      <div></div>
+      <div className="transition-all cursor-pointer font-bold mulish-regular mb-4 px-4 my-3 hover:bg-primary/85 hover:shadow-md py-3 bg-primary text-white flex justify-center">
+        Filter
+      </div>
       <div></div>
       <Divider />
     </div>

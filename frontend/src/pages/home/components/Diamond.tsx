@@ -1,4 +1,3 @@
-import React from "react";
 import Round from "../../../components/svg/Round";
 import Pear from "../../../components/svg/Pear";
 import Heart from "../../../components/svg/Heart";
@@ -10,9 +9,18 @@ import Asscher from "../../../components/svg/Asscher";
 import Oval from "../../../components/svg/Oval";
 import Princess from "../../../components/svg/Princess";
 
-const DiamondItem = ({ children }: { children: React.ReactNode }) => {
-  return <div className="text-sm">{children}</div>;
-};
+const items = [
+  <Round />,
+  <Pear />,
+  <Heart />,
+  <Marquise />,
+  <Emerald />,
+  <Cushion />,
+  <Radiant />,
+  <Asscher />,
+  <Oval />,
+  <Princess />,
+];
 
 export default function Diamond() {
   return (
@@ -21,36 +29,13 @@ export default function Diamond() {
         Diverse gemstones
       </div>
       <div className="mt-8 flex gap-4 justify-evenly px-8 overflow-x-hidden">
-        <DiamondItem>
-          <Round />
-        </DiamondItem>
-        <DiamondItem>
-          <Pear />
-        </DiamondItem>
-        <DiamondItem>
-          <Heart />
-        </DiamondItem>
-        <DiamondItem>
-          <Marquise />
-        </DiamondItem>
-        <DiamondItem>
-          <Emerald />
-        </DiamondItem>
-        <DiamondItem>
-          <Cushion />
-        </DiamondItem>
-        <DiamondItem>
-          <Radiant />
-        </DiamondItem>
-        <DiamondItem>
-          <Asscher />
-        </DiamondItem>
-        <DiamondItem>
-          <Oval />
-        </DiamondItem>
-        <DiamondItem>
-          <Princess />
-        </DiamondItem>
+        {items.map((item: any, index) => {
+          return (
+            <div className="text-sm" key={index}>
+              {item}
+            </div>
+          );
+        })}
       </div>
       <div className="flex justify-center mt-16">
         <a

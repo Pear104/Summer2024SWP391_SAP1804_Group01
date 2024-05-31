@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GET, PUT } from "../../utils/request";
 import { setCookie } from "../../utils/cookie";
 import { FormItem } from "react-hook-form-antd";
 import { useForm } from "react-hook-form";
 import { Button, DatePicker, Form, Input, Select } from "antd";
-import { useAuthStore } from "../../store/authStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { ProfileFilled } from "@ant-design/icons";
 import moment from "moment";
 
 const phoneRegex = new RegExp(
@@ -31,8 +29,7 @@ const schema = z.object({
 
 export default function EditAccount() {
   const [profile, setProfile] = useState<any>(null);
-  const googleProfile = useAuthStore((state) => state.googleProfile);
-  const { control, handleSubmit, setError, reset } = useForm({
+  const { control, handleSubmit, reset } = useForm({
     resolver: zodResolver(schema),
   });
 
@@ -71,8 +68,8 @@ export default function EditAccount() {
           className="w-[440px] flex flex-col gap-[2px]"
           onFinish={handleSubmit(async (formData) => {
             // setIsLoading(true);
-            const data = await PUT("/api/Accounts/" + formData.id, formData);
-            window.location.reload();
+            await PUT("/api/Accounts/" + formData.id, formData);
+            location.href = "/account";
           })}
         >
           <FormItem

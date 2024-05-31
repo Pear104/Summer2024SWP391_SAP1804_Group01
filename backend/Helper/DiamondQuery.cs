@@ -7,11 +7,11 @@ namespace backend.Helper
 {
     public class DiamondQuery
     {
-        public string? MinCarat { get; set; } = null;
-        public string? MaxCarat { get; set; } = null;
+        public Decimal? MinCarat { get; set; } = null;
+        public Decimal? MaxCarat { get; set; } = null;
         public string? Shape { get; set; } = null;
-        public string? SortBy { get; set; } = "carat";
-        public bool IsDecsending { get; set; } = false;
+        public string? SortBy { get; set; }
+        public bool IsDescending { get; set; }
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 20;
     }
