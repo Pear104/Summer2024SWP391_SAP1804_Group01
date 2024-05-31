@@ -18,9 +18,12 @@ import EmailLoading from "../pages/authentication/EmailLoading";
 import ForgetPassword from "../pages/authentication/ForgetPassword";
 import ResetPasswordForm from "../pages/authentication/ResetPasswordForm";
 import Dashboard from "../pages/dashboard/Dashboard";
+
 import Cart from "../pages/cart/Cart";
+
 import Test from "../pages/test/Test";
 import OrderDetail from "../pages/account/OrderDetail";
+import EditAccount from "../pages/account/EditAccount";
 
 const routes = [
   {
@@ -89,6 +92,10 @@ const routes = [
               {
                 index: true,
                 element: <AccountDetail />,
+              },
+              {
+                path: "edit",
+                element: <EditAccount />,
               },
               {
                 element: <OrderHistory />,

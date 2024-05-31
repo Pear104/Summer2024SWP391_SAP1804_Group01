@@ -51,7 +51,9 @@ export default function AccountDetail() {
         )}
       </div>
       <div className="mt-6">
-        <Button className="">EDIT</Button>
+        <a href="/account/edit">
+          <Button className="">EDIT</Button>
+        </a>
       </div>
     </div>
   );

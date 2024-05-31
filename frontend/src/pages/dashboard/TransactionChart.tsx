@@ -76,30 +76,32 @@ const data = [
 export default function TransactionChart() {
   return (
     <div className="h-[22rem] bg-white p-4 rounded-sm border border-gray-200 flex flex-col flex-1 items-center">
-      <strong className="text-gray-700 font-medium ">Transactions</strong>
-      <div className="mt-3 w-full flex-1 text-xs">
-        {/* <ResponsiveContainer width="100%" height="100%"> */}
-        <BarChart
-          className="items-center"
-          width={1800}
-          height={700}
-          data={data}
-          margin={{
-            top: 20,
-            right: 10,
-            left: -10,
-            bottom: 0,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar className="" dataKey="Income" fill="#0ea5e9" />
-          <Bar dataKey="Expense" fill="#ea580c" />
-        </BarChart>
-        {/* </ResponsiveContainer> */}
+      <div className="items-center flex flex-col">
+        <strong className="text-gray-700 font-medium ">Transactions</strong>
+        <div className="mt-3 w-full flex-1 text-xs">
+          {/* <ResponsiveContainer width="100%" height="100%"> */}
+          <BarChart
+            className="items-center"
+            width={1500}
+            height={400}
+            data={data}
+            margin={{
+              top: 20,
+              right: 10,
+              left: -10,
+              bottom: 0,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar className="" dataKey="Income" fill="#0ea5e9" />
+            <Bar dataKey="Expense" fill="#ea580c" />
+          </BarChart>
+          {/* </ResponsiveContainer> */}
+        </div>
       </div>
     </div>
   );
