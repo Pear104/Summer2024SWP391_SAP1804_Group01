@@ -1,6 +1,8 @@
-﻿using backend.Models;
+﻿using backend.Helper;
+using backend.Models;
 using backend.Models.Payment.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace backend.Data
 {
@@ -8,6 +10,11 @@ namespace backend.Data
     {
         public ApplicationDbContext(DbContextOptions options)
             : base(options) { }
+
+        public ApplicationDbContext()
+        {
+
+        }
 
         public DbSet<Shape> Shapes { get; set; }
         public DbSet<Diamond> Diamonds { get; set; }
@@ -30,6 +37,12 @@ namespace backend.Data
 
         //Start payment
         public DbSet<Merchant> Merchants { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<PaymentDestination> PaymentDestinations { get; set; }
+        public DbSet<PaymentNotification> PaymentNotifications { get; set; }
+        public DbSet<PaymentSignature> PaymentSignatures { get; set; }
+        public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
+
         //End payment
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -73,6 +86,30 @@ namespace backend.Data
             builder
                 .Entity<WarrantyRequest>()
                 .Property(o => o.WarrantyRequestId)
+                .ValueGeneratedOnAdd();
+            builder
+                .Entity<Merchant>()
+                .Property(o => o.Id)
+                .ValueGeneratedOnAdd();
+            builder
+                .Entity<Payment>()
+                .Property(o => o.Id)
+                .ValueGeneratedOnAdd();
+            builder
+                .Entity<PaymentDestination>()
+                .Property(o => o.Id)
+                .ValueGeneratedOnAdd();
+            builder
+                .Entity<PaymentNotification>()
+                .Property(o => o.Id)
+                .ValueGeneratedOnAdd();
+            builder
+                .Entity<PaymentSignature>()
+                .Property(o => o.Id)
+                .ValueGeneratedOnAdd();
+            builder
+                .Entity<PaymentTransaction>()
+                .Property(o => o.Id)
                 .ValueGeneratedOnAdd();
 
             //Them khoa ngoai giua Accessory voi AccessoryType
@@ -261,6 +298,63 @@ namespace backend.Data
                 .HasForeignKey(o => o.DeliveryStaffId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            //Them khoaa ngoai giua Merchant va Payment
+            builder.Entity<Merchant>()
+                .HasMany(e => e.Payments)
+                .WithOne(e => e.Merchant)
+                .HasForeignKey(e => e.MerchantId)
+                .IsRequired(false);
+
+            //Them khoaa ngoai giua Merchant va PaymentNotification
+            builder.Entity<Merchant>()
+                .HasMany(e => e.Notifications)
+                .WithOne(e => e.NotiMerchant)
+                .HasForeignKey(e => e.NotiMerchantId)
+                .IsRequired(false);
+
+            //Them khoaa ngoai giua Merchant va Payment
+            builder.Entity<Merchant>()
+                .HasMany(e => e.Payments)
+                .WithOne(e => e.Merchant)
+                .HasForeignKey(e => e.MerchantId)
+                .IsRequired(false);
+
+            //Them khoaa ngoai giua Payment va PaymentTranaction
+            builder.Entity<Payment>()
+                .HasMany(e => e.Transactions)
+                .WithOne(e => e.Payment)
+                .HasForeignKey(e => e.PaymentId)
+                .IsRequired(false);
+
+            //Them khoaa ngoai giua Payment va PaymentSignature
+            builder.Entity<Payment>()
+                .HasMany(e => e.Signatures)
+                .WithOne(e => e.Payment)
+                .HasForeignKey(e => e.PaymentId)
+                .IsRequired(false);
+
+            //Them khoaa ngoai giua Payment va PaymentNotification
+            builder.Entity<Payment>()
+                .HasMany(e => e.Notifications)
+                .WithOne(e => e.NotiPayment)
+                .HasForeignKey(e => e.NotiPaymentId)
+                .IsRequired(false);
+
+            //Them khoaa ngoai giua PaymentDestination va Payment
+            builder.Entity<PaymentDestination>()
+                .HasMany(e => e.Payments)
+                .WithOne(e => e.PaymentDestination)
+                .HasForeignKey(e => e.PaymentDestinationId)
+                .IsRequired(false);
+
+            //Them khoaa ngoai giua PaymentDestination va PaymentDestination
+            builder.Entity<PaymentDestination>()
+                .HasMany(e => e.PaymentDestinations)
+                .WithOne(e => e.DesParent)
+                .HasForeignKey(e => e.DesParentId)
+                .IsRequired(false);
+
+
             // Add test data
             List<Rank> ranks = new List<Rank>
             {
@@ -309,5 +403,29 @@ namespace backend.Data
             };
             builder.Entity<Rank>().HasData(ranks);
         }
+
+        public override int SaveChanges()
+        {
+            SetEmployeeIds();
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            SetEmployeeIds();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void SetEmployeeIds()
+        {
+            foreach (var entry in ChangeTracker.Entries<Merchant>())
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.Id = entry.Entity.GenerateHashedId();
+                }
+            }
+        }
+
     }
 }

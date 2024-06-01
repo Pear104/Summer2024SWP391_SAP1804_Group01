@@ -1,6 +1,11 @@
-﻿using backend.Payment_src.core.Payment.Application.Base.Models;
+﻿using backend.DTOs.Merchant;
+using backend.Interfaces;
+using backend.Mappers;
+using backend.Models.Payment.Domain.Entities;
+using backend.Payment_src.core.Payment.Application.Base.Models;
 using backend.Payment_src.core.Payment.Application.Features.Commands;
 using backend.Payment_src.core.Payment.Application.Features.Dtos;
+using backend.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -15,18 +20,27 @@ namespace backend.Controllers
     [ApiController]
     public class MerchantController : ControllerBase
     {
+        private readonly IMerchantRepository _merchantRepo;
+        public MerchantController(IMerchantRepository merchantRepo)
+        {
+            _merchantRepo = merchantRepo;
+        }
+
         /// <summary>
         /// Get merchants base on criteria
         /// </summary>
         /// <param name="criteria"></param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(BaseResultWIthData<List<MerchantDtos>>), 200)]
+        //[ProducesResponseType(typeof(BaseResultWIthData<List<MerchantDtos>>), 200)]
+        [ProducesResponseType(typeof(Merchant), 200)]
         [ProducesResponseType(400)]
-        public IActionResult Get(string criteria)
+        public async Task<IActionResult> GetAll()
         {
-            var response = new BaseResultWIthData<List<MerchantDtos>>();
-            return Ok(response);
+            var merchants = await _merchantRepo.GetAll();
+
+            //var response = new BaseResultWIthData<List<MerchantDtos>>();
+            return Ok(merchants);
         }
 
         /// <summary>
@@ -37,7 +51,6 @@ namespace backend.Controllers
         [HttpGet]
         [Route("with-paging")]
         [ProducesResponseType(typeof(BaseResultWIthData<BasePagingData<MerchantDtos>>), 200)]
-
         public IActionResult GetPaging([FromQuery] BasePagingQuery query)
         {
             var response = new BaseResultWIthData<BasePagingData<MerchantDtos>>();
@@ -78,11 +91,13 @@ namespace backend.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(BaseResultWIthData<MerchantDtos>), 200)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult Create([FromBody] CreateMerchant request)
+        public async Task<IActionResult> Create([FromBody] CreateMerchantDto request)
         {
-            var response = new BaseResultWIthData<MerchantDtos>();
+            var merchantModel = request.ToMerchantFromCreateMerchant();
+            var merchantDto = await _merchantRepo.Create(merchantModel);
+            //var response = new BaseResultWIthData<MerchantDtos>();
 
-            return Ok(response);
+            return Ok(merchantDto);
         }
 
         /// <summary>

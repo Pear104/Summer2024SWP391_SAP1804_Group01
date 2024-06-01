@@ -12,8 +12,8 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240530084713_AddPaymentModels")]
-    partial class AddPaymentModels
+    [Migration("20240531043951_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -520,6 +520,321 @@ namespace backend.Migrations
                     b.ToTable("order_detail");
                 });
 
+            modelBuilder.Entity("backend.Models.Payment.Domain.Entities.Merchant", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("CreatedBy");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
+
+                    b.Property<DateTime?>("LastUpdateAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("LastUpdateAt");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("LastUpdatedBy");
+
+                    b.Property<string>("MerchantName")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("MerchantName");
+
+                    b.Property<string>("MerchantReturnUrl")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("MerchantReturnUrl");
+
+                    b.Property<string>("MerchantWebLink")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("MerchantWebLink");
+
+                    b.Property<string>("MerchentIpnUrl")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("MerchentIpnUrl");
+
+                    b.Property<string>("SecretKey")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("SecretKey");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("merchant");
+                });
+
+            modelBuilder.Entity("backend.Models.Payment.Domain.Entities.Payment", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime?>("ExpireDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ExpireDate");
+
+                    b.Property<string>("MerchantId")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("MerchantId");
+
+                    b.Property<string>("PaidAmount")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("PaidAmount");
+
+                    b.Property<string>("PaymentContent")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("PaymentContent");
+
+                    b.Property<string>("PaymentCurrency")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("PaymentCurrency");
+
+                    b.Property<DateTime?>("PaymentDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PaymentDate");
+
+                    b.Property<string>("PaymentDestinationId")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("PaymentDestinationId");
+
+                    b.Property<string>("PaymentLanguage")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("PaymentLanguage");
+
+                    b.Property<string>("PaymentLastMessage")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("PaymentLastMessage");
+
+                    b.Property<string>("PaymentRefId")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("PaymentRefId");
+
+                    b.Property<string>("PaymentStatus")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("PaymentStatus");
+
+                    b.Property<decimal?>("RequiredAmount")
+                        .HasColumnType("decimal(19, 2)")
+                        .HasColumnName("RequiredAmount");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MerchantId");
+
+                    b.HasIndex("PaymentDestinationId");
+
+                    b.ToTable("payment");
+                });
+
+            modelBuilder.Entity("backend.Models.Payment.Domain.Entities.PaymentDestination", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("CreatedBy");
+
+                    b.Property<string>("DesLogo")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("DesLogo");
+
+                    b.Property<string>("DesName")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("DesName");
+
+                    b.Property<string>("DesParentId")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("DesParentId");
+
+                    b.Property<string>("DesShortName")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("DesShortName");
+
+                    b.Property<int?>("DesSortIndex")
+                        .HasColumnType("int")
+                        .HasColumnName("DesSortIndex");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit")
+                        .HasColumnName("IsActive");
+
+                    b.Property<DateTime?>("LastUpdateAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("LastUpdateAt");
+
+                    b.Property<string>("LastUpdatedBy")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("LastUpdatedBy");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DesParentId");
+
+                    b.ToTable("PaymentDestination");
+                });
+
+            modelBuilder.Entity("backend.Models.Payment.Domain.Entities.PaymentNotification", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("Id");
+
+                    b.Property<decimal>("NotiAmount")
+                        .HasColumnType("decimal(19,2)")
+                        .HasColumnName("NotiAmount");
+
+                    b.Property<string>("NotiContent")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("NotiContent");
+
+                    b.Property<DateTime?>("NotiDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("NotiDate");
+
+                    b.Property<string>("NotiMerchantId")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("NotiMerchantId");
+
+                    b.Property<string>("NotiMessage")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("NotiMessage");
+
+                    b.Property<string>("NotiPaymentId")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("NotiPaymentId");
+
+                    b.Property<DateTime?>("NotiResDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("NotiResDate");
+
+                    b.Property<string>("NotiResHttpCode")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("NotiResHttpCode");
+
+                    b.Property<string>("NotiResMessage")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("NotiResMessage");
+
+                    b.Property<string>("NotiSignature")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("NotiSignature");
+
+                    b.Property<string>("NotiStatus")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("NotiStatus");
+
+                    b.Property<string>("PaymentRefId")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("PaymentRefId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NotiMerchantId");
+
+                    b.HasIndex("NotiPaymentId");
+
+                    b.ToTable("paymentNotification");
+                });
+
+            modelBuilder.Entity("backend.Models.Payment.Domain.Entities.PaymentSignature", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("Id");
+
+                    b.Property<bool>("IsValid")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PaymentId")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("PaymentId");
+
+                    b.Property<string>("SignAlgo")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("SignAlgo");
+
+                    b.Property<DateTime?>("SignDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("SignDate");
+
+                    b.Property<string>("SignOwn")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("SignOwn");
+
+                    b.Property<string>("SignValue")
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("SignValue");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentId");
+
+                    b.ToTable("paymentSignature");
+                });
+
+            modelBuilder.Entity("backend.Models.Payment.Domain.Entities.PaymentTransaction", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("Id");
+
+                    b.Property<string>("PaymentId")
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("PaymentId");
+
+                    b.Property<decimal?>("TranAmount")
+                        .HasColumnType("decimal(19, 2)")
+                        .HasColumnName("TranAmount");
+
+                    b.Property<DateTime?>("TranDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("TranDate");
+
+                    b.Property<string>("TranPayload")
+                        .HasColumnType("nvarchar(500)")
+                        .HasColumnName("TranPayload");
+
+                    b.Property<string>("TranRefId")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("TranRefId");
+
+                    b.Property<string>("TranStatus")
+                        .HasColumnType("nvarchar(10)")
+                        .HasColumnName("TranStatus");
+
+                    b.Property<string>("TransMessage")
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("TransMessage");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentId");
+
+                    b.ToTable("paymentTransaction");
+                });
+
             modelBuilder.Entity("backend.Models.PriceRate", b =>
                 {
                     b.Property<long>("PriceRateId")
@@ -966,6 +1281,63 @@ namespace backend.Migrations
                     b.Navigation("WarrantyCard");
                 });
 
+            modelBuilder.Entity("backend.Models.Payment.Domain.Entities.Payment", b =>
+                {
+                    b.HasOne("backend.Models.Payment.Domain.Entities.Merchant", "Merchant")
+                        .WithMany("Payments")
+                        .HasForeignKey("MerchantId");
+
+                    b.HasOne("backend.Models.Payment.Domain.Entities.PaymentDestination", "PaymentDestination")
+                        .WithMany("Payments")
+                        .HasForeignKey("PaymentDestinationId");
+
+                    b.Navigation("Merchant");
+
+                    b.Navigation("PaymentDestination");
+                });
+
+            modelBuilder.Entity("backend.Models.Payment.Domain.Entities.PaymentDestination", b =>
+                {
+                    b.HasOne("backend.Models.Payment.Domain.Entities.PaymentDestination", "DesParent")
+                        .WithMany("PaymentDestinations")
+                        .HasForeignKey("DesParentId");
+
+                    b.Navigation("DesParent");
+                });
+
+            modelBuilder.Entity("backend.Models.Payment.Domain.Entities.PaymentNotification", b =>
+                {
+                    b.HasOne("backend.Models.Payment.Domain.Entities.Merchant", "NotiMerchant")
+                        .WithMany("Notifications")
+                        .HasForeignKey("NotiMerchantId");
+
+                    b.HasOne("backend.Models.Payment.Domain.Entities.Payment", "NotiPayment")
+                        .WithMany("Notifications")
+                        .HasForeignKey("NotiPaymentId");
+
+                    b.Navigation("NotiMerchant");
+
+                    b.Navigation("NotiPayment");
+                });
+
+            modelBuilder.Entity("backend.Models.Payment.Domain.Entities.PaymentSignature", b =>
+                {
+                    b.HasOne("backend.Models.Payment.Domain.Entities.Payment", "Payment")
+                        .WithMany("Signatures")
+                        .HasForeignKey("PaymentId");
+
+                    b.Navigation("Payment");
+                });
+
+            modelBuilder.Entity("backend.Models.Payment.Domain.Entities.PaymentTransaction", b =>
+                {
+                    b.HasOne("backend.Models.Payment.Domain.Entities.Payment", "Payment")
+                        .WithMany("Transactions")
+                        .HasForeignKey("PaymentId");
+
+                    b.Navigation("Payment");
+                });
+
             modelBuilder.Entity("backend.Models.PriceRate", b =>
                 {
                     b.HasOne("backend.Models.Account", "Account")
@@ -1079,6 +1451,29 @@ namespace backend.Migrations
                     b.Navigation("OrderDetails");
 
                     b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("backend.Models.Payment.Domain.Entities.Merchant", b =>
+                {
+                    b.Navigation("Notifications");
+
+                    b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("backend.Models.Payment.Domain.Entities.Payment", b =>
+                {
+                    b.Navigation("Notifications");
+
+                    b.Navigation("Signatures");
+
+                    b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("backend.Models.Payment.Domain.Entities.PaymentDestination", b =>
+                {
+                    b.Navigation("PaymentDestinations");
+
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("backend.Models.PriceRate", b =>

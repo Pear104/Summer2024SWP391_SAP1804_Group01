@@ -1,44 +1,49 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>\bin\api\backend.xml</DocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<DocumentationFile>\bin\api\backend.xml</DocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.5">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.5">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Selenium.WebDriver" Version="4.21.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.5">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.5">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Selenium.WebDriver" Version="4.21.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Payment_src\core\Payment.Application\Features\PaymentSignature\Commands\" />
-    <Folder Include="Payment_src\core\Payment.Application\Features\PaymentSignature\Queries\" />
-    <Folder Include="Payment_src\core\Payment.Application\Features\PaymentTransaction\Commands\" />
-    <Folder Include="Payment_src\core\Payment.Application\Features\PaymentTransaction\Queries\" />
-    <Folder Include="Payment_src\core\Payment.Application\Features\PaymentNotification\Commands\" />
-    <Folder Include="Payment_src\core\Payment.Application\Features\PaymentNotification\Queries\" />
-    <Folder Include="Payment_src\core\Payment.Application\Features\Merchant\Queries\" />
-    <Folder Include="Payment_src\core\Payment.Application\Features\PaymentDestination\" />
-    <Folder Include="Payment_src\infas\Payment.Persistence\" />
-    <Folder Include="Payment_src\shared\Payment.Ultils\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Payment_src\core\Payment.Application\Features\PaymentSignature\Commands\" />
+		<Folder Include="Payment_src\core\Payment.Application\Features\PaymentSignature\Queries\" />
+		<Folder Include="Payment_src\core\Payment.Application\Features\PaymentTransaction\Commands\" />
+		<Folder Include="Payment_src\core\Payment.Application\Features\PaymentTransaction\Queries\" />
+		<Folder Include="Payment_src\core\Payment.Application\Features\PaymentNotification\Commands\" />
+		<Folder Include="Payment_src\core\Payment.Application\Features\PaymentNotification\Queries\" />
+		<Folder Include="Payment_src\core\Payment.Application\Features\Merchant\Queries\" />
+		<Folder Include="Payment_src\core\Payment.Application\Features\PaymentDestination\" />
+		<Folder Include="Payment_src\core\Payment.Service\Momo\Config\" />
+		<Folder Include="Payment_src\core\Payment.Service\Momo\Lig\" />
+		<Folder Include="Payment_src\core\Payment.Service\Momo\Response\" />
+		<Folder Include="Payment_src\core\Payment.Service\Momo\Request\" />
+		<Folder Include="Payment_src\infas\Payment.Persistence\" />
+		<Folder Include="Payment_src\shared\Payment.Ultils\" />
+	</ItemGroup>
 
 </Project>

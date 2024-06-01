@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace backend.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,6 +58,53 @@ namespace backend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_material_price", x => x.material_price_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "merchant",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(250)", nullable: false),
+                    MerchantName = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    MerchantWebLink = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    MerchentIpnUrl = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    MerchantReturnUrl = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    SecretKey = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastUpdatedBy = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    LastUpdateAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_merchant", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PaymentDestination",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(250)", nullable: false),
+                    DesLogo = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    DesShortName = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    DesName = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    DesSortIndex = table.Column<int>(type: "int", nullable: true),
+                    DesParentId = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastUpdatedBy = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    LastUpdateAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentDestination", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PaymentDestination_PaymentDestination_DesParentId",
+                        column: x => x.DesParentId,
+                        principalTable: "PaymentDestination",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -116,6 +163,39 @@ namespace backend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_warranty_card", x => x.warranty_card_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "payment",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    PaymentContent = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    PaymentCurrency = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    PaymentRefId = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    RequiredAmount = table.Column<decimal>(type: "decimal(19,2)", nullable: true),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ExpireDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PaymentLanguage = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    MerchantId = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    PaymentDestinationId = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    PaidAmount = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    PaymentStatus = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    PaymentLastMessage = table.Column<string>(type: "nvarchar(250)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_payment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_payment_PaymentDestination_PaymentDestinationId",
+                        column: x => x.PaymentDestinationId,
+                        principalTable: "PaymentDestination",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_payment_merchant_MerchantId",
+                        column: x => x.MerchantId,
+                        principalTable: "merchant",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -205,6 +285,84 @@ namespace backend.Migrations
                         principalTable: "shape",
                         principalColumn: "shape_id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "paymentNotification",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    PaymentRefId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    NotiDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NotiContent = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    NotiAmount = table.Column<decimal>(type: "decimal(19,2)", nullable: false),
+                    NotiMessage = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    NotiSignature = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    NotiPaymentId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    NotiMerchantId = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    NotiStatus = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    NotiResDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NotiResMessage = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    NotiResHttpCode = table.Column<string>(type: "nvarchar(50)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_paymentNotification", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_paymentNotification_merchant_NotiMerchantId",
+                        column: x => x.NotiMerchantId,
+                        principalTable: "merchant",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_paymentNotification_payment_NotiPaymentId",
+                        column: x => x.NotiPaymentId,
+                        principalTable: "payment",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "paymentSignature",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    SignValue = table.Column<string>(type: "nvarchar(500)", nullable: true),
+                    SignAlgo = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    SignDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SignOwn = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    PaymentId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    IsValid = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_paymentSignature", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_paymentSignature_payment_PaymentId",
+                        column: x => x.PaymentId,
+                        principalTable: "payment",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "paymentTransaction",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    TransMessage = table.Column<string>(type: "nvarchar(250)", nullable: true),
+                    TranPayload = table.Column<string>(type: "nvarchar(500)", nullable: true),
+                    TranStatus = table.Column<string>(type: "nvarchar(10)", nullable: true),
+                    TranAmount = table.Column<decimal>(type: "decimal(19,2)", nullable: true),
+                    TranDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PaymentId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    TranRefId = table.Column<string>(type: "nvarchar(250)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_paymentTransaction", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_paymentTransaction_payment_PaymentId",
+                        column: x => x.PaymentId,
+                        principalTable: "payment",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -583,6 +741,41 @@ namespace backend.Migrations
                 column: "order_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_payment_MerchantId",
+                table: "payment",
+                column: "MerchantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_payment_PaymentDestinationId",
+                table: "payment",
+                column: "PaymentDestinationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PaymentDestination_DesParentId",
+                table: "PaymentDestination",
+                column: "DesParentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_paymentNotification_NotiMerchantId",
+                table: "paymentNotification",
+                column: "NotiMerchantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_paymentNotification_NotiPaymentId",
+                table: "paymentNotification",
+                column: "NotiPaymentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_paymentSignature_PaymentId",
+                table: "paymentSignature",
+                column: "PaymentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_paymentTransaction_PaymentId",
+                table: "paymentTransaction",
+                column: "PaymentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_price_rate_account_id",
                 table: "price_rate",
                 column: "account_id");
@@ -629,6 +822,15 @@ namespace backend.Migrations
                 name: "order_detail");
 
             migrationBuilder.DropTable(
+                name: "paymentNotification");
+
+            migrationBuilder.DropTable(
+                name: "paymentSignature");
+
+            migrationBuilder.DropTable(
+                name: "paymentTransaction");
+
+            migrationBuilder.DropTable(
                 name: "transaction");
 
             migrationBuilder.DropTable(
@@ -647,6 +849,9 @@ namespace backend.Migrations
                 name: "material_price");
 
             migrationBuilder.DropTable(
+                name: "payment");
+
+            migrationBuilder.DropTable(
                 name: "order");
 
             migrationBuilder.DropTable(
@@ -657,6 +862,12 @@ namespace backend.Migrations
 
             migrationBuilder.DropTable(
                 name: "shape");
+
+            migrationBuilder.DropTable(
+                name: "PaymentDestination");
+
+            migrationBuilder.DropTable(
+                name: "merchant");
 
             migrationBuilder.DropTable(
                 name: "price_rate");

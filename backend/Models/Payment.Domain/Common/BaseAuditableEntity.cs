@@ -4,11 +4,11 @@ namespace backend.Models.Payment.Domain
 {
     public class BaseAuditableEntity
     {
-        [Column("CreatedBy")]
+        [Column("CreatedBy", TypeName = "nvarchar(50)")]
         public string CreatedBy { get; set; } = string.Empty;
         [Column("CreatedAt")]
         public DateTime? CreatedAt { get; set; }
-        [Column("LastUpdatedBy")]
+        [Column("LastUpdatedBy", TypeName = "nvarchar(50)")]
         public string? LastUpdatedBy { get; set; } = string.Empty;
         [Column("LastUpdateAt")]
         public DateTime? LastUpdateAt { get; set; }

@@ -110,6 +110,7 @@ namespace backend
             builder.Services.AddScoped<IDiamondRepository, DiamondRepository>();
             builder.Services.AddScoped<IRankRepository, RankRepository>();
             builder.Services.AddScoped<IAccessoryRepository, AccessoryRepository>();
+            builder.Services.AddScoped<IMerchantRepository, MerchantRepository>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddTransient<IEmailSender, EmailSender>();

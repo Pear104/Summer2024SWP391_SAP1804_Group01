@@ -1,14 +1,37 @@
-﻿namespace backend.Models.Payment.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace backend.Models.Payment.Domain.Entities
 {
+    [Table("paymentTransaction")]
     public class PaymentTransaction
     {
-        public string Id { get; set; }
-        public string TransMessage { get; set; } = string.Empty;
-        public string TranPayload { get; set; } = string.Empty;
-        public string TranStatuc { get; set; } = string.Empty;
-        public decimal? ranAmount { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Column("Id", TypeName = "nvarchar(50)")]
+        public string? Id { get; set; }
+        [Column("TransMessage", TypeName = "nvarchar(250)")]
+        public string? TransMessage { get; set; } = string.Empty;
+
+        [Column("TranPayload", TypeName = "nvarchar(500)")]
+        public string? TranPayload { get; set; } = string.Empty;
+
+        [Column("TranStatus", TypeName = "nvarchar(10)")]
+        public string? TranStatus { get; set; } = string.Empty;
+
+        [Column("TranAmount", TypeName = "decimal(19, 2)")]
+        public decimal? TranAmount { get; set; }
+
+        [Column("TranDate")]
         public DateTime? TranDate { get; set; }
+
+        //FK
+        //One transaction belong to one payment
+        [Column("PaymentId", TypeName = "nvarchar(50)")]
         public string? PaymentId { get; set; } = string.Empty;
+        public Payment? Payment { get; set; }
+
+        [Column("TranRefId", TypeName = "nvarchar(250)")]
         public string? TranRefId { get; set; } = string.Empty;
 
 
