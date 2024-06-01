@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Data;
+using backend.DTOs;
 using backend.Interfaces;
 using backend.Models;
+using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 
 namespace backend.Repository
 {
@@ -16,19 +19,18 @@ namespace backend.Repository
         {
             _context = context;
         }
-        public Task<Order> CreateOrderAsync(Order order)
+
+        public Task<Order> CreateOrderAsync(OrderDTO order)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteOrderAsync(long id)
+        public async Task<IEnumerable<Order>> GetAllOrdersAsync()
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Order>> GetAllOrdersAsync()
-        {
-            throw new NotImplementedException();
+            var orders = await _context.Orders
+            .Include(x => x.OrderDetails)
+            .ToListAsync();
+            return orders;
         }
 
         public Task<Order> GetOrderByIdAsync(long id)
@@ -36,7 +38,7 @@ namespace backend.Repository
             throw new NotImplementedException();
         }
 
-        public Task<Order> UpdateOrderAsync(Order order)
+        public Task<Order> UpdateOrderAsync(OrderDTO order)
         {
             throw new NotImplementedException();
         }

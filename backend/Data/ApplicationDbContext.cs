@@ -163,7 +163,7 @@ namespace backend.Data
                 .Entity<OrderDetail>()
                 .HasOne(o => o.WarrantyCard)
                 .WithOne(o => o.OrderDetail)
-                .HasForeignKey<OrderDetail>(w => w.OrderDetailId)
+                .HasForeignKey<WarrantyCard>(w => w.WarrantyCardId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Them khoa ngoai giua WarrantyCard voi WarrantyRequest

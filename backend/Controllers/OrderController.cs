@@ -1,32 +1,58 @@
-// using System;
-// using System.Collections.Generic;
-// using System.Diagnostics;
-// using System.Linq;
-// using System.Threading.Tasks;
-// using Microsoft.AspNetCore.Mvc;
-// using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using backend.DTOs;
+using backend.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
-// namespace backend.Controllers
-// {
-//     [Route("[controller]")]
-//     public class OrderController : Controller
-//     {
-//         private readonly ILogger<OrderController> _logger;
-
-//         public OrderController(ILogger<OrderController> logger)
-//         {
-//             _logger = logger;
-//         }
-
-//         public IActionResult Index()
-//         {
-//             return View();
-//         }
-
-//         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-//         public IActionResult Error()
-//         {
-//             return View("Error!");
-//         }
-//     }
-// }
+namespace backend.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class OrderController : ControllerBase
+    {
+        private readonly IOrderRepository _orderRepo;
+        public OrderController(IOrderRepository orderRepo)
+        {
+            _orderRepo = orderRepo;
+        }
+        [HttpGet]
+        public async Task<ActionResult> GetOrders()
+        {
+            var orders = await _orderRepo.GetAllOrdersAsync();
+            return Ok(orders);
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetOrder(long id)
+        {
+            var order = await _orderRepo.GetOrderByIdAsync(id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            return Ok(order);
+        }
+        [HttpPost]
+        public async Task<ActionResult> CreateOrder([FromBody] OrderDTO order)
+        {
+            var createdOrder = await _orderRepo.CreateOrderAsync(order);
+            if(createdOrder == null)
+            {
+                return BadRequest("The order could not be created.");
+            }
+            return Ok(createdOrder);
+        }
+        // [HttpPut("{id}")]
+        // public async Task<ActionResult> UpdateOrder(long id, [FromBody] UpdateOrderDTO order)
+        // {
+        //     var updatedOrder = await _orderRepo.UpdateOrderAsync(order);
+        //     if(updatedOrder == null)
+        //     {
+        //         return BadRequest("The order could not be updated.");
+        //     }
+        //     return Ok(updatedOrder);
+        // }
+        
+    }
+}
