@@ -1,8 +1,10 @@
+import { Link } from "react-router-dom";
+
 const DiamondItem = ({ diamond }: { diamond: any }) => {
   return (
-    <a
+    <Link
       className="flex items-center w-full justify-around hover:bg-slate-100"
-      href={`/product/diamond/detail/${diamond.diamondId}`}
+      to={`/product/diamond/detail/${diamond.diamondId}`}
     >
       <div
         className="my-4 aspect-square bg-cover bg-center bg-no-repeat w-[100px]"
@@ -23,7 +25,7 @@ const DiamondItem = ({ diamond }: { diamond: any }) => {
           VIEW
         </div>
       </div>
-    </a>
+    </Link>
   );
 };
 

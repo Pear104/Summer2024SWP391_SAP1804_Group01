@@ -4,27 +4,28 @@ import { createJSONStorage, persist } from "zustand/middleware";
 type CartItem = {
   diamondId: number;
   accessoryId?: number;
+  size?: number;
 };
 
 export const useCartStore = create<{
-  currentDiamond?: number;
-  currentAccessory?: number;
+  currentDiamond?: number | null;
+  currentAccessory?: number | null;
   cart: CartItem[];
-  setCurrentDiamond: (diamondId: number) => void;
-  setCurrentAccessory: (accessoryId: number) => void;
-  setCart: (diamondId: number, accessoryId: number) => void;
+  setCurrentDiamond: (diamondId: number | null) => void;
+  setCurrentAccessory: (accessoryId: number | null) => void;
+  setCart: (diamondId: number, accessoryId: number, size: number) => void;
 }>()(
   persist(
     (set, get) => ({
-      currentDiamond: undefined,
-      currentAccessory: undefined,
+      currentDiamond: null,
+      currentAccessory: null,
       cart: [],
-      setCurrentDiamond: (diamondId: number) =>
+      setCurrentDiamond: (diamondId: number | null) =>
         set({ currentDiamond: diamondId }),
-      setCurrentAccessory: (accessoryId: number) =>
+      setCurrentAccessory: (accessoryId: number | null) =>
         set({ currentAccessory: accessoryId }),
-      setCart: (diamondId: number, accessoryId: number) =>
-        set({ cart: [...get().cart, { diamondId, accessoryId }] }),
+      setCart: (diamondId: number, accessoryId: number, size: number) =>
+        set({ cart: [...get().cart, { diamondId, accessoryId, size }] }),
     }),
     {
       name: "cart",

@@ -1,12 +1,13 @@
 import { Pagination } from "antd";
 import { useEffect, useState } from "react";
 import { GET } from "../../../utils/request";
+import { Link } from "react-router-dom";
 
 const AccessoryItem = ({ accessory }: { accessory: any }) => {
   return (
-    <a
+    <Link
       className="items-center w-full justify-around hover:shadow-xl p-2 m-2 duration-150"
-      href="/product/accessory/detail"
+      to={`/product/accessory/detail/${accessory.accessoryId}`}
     >
       <div
         className="my-2 aspect-square bg-cover bg-center bg-no-repeat w-full"
@@ -22,7 +23,7 @@ const AccessoryItem = ({ accessory }: { accessory: any }) => {
         {/* luc nao co gia thi thay karat = price*/}
         <div className="w-full flex ">{accessory.karat}</div>
       </div>
-    </a>
+    </Link>
   );
 };
 
@@ -38,6 +39,7 @@ export default function AccessoryList() {
       // setLastAccessoryId(lastAccessoryId);
     })();
   }, []);
+
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
   return (
@@ -49,7 +51,12 @@ export default function AccessoryList() {
         </div>
         <div className="grid grid-cols-4 gap-3">
           {accessories.map((accessory: any) => {
-            return <AccessoryItem accessory={accessory} />;
+            return (
+              <AccessoryItem
+                key={accessory.accessoryId}
+                accessory={accessory}
+              />
+            );
           })}
         </div>
         <div className="mt-10 flex justify-center">

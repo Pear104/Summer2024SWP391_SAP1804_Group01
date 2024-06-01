@@ -104,13 +104,19 @@ const DiamondItem = ({
 }) => {
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   const navigate = useNavigate();
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.searchParams);
   return (
     <div
-      className="hover:border-black transition-all px-6 py-2 border rounded-md flex flex-col items-center gap-2"
+      className={`hover:border-black transition-all px-6 py-2 border rounded-md flex flex-col items-center gap-2 ${
+        params.get("Shape") === title ? "border-black" : ""
+      }`}
       onClick={() => {
-        const url = new URL(window.location.href);
-        const params = new URLSearchParams(url.searchParams);
-        params.set("Shape", title);
+        if (params.get("Shape") === title) {
+          params.delete("Shape");
+        } else {
+          params.set("Shape", title);
+        }
         navigate("/product/diamond?" + params.toString());
         setQueryUrl(`/api/Diamonds?${params.toString()}`);
       }}

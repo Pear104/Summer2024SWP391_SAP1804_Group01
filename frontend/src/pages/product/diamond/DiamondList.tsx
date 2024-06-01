@@ -3,42 +3,11 @@ import { GET } from "../../../utils/request";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import DiamondItem from "./components/DiamondItem";
-// import SortItem from "./components/SortItem";
+import SortItem from "./components/SortItem";
 import Filter from "./components/Filter";
-import { ChevronDown, ChevronUp } from "lucide-react";
 import { useSearchStore } from "../../../store/searchStore";
-
-const SortItem = ({
-  property,
-  params,
-  setQueryUrl,
-}: {
-  property: string;
-  params: URLSearchParams;
-  setQueryUrl: any;
-}) => {
-  const navigate = useNavigate();
-  return (
-    <div
-      className="w-[80px] text-center flex items-center justify-center"
-      onClick={() => {
-        const isDescending = params.get("IsDescending") === "true";
-        params.set("IsDescending", (!isDescending).toString());
-        params.set("SortBy", property);
-        navigate("/product/diamond?" + params.toString());
-        setQueryUrl("/api/Diamonds?" + params.toString());
-      }}
-    >
-      {property}{" "}
-      {params.get("SortBy") == property &&
-      params.get("IsDescending") === "false" ? (
-        <ChevronUp size={20} />
-      ) : (
-        <ChevronDown size={20} />
-      )}
-    </div>
-  );
-};
+import { useEffect } from "react";
+import scrollTo from "../../../utils/scroll";
 
 export default function DiamondList() {
   const url = new URL(window.location.href);
@@ -55,9 +24,13 @@ export default function DiamondList() {
   ];
 
   const navigate = useNavigate();
+  scrollTo("table-header");
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   console.log("query url: " + queryUrl);
+  useEffect(() => {
+    setQueryUrl("/api/Diamonds?");
+  }, []);
   const { data, isLoading } = useQuery({
     queryKey: ["diamonds", queryUrl],
     queryFn: () => GET(queryUrl),
@@ -119,9 +92,7 @@ export default function DiamondList() {
             pageSize={Number(params.get("PageSize")) || 20}
             showSizeChanger={false}
             onChange={(page, _pageSize) => {
-              document
-                .getElementById("table-header")
-                ?.scrollIntoView({ block: "start", behavior: "smooth" });
+              scrollTo("table-header");
               params.set("PageNumber", page.toString());
               navigate(url.pathname + "?" + params.toString());
               setQueryUrl("/api/Diamonds?" + params.toString());

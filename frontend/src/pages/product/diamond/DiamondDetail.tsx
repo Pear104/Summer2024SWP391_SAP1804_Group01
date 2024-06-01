@@ -1,20 +1,25 @@
 import { useEffect, useState } from "react";
 import { GET } from "../../../utils/request";
 import { ExternalLink } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Image } from "antd";
+import { useCartStore } from "../../../store/cartStore";
+import scrollTo from "../../../utils/scroll";
 export default function DiamondDetail() {
   const [diamond, setDiamond] = useState<any>();
   const { diamondId } = useParams();
-  console.log(diamondId);
   useEffect(() => {
+    scrollTo("choose-item");
     (async () => {
       const data = await GET(`/api/Diamonds/${diamondId}`);
       setDiamond(data);
     })();
-  }, []);
+  }, [diamondId]);
+
+  const navigate = useNavigate();
+  const setCurrentDiamond = useCartStore((state) => state.setCurrentDiamond);
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center mb-20">
       <div className="w-[1200px] grid grid-cols-6 gap-10">
         {/* <div
           className="col-span-4 place-self-center aspect-square bg-cover bg-top bg-no-repeat w-4/5 border "
@@ -67,9 +72,15 @@ export default function DiamondDetail() {
               <div>{diamond?.fluorescence}</div>
             </div>
           </div>
-          <div className="flex flex-col gap-4">
-            <div className="text-xl w-full flex justify-center px-4 py-3 bg-cyan-900 text-white hover:scale-95 transition-all">
-              ADD TO RING
+          <div className="flex flex-col gap-4 mt-8">
+            <div
+              className="text-xl w-full flex justify-center px-4 py-3 bg-primary text-white hover:scale-95 transition-all"
+              onClick={() => {
+                navigate("/product/accessory");
+                setCurrentDiamond(diamond?.diamondId);
+              }}
+            >
+              ADD TO ACCESSORY
             </div>
             <div className="text-xl w-full flex justify-center border border-black px-4 py-3 bg-white hover:scale-95 transition-all">
               BUY LOOSE

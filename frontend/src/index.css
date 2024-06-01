@@ -214,3 +214,7 @@ a {
   border-radius: 0px !important;
   border: 0px !important;
 }
+
+.ant-image {
+  width: 100% !important;
+}

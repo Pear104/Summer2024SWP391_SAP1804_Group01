@@ -13,13 +13,22 @@ export default function ProductLayout() {
               className="mt-10 mb-4"
               items={[
                 {
-                  title: "Product",
+                  title: "Products",
                 },
                 {
-                  title: <a href="">Diamond</a>,
-                },
-                {
-                  title: <a href="">Shape</a>,
+                  title: (
+                    <Link
+                      to={`/product/${
+                        url.pathname.includes("diamond")
+                          ? "diamond"
+                          : "accessory"
+                      }`}
+                    >
+                      {url.pathname.includes("diamond")
+                        ? "Diamonds"
+                        : "Accessories"}
+                    </Link>
+                  ),
                 },
               ]}
             />

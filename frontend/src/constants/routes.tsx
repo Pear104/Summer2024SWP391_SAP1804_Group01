@@ -24,6 +24,7 @@ import Cart from "../pages/cart/Cart";
 import Test from "../pages/test/Test";
 import OrderDetail from "../pages/account/OrderDetail";
 import EditAccount from "../pages/account/EditAccount";
+import CompleteProduct from "../pages/product/complete/CompleteProduct";
 
 const routes = [
   {
@@ -124,8 +125,12 @@ const routes = [
                 element: <AccessoryList />,
               },
               {
-                path: "/product/accessory/detail",
+                path: "/product/accessory/detail/:accessoryId",
                 element: <AccessoryDetail />,
+              },
+              {
+                path: "/product/complete",
+                element: <CompleteProduct />,
               },
             ],
           },

@@ -14,6 +14,7 @@ import { useState } from "react";
 import JewelryItem from "./components/JewelryItem";
 import DiamondItem from "./components/DiamondItem";
 import { getCookie } from "../../utils/cookie";
+import { Link } from "react-router-dom";
 
 const TopNavItem = ({
   children,
@@ -23,12 +24,12 @@ const TopNavItem = ({
   href: string;
 }) => {
   return (
-    <a
+    <Link
       className="mulish-regular flex gap-1 items-center py-1 px-3 border-b-2 border-b-transparent text-base hover:border-b-blue-500 duration-200 transition-all"
-      href={href}
+      to={href}
     >
       {children}
-    </a>
+    </Link>
   );
 };
 
@@ -39,7 +40,7 @@ export default function TopNav() {
   return (
     <div className="top-0 left-0 relative gap-4 py-3 px-4 bg-white w-full shadow-lg">
       <div className="flex justify-between">
-        <div className="flex justify-end gap-4 items-center">
+        <div className="flex justify-end gap-6 items-center">
           <div className="flex items-center gap-2">
             <MapPin size={20} absoluteStrokeWidth />
             <span className="mulish-regular font-bold text-base">
@@ -61,29 +62,29 @@ export default function TopNav() {
         </div>
         <div className="flex justify-end gap-4 items-center">
           <SearchBar />
-          <a href="/admin">
+          <Link to="/admin">
             <LineChart size={20} strokeWidth={2} absoluteStrokeWidth />
-          </a>
+          </Link>
           <Heart size={20} strokeWidth={2} absoluteStrokeWidth />
-          <a href="/cart">
-          <ShoppingCart size={20} strokeWidth={2} />
-          </a>
-          <a
-            href={
+          <Link to="/cart">
+            <ShoppingCart size={20} strokeWidth={2} />
+          </Link>
+          <Link
+            to={
               !getCookie("accessToken") ? "/authentication/login" : "/account"
             }
           >
             <User size={20} absoluteStrokeWidth />
-          </a>
+          </Link>
         </div>
       </div>
       <div className="flex gap-4 mt-2">
         <div className="flex justify-center">
           <Logo />
         </div>
-        <a
+        <Link
           className="relative mulish-regular flex gap-1 items-center py-1 px-3 border-b-2 border-b-transparent text-base hover:border-b-blue-500 duration-200 transition-all"
-          href={"/product/accessory"}
+          to={"/product/accessory"}
           onMouseEnter={() => {
             setJewelryDrop(true);
           }}
@@ -110,10 +111,10 @@ export default function TopNav() {
               </div>
             </div>
           )}
-        </a>
-        <a
+        </Link>
+        <Link
           className="relative mulish-regular flex gap-1 items-center py-1 px-3 border-b-2 border-b-transparent text-base hover:border-b-blue-500 duration-200 transition-all"
-          href={"/product/diamond"}
+          to={"/product/diamond"}
           onMouseEnter={() => {
             setDiamondDrop(true);
           }}
@@ -136,7 +137,7 @@ export default function TopNav() {
               </div>
             </div>
           )}
-        </a>
+        </Link>
         <TopNavItem href="/blog">Blog</TopNavItem>
         <TopNavItem href="/about">About us</TopNavItem>
         <TopNavItem href="/test">Test API</TopNavItem>

@@ -8,6 +8,7 @@ import Radiant from "../../../components/svg/Radiant";
 import Asscher from "../../../components/svg/Asscher";
 import Oval from "../../../components/svg/Oval";
 import Princess from "../../../components/svg/Princess";
+import { Link } from "react-router-dom";
 
 const items = [
   <Round />,
@@ -38,12 +39,12 @@ export default function Diamond() {
         })}
       </div>
       <div className="flex justify-center mt-16">
-        <a
-          href="./"
+        <Link
+          to="/product/diamond"
           className="inline-block py-2 px-4 font-bold border-2 border-black hover:scale-95 transition-all"
         >
           VIEW MORE
-        </a>
+        </Link>
       </div>
     </div>
   );

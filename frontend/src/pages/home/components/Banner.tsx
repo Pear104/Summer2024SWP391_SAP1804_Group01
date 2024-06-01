@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Banner() {
   return (
     <div
@@ -14,20 +16,20 @@ export default function Banner() {
         </div>
         <div className="mt-16 flex gap-4">
           <div>
-            <a
-              href="./"
+            <Link
+              to="/product/diamond"
               className="inline-block py-2 px-4 font-bold border-2 border-black hover:scale-95 transition-all"
             >
               BUY DIAMOND
-            </a>
+            </Link>
           </div>
           <div>
-            <a
-              href="./"
+            <Link
+              to="/product/accessory"
               className="inline-block py-2 px-4 font-bold border-2 border-black hover:scale-95 transition-all"
             >
               BUY ACCESSORY
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,15 +1,13 @@
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const SortItem = ({
   property,
   params,
-  setFilterProperty,
   setQueryUrl,
 }: {
   property: string;
   params: URLSearchParams;
-  setFilterProperty: any;
   setQueryUrl: any;
 }) => {
   const navigate = useNavigate();
@@ -17,12 +15,20 @@ const SortItem = ({
     <div
       className="w-[80px] text-center flex items-center justify-center"
       onClick={() => {
-        setFilterProperty(property);
+        const isDescending = params.get("IsDescending") === "true";
+        params.set("IsDescending", (!isDescending).toString());
         params.set("SortBy", property);
         navigate("/product/diamond?" + params.toString());
+        setQueryUrl("/api/Diamonds?" + params.toString());
       }}
     >
-      {property} <ChevronDown size={20} />
+      {property}{" "}
+      {params.get("SortBy") == property &&
+      params.get("IsDescending") === "false" ? (
+        <ChevronUp size={20} />
+      ) : (
+        <ChevronDown size={20} />
+      )}
     </div>
   );
 };

@@ -1,14 +1,25 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GET } from "../../../utils/request";
+import { useNavigate, useParams } from "react-router-dom";
+import { useCartStore } from "../../../store/cartStore";
+import scrollToChoose from "../../../utils/scroll";
 
 export default function AccessoryDetail() {
   const [accessory, setAccessory] = useState<any>();
+  const { accessoryId } = useParams();
   useEffect(() => {
     (async () => {
-      const data = await GET("/api/Accessories/6");
+      const data = await GET(`/api/Accessories/${accessoryId}`);
+      console.log(data);
       setAccessory(data);
     })();
-  }, []);
+  }, [accessoryId]);
+  const navigate = useNavigate();
+  const setCurrentAccessory = useCartStore(
+    (state) => state.setCurrentAccessory
+  );
+  scrollToChoose();
+  const currentDiamond = useCartStore((state) => state.currentDiamond);
   return (
     <div>
       <div className="flex justify-center">
@@ -18,22 +29,19 @@ export default function AccessoryDetail() {
               accessory?.accessoryImages.map((image: any) => {
                 return (
                   <div
-                    className="aspect-square bg-no-repeat shadow-lg mb-4"
+                    key={image.url}
+                    className="aspect-square bg-cover bg-center bg-no-repeat shadow-lg mb-4"
                     style={{
                       backgroundImage: `url(${image.url})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
                     }}
                   ></div>
                 );
               })}
           </div>
           <div
-            className="col-span-4 place-self-center aspect-square bg-contain bg-top bg-no-repeat w-4/5 border "
+            className="col-span-4 place-self-center aspect-square bg-cover bg-top bg-no-repeat w-4/5 border "
             style={{
               backgroundImage: `url(${accessory?.accessoryImages[0]?.url})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
             }}
           ></div>
           <div className="col-span-3">
@@ -50,9 +58,33 @@ export default function AccessoryDetail() {
               </div>
             </div>
             <div className="flex flex-col gap-4">
-              <div className="text-xl w-full flex justify-center px-4 py-3 bg-cyan-900 text-white hover:scale-95 transition-all">
-                CHOOSE THIS ACCESSORY
+              <div
+                className={`text-xl w-full flex justify-center px-4 py-3 bg-primary hover:scale-95 transition-all ${
+                  currentDiamond
+                    ? "text-white"
+                    : "bg-gray-300 px-4 py-2 rounded-md cursor-not-allowed opacity-50 text-black"
+                }`}
+                onClick={() => {
+                  if (currentDiamond) {
+                    setCurrentAccessory(accessory?.accessoryId);
+                    navigate("/product/complete");
+                  }
+                }}
+              >
+                {currentDiamond
+                  ? "CHOOSE THIS ACCESSORY"
+                  : "YOU NEED TO CHOOSE DIAMOND FIRST"}
               </div>
+              {!currentDiamond && (
+                <div
+                  className={`text-xl w-full flex justify-center px-4 py-3 text-white bg-primary hover:scale-95 transition-all `}
+                  onClick={() => {
+                    navigate("/product/diamond");
+                  }}
+                >
+                  CHOOSE DIAMOND
+                </div>
+              )}
               <div className="text-xl w-full flex justify-center border border-black px-4 py-3 bg-white hover:scale-95 transition-all">
                 ADD TO CART
               </div>
