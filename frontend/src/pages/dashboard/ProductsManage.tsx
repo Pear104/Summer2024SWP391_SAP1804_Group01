@@ -1,17 +1,36 @@
 import { DownOutlined } from "@ant-design/icons";
 import { Button, Dropdown, Form, Input, Menu } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import { GET } from "../../utils/request";
+// interface Diamond {
+//   diamondId: number;
+//   imageUrl: string;
+//   name: string;
+//   price: number;
+//   shape: string;
+//   carat: number;
+//   color: string;
+//   clarity: string;
+//   cut: string;
+//   availability: boolean;
+// }
 export default function ProductsManage() {
   const location = useLocation();
   const navigate = useNavigate();
   const [statusText, setStatusText] = React.useState("Status");
   const [productTypeText, setProductTypeText] = React.useState("Product Type");
-
+  const [diamonds, setDiamonds] = useState<any>();
+  useEffect(() => {
+    async () => {
+      const data = await GET("/api/Diamonds");
+      setDiamonds(data);
+    };
+  }, []);
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const status = params.get("status");
+
     const type = params.get("type");
     if (status) {
       setStatusText(status === "1" ? "Enable" : "Disable");
@@ -34,7 +53,17 @@ export default function ProductsManage() {
     params.set("type", type);
     navigate({ search: params.toString() });
   };
-
+  const columnHeaders = [
+    "Thumbnail",
+    "Name",
+    "Price",
+    "Shape",
+    "Carat",
+    "Color",
+    "Clarity",
+    "Cut",
+    "Status",
+  ];
   const statusMenu = (
     <Menu>
       <Menu.Item key="1">
@@ -121,7 +150,7 @@ export default function ProductsManage() {
             </h3>
             <div className="flex space-x-075">
               <div className="card-action ">
-                <a href="#" className="text-interactive ">
+                <a href="/admin/products" className="text-interactive ">
                   Clear filter
                 </a>
               </div>
@@ -155,121 +184,84 @@ export default function ProductsManage() {
                           </label>
                         </div>
                       </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Thumbnail
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Name
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Price
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        SHAPE
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        CARAT
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        COLOR
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        CLARITY
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        CUT
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Status
-                      </th>
+                      {columnHeaders.map((header) => (
+                        <th
+                          key={header}
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          {header}
+                        </th>
+                      ))}
                     </tr>
                   </thead>
                   {/* body */}
                   <tbody className="bg-white divide-y divide-gray-200">
-                    <tr>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <label className="flex items-center">
-                            <input
-                              type="checkbox"
-                              value="0"
-                              className="form-checkbox"
-                            />
-                            <span className="checkbox-unchecked"></span>
-                            <span className="pl-2"></span>
-                            <input type="hidden" value="0" />
-                          </label>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <img
-                            className="h-10 w-10 rounded-full"
-                            src="path_to_your_image"
-                            alt=""
-                          />
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-500">
-                          <a href="/">Nike Revolution 5</a>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-500">$58.00</div>
-                      </td>
-
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        500
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        500
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        500
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        500
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        500
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                        <a
-                          href="#"
-                          className="text-indigo-600 hover:text-indigo-900"
-                        >
-                          Availables
-                        </a>
-                      </td>
-                    </tr>
+                    {diamonds &&
+                      diamonds.map((diamond: any) => {
+                        return (
+                          <tr key={diamond.diamondId}>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center">
+                                <label className="flex items-center">
+                                  <input
+                                    type="checkbox"
+                                    value="0"
+                                    className="form-checkbox"
+                                  />
+                                  <span className="checkbox-unchecked"></span>
+                                  <span className="pl-2"></span>
+                                  <input type="hidden" value="0" />
+                                </label>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center">
+                                <img
+                                  className="h-10 w-10 rounded-full"
+                                  src={diamond.imageUrl}
+                                  alt=""
+                                />
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-500">
+                                {/* <a href="/">{diamond.name}</a> */}Name
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="text-sm text-gray-500">
+                                {/* ${diamond.price} */} Price
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {diamond.shape}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {diamond.carat}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {diamond.color}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {diamond.clarity}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {diamond.cut}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                              <a
+                                href="#"
+                                className="text-indigo-600 hover:text-indigo-900"
+                              >
+                                {diamond.availability
+                                  ? "Available"
+                                  : "Not Available"}
+                              </a>
+                            </td>
+                          </tr>
+                        );
+                      })}
                   </tbody>
                 </table>
               </div>
