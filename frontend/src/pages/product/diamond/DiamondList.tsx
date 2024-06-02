@@ -51,6 +51,7 @@ export default function DiamondList() {
           {properties.map((property) => {
             return (
               <SortItem
+                type="diamond"
                 key={property}
                 property={property}
                 params={params}

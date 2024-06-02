@@ -5,10 +5,12 @@ const SortItem = ({
   property,
   params,
   setQueryUrl,
+  type,
 }: {
   property: string;
   params: URLSearchParams;
   setQueryUrl: any;
+  type: string;
 }) => {
   const navigate = useNavigate();
   return (
@@ -18,8 +20,8 @@ const SortItem = ({
         const isDescending = params.get("IsDescending") === "true";
         params.set("IsDescending", (!isDescending).toString());
         params.set("SortBy", property);
-        navigate("/product/diamond?" + params.toString());
-        setQueryUrl("/api/Diamonds?" + params.toString());
+        navigate(`/product/${type}?` + params.toString());
+        setQueryUrl(`/api/$${type}?` + params.toString());
       }}
     >
       {property}{" "}

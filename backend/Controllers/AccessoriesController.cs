@@ -28,8 +28,7 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<ActionResult> GetAccessories([FromQuery] AccessoryQuery query)
         {
-            var accessoryModels = await _accessoryRepo.GetAllAccessoriesAsync(query);
-            var accessoryDTOs = accessoryModels.Select(x => x.ToAccessoryDTO());
+            var accessoryDTOs = await _accessoryRepo.GetAllAccessoriesAsync(query);
             return Ok(accessoryDTOs);
         }
 

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Data;
+using backend.DTOs.Accessory;
 using backend.Helper;
 using backend.Interfaces;
+using backend.Mappers;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,7 +39,7 @@ namespace backend.Repository
             return null;
         }
 
-        public async Task<IEnumerable<Accessory>> GetAllAccessoriesAsync(AccessoryQuery query)
+        public async Task<AccessoryResult> GetAllAccessoriesAsync(AccessoryQuery query)
         {
             var accessoriesQuery = _context.Accessories
                 .Include(x => x.Shape)
@@ -64,10 +66,21 @@ namespace backend.Repository
                 accessoriesQuery = accessoriesQuery.Where(x => x.MaterialWeight >= query.MinMaterialWeight && x.MaterialWeight <= query.MaxMaterialWeight);
             }
 
-            return await accessoriesQuery
+            var totalCount = await accessoriesQuery.CountAsync();
+            var totalPages = totalCount / query.PageSize;
+            var accessories = await accessoriesQuery
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize)
+                .Select(x => x.ToAccessoryDTO())
                 .ToListAsync();
+                return new AccessoryResult
+                {
+                    Accessories = accessories,
+                    TotalPages = totalPages,
+                    TotalCount = totalCount,
+                    PageSize = query.PageSize,
+                    CurrentPage = query.PageNumber
+                };
         }
 
         public async Task<Accessory?> GetAccessoryByIdAsync(long id)
