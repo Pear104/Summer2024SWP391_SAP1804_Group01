@@ -97,6 +97,7 @@ namespace backend
                     };
                 });
 
+            builder.Services.AddScoped<IBlogRepository, BlogRepository>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
             builder.Services.AddScoped<IDiamondRepository, DiamondRepository>();

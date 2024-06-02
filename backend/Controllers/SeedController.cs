@@ -486,7 +486,7 @@ namespace backend.Controllers
         [HttpGet("/seed/price")]
         public IActionResult AddPrice()
         {
-            float[] percents = [105.75f, 100.1f, 106.3f, 103.5f, 109.4f, 115.45f, 98.1f, 118.5f];
+            float[] percents = [1.0575f, 1.001f, 1.063f, 1.035f, 1.094f, 1.1545f, 1.081f, 1.185f];
 
             var admin = _context.Accounts.FirstOrDefault(x => x.Name == "ToiLaAdministrator");
             foreach (var percent in percents)

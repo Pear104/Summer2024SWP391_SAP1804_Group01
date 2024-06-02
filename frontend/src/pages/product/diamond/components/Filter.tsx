@@ -12,6 +12,7 @@ import Heart from "../../../../components/svg/Heart";
 import SliderItem from "./SliderItem";
 import { useSearchStore } from "../../../../store/searchStore";
 import { useNavigate } from "react-router-dom";
+import DiamondShapeFilter from "./DiamondShapeFilter";
 
 const clarity: { [key: number]: string } = {
   0: "I3",
@@ -28,16 +29,16 @@ const clarity: { [key: number]: string } = {
   11: "FL",
 };
 const color: { [key: number]: string } = {
-  0: "M",
-  1: "L",
-  2: "K",
-  3: "J",
-  4: "I",
-  5: "H",
-  6: "G",
-  7: "F",
-  8: "E",
-  9: "D",
+  9: "M",
+  10: "L",
+  11: "K",
+  12: "J",
+  13: "I",
+  14: "H",
+  15: "G",
+  16: "F",
+  17: "E",
+  18: "D",
 };
 
 const cut: { [key: number]: string } = {
@@ -95,48 +96,20 @@ const items = [
   },
 ];
 
-const DiamondItem = ({
-  children,
-  title,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) => {
+export default function Filter() {
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   const navigate = useNavigate();
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
-  return (
-    <div
-      className={`hover:border-black transition-all px-6 py-2 border rounded-md flex flex-col items-center gap-2 ${
-        params.get("Shape") === title ? "border-black" : ""
-      }`}
-      onClick={() => {
-        if (params.get("Shape") === title) {
-          params.delete("Shape");
-        } else {
-          params.set("Shape", title);
-        }
-        navigate("/product/diamond?" + params.toString());
-        setQueryUrl(`/api/Diamonds?${params.toString()}`);
-      }}
-    >
-      <div className="">{children}</div>
-      <div className="text-xs">{title}</div>
-    </div>
-  );
-};
-
-export default function Filter() {
   return (
     <div className="w-full px-20">
       <div className="font-bold mulish-regular mb-4">BY SHAPE</div>
       <div className="flex justify-between">
         {items.map((item) => {
           return (
-            <DiamondItem key={item.name} title={item.name}>
+            <DiamondShapeFilter key={item.name} title={item.name}>
               {item.element}
-            </DiamondItem>
+            </DiamondShapeFilter>
           );
         })}
       </div>
@@ -147,7 +120,16 @@ export default function Filter() {
           mark={cut}
           min={0}
           max={3}
-          defaultValue={[0, 3]}
+          defaultValue={[
+            Number(params.get("MinCut")) || 0,
+            Number(params.get("MaxCut")) || 3,
+          ]}
+          debounceCallback={(value: any) => {
+            params.set("MinCut", value[0]);
+            params.set("MaxCut", value[1]);
+            navigate("/product/diamond?" + params.toString());
+            setQueryUrl(`/api/Diamonds?${params.toString()}`);
+          }}
         />
         <SliderItem
           step={0.01}
@@ -155,7 +137,16 @@ export default function Filter() {
           mark={carat}
           min={0}
           max={6}
-          defaultValue={[0, 6]}
+          defaultValue={[
+            Number(params.get("MinCarat")) || 0,
+            Number(params.get("MaxCarat")) || 6,
+          ]}
+          debounceCallback={(value: any) => {
+            params.set("MinCarat", value[0]);
+            params.set("MaxCarat", value[1]);
+            navigate("/product/diamond?" + params.toString());
+            setQueryUrl(`/api/Diamonds?${params.toString()}`);
+          }}
         />
       </div>
       <SliderItem
@@ -163,20 +154,33 @@ export default function Filter() {
         mark={clarity}
         min={0}
         max={11}
-        defaultValue={[0, 11]}
+        defaultValue={[
+          Number(params.get("MinClarity")) || 0,
+          Number(params.get("MaxClarity")) || 11,
+        ]}
+        debounceCallback={(value: any) => {
+          params.set("MinClarity", value[0]);
+          params.set("MaxClarity", value[1]);
+          navigate("/product/diamond?" + params.toString());
+          setQueryUrl(`/api/Diamonds?${params.toString()}`);
+        }}
       />
       <SliderItem
         title="BY COLOR"
         mark={color}
-        min={0}
-        max={9}
-        defaultValue={[0, 9]}
+        min={9}
+        max={18}
+        defaultValue={[
+          Number(params.get("MinColor")) || 9,
+          Number(params.get("MaxColor")) || 18,
+        ]}
+        debounceCallback={(value: any) => {
+          params.set("MinColor", value[0]);
+          params.set("MaxColor", value[1]);
+          navigate("/product/diamond?" + params.toString());
+          setQueryUrl(`/api/Diamonds?${params.toString()}`);
+        }}
       />
-      <div></div>
-      <div className="transition-all cursor-pointer font-bold mulish-regular mb-4 px-4 my-3 hover:bg-primary/85 hover:shadow-md py-3 bg-primary text-white flex justify-center">
-        Filter
-      </div>
-      <div></div>
       <Divider />
     </div>
   );

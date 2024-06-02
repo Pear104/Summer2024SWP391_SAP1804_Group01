@@ -24,7 +24,7 @@ export default function DiamondList() {
   ];
 
   const navigate = useNavigate();
-  scrollTo("table-header");
+  // scrollTo("table-header");
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   console.log("query url: " + queryUrl);
@@ -73,32 +73,31 @@ export default function DiamondList() {
             />
           )}
           {data &&
-            data.diamonds.map((diamond: any) => {
-              return (
-                <DiamondItem
-                  key={diamond.certificateNumber}
-                  diamond={diamond}
-                />
-              );
+            data.diamonds.map((diamond: any, index: number) => {
+              return <DiamondItem key={index} diamond={diamond} />;
             })}
         </div>
         <div className="mt-10 flex justify-center">
-          <Pagination
-            showTotal={(total, range) =>
-              `${range[0]}-${range[1]} of ${total} items`
-            }
-            current={Number(params.get("PageNumber")) || 1}
-            defaultCurrent={(data && data.currentPage.toString()) || "1"}
-            total={data && data.totalCount}
-            pageSize={Number(params.get("PageSize")) || 20}
-            showSizeChanger={false}
-            onChange={(page, _pageSize) => {
-              scrollTo("table-header");
-              params.set("PageNumber", page.toString());
-              navigate(url.pathname + "?" + params.toString());
-              setQueryUrl("/api/Diamonds?" + params.toString());
-            }}
-          />
+          {data && data.diamonds.length == 0 ? (
+            <div className="text-center text-2xl">No Diamonds Found.</div>
+          ) : (
+            <Pagination
+              showTotal={(total, range) =>
+                `${range[0]}-${range[1]} of ${total} items`
+              }
+              current={Number(params.get("PageNumber")) || 1}
+              defaultCurrent={(data && data.currentPage.toString()) || "1"}
+              total={data && data.totalCount}
+              pageSize={Number(params.get("PageSize")) || 20}
+              showSizeChanger={false}
+              onChange={(page, _pageSize) => {
+                scrollTo("table-header");
+                params.set("PageNumber", page.toString());
+                navigate(url.pathname + "?" + params.toString());
+                setQueryUrl("/api/Diamonds?" + params.toString());
+              }}
+            />
+          )}
         </div>
       </div>
     </div>

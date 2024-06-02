@@ -2,17 +2,17 @@ namespace backend.Enums
 {
     public enum Clarity
     {
-        FL,
-        IF,
-        VVS1,
-        VVS2,
-        VS1,
-        VS2,
-        SI1,
-        SI2,
-        SI3,
-        I1,
-        I2,
-        I3,
+        FL = 11,
+        IF = 10,
+        VVS1 = 9,
+        VVS2 = 8,
+        VS1 = 7,
+        VS2 = 6,
+        SI1 = 5,
+        SI2 = 4,
+        SI3 = 3,
+        I1 = 2,
+        I2 = 1,
+        I3 = 0,
     }
 }
