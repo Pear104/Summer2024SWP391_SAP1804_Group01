@@ -148,7 +148,7 @@ namespace backend.Data
                 .Entity<OrderDetail>()
                 .HasOne(o => o.Diamond)
                 .WithOne(o => o.OrderDetail)
-                .HasForeignKey<OrderDetail>(w => w.OrderDetailId)
+                .HasForeignKey<OrderDetail>(w => w.DiamondId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Them khoa ngoai giua Order voi Transaction
@@ -160,10 +160,10 @@ namespace backend.Data
 
             //Them khoa ngoai giua WarrantyCard voi OrderDetail
             builder
-                .Entity<OrderDetail>()
-                .HasOne(o => o.WarrantyCard)
-                .WithOne(o => o.OrderDetail)
-                .HasForeignKey<WarrantyCard>(w => w.WarrantyCardId)
+                .Entity<WarrantyCard>()
+                .HasOne(o => o.OrderDetail)
+                .WithOne(o => o.WarrantyCard)
+                .HasForeignKey<WarrantyCard>(w => w.OrderDetaiId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Them khoa ngoai giua WarrantyCard voi WarrantyRequest

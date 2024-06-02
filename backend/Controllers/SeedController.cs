@@ -1,10 +1,11 @@
-﻿using backend.Crawler;
+﻿using System.Text.RegularExpressions;
+using backend.Crawler;
 using backend.Data;
 using backend.Enums;
 using backend.Helper;
 using backend.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
@@ -258,14 +259,7 @@ namespace backend.Controllers
             _context = context;
         }
 
-        [HttpGet("/test")]
-        public async Task<IActionResult> Test()
-        {
-            await Console.Out.WriteLineAsync("ahihi");
-            return Ok("ahihi");
-        }
-
-        [HttpGet("/crawler/1")]
+        [HttpGet("/seed/account")]
         public IActionResult AddShape()
         {
             foreach (string shape in this._shapes)
@@ -303,7 +297,7 @@ namespace backend.Controllers
             return Ok("add 1 ok");
         }
 
-        [HttpGet("/crawler/2")]
+        [HttpGet("/seed/diamond")]
         public async Task<IActionResult> AddDiamond()
         {
             foreach (var shape in _shapes)
@@ -329,7 +323,7 @@ namespace backend.Controllers
             return Ok("add 2 ok");
         }
 
-        [HttpGet("/crawler/3")]
+        [HttpGet("/seed/accessory")]
         public async Task<IActionResult> AddAccessory()
         {
             List<Accessory> accessories = new List<Accessory>();
@@ -394,7 +388,7 @@ namespace backend.Controllers
             return result;
         }
 
-        [HttpGet("/crawler/4")]
+        [HttpGet("/seed/ring-accessory")]
         public async Task<IActionResult> AddRings()
         {
             var typeModel = _context.AccessoryTypes.FirstOrDefault(x => x.Name == "Rings");
@@ -489,7 +483,7 @@ namespace backend.Controllers
         //    return Ok("add 5 ok");
         //}
 
-        [HttpGet("/crawler/5")]
+        [HttpGet("/seed/price")]
         public IActionResult AddPrice()
         {
             float[] percents = [105.75f, 100.1f, 106.3f, 103.5f, 109.4f, 115.45f, 98.1f, 118.5f];
@@ -514,6 +508,74 @@ namespace backend.Controllers
             CrawlHelper.SeedDiamondPrice("SeedData\\500_599.csv", 5.0f, 5.9999f);
             CrawlHelper.SeedMaterialPrice();
             return Ok("add 5 ok");
+        }
+
+        [HttpGet("/seed/order")]
+        public async Task<IActionResult> AddOrder()
+        {
+            var customer = await _context
+                .Accounts.Include(x => x.Rank)
+                .FirstOrDefaultAsync(x => x.Email == "customer@gmail.com");
+            var saleStaff = await _context.Accounts.FirstOrDefaultAsync(x =>
+                x.Email == "sale_staff@gmail.com"
+            );
+            var deliveryStaff = await _context.Accounts.FirstOrDefaultAsync(x =>
+                x.Email == "delivery_staff@gmail.com"
+            );
+
+            var order = new Order()
+            {
+                Customer = customer,
+                SaleStaff = saleStaff,
+                DeliveryStaff = deliveryStaff,
+                Rank = customer.Rank,
+                PriceRate = await _context
+                    .PriceRates.OrderByDescending(x => x.CreatedAt)
+                    .FirstOrDefaultAsync(),
+                ShippingAddress = customer.Address,
+                PhoneNumber = customer.PhoneNumber,
+                OrderStatus = OrderStatus.Pending,
+            };
+
+            var diamond = await _context.Diamonds.FindAsync((long)12);
+            var accessory = await _context
+                .Accessories.Include(x => x.AccessoryType)
+                .FirstOrDefaultAsync(x => x.AccessoryId == 34);
+            var orderDetail = new OrderDetail
+            {
+                Size = 3.5f,
+                Diamond = diamond,
+                Accessory = accessory,
+                DiamondPrice = await _context
+                    .DiamondPrices.OrderByDescending(x => x.EffTime)
+                    .FirstOrDefaultAsync(x =>
+                        x.Clarity == diamond.Clarity
+                        && x.Color == diamond.Color
+                        && diamond.Carat <= x.MaxCaratEff
+                        && diamond.Carat >= x.MinCaratEff
+                    ),
+                MaterialPrice = await _context
+                    .MaterialPrices.OrderByDescending(x => x.EffTime)
+                    .FirstOrDefaultAsync(x => x.Karat == accessory.Karat),
+                Order = order,
+            };
+            orderDetail.ItemPrice =
+                orderDetail.DiamondPrice.UnitPrice * diamond.Carat
+                + orderDetail.MaterialPrice.UnitPrice * accessory.MaterialWeight
+                + accessory.AccessoryType.ProcessingPrice;
+            order.OrderDetails = new List<OrderDetail> { orderDetail };
+            order.TotalPrice = order.OrderDetails.Sum(x => x.ItemPrice) * order.PriceRate.Percent;
+
+            var warrantyCard = new WarrantyCard();
+            orderDetail.WarrantyCard = warrantyCard;
+
+            await _context.Orders.AddAsync(order);
+            await _context.OrderDetails.AddAsync(orderDetail);
+            await _context.WarrantyCards.AddAsync(warrantyCard);
+
+            _context.SaveChangesAsync();
+
+            return Ok("add 6 ok");
         }
     }
 }
