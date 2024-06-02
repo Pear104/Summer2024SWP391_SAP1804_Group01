@@ -7,6 +7,8 @@ namespace backend.Models
     [Table("order")]
     public class Order
     {
+        internal readonly object AccessoryImages;
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("order_id")]

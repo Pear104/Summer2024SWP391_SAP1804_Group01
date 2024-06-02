@@ -4,28 +4,30 @@ import { GET } from "../../utils/request";
 const OrderList = ({ order }: { order: any }) => {
   return (
     <a
-      className="grid grid-cols-8 w-full justify-around border-b-[1px] border-gray-400 p-2 mb-5"
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full justify-around border-b border-gray-400 p-2 mb-5"
       href="/account/order-history/detail"
     >
       <div
-        className="my-2 aspect-square bg-no-repeat col-span-4 bg-cover w-[400px]"
+        className="my-2 aspect-square bg-no-repeat bg-cover w-full h-48"
         style={{
-          backgroundImage: `url(${order.accessory.accessoryImages[0].url})`,
+          backgroundImage: `url(${order.orderDetails[0].diamond.imageUrl})`,
         }}
       ></div>
       <div
-        className="my-2 aspect-square bg-no-repeat col-span-4 bg-cover w-[400px]"
+        className="my-2 aspect-square bg-no-repeat bg-cover w-full h-48"
         style={{
-          backgroundImage: `url(${order.diamond.imageUrl})`,
+          backgroundImage: `url(${order.orderDetails[0].accessory?.accessoryImages[0].url})`,
         }}
       ></div>
-      <div className="col-span-4 p-10">
-        <div className="libre-baskerville-regular">{order.accessory.name}</div>
-        <div className="libre-baskerville-regular mt-5">Status: </div>
-        <div className="libre-baskerville-regular mt-5">Diamond Price: </div>
-        <div className="libre-baskerville-regular mt-5">Accessory Price: </div>
-        <div className="libre-baskerville-regular mt-5">Delivery Price: </div>
-        <div className="libre-baskerville-regular mt-5">Total Price: </div>
+      <div className="col-span-2 p-5 lg:p-10">
+        <div className="font-serif text-lg">
+          {order.orderDetails[0].accessory?.name}
+        </div>
+        <div className="font-serif mt-5">Status: </div>
+        <div className="font-serif mt-5">Diamond Price: </div>
+        <div className="font-serif mt-5">Accessory Price: </div>
+        <div className="font-serif mt-5">Delivery Price: </div>
+        <div className="font-serif mt-5">Total Price: </div>
         <a
           className="mt-14 w-32 h-12 bg-black text-white text-lg flex justify-center items-center rounded-md cursor-pointer"
           href="#"
@@ -39,48 +41,35 @@ const OrderList = ({ order }: { order: any }) => {
 
 export default function OrderHistory() {
   const [orderHistories, setOrderHistories] = useState<any>([]);
-
   useEffect(() => {
     (async () => {
-      const accessories = (await GET("/api/Accessories")).slice(0, 10);
-      console.log(accessories);
-      const diamonds = (await GET("/api/Diamonds")).diamonds.slice(0, 10);
-      console.log(diamonds);
-
-      const data: any[] = [];
-      for (let i = 0; i < 10; i++) {
-        data.push({
-          accessory: accessories[i],
-          diamond: diamonds[i],
-        });
-      }
-      setOrderHistories(data);
+      const orders = await GET("/api/Order");
+      setOrderHistories(orders);
     })();
   }, []);
-  console.log(orderHistories);
 
   return (
     <div className="p-4 w-full">
-      <div className="Order-header libre-baskerville-regular mb-6">
-        ORDER HISTORY
-      </div>
-      <div className="Order-body-none">
-        <p className="border-solid border-2 border-slate-400 p-5">
-          You haven't placed any orders yet
-        </p>
-      </div>
-      <div className="Order-body-exist w-full">
-        {orderHistories.map((order: any) => {
-          console.log(order);
-          return <OrderList order={order} />;
-        })}
-      </div>
-      <div>
-        <div className="flex justify-center mt-10">
-          <div className="w-96 h-12 bg-black text-white text-lg flex justify-center items-center rounded-md cursor-pointer">
-            Continue Shopping
-          </div>
+      <div className="text-2xl font-serif mb-6">ORDER HISTORY</div>
+      {orderHistories.length === 0 ? (
+        <div className="border-2 border-slate-400 p-5">
+          <p>You haven't placed any orders yet</p>
         </div>
+      ) : (
+        <div className="w-full">
+          {orderHistories.map((order: any) => {
+            console.log(order);
+            return <OrderList key={order.orderId} order={order} />;
+          })}
+        </div>
+      )}
+      <div className="flex justify-center mt-10">
+        <a
+          className="w-96 h-12 bg-black text-white text-lg flex justify-center items-center rounded-md cursor-pointer"
+          href="/product/diamond"
+        >
+          Continue Shopping
+        </a>
       </div>
     </div>
   );
