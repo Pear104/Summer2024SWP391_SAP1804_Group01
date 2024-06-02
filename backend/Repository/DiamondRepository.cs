@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using backend.Data;
 using backend.DTOs;
 using backend.DTOs.Diamond;
+using backend.Enums;
 using backend.Helper;
 using backend.Interfaces;
 using backend.Mappers;
@@ -103,8 +104,36 @@ namespace backend.Repository
             {
                 diamondsQuery = diamondsQuery.Where(x => x.Carat <= (float)query.MaxCarat);
             }
+
+            if (!string.IsNullOrEmpty(query.MinColor))
+            {
+                diamondsQuery = diamondsQuery.Where(x =>
+                    x.Color >= (Color)Enum.Parse(typeof(Color), query.MinColor)
+                );
+            }
+            if (!string.IsNullOrEmpty(query.MaxColor))
+            {
+                diamondsQuery = diamondsQuery.Where(x =>
+                    x.Color <= (Color)Enum.Parse(typeof(Color), query.MaxColor)
+                );
+            }
+            if (!string.IsNullOrEmpty(query.MinClarity))
+            {
+                diamondsQuery = diamondsQuery.Where(x =>
+                    x.Clarity >= (Clarity)Enum.Parse(typeof(Clarity), query.MinClarity)
+                );
+            }
+            if (!string.IsNullOrEmpty(query.MaxClarity))
+            {
+                diamondsQuery = diamondsQuery.Where(x =>
+                    x.Clarity <= (Clarity)Enum.Parse(typeof(Clarity), query.MaxClarity)
+                );
+            }
+            System.Console.WriteLine("ahihihi");
+            System.Console.WriteLine("shape: " + query.Shape);
             if (!string.IsNullOrEmpty(query.Shape))
             {
+                System.Console.WriteLine(query.Shape);
                 diamondsQuery = diamondsQuery.Where(x => x.Shape.Name == query.Shape);
             }
 

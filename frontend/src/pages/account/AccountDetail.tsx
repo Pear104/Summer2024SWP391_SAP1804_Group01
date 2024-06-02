@@ -2,12 +2,20 @@ import { Button } from "antd";
 import { useEffect, useState } from "react";
 import { GET } from "../../utils/request";
 import { setCookie } from "../../utils/cookie";
+import { camelCaseToSentenceCase } from "../../utils/caseConverter";
+import moment from "moment";
 
 const Field = ({ field, value }: { field: string; value: string }) => {
   return (
     <div className="flex items-center gap-4">
-      <div className="font-bold mulish-regular text-lg">{field}:</div>
-      <div>{value}</div>
+      <div className="font-bold mulish-regular text-lg">
+        {camelCaseToSentenceCase(field)}:
+      </div>
+      <div>
+        {!(field == "birthday" || field == "createdAt")
+          ? value
+          : moment(value).format("MM-DD-YYYY")}
+      </div>
     </div>
   );
 };

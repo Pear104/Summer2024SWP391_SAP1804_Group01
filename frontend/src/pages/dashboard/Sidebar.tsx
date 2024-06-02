@@ -1,5 +1,4 @@
 import { Gem } from "lucide-react";
-import React from "react";
 import {
   DASHBOARD_SIDEBAR_BOTTOM_LINKS,
   DASHBOARD_SIDEBAR_LINKS,

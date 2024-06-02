@@ -8,6 +8,7 @@ import {
   HiOutlineCog,
   HiCurrencyDollar,
 } from "react-icons/hi";
+import { BsTextParagraph } from "react-icons/bs";
 
 export const DASHBOARD_SIDEBAR_LINKS = [
   {
@@ -51,6 +52,12 @@ export const DASHBOARD_SIDEBAR_LINKS = [
     label: "Accessory Price",
     path: "/admin/accessory-price",
     icon: <HiCurrencyDollar />,
+  },
+  {
+    key: "blog",
+    label: "Blog",
+    path: "/admin/blogs",
+    icon: <BsTextParagraph />,
   },
 ];
 

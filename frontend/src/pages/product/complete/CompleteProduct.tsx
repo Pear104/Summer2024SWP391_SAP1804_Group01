@@ -124,7 +124,7 @@ export default function CompleteProduct() {
                   className="hover:bg-slate-200 p-2 rounded-md"
                 >
                   {accessory?.data &&
-                    `${accessory.data.name} in ${accessory.data.karat}K - ${diamond.data.shape} Shape Diamond - ${diamond.data.color} Color - ${diamond.data.clarity} Clarity - Stock #: ${diamond.data.diamondId}`}
+                    `${accessory.data.name} in ${accessory.data.karat}K Stock #: ${diamond.data.diamondId}`}
                   <div>$1,122</div>
                 </Link>
                 <Link

@@ -1,5 +1,7 @@
 import { Slider } from "antd";
-
+import { useNavigate } from "react-router-dom";
+import { useSearchStore } from "../../../../store/searchStore";
+import { useDebouncedCallback } from "use-debounce";
 export default function SliderItem({
   mark,
   min,
@@ -7,6 +9,7 @@ export default function SliderItem({
   defaultValue,
   title,
   step,
+  debounceCallback,
 }: {
   step?: number;
   title: string;
@@ -14,12 +17,18 @@ export default function SliderItem({
   min: number;
   max: number;
   defaultValue: number[];
+  debounceCallback: any;
 }) {
+  const debounced = useDebouncedCallback(debounceCallback, 800);
+
   return (
     <div className="flex flex-col mt-6">
       <div className="font-bold mulish-regular mb-2">{title}</div>
       <div className="w-full">
         <Slider
+          onChange={(value) => {
+            debounced(value);
+          }}
           tooltip={{
             formatter: (value?: number): React.ReactNode => {
               if (typeof value === "number") {

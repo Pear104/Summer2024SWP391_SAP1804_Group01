@@ -25,6 +25,8 @@ import Test from "../pages/test/Test";
 import OrderDetail from "../pages/account/OrderDetail";
 import EditAccount from "../pages/account/EditAccount";
 import CompleteProduct from "../pages/product/complete/CompleteProduct";
+import BlogsManage from "../pages/dashboard/blog/BlogsManage";
+import NewBlog from "../pages/dashboard/blog/NewBlog";
 
 const routes = [
   {
@@ -42,6 +44,14 @@ const routes = [
           {
             element: <Products />,
             path: "/admin/products",
+          },
+          {
+            element: <BlogsManage />,
+            path: "/admin/blogs",
+          },
+          {
+            element: <NewBlog />,
+            path: "/admin/blogs/new",
           },
         ],
       },

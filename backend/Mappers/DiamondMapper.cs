@@ -46,25 +46,5 @@ namespace backend.Mappers
                 ShapeId = diamondDto.ShapeId,
             };
         }
-
-        public static Diamond ToDiamondFromUpdate(this UpdateDiamondDTO diamondDto)
-        {
-            return new Diamond
-            {
-                Lab = diamondDto.Lab,
-                CertificateNumber = diamondDto.CertificateNumber,
-                CertificateUrl = diamondDto.Lab,
-                ImageUrl = diamondDto.ImageUrl,
-                Carat = diamondDto.Carat,
-                Cut = diamondDto.Cut,
-                Clarity = diamondDto.Clarity,
-                Color = diamondDto.Color,
-                Polish = diamondDto.Polish,
-                Symmetry = diamondDto.Symmetry,
-                Fluorescence = diamondDto.Fluorescence,
-                Availability = diamondDto.Availability,
-                ShapeId = diamondDto.ShapeId,
-            };
-        }
     }
 }

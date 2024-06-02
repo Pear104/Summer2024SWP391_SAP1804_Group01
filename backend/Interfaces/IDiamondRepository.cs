@@ -9,8 +9,6 @@ namespace backend.Interfaces
     public interface IDiamondRepository
     {
         Task<DiamondResult> GetAllDiamondsAsync(DiamondQuery query);
-
-        // Task<IEnumerable<Diamond>> GetAllDiamondsAsync(DiamondQuery query);
         Task<Diamond?> GetDiamondByIdAsync(long id);
         Task<Diamond?> CreateDiamondAsync(CreateDiamondDTO diamondDTO);
         Task<Diamond?> UpdateDiamondAsync(long id, UpdateDiamondDTO diamondDTO);
