@@ -1,5 +1,6 @@
 ﻿using backend.Data;
 using backend.Interfaces;
+using backend.Payment_src.core.Payment.Service.Momo.Config;
 using backend.Repository;
 using backend.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -111,9 +112,16 @@ namespace backend
             builder.Services.AddScoped<IRankRepository, RankRepository>();
             builder.Services.AddScoped<IAccessoryRepository, AccessoryRepository>();
             builder.Services.AddScoped<IMerchantRepository, MerchantRepository>();
+            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddTransient<IEmailSender, EmailSender>();
+
+            //Payment cofiguration
+            builder.Services.Configure<MomoConfig>(
+                builder.Configuration.GetSection(MomoConfig.ConfigName)
+                );
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

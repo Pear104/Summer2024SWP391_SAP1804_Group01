@@ -19,5 +19,23 @@ namespace backend.Helper
                 return builder.ToString();
             }
         }
+
+
+        public static string HmacSHA256(string inputData, string key)
+        {
+            byte[] keyByte = Encoding.UTF8.GetBytes(key);
+            byte[] messageBytes = Encoding.UTF8.GetBytes(inputData);
+
+            using (var hmacsha256 = new HMACSHA256(keyByte))
+            {
+                byte[] hashMessage = hmacsha256.ComputeHash(messageBytes);
+                StringBuilder hex = new StringBuilder(hashMessage.Length * 2);
+                foreach (byte b in hashMessage)
+                {
+                    hex.AppendFormat("{0:x2}", b);
+                }
+                return hex.ToString();
+            }
+        }
     }
 }

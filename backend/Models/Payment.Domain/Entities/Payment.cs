@@ -8,7 +8,7 @@ namespace backend.Models.Payment.Domain.Entities
     public class Payment
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("Id", TypeName = "nvarchar(50)")]
         public string Id { get; set; }
 
@@ -63,5 +63,14 @@ namespace backend.Models.Payment.Domain.Entities
         //One payment can have many transactions
         public List<PaymentTransaction> Transactions { get; set; } = new List<PaymentTransaction>();
 
+
+        public void SetIdAfterCurrentTime()
+        {
+            this.Id = DateTime.Now.Ticks.ToString()+"id";
+        }
+        public void SetOrderIdAfterCurrentTime()
+        {
+            this.PaymentRefId = DateTime.Now.Ticks.ToString()+":01234566789";
+        }
     }
 }

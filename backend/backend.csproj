@@ -11,6 +11,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
+		<PackageReference Include="MediatR" Version="12.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.5" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.5" />
@@ -38,10 +39,7 @@
 		<Folder Include="Payment_src\core\Payment.Application\Features\PaymentNotification\Queries\" />
 		<Folder Include="Payment_src\core\Payment.Application\Features\Merchant\Queries\" />
 		<Folder Include="Payment_src\core\Payment.Application\Features\PaymentDestination\" />
-		<Folder Include="Payment_src\core\Payment.Service\Momo\Config\" />
 		<Folder Include="Payment_src\core\Payment.Service\Momo\Lig\" />
-		<Folder Include="Payment_src\core\Payment.Service\Momo\Response\" />
-		<Folder Include="Payment_src\core\Payment.Service\Momo\Request\" />
 		<Folder Include="Payment_src\infas\Payment.Persistence\" />
 		<Folder Include="Payment_src\shared\Payment.Ultils\" />
 	</ItemGroup>

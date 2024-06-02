@@ -413,6 +413,7 @@ namespace backend.Data
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             SetEmployeeIds();
+            SetPaymentIds();
             return base.SaveChangesAsync(cancellationToken);
         }
 
@@ -423,6 +424,19 @@ namespace backend.Data
                 if (entry.State == EntityState.Added)
                 {
                     entry.Entity.Id = entry.Entity.GenerateHashedId();
+                }
+            }
+        }
+
+        //tobe refactored
+        private void SetPaymentIds()
+        {
+            foreach (var entry in ChangeTracker.Entries<Payment>())
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.SetIdAfterCurrentTime();
+                    entry.Entity.SetOrderIdAfterCurrentTime();
                 }
             }
         }
