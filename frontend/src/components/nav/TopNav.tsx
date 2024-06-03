@@ -16,6 +16,7 @@ import JewelryItem from "./components/JewelryItem";
 import DiamondItem from "./components/DiamondItem";
 import { getCookie } from "../../utils/cookie";
 import { Link } from "react-router-dom";
+import { useCartStore } from "../../store/cartStore";
 
 const TopNavItem = ({
   children,
@@ -34,8 +35,11 @@ const TopNavItem = ({
   );
 };
 
+
 export default function TopNav() {
   // const isLoged = useSelector((state: any) => state.auth.isLoged);
+  const cart = useCartStore((state) => state.cart);
+  const cartItemCount = cart.length;
   const [jewelryDrop, setJewelryDrop] = useState(false);
   const [diamondDrop, setDiamondDrop] = useState(false);
   return (
@@ -70,9 +74,16 @@ export default function TopNav() {
             <LineChart size={20} strokeWidth={2} absoluteStrokeWidth />
           </Link>
           <Heart size={20} strokeWidth={2} absoluteStrokeWidth />
-          <Link to="/cart">
-            <ShoppingCart size={20} strokeWidth={2} />
-          </Link>
+          <div className="relative">
+            <Link to="/cart">
+              <ShoppingCart size={20} strokeWidth={2} />
+              {cartItemCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-slate-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                  {cartItemCount}
+                </span>
+              )}
+            </Link>
+          </div>
           <Link
             to={
               !getCookie("accessToken") ? "/authentication/login" : "/account"

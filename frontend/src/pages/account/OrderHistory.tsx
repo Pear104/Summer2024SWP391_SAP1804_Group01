@@ -3,39 +3,64 @@ import { GET } from "../../utils/request";
 
 const OrderList = ({ order }: { order: any }) => {
   return (
-    <a
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full justify-around border-b border-gray-400 p-2 mb-5"
-      href="/account/order-history/detail"
-    >
-      <div
-        className="my-2 aspect-square bg-no-repeat bg-cover w-full h-48"
-        style={{
-          backgroundImage: `url(${order.orderDetails[0].diamond.imageUrl})`,
-        }}
-      ></div>
-      <div
-        className="my-2 aspect-square bg-no-repeat bg-cover w-full h-48"
-        style={{
-          backgroundImage: `url(${order.orderDetails[0].accessory?.accessoryImages[0].url})`,
-        }}
-      ></div>
-      <div className="col-span-2 p-5 lg:p-10">
-        <div className="font-serif text-lg">
-          {order.orderDetails[0].accessory?.name}
-        </div>
-        <div className="font-serif mt-5">Status: </div>
-        <div className="font-serif mt-5">Diamond Price: </div>
-        <div className="font-serif mt-5">Accessory Price: </div>
-        <div className="font-serif mt-5">Delivery Price: </div>
-        <div className="font-serif mt-5">Total Price: </div>
-        <a
-          className="mt-14 w-32 h-12 bg-black text-white text-lg flex justify-center items-center rounded-md cursor-pointer"
-          href="#"
-        >
-          Evaluating
-        </a>
+    <div className="border-b border-gray-300 p-4 mb-6">
+      <div className="flex items-center justify-between mb-4">
+        <div className="font-semibold text-lg">{order.storeName}</div>
+        <div className="text-green-600">{order.status}</div>
       </div>
-    </a>
+      {order.orderDetails.map((detail: any, index: number) => (
+        <div key={index} className="flex mb-4">
+          <div className="w-1/4">
+            <img
+              className="w-24 h-24 object-cover"
+              src={detail.diamond.imageUrl}
+              alt="diamond"
+            />
+            {detail.accessory?.accessoryImages[0]?.url && (
+              <img
+                className="w-24 h-24 object-cover mt-2"
+                src={detail.accessory.accessoryImages[0].url}
+                alt="accessory"
+              />
+            )}
+          </div>
+          <div className="w-3/4 pl-4">
+            <div className="text-lg font-serif">{detail.accessory?.name}</div>
+            <div className="text-gray-800 my-4">
+              Diamond price:{" "}
+              {detail.diamondPrice.unitPrice *
+                detail.diamond.carat *
+                100 *
+                order.priceRate.percent}{" "}
+              $
+            </div>
+            {detail.accessory && (
+              <div className="text-gray-800 my-4">
+                Accessory price:{" "}
+                {(detail.accessory.materialWeight *
+                  detail.materialPrice.unitPrice +
+                  detail.accessory.accessoryType.processingPrice) *
+                  order.priceRate.percent}{" "}
+                $
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+      <div className="flex justify-between items-center mt-4">
+        <div className="text-xl font-bold text-gray-800">
+          Total: {order.totalPrice} $
+        </div>
+        <div>
+          <button className="bg-gray-800 text-white px-4 py-2 rounded mr-2">
+            Buy Again
+          </button>
+          <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded">
+            Contact Seller
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -57,10 +82,9 @@ export default function OrderHistory() {
         </div>
       ) : (
         <div className="w-full">
-          {orderHistories.map((order: any) => {
-            console.log(order);
-            return <OrderList key={order.orderId} order={order} />;
-          })}
+          {orderHistories.map((order: any) => (
+            <OrderList key={order.orderId} order={order} />
+          ))}
         </div>
       )}
       <div className="flex justify-center mt-10">

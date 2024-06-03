@@ -129,7 +129,6 @@ namespace backend.Repository
                     x.Clarity <= (Clarity)Enum.Parse(typeof(Clarity), query.MaxClarity)
                 );
             }
-            System.Console.WriteLine("ahihihi");
             System.Console.WriteLine("shape: " + query.Shape);
             if (!string.IsNullOrEmpty(query.Shape))
             {
