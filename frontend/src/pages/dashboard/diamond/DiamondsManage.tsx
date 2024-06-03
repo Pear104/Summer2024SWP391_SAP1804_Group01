@@ -82,7 +82,7 @@ export default function ProductsManage() {
   };
   const columnHeaders = [
     "Thumbnail",
-    "Name",
+    // "Name",
     "Price",
     "Shape",
     "Carat",
@@ -321,18 +321,20 @@ export default function ProductsManage() {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="flex items-center">
-                                <img
-                                  className="h-10 w-10 rounded-full"
-                                  src={diamond.imageUrl}
-                                  alt=""
-                                />
+                                <a href="#">
+                                  <img
+                                    className="h-14  w-14 square-full"
+                                    src={diamond.imageUrl}
+                                    alt=""
+                                  />
+                                </a>
                               </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
+                            {/* <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm text-gray-500">
-                                {/* <a href="/">{diamond.name}</a> */}Name
+                                <a href="/">{diamond.name}</a>Name
                               </div>
-                            </td>
+                            </td> */}
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm text-gray-500">
                                 {/* ${diamond.price} */} Price
@@ -354,14 +356,11 @@ export default function ProductsManage() {
                               {diamond.cut}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                              <a
-                                href="#"
-                                className="text-indigo-600 hover:text-indigo-900"
-                              >
+                              <div className="text-indigo-600 hover:text-indigo-900">
                                 {diamond.availability
                                   ? "Available"
                                   : "Not Available"}
-                              </a>
+                              </div>
                             </td>
                           </tr>
                         );
