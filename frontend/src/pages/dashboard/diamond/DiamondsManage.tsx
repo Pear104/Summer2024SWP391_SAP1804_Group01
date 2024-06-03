@@ -1,8 +1,8 @@
 import { DownOutlined } from "@ant-design/icons";
-import { Button, Dropdown, Form, Input, Menu } from "antd";
+import { Button, Dropdown, Form, Input, Menu, Pagination } from "antd";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { GET } from "../../utils/request";
+import { GET } from "../../../utils/request";
 // interface Diamond {
 //   diamondId: number;
 //   imageUrl: string;
@@ -18,15 +18,42 @@ import { GET } from "../../utils/request";
 export default function ProductsManage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [statusText, setStatusText] = React.useState("Status");
-  const [productTypeText, setProductTypeText] = React.useState("Product Type");
-  const [diamonds, setDiamonds] = useState<any>();
+  const [statusText, setStatusText] = useState("Status");
+  const [productTypeText, setProductTypeText] = useState("Product Type");
+  const [data, setData] = useState<any>([]);
+  // selected diamonds
+  const [selectedDiamonds, setSelectedDiamonds] = useState<number[]>([]);
+  // select all
+  const [selectAll, setSelectAll] = useState(false);
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  // many diamond action
+  const handleAction = (action: string) => {
+    // Handle your action here...
+    console.log(action);
+  };
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const data = await GET("/api/Diamonds");
+  //     console.log(data); // Log the data here
+  //     setData(data);
+  //   })();
+  // }, []);
   useEffect(() => {
-    async () => {
-      const data = await GET("/api/Diamonds");
-      setDiamonds(data);
-    };
-  }, []);
+    (async () => {
+      const data = await GET(
+        `/api/Diamonds?PageNumber=${currentPage}&PageSize=${pageSize}`
+      );
+      console.log(data); // Log the data here
+      setData(data);
+      // Assuming the API returns the total number of pages in data.totalPages
+      setTotalPages(data.totalPages);
+    })();
+  }, [currentPage, pageSize]);
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const status = params.get("status");
@@ -55,7 +82,7 @@ export default function ProductsManage() {
   };
   const columnHeaders = [
     "Thumbnail",
-    "Name",
+    // "Name",
     "Price",
     "Shape",
     "Carat",
@@ -92,7 +119,7 @@ export default function ProductsManage() {
       <div className="flex justify-between items-center mt-6 mx-auto mb-8">
         <div className="flex justify-start space-x-1 items-center">
           <div className="self-center">
-            <h1 className="text-2xl"> Products</h1>
+            <h1 className="text-2xl"> Diamonds</h1>
           </div>
         </div>
         <div className="flex justify-end space-x-1 items-center">
@@ -150,7 +177,20 @@ export default function ProductsManage() {
             </h3>
             <div className="flex space-x-075">
               <div className="card-action ">
-                <a href="/admin/products" className="text-interactive ">
+                <a
+                  href="/admin/products"
+                  className="text-interactive "
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setStatusText("Status");
+                    setProductTypeText("Product Type");
+                    // Clear the URL parameters
+                    const params = new URLSearchParams(location.search);
+                    params.delete("status");
+                    params.delete("type");
+                    navigate({ search: params.toString() });
+                  }}
+                >
                   Clear filter
                 </a>
               </div>
@@ -177,7 +217,21 @@ export default function ProductsManage() {
                               type="checkbox"
                               value="0"
                               className="form-checkbox"
+                              checked={selectAll}
+                              onChange={(e) => {
+                                setSelectAll(e.target.checked);
+                                if (e.target.checked) {
+                                  setSelectedDiamonds(
+                                    data.diamonds.map(
+                                      (diamond: any) => diamond.diamondId
+                                    )
+                                  );
+                                } else {
+                                  setSelectedDiamonds([]);
+                                }
+                              }}
                             />
+
                             <span className="checkbox-unchecked"></span>
                             <span className="pl-2"></span>
                             {/* <input type="hidden" value="0" /> */}
@@ -197,8 +251,40 @@ export default function ProductsManage() {
                   </thead>
                   {/* body */}
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {diamonds &&
-                      diamonds.map((diamond: any) => {
+                    {selectedDiamonds.length > 0 && (
+                      <tr>
+                        <td colSpan={100} className="border-t-0">
+                          <div className="inline-flex border border-gray-300 rounded justify-start">
+                            <button
+                              onClick={() => handleAction("selected")}
+                              className="font-semibold py-1 px-2"
+                            >
+                              {selectedDiamonds.length} selected
+                            </button>
+                            <button
+                              onClick={() => handleAction("disable")}
+                              className="font-semibold py-1 px-2 border-l border-gray-300"
+                            >
+                              Disable
+                            </button>
+                            <button
+                              onClick={() => handleAction("enable")}
+                              className="font-semibold py-1 px-2 border-l border-gray-300"
+                            >
+                              Enable
+                            </button>
+                            <button
+                              onClick={() => handleAction("delete")}
+                              className="font-semibold py-1 px-2 border-l border-gray-300"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                    {data.diamonds &&
+                      data.diamonds.map((diamond: any) => {
                         return (
                           <tr key={diamond.diamondId}>
                             <td className="px-6 py-4 whitespace-nowrap">
@@ -208,7 +294,25 @@ export default function ProductsManage() {
                                     type="checkbox"
                                     value="0"
                                     className="form-checkbox"
+                                    checked={selectedDiamonds.includes(
+                                      diamond.diamondId
+                                    )}
+                                    onChange={(e) => {
+                                      if (e.target.checked) {
+                                        setSelectedDiamonds([
+                                          ...selectedDiamonds,
+                                          diamond.diamondId,
+                                        ]);
+                                      } else {
+                                        setSelectedDiamonds(
+                                          selectedDiamonds.filter(
+                                            (id) => id !== diamond.diamondId
+                                          )
+                                        );
+                                      }
+                                    }}
                                   />
+
                                   <span className="checkbox-unchecked"></span>
                                   <span className="pl-2"></span>
                                   <input type="hidden" value="0" />
@@ -217,18 +321,20 @@ export default function ProductsManage() {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="flex items-center">
-                                <img
-                                  className="h-10 w-10 rounded-full"
-                                  src={diamond.imageUrl}
-                                  alt=""
-                                />
+                                <a href="#">
+                                  <img
+                                    className="h-14  w-14 square-full"
+                                    src={diamond.imageUrl}
+                                    alt=""
+                                  />
+                                </a>
                               </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
+                            {/* <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm text-gray-500">
-                                {/* <a href="/">{diamond.name}</a> */}Name
+                                <a href="/">{diamond.name}</a>Name
                               </div>
-                            </td>
+                            </td> */}
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm text-gray-500">
                                 {/* ${diamond.price} */} Price
@@ -250,20 +356,28 @@ export default function ProductsManage() {
                               {diamond.cut}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                              <a
-                                href="#"
-                                className="text-indigo-600 hover:text-indigo-900"
-                              >
+                              <div className="text-indigo-600 hover:text-indigo-900">
                                 {diamond.availability
                                   ? "Available"
                                   : "Not Available"}
-                              </a>
+                              </div>
                             </td>
                           </tr>
                         );
                       })}
                   </tbody>
                 </table>
+                <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
+                  <Pagination
+                    className="text-center"
+                    current={currentPage}
+                    total={totalPages * pageSize}
+                    pageSize={pageSize}
+                    onChange={(page) => setCurrentPage(page)}
+                    showSizeChanger={true}
+                    onShowSizeChange={(current, size) => setPageSize(size)}
+                  />
+                </div>
               </div>
             </div>
           </div>
