@@ -1,5 +1,5 @@
-import DashBoardStatsGrid from "./DashBoardStatsGrid";
-import TransactionChart from "./TransactionChart";
+import DashBoardStatsGrid from "./components/DashBoardStatsGrid";
+import TransactionChart from "./components/TransactionChart";
 
 export default function Dashboard() {
   return (

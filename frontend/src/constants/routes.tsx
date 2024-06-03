@@ -13,7 +13,7 @@ import DiamondDetail from "../pages/product/diamond/DiamondDetail";
 import AccessoryList from "../pages/product/accessory/AccessoryList";
 import AccessoryDetail from "../pages/product/accessory/AccessoryDetail";
 import DashBoardLayout from "../layouts/DashBoardLayout";
-import Products from "../pages/dashboard/ProductsManage";
+import DiamondsManage from "../pages/dashboard/diamond/DiamondsManage";
 import EmailLoading from "../pages/authentication/EmailLoading";
 import ForgetPassword from "../pages/authentication/ForgetPassword";
 import ResetPasswordForm from "../pages/authentication/ResetPasswordForm";
@@ -42,8 +42,8 @@ const routes = [
             element: <Dashboard />,
           },
           {
-            element: <Products />,
-            path: "/admin/products",
+            element: <DiamondsManage />,
+            path: "/admin/diamonds",
           },
           {
             element: <BlogsManage />,
