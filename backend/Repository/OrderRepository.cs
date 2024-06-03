@@ -38,6 +38,15 @@ namespace backend.Repository
             .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Accessory)
                 .ThenInclude(x => x.AccessoryImages)
+            .Include(x => x.PriceRate)
+            .Include(x => x.Customer)
+            .Include(x => x.SaleStaff)
+            .Include(x => x.DeliveryStaff)
+            .Include(x => x.Promotion)
+            .Include(x => x.OrderDetails)
+                .ThenInclude(x => x.DiamondPrice)
+            .Include(x => x.OrderDetails)
+                .ThenInclude(x => x.MaterialPrice)
             .ToListAsync();
             return orders;
         }
