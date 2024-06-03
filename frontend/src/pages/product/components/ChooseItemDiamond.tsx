@@ -4,7 +4,13 @@ import { useCartStore } from "../../../store/cartStore";
 import DiamondIcon from "./DiamondIcon";
 import { Link } from "react-router-dom";
 
-export default function ChooseItemDiamond({ diamond }: { diamond: any }) {
+export default function ChooseItemDiamond({
+  diamond,
+  price,
+}: {
+  diamond: any;
+  price: any;
+}) {
   const currentDiamond = useCartStore((state) => state.currentDiamond);
   const setCurrentDiamond = useCartStore((state) => state.setCurrentDiamond);
   return (
@@ -27,7 +33,7 @@ export default function ChooseItemDiamond({ diamond }: { diamond: any }) {
           <div className="text-sm flex flex-col">
             <div className="text-sm truncate w-[260px]">{`${diamond?.carat} Carat ${diamond?.shape} Shape Lab Diamond`}</div>
             <div className="flex items-end gap-4">
-              <div className="font-semibold">$1,456</div>
+              <div className="font-semibold">{price}</div>
               <div className="text-xs flex gap-2 text-slate-400">
                 <Link
                   className="border-b cursor-pointer"

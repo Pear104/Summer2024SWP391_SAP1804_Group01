@@ -21,7 +21,7 @@ const SortItem = ({
         params.set("IsDescending", (!isDescending).toString());
         params.set("SortBy", property);
         navigate(`/product/${type}?` + params.toString());
-        setQueryUrl(`/api/$${type}?` + params.toString());
+        setQueryUrl(`/api/${type}s?` + params.toString());
       }}
     >
       {property}{" "}

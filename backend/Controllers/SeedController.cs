@@ -506,6 +506,7 @@ namespace backend.Controllers
             CrawlHelper.SeedDiamondPrice("SeedData\\300_399.csv", 3.0f, 3.9999f);
             CrawlHelper.SeedDiamondPrice("SeedData\\400_499.csv", 4.0f, 4.9999f);
             CrawlHelper.SeedDiamondPrice("SeedData\\500_599.csv", 5.0f, 5.9999f);
+            CrawlHelper.SeedDiamondPrice("SeedData\\600_799.csv", 6.0f, 7.9999f);
             CrawlHelper.SeedMaterialPrice();
             return Ok("add 5 ok");
         }

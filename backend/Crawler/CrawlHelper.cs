@@ -221,10 +221,11 @@ namespace backend.Crawler
 
         public static void SeedDiamondPrice(string filepath, float minCt, float maxCt)
         {
-            string filePath = "SeedData\\0_39.csv";
+            string filePath = filepath;
             string[] colors = ["D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
             string[] clarities =
             [
+                "FL",
                 "IF",
                 "VVS1",
                 "VVS2",
@@ -287,17 +288,7 @@ namespace backend.Crawler
         public static void SeedMaterialPrice()
         {
             double[] materialPrices18k = [75.75f, 78f, 73.3f, 71.5f, 72.4f, 77.95f, 80.1f, 81.5f];
-            double[] materialPrices24k =
-            [
-                105.75f,
-                100.1f,
-                106.3f,
-                103.5f,
-                109.4f,
-                115.45f,
-                98.1f,
-                118.5f
-            ];
+            double[] materialPrices24k = [83.75f, 87.1f, 86.3f, 85.5f, 89.4f, 90.45f, 88.1f, 88.5f];
             foreach (var materialPrice in materialPrices18k)
             {
                 var price = new MaterialPrice() { UnitPrice = materialPrice, Karat = 18, };

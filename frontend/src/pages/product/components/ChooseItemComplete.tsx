@@ -3,7 +3,13 @@ import { useCartStore } from "../../../store/cartStore";
 import { Link } from "react-router-dom";
 import CompleteRingIcon from "./CompleteRingIcon";
 
-export default function ChooseItemComplete({ accessory }: { accessory: any }) {
+export default function ChooseItemComplete({
+  accessory,
+  totalPrice,
+}: {
+  accessory: any;
+  totalPrice: any;
+}) {
   const currentDiamond = useCartStore((state) => state.currentDiamond);
   const currentAccessory = useCartStore((state) => state.currentAccessory);
   return (
@@ -32,7 +38,7 @@ export default function ChooseItemComplete({ accessory }: { accessory: any }) {
           <div className="text-sm flex flex-col">
             <div className="text-sm truncate w-[260px]">Complete Accessory</div>
             <div className="flex items-end gap-4">
-              <div className="font-semibold">$1,456</div>
+              <div className="font-semibold">{totalPrice}</div>
               <div className="text-xs flex gap-2 text-slate-400">
                 <Link
                   className="border-b cursor-pointer"

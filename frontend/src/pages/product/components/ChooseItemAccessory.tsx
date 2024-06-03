@@ -4,7 +4,13 @@ import { useCartStore } from "../../../store/cartStore";
 import { Link, useNavigate } from "react-router-dom";
 import RingIcon from "./RingIcon";
 
-export default function ChooseItemAccessory({ accessory }: { accessory: any }) {
+export default function ChooseItemAccessory({
+  accessory,
+  price,
+}: {
+  accessory: any;
+  price: any;
+}) {
   const currentAccessory = useCartStore((state) => state.currentAccessory);
   const setCurrentAccessory = useCartStore(
     (state) => state.setCurrentAccessory
@@ -31,7 +37,7 @@ export default function ChooseItemAccessory({ accessory }: { accessory: any }) {
           <div className="text-sm flex flex-col">
             <div className="text-sm truncate w-[260px]">{accessory?.name}</div>
             <div className="flex items-end gap-4">
-              <div className="font-semibold">$1,456</div>
+              <div className="font-semibold">{price}</div>
               <div className="text-xs flex gap-2 text-slate-400">
                 <Link
                   className="border-b cursor-pointer"

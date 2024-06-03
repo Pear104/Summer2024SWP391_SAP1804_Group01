@@ -1,6 +1,6 @@
 import { Pagination, Skeleton } from "antd";
 import { GET } from "../../../utils/request";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import DiamondItem from "./components/DiamondItem";
 import SortItem from "./components/SortItem";
@@ -31,9 +31,20 @@ export default function DiamondList() {
   useEffect(() => {
     setQueryUrl("/api/Diamonds?");
   }, []);
-  const { data, isLoading } = useQuery({
-    queryKey: ["diamonds", queryUrl],
-    queryFn: () => GET(queryUrl),
+
+  const [diamond, diamondPrice] = useQueries({
+    queries: [
+      {
+        queryKey: ["diamonds", queryUrl],
+        queryFn: () => GET(queryUrl),
+        staleTime: Infinity,
+      },
+      {
+        queryKey: ["diamondPrices"],
+        queryFn: () => GET("/api/DiamondPrices/"),
+        staleTime: Infinity,
+      },
+    ],
   });
 
   return (
@@ -64,7 +75,7 @@ export default function DiamondList() {
           </div>
         </div>
         <div>
-          {isLoading && (
+          {diamond?.isLoading && diamondPrice?.isLoading && (
             <Skeleton
               active
               paragraph={{
@@ -72,13 +83,34 @@ export default function DiamondList() {
               }}
             />
           )}
-          {data &&
-            data.diamonds.map((diamond: any, index: number) => {
-              return <DiamondItem key={index} diamond={diamond} />;
+          {diamond?.data &&
+            diamondPrice?.data &&
+            diamond?.data.diamonds.map((diamond: any, index: number) => {
+              return (
+                <DiamondItem
+                  key={index}
+                  diamond={diamond}
+                  price={(
+                    diamondPrice?.data.find(
+                      (price: any) =>
+                        diamond.color == price.color &&
+                        diamond.clarity == price.clarity &&
+                        price.minCaratEff <= diamond.carat &&
+                        diamond.carat <= price.maxCaratEff
+                    ).unitPrice *
+                    diamond.carat *
+                    10
+                  ).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 0,
+                  })}
+                />
+              );
             })}
         </div>
         <div className="mt-10 flex justify-center">
-          {data && data.diamonds.length == 0 ? (
+          {diamond?.data && diamond?.data.diamonds.length == 0 ? (
             <div className="text-center text-2xl">No Diamonds Found.</div>
           ) : (
             <Pagination
@@ -86,8 +118,10 @@ export default function DiamondList() {
                 `${range[0]}-${range[1]} of ${total} items`
               }
               current={Number(params.get("PageNumber")) || 1}
-              defaultCurrent={(data && data.currentPage.toString()) || "1"}
-              total={data && data.totalCount}
+              defaultCurrent={
+                (diamond?.data && diamond?.data.currentPage.toString()) || "1"
+              }
+              total={diamond?.data && diamond?.data.totalCount}
               pageSize={Number(params.get("PageSize")) || 20}
               showSizeChanger={false}
               onChange={(page, _pageSize) => {

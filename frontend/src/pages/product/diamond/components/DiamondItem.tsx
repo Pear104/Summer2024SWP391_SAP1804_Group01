@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const DiamondItem = ({ diamond }: { diamond: any }) => {
+const DiamondItem = ({ diamond, price }: { diamond: any; price: any }) => {
   return (
     <Link
       className="flex items-center w-full justify-around hover:bg-slate-100"
@@ -14,7 +14,7 @@ const DiamondItem = ({ diamond }: { diamond: any }) => {
         }}
       ></div>
       <div className="w-[80px] flex justify-center">{diamond.shape}</div>
-      <div className="w-[80px] flex justify-center">Price</div>
+      <div className="w-[80px] flex justify-center">{price}</div>
       <div className="w-[80px] flex justify-center">{diamond.carat}</div>
       <div className="w-[80px] flex justify-center">{diamond.color}</div>
       <div className="w-[80px] flex justify-center">{diamond.clarity}</div>

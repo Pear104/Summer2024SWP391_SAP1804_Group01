@@ -18,6 +18,7 @@ const DiamondShapeFilter = ({
         params.get("Shape") === title ? "border-black" : ""
       }`}
       onClick={() => {
+        params.delete("PageNumber");
         if (params.get("Shape") === title) {
           params.delete("Shape");
         } else {

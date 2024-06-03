@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
 
-const AccessoryItem = ({ accessory }: { accessory: any }) => {
+const AccessoryItem = ({
+  accessory,
+  price,
+}: {
+  accessory: any;
+  price: any;
+}) => {
   return (
     <Link
       className="items-center w-full justify-around hover:shadow-xl p-2 m-2 duration-150"
@@ -18,7 +24,7 @@ const AccessoryItem = ({ accessory }: { accessory: any }) => {
         </div>
 
         {/* luc nao co gia thi thay karat = price*/}
-        <div className="w-full flex ">{accessory.karat}</div>
+        <div className="w-full flex ">{price}</div>
       </div>
     </Link>
   );

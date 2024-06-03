@@ -50,7 +50,14 @@ const cut: { [key: number]: string } = {
 
 const carat: { [key: number]: string } = {
   0: "0",
+  1: "1",
+  2: "2",
+  3: "3",
+  4: "4",
+  5: "5",
   6: "6",
+  7: "7",
+  8: "8",
 };
 
 const items = [
@@ -114,8 +121,8 @@ export default function Filter() {
         })}
       </div>
 
-      <div className="grid grid-cols-2 gap-16">
-        <SliderItem
+      <div className="grid grid-cols-1 gap-16">
+        {/* <SliderItem
           title="BY CUT"
           mark={cut}
           min={0}
@@ -125,23 +132,25 @@ export default function Filter() {
             Number(params.get("MaxCut")) || 3,
           ]}
           debounceCallback={(value: any) => {
+            params.delete("PageNumber");
             params.set("MinCut", value[0]);
             params.set("MaxCut", value[1]);
             navigate("/product/diamond?" + params.toString());
             setQueryUrl(`/api/Diamonds?${params.toString()}`);
           }}
-        />
+        /> */}
         <SliderItem
           step={0.01}
           title="BY CARAT"
           mark={carat}
           min={0}
-          max={6}
+          max={8}
           defaultValue={[
             Number(params.get("MinCarat")) || 0,
-            Number(params.get("MaxCarat")) || 6,
+            Number(params.get("MaxCarat")) || 8,
           ]}
           debounceCallback={(value: any) => {
+            params.delete("PageNumber");
             params.set("MinCarat", value[0]);
             params.set("MaxCarat", value[1]);
             navigate("/product/diamond?" + params.toString());
@@ -159,6 +168,7 @@ export default function Filter() {
           Number(params.get("MaxClarity")) || 11,
         ]}
         debounceCallback={(value: any) => {
+          params.delete("PageNumber");
           params.set("MinClarity", value[0]);
           params.set("MaxClarity", value[1]);
           navigate("/product/diamond?" + params.toString());
@@ -175,6 +185,7 @@ export default function Filter() {
           Number(params.get("MaxColor")) || 18,
         ]}
         debounceCallback={(value: any) => {
+          params.delete("PageNumber");
           params.set("MinColor", value[0]);
           params.set("MaxColor", value[1]);
           navigate("/product/diamond?" + params.toString());
