@@ -30,7 +30,6 @@ namespace backend.Repository
         
         public async Task<Payment>? GetPaymentById(string id)
         {
-            //var payment = await _dbContext.Payments.FirstOrDefaultAsync(id);
             var payment = await _dbContext.Payments.FirstOrDefaultAsync(p => p.Id.ToLower().Equals(id.ToLower()) );
             return payment;
         }

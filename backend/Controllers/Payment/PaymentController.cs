@@ -67,7 +67,7 @@ namespace backend.Controllers
         ///     {
         ///     "paymentContent": "Thanh toan don hang 0001",
         ///     "paymentCurrency": "VND",
-        ///     "paymentRefId": "1717321122750:0123456778",
+        ///     "paymentRefId": "ORD:12345",
         ///     "requiredAmount": 50000,
         ///     "paymentLanguage": "vi",
         ///     "merchantId": "MER0001",
@@ -79,41 +79,57 @@ namespace backend.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> CreatePayment([FromBody] CreatePayment createPayment)
         {
-            //input payment request
             PaymentLinkDtos result = new();
-            var paymentModel = createPayment.FromCreatePaymentToPayment();
-            Payment newPayment = await _paymentRepo.CreatePayment(paymentModel);
-            if (newPayment != null)
+            Payment paymentModel = await _paymentRepo.CreatePayment(createPayment.FromCreatePaymentToPayment())!;
+
+            if (paymentModel != null)   //send one time payment request to Momo
             {
-                var momoOneTImePayRequest = new MomoOneTimePaymentRequest(
-                    _momoConfig.PartnerCode,
-                    "Momo",
-                    newPayment.MerchantId,
-                    "captureWallet",
-                    _momoConfig.IpnUrl,
-                    _momoConfig.ReturnUrl,
-                    newPayment.PaymentRefId,
-                    (long)newPayment.RequiredAmount,
-                    newPayment.PaymentLanguage,
-                    true,
-                    newPayment.PaymentContent,
-                    newPayment.Id,                    "ew0KImVtYWlsIjogImh1b25neGRAZ21haWwuY29tIg0KfQ"
-                    );
-                momoOneTImePayRequest.MakeSignature(_momoConfig.AccessKey, _momoConfig.SecretKey);
-                (bool createMomoLinkResult, string? createMessage) = momoOneTImePayRequest.GetLink(_momoConfig.PaymentUrl);
+                //var momoOneTimePayRequest = new MomoOneTimePaymentRequest(
+                //    _momoConfig.PartnerCode,
+                //    "Momo",
+                //    paymentModel.MerchantId!,
+                //    "captureWallet",
+                //    _momoConfig.IpnUrl,
+                //    _momoConfig.ReturnUrl,
+                //    paymentModel.PaymentRefId!,
+                //    (long)paymentModel.RequiredAmount!,
+                //    paymentModel.PaymentLanguage!,
+                //    true,
+                //    paymentModel.PaymentContent!,
+                //    paymentModel.Id,
+                //    "ew0KImVtYWlsIjogImh1b25neGRAZ21haWwuY29tIg0KfQ"
+                //    );
+
+                var momoOneTimePayRequest = new MomoOneTimePaymentRequest()
+                {
+                    partnerCode = _momoConfig.PartnerCode,
+                    partnerName = "Momo",
+                    storeId = paymentModel.MerchantId!,
+                    requestType = "captureWallet",
+                    ipnUrl = _momoConfig.IpnUrl,
+                    redirectUrl = _momoConfig.ReturnUrl,
+                    orderId = paymentModel.PaymentRefId!,
+                    amount = (long)paymentModel.RequiredAmount!,
+                    lang = paymentModel.PaymentLanguage!,
+                    orderInfo = paymentModel.PaymentContent!,
+                    requestId = paymentModel.Id
+                };
+
+                momoOneTimePayRequest.MakeSignature(_momoConfig.AccessKey, _momoConfig.SecretKey);
+
+                (bool createMomoLinkResult, string? createMessage) = momoOneTimePayRequest.GetLink(_momoConfig.PaymentUrl);
                 if (createMomoLinkResult)
                 {
-                    result.PaymentId = newPayment.Id;
-                    result.PaymentUrl = createMessage;
+                    result.PaymentId = paymentModel.Id;
+                    result.PaymentUrl = createMessage!;
                 }
                 else
                 {
-                    result.PaymentId = newPayment.Id;
-                    result.PaymentUrl = createMessage;
+                    result.PaymentId = paymentModel.Id;
+                    result.Message = createMessage!;
                 }
-            }
-            //output payment with link
-            //return CreatedAtAction("GetById", new { id = newPayment.Id }, newPayment);
+            }//end payment is NOT null
+
             return Ok(result);
         }
 

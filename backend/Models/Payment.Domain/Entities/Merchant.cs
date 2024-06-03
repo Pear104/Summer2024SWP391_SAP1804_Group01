@@ -7,6 +7,9 @@ namespace backend.Models.Payment.Domain.Entities
     [Table("merchant")]
     public class Merchant : BaseAuditableEntity
     {
+        /// <summary>
+        /// 1 merchant id ~ 1 store
+        /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("Id", TypeName = "nvarchar(250)")]

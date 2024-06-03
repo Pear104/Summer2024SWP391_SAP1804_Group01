@@ -406,18 +406,18 @@ namespace backend.Data
 
         public override int SaveChanges()
         {
-            SetEmployeeIds();
+            SetMerchantIds();
             return base.SaveChanges();
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            SetEmployeeIds();
+            SetMerchantIds();
             SetPaymentIds();
             return base.SaveChangesAsync(cancellationToken);
         }
 
-        private void SetEmployeeIds()
+        private void SetMerchantIds()
         {
             foreach (var entry in ChangeTracker.Entries<Merchant>())
             {
@@ -436,7 +436,6 @@ namespace backend.Data
                 if (entry.State == EntityState.Added)
                 {
                     entry.Entity.SetIdAfterCurrentTime();
-                    entry.Entity.SetOrderIdAfterCurrentTime();
                 }
             }
         }

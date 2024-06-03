@@ -18,6 +18,9 @@ namespace backend.Models.Payment.Domain.Entities
         [Column("PaymentCurrency", TypeName = "nvarchar(250)")]
         public string? PaymentCurrency { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Which Store's order does this payment reference to?
+        /// </summary>
         [Column("PaymentRefId", TypeName = "nvarchar(250)")]
         public string? PaymentRefId { get; set; } = string.Empty;
 
@@ -41,6 +44,9 @@ namespace backend.Models.Payment.Domain.Entities
 
         //FK
         //one payment belong to one paymentDestination
+        /// <summary>
+        /// How will this payment be performed? (VNPay, Momo, etc...)
+        /// </summary>
         [Column("PaymentDestinationId", TypeName = "nvarchar(250)")]
         public string? PaymentDestinationId { get; set; } = string.Empty;
         public PaymentDestination? PaymentDestination { get; set; }
@@ -66,11 +72,12 @@ namespace backend.Models.Payment.Domain.Entities
 
         public void SetIdAfterCurrentTime()
         {
-            this.Id = DateTime.Now.Ticks.ToString()+"id";
+            this.Id = DateTime.Now.Ticks.ToString()+"id";   //No special reason for this format, can be changed.
         }
-        public void SetOrderIdAfterCurrentTime()
-        {
-            this.PaymentRefId = DateTime.Now.Ticks.ToString()+":01234566789";
-        }
+
+        //public void SetOrderIdAfterCurrentTime()
+        //{
+        //    this.PaymentRefId = DateTime.Now.Ticks.ToString()+":01234566789";
+        //}
     }
 }
