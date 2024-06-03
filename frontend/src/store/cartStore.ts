@@ -8,6 +8,7 @@ type CartItem = {
 };
 
 export const useCartStore = create<{
+  [x: string]: any;
   currentDiamond?: number | null;
   currentAccessory?: number | null;
   cart: CartItem[];
@@ -24,9 +25,34 @@ export const useCartStore = create<{
         set({ currentDiamond: diamondId }),
       setCurrentAccessory: (accessoryId: number | null) =>
         set({ currentAccessory: accessoryId }),
-      setCart: (diamondId: number, accessoryId: number, size: number) =>
-        set({ cart: [...get().cart, { diamondId, accessoryId, size }] }),
+      setCart: (diamondId: number, accessoryId: number, size: number) => {
+        const existingItem = get().cart.find(item => item.diamondId === diamondId);
+        if (existingItem) {
+          alert('The diamond is already in the cart');
+        } else {
+          set({ cart: [...get().cart, { diamondId, accessoryId, size }] });
+        }
+      },
+      // Hàm cập nhật size của một mục trong cart
+      updateCartItemSize: (diamondId: number, size: number) => {
+        set({
+          cart: get().cart.map((item) =>
+            item.diamondId === diamondId ? { ...item, size } : item
+          ),
+        });
+      },
+      // Hàm xóa một mục khỏi cart
+      removeCartItem: (diamondId: number) => {
+        set({
+          cart: get().cart.filter((item) => item.diamondId !== diamondId),
+        });
+      },
+      // Hàm xóa tất cả các mục trong cart
+      clearCart: () => {
+        set({ cart: [] });
+      },
     }),
+
     {
       name: "cart",
       storage: createJSONStorage(() => localStorage),
