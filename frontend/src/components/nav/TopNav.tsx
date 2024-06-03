@@ -1,5 +1,6 @@
 import {
   ChevronDown,
+  FlaskConical,
   Heart,
   LineChart,
   Mail,
@@ -62,6 +63,9 @@ export default function TopNav() {
         </div>
         <div className="flex justify-end gap-4 items-center">
           <SearchBar />
+          <Link to="/test">
+            <FlaskConical size={20} strokeWidth={2} absoluteStrokeWidth />
+          </Link>
           <Link to="/admin">
             <LineChart size={20} strokeWidth={2} absoluteStrokeWidth />
           </Link>
@@ -140,7 +144,6 @@ export default function TopNav() {
         </a>
         <TopNavItem href="/blog">Blog</TopNavItem>
         <TopNavItem href="/about">About us</TopNavItem>
-        <TopNavItem href="/test">Test API</TopNavItem>
       </div>
       {(jewelryDrop || diamondDrop) && (
         <div className="z-10 fixed left-0 right-0 h-[100vh] w-[100vw] bg-black bg-opacity-30"></div>
