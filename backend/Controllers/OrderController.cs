@@ -20,8 +20,8 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<ActionResult> GetOrders()
         {
-            var orders = await _orderRepo.GetAllOrdersAsync();
-            return Ok(orders);
+            var orderDTOs = await _orderRepo.GetAllOrdersAsync();
+            return Ok(orderDTOs);
         }
         [HttpGet("{id}")]
         public async Task<ActionResult> GetOrder(long id)
