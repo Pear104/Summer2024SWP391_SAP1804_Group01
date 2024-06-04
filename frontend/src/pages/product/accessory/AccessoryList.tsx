@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { GET } from "../../../utils/request";
 import { useNavigate } from "react-router-dom";
 import { useSearchStore } from "../../../store/searchStore";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import AccessoryItem from "./AccessoryItem";
 
 export default function AccessoryList() {
@@ -22,8 +22,8 @@ export default function AccessoryList() {
   const [accessories, materialPrice] = useQueries({
     queries: [
       {
-        queryKey: ["accessories"],
-        queryFn: () => GET("/api/Accessories/"),
+        queryKey: ["accessories", queryUrl],
+        queryFn: () => GET(queryUrl),
         staleTime: Infinity,
       },
       {
@@ -35,14 +35,18 @@ export default function AccessoryList() {
   });
 
   if (accessories.isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Skeleton
+        active
+        paragraph={{
+          rows: 20,
+        }}
+      />
+    );
   }
 
   if (accessories.error) {
     return <div>Error: {accessories.error.message}</div>;
-  }
-  if (materialPrice.data) {
-    console.log(materialPrice.data);
   }
 
   return (
@@ -90,8 +94,8 @@ export default function AccessoryList() {
               }
               current={Number(params.get("PageNumber")) || 1}
               defaultCurrent={
-                (accessories.data.currentPage &&
-                  accessories.data.currentPage.toString()) ||
+                (accessories?.data &&
+                  accessories?.data.currentPage.toString()) ||
                 "1"
               }
               total={accessories.data.totalCount}

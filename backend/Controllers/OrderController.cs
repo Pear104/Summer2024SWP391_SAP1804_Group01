@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend.DTOs;
 using backend.Interfaces;
+using backend.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
@@ -21,6 +22,7 @@ namespace backend.Controllers
         public async Task<ActionResult> GetOrders()
         {
             var orderDTOs = await _orderRepo.GetAllOrdersAsync();
+            orderDTOs = orderDTOs.Select<Order, OrderDTO>(x => x.ToOrderDTO()).ToList();
             return Ok(orderDTOs);
         }
         [HttpGet("{id}")]

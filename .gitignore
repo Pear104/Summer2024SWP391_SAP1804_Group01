@@ -25,3 +25,5 @@ dist-ssr
 *.sw?
 
 *.fake
+backend/Migrations/20240603065533_init.Designer.cs
+backend/Migrations/ApplicationDbContextModelSnapshot.cs

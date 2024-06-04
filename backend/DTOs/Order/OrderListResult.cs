@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace backend.DTOs
+namespace backend.DTOs.Order
 {
-    public class OrderDTO
+    public class OrderListResult
     {
-        public long OrderId { get; set; }
+        public List<OrderDTO> Orders { get; set; } = new List<OrderDTO>();
         public double TotalPrice { get; set; }
         public float TotalDiscountPercent { get; set; }
         public string OrderStatus { get; set; } = string.Empty;
@@ -17,8 +17,9 @@ namespace backend.DTOs
         public long SaleStaffId { get; set; }
         public long DeliveryStaffId { get; set; }
         public long? PromotionId { get; set; }
-        public List<OrderDetailDTO> OrderDetails { get; set; }  = new List<OrderDetailDTO>();
-        // public List<TransactionDTO> Transactions { get; set; }
-        // public List<FeedbackDTO> Feedbacks { get; set; }
+        // public int TotalPages { get; set; }
+        // public int PageSize { get; set; }
+        // public int CurrentPage { get; set; }
+        // public int TotalCount { get; set; }
     }
 }
