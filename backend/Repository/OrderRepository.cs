@@ -117,9 +117,25 @@ namespace backend.Repository
 }
 
 
-        public Task<Order> GetOrderByIdAsync(long id)
+        public async Task<Order?> GetOrderByIdAsync(long id)
         {
-            throw new NotImplementedException();
+            //chua biet chuyen qua dto the nao :v
+            return await _context.Orders
+                .Include(x => x.OrderDetails)
+                    .ThenInclude(x => x.Diamond)
+                .Include(x => x.OrderDetails)
+                    .ThenInclude(x => x.Accessory)
+                        .ThenInclude(x => x.AccessoryType)
+                .Include(x => x.OrderDetails)
+                    .ThenInclude(x => x.Accessory)
+                        .ThenInclude(x => x.AccessoryImages)
+                .Include(x => x.OrderDetails)
+                    .ThenInclude(x => x.MaterialPrice)
+                .Include(x => x.OrderDetails)
+                    .ThenInclude(x => x.DiamondPrice)
+                .Include(x => x.SaleStaff)
+                .Include(x => x.DeliveryStaff)
+                .FirstOrDefaultAsync(x => x.OrderId == id);
         }
 
         public Task<Order> UpdateOrderAsync(OrderDTO order)
