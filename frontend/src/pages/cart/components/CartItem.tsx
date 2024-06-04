@@ -117,7 +117,7 @@ const CartItem: React.FC<CartItemProps> = ({ diamondId, accessoryId, size }) => 
             <div
               className="col-span-4 place-self-center aspect-square bg-cover bg-top bg-no-repeat w-4/5 "
               style={{
-                backgroundImage: `url(${accessoryDetail?.accessoryImages[0]?.url})`,
+                backgroundImage: `url(${accessoryDetail?.accessoryImages[0]?.url.replace('400x', '800x')})`,
               }}
             ></div>
             <div>
