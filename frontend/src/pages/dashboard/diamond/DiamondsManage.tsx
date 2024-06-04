@@ -35,13 +35,6 @@ export default function ProductsManage() {
     console.log(action);
   };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const data = await GET("/api/Diamonds");
-  //     console.log(data); // Log the data here
-  //     setData(data);
-  //   })();
-  // }, []);
   useEffect(() => {
     (async () => {
       const data = await GET(
@@ -49,7 +42,6 @@ export default function ProductsManage() {
       );
       console.log(data); // Log the data here
       setData(data);
-      // Assuming the API returns the total number of pages in data.totalPages
       setTotalPages(data.totalPages);
     })();
   }, [currentPage, pageSize]);
@@ -82,7 +74,7 @@ export default function ProductsManage() {
   };
   const columnHeaders = [
     "Thumbnail",
-    // "Name",
+    "Certificate",
     "Price",
     "Shape",
     "Carat",
@@ -125,7 +117,7 @@ export default function ProductsManage() {
         <div className="flex justify-end space-x-1 items-center">
           <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
             <a href="/admin/products/new" className="button primary">
-              <span>New Product</span>
+              <span>New Diamond</span>
             </a>
           </button>
         </div>
@@ -330,11 +322,13 @@ export default function ProductsManage() {
                                 </a>
                               </div>
                             </td>
-                            {/* <td className="px-6 py-4 whitespace-nowrap">
+                            <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm text-gray-500">
-                                <a href="/">{diamond.name}</a>Name
+                                <a href={diamond.certificateUrl}>
+                                  {diamond.certificateNumber}
+                                </a>
                               </div>
-                            </td> */}
+                            </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm text-gray-500">
                                 {/* ${diamond.price} */} Price

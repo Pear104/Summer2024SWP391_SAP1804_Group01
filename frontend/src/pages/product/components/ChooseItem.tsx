@@ -32,6 +32,24 @@ export default function ChooseItem() {
       },
     ],
   });
+  const diamondPriceItem = diamondPrice?.data
+    ? diamondPrice.data.find(
+        (price: any) =>
+          diamond.data.color == price.color &&
+          diamond.data.clarity == price.clarity &&
+          price.minCaratEff <= diamond.data.carat &&
+          diamond.data.carat <= price.maxCaratEff
+      )
+    : undefined;
+  const diamondUnitPrice = diamondPriceItem ? diamondPriceItem.unitPrice : 0;
+
+  const materialPriceItem = materialPrice.data
+    ? materialPrice.data.find(
+        (price: any) => price.karat == accessory.data.karat
+      )
+    : undefined;
+  const materialUnitPrice = materialPriceItem ? materialPriceItem.unitPrice : 0;
+
   return (
     <div id="choose-item" className="flex mulish-regular">
       {diamond?.data &&
@@ -42,13 +60,7 @@ export default function ChooseItem() {
             <ChooseItemDiamond
               diamond={diamond?.data}
               price={(
-                diamondPrice?.data.find(
-                  (price: any) =>
-                    diamond.data.color == price.color &&
-                    diamond.data.clarity == price.clarity &&
-                    price.minCaratEff <= diamond.data.carat &&
-                    diamond.data.carat <= price.maxCaratEff
-                ).unitPrice *
+                diamondUnitPrice *
                 diamond.data.carat *
                 10
               ).toLocaleString("en-US", {
@@ -59,32 +71,20 @@ export default function ChooseItem() {
             />
             <ChooseItemAccessory
               accessory={accessory.data}
-              price={(
-                materialPrice.data.find(
-                  (price: any) => price.karat == accessory.data.karat
-                ).unitPrice * accessory.data.karat
-              ).toLocaleString("en-US", {
-                style: "currency",
-                currency: "USD",
-                maximumFractionDigits: 0,
-              })}
+              price={(materialUnitPrice * accessory.data.karat).toLocaleString(
+                "en-US",
+                {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 0,
+                }
+              )}
             />
             <ChooseItemComplete
               accessory={accessory?.data}
               totalPrice={(
-                diamondPrice?.data.find(
-                  (price: any) =>
-                    diamond.data.color == price.color &&
-                    diamond.data.clarity == price.clarity &&
-                    price.minCaratEff <= diamond.data.carat &&
-                    diamond.data.carat <= price.maxCaratEff
-                ).unitPrice *
-                  diamond.data.carat *
-                  10 +
-                materialPrice.data.find(
-                  (price: any) => price.karat == accessory.data.karat
-                ).unitPrice *
-                  accessory.data.karat
+                diamondUnitPrice * diamond.data.carat * 10 +
+                materialUnitPrice * accessory.data.karat
               ).toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
