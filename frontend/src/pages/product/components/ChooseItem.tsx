@@ -4,6 +4,7 @@ import { GET } from "../../../utils/request";
 import ChooseItemDiamond from "./ChooseItemDiamond";
 import ChooseItemAccessory from "./ChooseItemAccessory";
 import ChooseItemComplete from "./ChooseItemComplete";
+import { getAccessoryPrice, getDiamondPrice } from "../../../utils/getPrice";
 
 export default function ChooseItem() {
   const currentDiamond = useCartStore((state) => state.currentDiamond);
@@ -32,69 +33,54 @@ export default function ChooseItem() {
       },
     ],
   });
-  const diamondPriceItem =
-    diamond?.data && diamondPrice?.data
-      ? diamondPrice.data.find(
-          (price: any) =>
-            diamond.data.color == price.color &&
-            diamond.data.clarity == price.clarity &&
-            price.minCaratEff <= diamond.data.carat &&
-            diamond.data.carat <= price.maxCaratEff
-        )
-      : undefined;
-  const diamondUnitPrice = diamondPriceItem ? diamondPriceItem.unitPrice : 0;
-
-  const materialPriceItem =
-    accessory?.data && materialPrice.data
-      ? materialPrice.data.find(
-          (price: any) => price.karat == accessory.data.karat
-        )
-      : undefined;
-  const materialUnitPrice = materialPriceItem ? materialPriceItem.unitPrice : 0;
-
   return (
     <div id="choose-item" className="flex mulish-regular">
-      {diamond?.data &&
-        diamondPrice?.data &&
-        accessory?.data &&
-        materialPrice?.data && (
-          <>
-            <ChooseItemDiamond
-              diamond={diamond?.data}
-              price={(
-                diamondUnitPrice *
-                diamond.data.carat *
-                10
+      <ChooseItemDiamond
+        diamond={currentDiamond && diamond?.data}
+        price={
+          currentDiamond &&
+          diamond?.data &&
+          diamondPrice?.data &&
+          getDiamondPrice(diamond?.data, diamondPrice?.data).toLocaleString(
+            "en-US",
+            { style: "currency", currency: "USD", maximumFractionDigits: 0 }
+          )
+        }
+      />
+      <ChooseItemAccessory
+        accessory={currentAccessory && accessory?.data}
+        price={
+          currentAccessory &&
+          accessory?.data &&
+          materialPrice?.data &&
+          getAccessoryPrice(
+            accessory?.data,
+            materialPrice?.data
+          ).toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 0,
+          })
+        }
+      />
+      <ChooseItemComplete
+        accessory={currentAccessory && accessory?.data}
+        totalPrice={
+          currentAccessory &&
+          accessory?.data &&
+          diamondPrice?.data &&
+          materialPrice?.data
+            ? (
+                getDiamondPrice(diamond.data, diamondPrice.data) +
+                getAccessoryPrice(accessory.data, materialPrice.data)
               ).toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
                 maximumFractionDigits: 0,
-              })}
-            />
-            <ChooseItemAccessory
-              accessory={accessory.data}
-              price={(materialUnitPrice * accessory.data.karat).toLocaleString(
-                "en-US",
-                {
-                  style: "currency",
-                  currency: "USD",
-                  maximumFractionDigits: 0,
-                }
-              )}
-            />
-            <ChooseItemComplete
-              accessory={accessory?.data}
-              totalPrice={(
-                diamondUnitPrice * diamond.data.carat * 10 +
-                materialUnitPrice * accessory.data.karat
-              ).toLocaleString("en-US", {
-                style: "currency",
-                currency: "USD",
-                maximumFractionDigits: 0,
-              })}
-            />
-          </>
-        )}
+              })
+            : 0
+        }
+      />
     </div>
   );
 }

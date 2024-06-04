@@ -21,7 +21,7 @@ export default function ChooseItemAccessory({
       // className="font-bold border-primary border-y-2 py-4 px-8 flex items-center w-[400px] justify-between"
       to="/product/accessory"
       className={`font-bold border-y-2 border-primary py-4 flex items-center w-[400px] justify-between ${
-        currentAccessory ? "px-4" : "px-8"
+        !currentAccessory ? "px-8" : "px-4"
       }`}
     >
       {!currentAccessory ? (

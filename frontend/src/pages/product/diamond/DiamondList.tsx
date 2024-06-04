@@ -8,6 +8,7 @@ import Filter from "./components/Filter";
 import { useSearchStore } from "../../../store/searchStore";
 import { useEffect } from "react";
 import scrollTo from "../../../utils/scroll";
+import { getDiamondPrice } from "../../../utils/getPrice";
 
 export default function DiamondList() {
   const url = new URL(window.location.href);
@@ -46,17 +47,12 @@ export default function DiamondList() {
       },
     ],
   });
-  const diamondPriceItem =
-    diamond?.data && diamondPrice?.data
-      ? diamondPrice.data.find(
-          (price: any) =>
-            diamond.data.color == price.color &&
-            diamond.data.clarity == price.clarity &&
-            price.minCaratEff <= diamond.data.carat &&
-            diamond.data.carat <= price.maxCaratEff
-        )
-      : undefined;
-  const diamondUnitPrice = diamondPriceItem ? diamondPriceItem.unitPrice : 0;
+
+  if (diamond?.data && diamondPrice?.data) {
+    console.log("i am bug");
+    console.log(diamond?.data);
+  }
+
   return (
     <div className="flex items-center justify-around flex-col mb-20">
       <Filter />
@@ -85,7 +81,7 @@ export default function DiamondList() {
           </div>
         </div>
         <div>
-          {diamond?.isLoading && diamondPrice?.isLoading && (
+          {(diamond?.isLoading || diamondPrice?.isLoading) && (
             <Skeleton
               active
               paragraph={{
@@ -95,21 +91,14 @@ export default function DiamondList() {
           )}
           {diamond?.data &&
             diamondPrice?.data &&
-            diamond?.data.diamonds.map((diamond: any, index: number) => {
+            diamond?.data?.diamonds?.map((diamond: any, index: number) => {
               return (
                 <DiamondItem
                   key={index}
                   diamond={diamond}
-                  price={(
-                    diamondPrice?.data.find(
-                      (price: any) =>
-                        diamond.color == price.color &&
-                        diamond.clarity == price.clarity &&
-                        price.minCaratEff <= diamond.carat &&
-                        diamond.carat <= price.maxCaratEff
-                    ).unitPrice *
-                    diamond.carat *
-                    10
+                  price={getDiamondPrice(
+                    diamond,
+                    diamondPrice.data
                   ).toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",

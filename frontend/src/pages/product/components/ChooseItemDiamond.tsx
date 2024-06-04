@@ -2,7 +2,8 @@ import { Check } from "lucide-react";
 
 import { useCartStore } from "../../../store/cartStore";
 import DiamondIcon from "./DiamondIcon";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSearchStore } from "../../../store/searchStore";
 
 export default function ChooseItemDiamond({
   diamond,
@@ -13,11 +14,13 @@ export default function ChooseItemDiamond({
 }) {
   const currentDiamond = useCartStore((state) => state.currentDiamond);
   const setCurrentDiamond = useCartStore((state) => state.setCurrentDiamond);
+  const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
+  const navigate = useNavigate();
   return (
     <Link
       to={`/product/diamond`}
       className={`font-bold border-2 border-primary py-4 rounded-l-full flex items-center w-[400px] justify-between ${
-        currentDiamond ? "pr-8" : "px-8"
+        !currentDiamond ? "px-8" : "pr-8"
       }`}
     >
       {!currentDiamond ? (
@@ -37,17 +40,19 @@ export default function ChooseItemDiamond({
               <div className="text-xs flex gap-2 text-slate-400">
                 <Link
                   className="border-b cursor-pointer"
-                  to={`/product/diamond/detail/${currentDiamond}`}
+                  to={`/product/diamond/detail/${diamond?.diamondId}`}
                 >
                   View
                 </Link>
                 <div
-                  className="border-b cursor-pointer"
+                  className="border-b border-b-transparent cursor-pointer hover:border-b-slate-600"
                   onClick={() => {
-                    if (location.pathname.includes("complete")) {
-                      location.href = "/product/diamond";
-                    }
                     setCurrentDiamond(null);
+                    setQueryUrl("/api/Diamonds?");
+                    // if (location.pathname.includes("complete")) {
+                    // }
+                    // location.href = "/product/diamond"
+                    navigate("/product/diamond");
                   }}
                 >
                   Remove
@@ -57,8 +62,8 @@ export default function ChooseItemDiamond({
           </div>
         </div>
       )}
-      <div className={`flex ${!currentDiamond && "w-[24px]"}`}>
-        {!currentDiamond ? (
+      <div className={`flex ${!diamond && "w-[24px]"}`}>
+        {!diamond ? (
           <DiamondIcon />
         ) : (
           <div

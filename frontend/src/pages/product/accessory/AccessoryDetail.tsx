@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { GET } from "../../../utils/request";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCartStore } from "../../../store/cartStore";
-import scrollToChoose from "../../../utils/scroll";
 
 export default function AccessoryDetail() {
   const [accessory, setAccessory] = useState<any>();
@@ -18,7 +17,6 @@ export default function AccessoryDetail() {
   const setCurrentAccessory = useCartStore(
     (state) => state.setCurrentAccessory
   );
-  //scrollToChoose();
   const currentDiamond = useCartStore((state) => state.currentDiamond);
   return (
     <div>
@@ -59,10 +57,11 @@ export default function AccessoryDetail() {
             </div>
             <div className="flex flex-col gap-4">
               <div
-                className={`text-xl w-full flex justify-center px-4 py-3 bg-primary hover:scale-95 transition-all ${currentDiamond
+                className={`text-xl w-full flex justify-center px-4 py-3 bg-primary hover:scale-95 transition-all ${
+                  currentDiamond
                     ? "text-white"
                     : "bg-gray-300 px-4 py-2 rounded-md cursor-not-allowed opacity-50 text-black"
-                  }`}
+                }`}
                 onClick={() => {
                   if (currentDiamond) {
                     setCurrentAccessory(accessory?.accessoryId);

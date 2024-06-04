@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import DiamondIcon from "../components/DiamondIcon";
 import RingIcon from "../components/RingIcon";
 import ImageList from "./components/ImageList";
+import { getAccessoryPrice, getDiamondPrice } from "../../../utils/getPrice";
 
 const ringOptions = [
   {
@@ -104,19 +105,8 @@ export default function CompleteProduct() {
               <div className="text-3xl my-2">
                 Total price:{" "}
                 {(
-                  diamondPrice?.data.find(
-                    (price: any) =>
-                      diamond.data.color == price.color &&
-                      diamond.data.clarity == price.clarity &&
-                      price.minCaratEff <= diamond.data.carat &&
-                      diamond.data.carat <= price.maxCaratEff
-                  ).unitPrice *
-                    diamond.data.carat *
-                    10 +
-                  materialPrice.data.find(
-                    (price: any) => price.karat == accessory.data.karat
-                  ).unitPrice *
-                    accessory.data.karat
+                  getDiamondPrice(diamond.data, diamondPrice.data) +
+                  getAccessoryPrice(accessory.data, materialPrice.data)
                 ).toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",
@@ -128,25 +118,18 @@ export default function CompleteProduct() {
                 <div className="text-lg mb-4">Complete Ring:</div>
                 <div className="flex flex-col gap-4 text-sm">
                   <div className="flex gap-4 items-center">
-                    <div className="w-[20px]">
+                    <div className="w-[60px]">
                       <DiamondIcon />
                     </div>
                     <Link
                       to={`/product/diamond/detail/${currentDiamond}`}
                       className="hover:bg-slate-200 p-2 rounded-md"
                     >
-                      {`${diamond.data.carat} Ct - ${diamond.data.cut} Cut - ${diamond.data.shape} Shape Diamond - ${diamond.data.color} Color - ${diamond.data.clarity} Clarity - Stock #: ${diamond.data.diamondId}`}
+                      {`${diamond.data.carat} Ct - ${diamond.data.cut} Cut - ${diamond.data.shape} Shape Diamond - ${diamond.data.color} Color - ${diamond.data.clarity} Clarity - Diamond Id: ${diamond.data.diamondId} - Certificated from ${diamond.data.lab} LAB with number: ${diamond.data.certificateNumber}`}
                       <div>
-                        {(
-                          diamondPrice?.data.find(
-                            (price: any) =>
-                              diamond.data.color == price.color &&
-                              diamond.data.clarity == price.clarity &&
-                              price.minCaratEff <= diamond.data.carat &&
-                              diamond.data.carat <= price.maxCaratEff
-                          ).unitPrice *
-                          diamond.data.carat *
-                          10
+                        {getDiamondPrice(
+                          diamond.data,
+                          diamondPrice.data
                         ).toLocaleString("en-US", {
                           style: "currency",
                           currency: "USD",
@@ -171,10 +154,9 @@ export default function CompleteProduct() {
                     >
                       {`${accessory.data.name} in ${accessory.data.karat}K Stock #: ${diamond.data.diamondId}`}
                       <div>
-                        {(
-                          materialPrice.data.find(
-                            (price: any) => price.karat == accessory.data.karat
-                          ).unitPrice * accessory.data.karat
+                        {getAccessoryPrice(
+                          accessory.data,
+                          materialPrice.data
                         ).toLocaleString("en-US", {
                           style: "currency",
                           currency: "USD",
