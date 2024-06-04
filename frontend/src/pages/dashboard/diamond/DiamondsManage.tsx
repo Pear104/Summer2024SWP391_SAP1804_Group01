@@ -4,93 +4,23 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { GET } from "../../../utils/request";
 import DiamondRow from "./DiamondRow";
-// interface Diamond {
-//   diamondId: number;
-//   imageUrl: string;
-//   name: string;
-//   price: number;
-//   shape: string;
-//   carat: number;
-//   color: string;
-//   clarity: string;
-//   cut: string;
-//   availability: boolean;
-// }
+import { useQueries } from "@tanstack/react-query";
+import { useSearchStore } from "../../../store/searchStore";
+import { getDiamondPrice } from "../../../utils/getPrice";
+
 export default function ProductsManage() {
   const location = useLocation();
   const navigate = useNavigate();
   const [statusText, setStatusText] = useState("Status");
   const [productTypeText, setProductTypeText] = useState("Product Type");
   const [data, setData] = useState<any>([]);
-
-  // search item
-  const [searchTerm, setSearchTerm] = useState("");
-  // selected diamonds
-  const [selectedDiamonds, setSelectedDiamonds] = useState<number[]>([]);
-  // select all
-  const [selectAll, setSelectAll] = useState(false);
-  // pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
-  // many diamond action
-  const handleAction = (action: string) => {
-    // Handle your action here...
-    console.log(action);
-  };
-  useEffect(() => {
-    (async () => {
-      let data;
-      if (searchTerm) {
-        // Fetch data based on searchTerm
-        data = await GET(`/api/Diamonds/cert/${searchTerm}`);
-      } else {
-        // Fetch original data when searchTerm is empty
-        data = await GET(
-          `/api/Diamonds?PageNumber=${currentPage}&PageSize=${pageSize}`
-        );
-      }
-      setData(data);
-    })();
-  }, [searchTerm, currentPage, pageSize]);
-
-  useEffect(() => {
-    (async () => {
-      const data = await GET(
-        `/api/Diamonds?PageNumber=${currentPage}&PageSize=${pageSize}`
-      );
-      console.log(data); // Log the data here
-      setData(data);
-      setTotalPages(data.totalPages);
-    })();
-  }, [currentPage, pageSize]);
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const status = params.get("status");
-
-    const type = params.get("type");
-    if (status) {
-      setStatusText(status === "1" ? "Enable" : "Disable");
-    }
-    if (type) {
-      setProductTypeText(type === "1" ? "Type 1" : "Type 2");
-    }
-  }, [location.search]);
-
-  const handleStatusClick = (status: string, statusText: string) => {
-    setStatusText(statusText);
-    const params = new URLSearchParams(location.search);
-    params.set("status", status);
-    navigate({ search: params.toString() });
-  };
-
-  const handleProductTypeClick = (type: string, typeText: string) => {
-    setProductTypeText(typeText);
-    const params = new URLSearchParams(location.search);
-    params.set("type", type);
-    navigate({ search: params.toString() });
-  };
+  const [originalData, setOriginalData] = useState<any>([]);
+  // sort item
+  const [sortConfig, setSortConfig] = useState<{
+    field: string;
+    direction: "asc" | "desc" | "none";
+    isNumber: boolean;
+  }>({ field: "", direction: "none", isNumber: false });
   const columnHeaders = [
     "Thumbnail",
     "Certificate",
@@ -123,6 +53,145 @@ export default function ProductsManage() {
       </Menu.Item>
     </Menu>
   );
+  const sortableColumns = [
+    "price",
+    "shape",
+    "carat",
+    "color",
+    "clarity",
+    "cut",
+  ];
+  // search item
+  const [searchTerm, setSearchTerm] = useState("");
+  // selected diamonds
+  const [selectedDiamonds, setSelectedDiamonds] = useState<number[]>([]);
+  // select all
+  const [selectAll, setSelectAll] = useState(false);
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  // many diamond action
+
+  // get diamond price
+  const queryUrl = useSearchStore((state) => state.queryUrl);
+  const [diamond, diamondPrice] = useQueries({
+    queries: [
+      {
+        queryKey: ["diamonds", queryUrl],
+        queryFn: () => GET(queryUrl),
+        staleTime: Infinity,
+      },
+      {
+        queryKey: ["diamondPrices"],
+        queryFn: () => GET("/api/DiamondPrices/"),
+        staleTime: Infinity,
+      },
+    ],
+  });
+  // fetch data
+  useEffect(() => {
+    (async () => {
+      const data = await GET(
+        `/api/Diamonds?PageNumber=${currentPage}&PageSize=${pageSize}`
+      );
+      console.log(data); // Log the data here
+      setData(data);
+      setOriginalData(data);
+      setTotalPages(data.totalPages);
+    })();
+  }, [currentPage, pageSize]);
+
+  // sort
+  // const diamondsWithPrice = data.diamonds.map((diamond: any) => ({
+  //   ...diamond,
+  //   price: getDiamondPrice(diamond, diamondPrice.data),
+  // }));
+  // setData({ ...data, diamonds: diamondsWithPrice });
+  const handleSort = (field: string, isNumber = false) => {
+    let direction: "asc" | "desc" | "none" = "asc";
+    if (sortConfig.field === field && sortConfig.direction === "asc") {
+      direction = "desc";
+    } else if (sortConfig.field === field && sortConfig.direction === "desc") {
+      direction = "none";
+    }
+    setSortConfig({ field, direction, isNumber });
+  };
+
+  useEffect(() => {
+    if (data && Array.isArray(data.diamonds) && sortConfig.field) {
+      if (sortConfig.direction !== "none") {
+        const sortedData = [...data.diamonds].sort((a: any, b: any) => {
+          if (sortConfig.isNumber) {
+            return sortConfig.direction === "asc"
+              ? parseFloat(a[sortConfig.field]) -
+                  parseFloat(b[sortConfig.field])
+              : parseFloat(b[sortConfig.field]) -
+                  parseFloat(a[sortConfig.field]);
+          } else {
+            return sortConfig.direction === "asc"
+              ? String(a[sortConfig.field]).localeCompare(
+                  String(b[sortConfig.field])
+                )
+              : String(b[sortConfig.field]).localeCompare(
+                  String(a[sortConfig.field])
+                );
+          }
+        });
+        setData({ ...data, diamonds: sortedData });
+      } else {
+        setData(originalData); // Reset to the original unsorted data
+      }
+    }
+  }, [sortConfig]);
+
+  const handleAction = (action: string) => {
+    // Handle your action here...
+    console.log(action);
+  };
+  //search item
+  useEffect(() => {
+    (async () => {
+      let data;
+      if (searchTerm) {
+        // Fetch data based on searchTerm
+        data = await GET(`/api/Diamonds/cert/${searchTerm}`);
+      } else {
+        // Fetch original data when searchTerm is empty
+        data = await GET(
+          `/api/Diamonds?PageNumber=${currentPage}&PageSize=${pageSize}`
+        );
+      }
+      setData(data);
+    })();
+  }, [searchTerm, currentPage, pageSize]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const status = params.get("status");
+
+    const type = params.get("type");
+    if (status) {
+      setStatusText(status === "1" ? "Enable" : "Disable");
+    }
+    if (type) {
+      setProductTypeText(type === "1" ? "Type 1" : "Type 2");
+    }
+  }, [location.search]);
+
+  const handleStatusClick = (status: string, statusText: string) => {
+    setStatusText(statusText);
+    const params = new URLSearchParams(location.search);
+    params.set("status", status);
+    navigate({ search: params.toString() });
+  };
+
+  const handleProductTypeClick = (type: string, typeText: string) => {
+    setProductTypeText(typeText);
+    const params = new URLSearchParams(location.search);
+    params.set("type", type);
+    navigate({ search: params.toString() });
+  };
 
   return (
     <div className="p-4">
@@ -255,9 +324,56 @@ export default function ProductsManage() {
                         <th
                           key={header}
                           scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider "
                         >
-                          {header}
+                          <div className="flex flex-row items-center gap-[5px]">
+                            <span>{header}</span>
+                            {sortableColumns.includes(header.toLowerCase()) && (
+                              <div className="sort">
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleSort(header.toLowerCase())
+                                  }
+                                >
+                                  <svg
+                                    width="12"
+                                    height="12"
+                                    viewBox="0 0 17 23"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path
+                                      d="M1 8.5L8.5 1L16 8.5"
+                                      stroke={
+                                        sortConfig.field ===
+                                          header.toLowerCase() &&
+                                        sortConfig.direction === "asc"
+                                          ? "black"
+                                          : "#e1e3e5"
+                                      }
+                                      strokeWidth="1.5"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    />
+                                    <path
+                                      d="M16 14L8.5 21.5L1 14"
+                                      stroke={
+                                        sortConfig.field ===
+                                          header.toLowerCase() &&
+                                        sortConfig.direction === "desc"
+                                          ? "black"
+                                          : "#e1e3e5"
+                                      }
+                                      strokeWidth="1.5"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    />
+                                  </svg>
+                                </button>
+                              </div>
+                            )}
+                          </div>
                         </th>
                       ))}
                     </tr>
@@ -296,97 +412,22 @@ export default function ProductsManage() {
                         </td>
                       </tr>
                     )}
-                    {/* {data.diamonds &&
-                      data.diamonds.map((diamond: any) => {
-                        return (
-                          <tr key={diamond.diamondId}>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center">
-                                <label className="flex items-center">
-                                  <input
-                                    type="checkbox"
-                                    value="0"
-                                    className="form-checkbox"
-                                    checked={selectedDiamonds.includes(
-                                      diamond.diamondId
-                                    )}
-                                    onChange={(e) => {
-                                      if (e.target.checked) {
-                                        setSelectedDiamonds([
-                                          ...selectedDiamonds,
-                                          diamond.diamondId,
-                                        ]);
-                                      } else {
-                                        setSelectedDiamonds(
-                                          selectedDiamonds.filter(
-                                            (id) => id !== diamond.diamondId
-                                          )
-                                        );
-                                      }
-                                    }}
-                                  />
 
-                                  <span className="checkbox-unchecked"></span>
-                                  <span className="pl-2"></span>
-                                  <input type="hidden" value="0" />
-                                </label>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center">
-                                <a href="#">
-                                  <img
-                                    className="h-14  w-14 square-full"
-                                    src={diamond.imageUrl}
-                                    alt=""
-                                  />
-                                </a>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-500">
-                                <a href={diamond.certificateUrl}>
-                                  {diamond.certificateNumber}
-                                </a>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-500">
-                                ${diamond.price}
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {diamond.shape}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {diamond.carat}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {diamond.color}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {diamond.clarity}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {diamond.cut}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                              <div className="text-indigo-600 hover:text-indigo-900">
-                                {diamond.availability
-                                  ? "Available"
-                                  : "Not Available"}
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      })} */}
-                    {data && data.diamonds ? (
+                    {data && data.diamonds && diamondPrice?.data ? (
                       data.diamonds.map((diamond: any) => (
                         <DiamondRow
                           key={diamond.diamondId}
                           diamond={diamond}
                           selectedDiamonds={selectedDiamonds}
                           setSelectedDiamonds={setSelectedDiamonds}
+                          price={getDiamondPrice(
+                            diamond,
+                            diamondPrice.data
+                          ).toLocaleString("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                            maximumFractionDigits: 0,
+                          })}
                         />
                       ))
                     ) : data ? (
@@ -395,9 +436,19 @@ export default function ProductsManage() {
                         diamond={data}
                         selectedDiamonds={selectedDiamonds}
                         setSelectedDiamonds={setSelectedDiamonds}
+                        price={getDiamondPrice(
+                          diamond,
+                          diamondPrice.data
+                        ).toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                          maximumFractionDigits: 0,
+                        })}
                       />
                     ) : (
-                      <p>There is no diamond</p>
+                      <div className="text-center items-center">
+                        <p>There is no diamond</p>
+                      </div>
                     )}
                   </tbody>
                 </table>
