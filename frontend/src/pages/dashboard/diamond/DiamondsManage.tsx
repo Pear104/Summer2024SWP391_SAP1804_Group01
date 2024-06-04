@@ -1,5 +1,4 @@
-import { DownOutlined } from "@ant-design/icons";
-import { Button, Dropdown, Form, Input, Menu, Pagination } from "antd";
+import { Form, Input, Pagination } from "antd";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { GET } from "../../../utils/request";
@@ -7,6 +6,7 @@ import DiamondRow from "./DiamondRow";
 import { useQueries } from "@tanstack/react-query";
 import { useSearchStore } from "../../../store/searchStore";
 import { getDiamondPrice } from "../../../utils/getPrice";
+import { ProductTypeMenu, StatusMenu } from "./DiamondsManageHeader";
 
 export default function ProductsManage() {
   const location = useLocation();
@@ -14,13 +14,13 @@ export default function ProductsManage() {
   const [statusText, setStatusText] = useState("Status");
   const [productTypeText, setProductTypeText] = useState("Product Type");
   const [data, setData] = useState<any>([]);
-  const [originalData, setOriginalData] = useState<any>([]);
   // sort item
   const [sortConfig, setSortConfig] = useState<{
     field: string;
     direction: "asc" | "desc" | "none";
     isNumber: boolean;
   }>({ field: "", direction: "none", isNumber: false });
+
   const columnHeaders = [
     "Thumbnail",
     "Certificate",
@@ -32,27 +32,34 @@ export default function ProductsManage() {
     "Cut",
     "Status",
   ];
-  const statusMenu = (
-    <Menu>
-      <Menu.Item key="1">
-        <a onClick={() => handleStatusClick("1", "Enable")}>Enable</a>
-      </Menu.Item>
-      <Menu.Item key="2">
-        <a onClick={() => handleStatusClick("2", "Disable")}>Disable</a>
-      </Menu.Item>
-    </Menu>
-  );
+  // search and filter
+  const handleStatusClick = (status: string, statusText: string) => {
+    setStatusText(statusText);
+    const params = new URLSearchParams(location.search);
+    params.set("status", status);
+    navigate({ search: params.toString() });
+  };
 
-  const productTypeMenu = (
-    <Menu>
-      <Menu.Item key="1">
-        <a onClick={() => handleProductTypeClick("1", "Type 1")}>Type 1</a>
-      </Menu.Item>
-      <Menu.Item key="2">
-        <a onClick={() => handleProductTypeClick("2", "Type 2")}>Type 2</a>
-      </Menu.Item>
-    </Menu>
-  );
+  const handleProductTypeClick = (type: string, typeText: string) => {
+    setProductTypeText(typeText);
+    const params = new URLSearchParams(location.search);
+    params.set("type", type);
+    navigate({ search: params.toString() });
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const status = params.get("status");
+
+    const type = params.get("type");
+    if (status) {
+      setStatusText(status === "1" ? "Enable" : "Disable");
+    }
+    if (type) {
+      setProductTypeText(type === "1" ? "Type 1" : "Type 2");
+    }
+  }, [location.search]);
+
   const sortableColumns = [
     "price",
     "shape",
@@ -97,56 +104,35 @@ export default function ProductsManage() {
       );
       console.log(data); // Log the data here
       setData(data);
-      setOriginalData(data);
       setTotalPages(data.totalPages);
     })();
   }, [currentPage, pageSize]);
 
-  // sort
-  // const diamondsWithPrice = data.diamonds.map((diamond: any) => ({
-  //   ...diamond,
-  //   price: getDiamondPrice(diamond, diamondPrice.data),
-  // }));
-  // setData({ ...data, diamonds: diamondsWithPrice });
-  const handleSort = (field: string, isNumber = false) => {
+  const handleSort = async (field: string) => {
     let direction: "asc" | "desc" | "none" = "asc";
+    let isNumber = false;
     if (sortConfig.field === field && sortConfig.direction === "asc") {
       direction = "desc";
     } else if (sortConfig.field === field && sortConfig.direction === "desc") {
       direction = "none";
     }
+
+    // Check if the field should be sorted as a number
+    if (field === "price") {
+      isNumber = true;
+    }
+
     setSortConfig({ field, direction, isNumber });
+
+    // Make a request to the API with the new sort configuration
+    const queryUrl = `/api/Diamonds?SortBy=${field}&IsDescending=${
+      direction === "desc"
+    }&PageNumber=${currentPage}&PageSize=${pageSize}`;
+    const data = await GET(queryUrl);
+    setData(data);
   };
 
-  useEffect(() => {
-    if (data && Array.isArray(data.diamonds) && sortConfig.field) {
-      if (sortConfig.direction !== "none") {
-        const sortedData = [...data.diamonds].sort((a: any, b: any) => {
-          if (sortConfig.isNumber) {
-            return sortConfig.direction === "asc"
-              ? parseFloat(a[sortConfig.field]) -
-                  parseFloat(b[sortConfig.field])
-              : parseFloat(b[sortConfig.field]) -
-                  parseFloat(a[sortConfig.field]);
-          } else {
-            return sortConfig.direction === "asc"
-              ? String(a[sortConfig.field]).localeCompare(
-                  String(b[sortConfig.field])
-                )
-              : String(b[sortConfig.field]).localeCompare(
-                  String(a[sortConfig.field])
-                );
-          }
-        });
-        setData({ ...data, diamonds: sortedData });
-      } else {
-        setData(originalData); // Reset to the original unsorted data
-      }
-    }
-  }, [sortConfig]);
-
   const handleAction = (action: string) => {
-    // Handle your action here...
     console.log(action);
   };
   //search item
@@ -165,33 +151,6 @@ export default function ProductsManage() {
       setData(data);
     })();
   }, [searchTerm, currentPage, pageSize]);
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const status = params.get("status");
-
-    const type = params.get("type");
-    if (status) {
-      setStatusText(status === "1" ? "Enable" : "Disable");
-    }
-    if (type) {
-      setProductTypeText(type === "1" ? "Type 1" : "Type 2");
-    }
-  }, [location.search]);
-
-  const handleStatusClick = (status: string, statusText: string) => {
-    setStatusText(statusText);
-    const params = new URLSearchParams(location.search);
-    params.set("status", status);
-    navigate({ search: params.toString() });
-  };
-
-  const handleProductTypeClick = (type: string, typeText: string) => {
-    setProductTypeText(typeText);
-    const params = new URLSearchParams(location.search);
-    params.set("type", type);
-    navigate({ search: params.toString() });
-  };
 
   return (
     <div className="p-4">
@@ -232,28 +191,16 @@ export default function ProductsManage() {
                   />
                 </Form.Item>
                 <Form.Item>
-                  <Dropdown
-                    overlay={statusMenu}
-                    placement="bottomCenter"
-                    trigger={["click"]}
-                  >
-                    <Button className="border p-2 rounded-md flex items-center">
-                      <span>{statusText}</span>
-                      <DownOutlined className="ml-1" />
-                    </Button>
-                  </Dropdown>
+                  <StatusMenu
+                    handleStatusClick={handleStatusClick}
+                    statusText={statusText}
+                  />
                 </Form.Item>
                 <Form.Item>
-                  <Dropdown
-                    overlay={productTypeMenu}
-                    placement="bottomCenter"
-                    trigger={["click"]}
-                  >
-                    <Button className="border p-2 rounded-md flex items-center">
-                      <span>{productTypeText}</span>
-                      <DownOutlined className="ml-1" />
-                    </Button>
-                  </Dropdown>
+                  <ProductTypeMenu
+                    handleProductTypeClick={handleProductTypeClick}
+                    productTypeText={productTypeText}
+                  />
                 </Form.Item>
               </Form>
             </h3>

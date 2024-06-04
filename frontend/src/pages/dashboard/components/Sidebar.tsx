@@ -31,6 +31,12 @@ export default function Sidebar() {
       icon: <HiOutlineCube />,
     },
     {
+      key: "products",
+      label: "Accessorys",
+      path: "/admin/accessorys",
+      icon: <HiOutlineCube />,
+    },
+    {
       key: "orders",
       label: "Orders",
       path: "/admin/orders",

@@ -27,6 +27,12 @@ import EditAccount from "../pages/account/EditAccount";
 import CompleteProduct from "../pages/product/complete/CompleteProduct";
 import BlogsManage from "../pages/dashboard/blog/BlogsManage";
 import NewBlog from "../pages/dashboard/blog/NewBlog";
+import AccessoryManage from "../pages/dashboard/accessory/AccessoryManage";
+import DiamondPriceManage from "../pages/dashboard/diamondprice/DiamondPriceManage";
+import AccessoryPriceManage from "../pages/dashboard/accessoryprice/AccessoryPriceManage";
+import CustomerManage from "../pages/dashboard/customer/CustomerManage";
+import TransactionManage from "../pages/dashboard/transacction/TransactionManage";
+import OrderManage from "../pages/dashboard/order/OrderManage";
 
 const routes = [
   {
@@ -44,6 +50,30 @@ const routes = [
           {
             element: <DiamondsManage />,
             path: "/admin/diamonds",
+          },
+          {
+            element: <AccessoryManage />,
+            path: "/admin/accessorys",
+          },
+          {
+            element: <DiamondPriceManage />,
+            path: "/admin/diamond-price",
+          },
+          {
+            element: <AccessoryPriceManage />,
+            path: "/admin/accessory-price",
+          },
+          {
+            element: <CustomerManage />,
+            path: "/admin/customers",
+          },
+          {
+            element: <OrderManage />,
+            path: "/admin/orders",
+          },
+          {
+            element: <TransactionManage />,
+            path: "/admin/transactions",
           },
           {
             element: <BlogsManage />,

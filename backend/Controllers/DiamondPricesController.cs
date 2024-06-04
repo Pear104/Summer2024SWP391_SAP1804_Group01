@@ -24,7 +24,7 @@ namespace backend.Controllers
         public async Task<ActionResult> GetDiamondPrices()
         {
             var diamondPriceModels = await _diamondPriceRepo.GetAllDiamondPricesAsync();
-            var diamondPriceDTOs = diamondPriceModels.Select(x => x.ToDiamontPriceDTO());
+            var diamondPriceDTOs = diamondPriceModels.Select(x => x.ToDiamondPriceDTO());
             return Ok(diamondPriceDTOs);
         }
 
@@ -37,7 +37,7 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            return Ok(diamondPrice.ToDiamontPriceDTO());
+            return Ok(diamondPrice.ToDiamondPriceDTO());
         }
 
         [HttpPost]

@@ -18,7 +18,6 @@ namespace backend.Repository
     public class DiamondRepository : IDiamondRepository
     {
         private readonly ApplicationDbContext _context;
-
         public DiamondRepository(ApplicationDbContext context)
         {
             _context = context;
