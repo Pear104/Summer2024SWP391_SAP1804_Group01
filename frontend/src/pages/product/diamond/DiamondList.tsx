@@ -46,7 +46,17 @@ export default function DiamondList() {
       },
     ],
   });
-
+  const diamondPriceItem =
+    diamond?.data && diamondPrice?.data
+      ? diamondPrice.data.find(
+          (price: any) =>
+            diamond.data.color == price.color &&
+            diamond.data.clarity == price.clarity &&
+            price.minCaratEff <= diamond.data.carat &&
+            diamond.data.carat <= price.maxCaratEff
+        )
+      : undefined;
+  const diamondUnitPrice = diamondPriceItem ? diamondPriceItem.unitPrice : 0;
   return (
     <div className="flex items-center justify-around flex-col mb-20">
       <Filter />

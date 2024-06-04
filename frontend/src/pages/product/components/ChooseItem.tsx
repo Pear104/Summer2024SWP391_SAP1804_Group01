@@ -32,22 +32,24 @@ export default function ChooseItem() {
       },
     ],
   });
-  const diamondPriceItem = diamondPrice?.data
-    ? diamondPrice.data.find(
-        (price: any) =>
-          diamond.data.color == price.color &&
-          diamond.data.clarity == price.clarity &&
-          price.minCaratEff <= diamond.data.carat &&
-          diamond.data.carat <= price.maxCaratEff
-      )
-    : undefined;
+  const diamondPriceItem =
+    diamond?.data && diamondPrice?.data
+      ? diamondPrice.data.find(
+          (price: any) =>
+            diamond.data.color == price.color &&
+            diamond.data.clarity == price.clarity &&
+            price.minCaratEff <= diamond.data.carat &&
+            diamond.data.carat <= price.maxCaratEff
+        )
+      : undefined;
   const diamondUnitPrice = diamondPriceItem ? diamondPriceItem.unitPrice : 0;
 
-  const materialPriceItem = materialPrice.data
-    ? materialPrice.data.find(
-        (price: any) => price.karat == accessory.data.karat
-      )
-    : undefined;
+  const materialPriceItem =
+    accessory?.data && materialPrice.data
+      ? materialPrice.data.find(
+          (price: any) => price.karat == accessory.data.karat
+        )
+      : undefined;
   const materialUnitPrice = materialPriceItem ? materialPriceItem.unitPrice : 0;
 
   return (
