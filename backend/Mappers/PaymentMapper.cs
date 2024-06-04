@@ -1,5 +1,6 @@
 ﻿using backend.Models.Payment.Domain.Entities;
 using backend.Payment_src.core.Payment.Application.Features.Commands;
+using backend.Payment_src.core.Payment.Application.Features.Payment.Dtos;
 
 namespace backend.Mappers
 {
@@ -20,6 +21,25 @@ namespace backend.Mappers
                 PaymentDestinationId = createPayment.PaymentDestinationId
             };
             return payment;
+        }
+
+        public static PaymentDtos FromPaymentToPaymentDtos(this Payment paymentModel)
+        {
+            var paymentDtos = new PaymentDtos()
+            {
+                Id = paymentModel.Id,
+                PaymentContent = paymentModel.PaymentContent,
+                PaymentCurrency = paymentModel.PaymentCurrency,
+                PaymentRefId = paymentModel.PaymentRefId,
+                RequiredAmount = paymentModel.RequiredAmount,
+                PaymentDate = paymentModel.PaymentDate,
+                ExpireDate = paymentModel.ExpireDate,
+                PaymentLanguage = paymentModel.PaymentLanguage,
+                MerchantId = paymentModel.MerchantId,
+                PaymentDestinationId = paymentModel.PaymentDestinationId,
+                PaidAmount = paymentModel.PaidAmount
+            };
+            return paymentDtos;
         }
     }
 }

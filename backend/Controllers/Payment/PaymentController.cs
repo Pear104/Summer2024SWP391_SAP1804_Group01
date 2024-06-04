@@ -1,4 +1,5 @@
-﻿using backend.Interfaces;
+﻿using backend.Helper;
+using backend.Interfaces;
 using backend.Mappers;
 using backend.Models.Payment.Domain.Entities;
 using backend.Payment_src.core.Payment.Application.Features.Commands;
@@ -43,17 +44,18 @@ namespace backend.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(Payment), 200)]
+        [ProducesResponseType(typeof(PaymentDtos), 200)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> GetAll()
         {
-            var payments = await _paymentRepo.GetAllPayment();
-            if (payments == null)
+            var paymentModels = await _paymentRepo.GetAllPayment();
+            if (paymentModels == null)
             {
                 return NotFound();
             }
+            var accountDTOs = paymentModels.Select(p => p.FromPaymentToPaymentDtos()).ToList();
             //var response = new BaseResultWIthData<List<MerchantDtos>>();
-            return Ok(payments);
+            return Ok(accountDTOs);
         }
 
         /// <summary>
@@ -84,21 +86,6 @@ namespace backend.Controllers
 
             if (paymentModel != null)   //send one time payment request to Momo
             {
-                //var momoOneTimePayRequest = new MomoOneTimePaymentRequest(
-                //    _momoConfig.PartnerCode,
-                //    "Momo",
-                //    paymentModel.MerchantId!,
-                //    "captureWallet",
-                //    _momoConfig.IpnUrl,
-                //    _momoConfig.ReturnUrl,
-                //    paymentModel.PaymentRefId!,
-                //    (long)paymentModel.RequiredAmount!,
-                //    paymentModel.PaymentLanguage!,
-                //    true,
-                //    paymentModel.PaymentContent!,
-                //    paymentModel.Id,
-                //    "ew0KImVtYWlsIjogImh1b25neGRAZ21haWwuY29tIg0KfQ"
-                //    );
 
                 var momoOneTimePayRequest = new MomoOneTimePaymentRequest()
                 {
@@ -131,6 +118,31 @@ namespace backend.Controllers
             }//end payment is NOT null
 
             return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("momo-return")]
+        public async Task<IActionResult> MomoReturn([FromQuery]MomoOneTimePaymentResultRequest resultRequest)
+        {
+            string returnUrl = string.Empty;
+            var returnModel = new PaymentReturnDtos();
+
+            //send link
+            var processResult = await _paymentRepo.ProcessMomoPaymentReturn(resultRequest);
+            if (processResult.Success)
+            {
+                returnModel = processResult.Data.Item1 as PaymentReturnDtos;
+                returnUrl = processResult.Data.Item2 as string;
+            }
+            //dunnot what this does
+            if (returnUrl.EndsWith("/"))
+            {
+                returnUrl = returnUrl.Remove(returnUrl.Length- 1, 1);
+            }
+            //dunnot what this does
+
+            //return NotFound();
+            return Redirect($"{returnUrl}?{returnModel.ToQueryString()}");
         }
 
     }

@@ -66,8 +66,8 @@ namespace backend.Payment_src.core.Payment.Service.Momo.Request
 
         /// <summary>
         /// The Id of the Payment
-        /// (NOT MomoOneTImePayment)
-        /// To handle idempotency (only one payment/transaction operation hapeen no matter how many request is sent)
+        /// (NOT MomoOneTimePayment)
+        /// To handle idempotency (only one payment/transaction operation happen on Momo side no matter how many request is sent)
         /// </summary>
         public string requestId { get; set; } = string.Empty;
 

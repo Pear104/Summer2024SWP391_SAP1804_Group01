@@ -5,6 +5,7 @@ using backend.Repository;
 using backend.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -78,6 +79,11 @@ namespace backend
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            //Payment cofiguration
+            builder.Services.Configure<MomoConfig>(
+                builder.Configuration.GetSection(MomoConfig.ConfigName)
+                );
+
             builder
                 .Services.AddAuthentication(options =>
                 {
@@ -106,21 +112,18 @@ namespace backend
                     };
                 });
 
-            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-            builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-            builder.Services.AddScoped<IDiamondRepository, DiamondRepository>();
-            builder.Services.AddScoped<IRankRepository, RankRepository>();
-            builder.Services.AddScoped<IAccessoryRepository, AccessoryRepository>();
-            builder.Services.AddScoped<IMerchantRepository, MerchantRepository>();
-            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
-            builder.Services.AddScoped<ITokenService, TokenService>();
-            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
-            builder.Services.AddTransient<IEmailSender, EmailSender>();
 
-            //Payment cofiguration
-            builder.Services.Configure<MomoConfig>(
-                builder.Configuration.GetSection(MomoConfig.ConfigName)
-                );
+            builder.Services.AddScoped<IAccessoryRepository, AccessoryRepository>();
+            builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddScoped<IDiamondRepository, DiamondRepository>();
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
+            builder.Services.AddScoped<IMerchantRepository, MerchantRepository>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IRankRepository, RankRepository>();
+            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+
 
             var app = builder.Build();
 

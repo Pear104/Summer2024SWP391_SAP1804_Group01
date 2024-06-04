@@ -50,10 +50,10 @@ namespace backend.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("with-paging")]
-        [ProducesResponseType(typeof(BaseResultWIthData<BasePagingData<MerchantDtos>>), 200)]
+        [ProducesResponseType(typeof(BaseResultWithData<BasePagingData<MerchantDtos>>), 200)]
         public IActionResult GetPaging([FromQuery] BasePagingQuery query)
         {
-            var response = new BaseResultWIthData<BasePagingData<MerchantDtos>>();
+            var response = new BaseResultWithData<BasePagingData<MerchantDtos>>();
             return Ok(response);
         }
 
@@ -64,11 +64,11 @@ namespace backend.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("{id}")]
-        [ProducesResponseType(typeof(BaseResultWIthData<MerchantDtos>), 200)]
+        [ProducesResponseType(typeof(BaseResultWithData<MerchantDtos>), 200)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public IActionResult GetOne([FromRoute] string id)
         {
-            var response = new BaseResultWIthData<MerchantDtos>();
+            var response = new BaseResultWithData<MerchantDtos>();
             return Ok(response);
         }
 
@@ -89,7 +89,7 @@ namespace backend.Controllers
         ///     
         /// </remarks>
         [HttpPost]
-        [ProducesResponseType(typeof(BaseResultWIthData<MerchantDtos>), 200)]
+        [ProducesResponseType(typeof(BaseResultWithData<MerchantDtos>), 200)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create([FromBody] CreateMerchantDto request)
         {
