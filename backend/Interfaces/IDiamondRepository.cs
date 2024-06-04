@@ -10,6 +10,7 @@ namespace backend.Interfaces
     {
         Task<DiamondResult> GetAllDiamondsAsync(DiamondQuery query);
         Task<Diamond?> GetDiamondByIdAsync(long id);
+        Task<Diamond?> GetDiamondByCertificateNumberAsync (long CertificateNumber);
         Task<Diamond?> CreateDiamondAsync(CreateDiamondDTO diamondDTO);
         Task<Diamond?> UpdateDiamondAsync(long id, UpdateDiamondDTO diamondDTO);
         Task<Diamond?> DeleteDiamondAsync(long id);

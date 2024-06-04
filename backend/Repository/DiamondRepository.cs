@@ -176,6 +176,13 @@ namespace backend.Repository
                 .Diamonds.Include(x => x.Shape)
                 .FirstOrDefaultAsync(x => x.DiamondId == id);
         }
+        
+        public async Task<Diamond?> GetDiamondByCertificateNumberAsync(long CertificateNumber)
+        {
+            return await _context
+                .Diamonds.Include(x => x.Shape)
+                .FirstOrDefaultAsync(x => x.CertificateNumber == CertificateNumber);
+        }
 
         public async Task<Diamond?> UpdateDiamondAsync(long id, UpdateDiamondDTO diamondDto)
         {

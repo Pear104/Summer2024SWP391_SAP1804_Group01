@@ -3,6 +3,7 @@ import { Button, Dropdown, Form, Input, Menu, Pagination } from "antd";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { GET } from "../../../utils/request";
+import DiamondRow from "./DiamondRow";
 // interface Diamond {
 //   diamondId: number;
 //   imageUrl: string;
@@ -21,6 +22,9 @@ export default function ProductsManage() {
   const [statusText, setStatusText] = useState("Status");
   const [productTypeText, setProductTypeText] = useState("Product Type");
   const [data, setData] = useState<any>([]);
+
+  // search item
+  const [searchTerm, setSearchTerm] = useState("");
   // selected diamonds
   const [selectedDiamonds, setSelectedDiamonds] = useState<number[]>([]);
   // select all
@@ -34,6 +38,21 @@ export default function ProductsManage() {
     // Handle your action here...
     console.log(action);
   };
+  useEffect(() => {
+    (async () => {
+      let data;
+      if (searchTerm) {
+        // Fetch data based on searchTerm
+        data = await GET(`/api/Diamonds/cert/${searchTerm}`);
+      } else {
+        // Fetch original data when searchTerm is empty
+        data = await GET(
+          `/api/Diamonds?PageNumber=${currentPage}&PageSize=${pageSize}`
+        );
+      }
+      setData(data);
+    })();
+  }, [searchTerm, currentPage, pageSize]);
 
   useEffect(() => {
     (async () => {
@@ -139,6 +158,8 @@ export default function ProductsManage() {
                     placeholder="Search"
                     id="keyword"
                     className="border p-2 rounded-md w-full"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </Form.Item>
                 <Form.Item>
@@ -275,7 +296,7 @@ export default function ProductsManage() {
                         </td>
                       </tr>
                     )}
-                    {data.diamonds &&
+                    {/* {data.diamonds &&
                       data.diamonds.map((diamond: any) => {
                         return (
                           <tr key={diamond.diamondId}>
@@ -331,7 +352,7 @@ export default function ProductsManage() {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm text-gray-500">
-                                {/* ${diamond.price} */} Price
+                                ${diamond.price}
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -358,7 +379,26 @@ export default function ProductsManage() {
                             </td>
                           </tr>
                         );
-                      })}
+                      })} */}
+                    {data && data.diamonds ? (
+                      data.diamonds.map((diamond: any) => (
+                        <DiamondRow
+                          key={diamond.diamondId}
+                          diamond={diamond}
+                          selectedDiamonds={selectedDiamonds}
+                          setSelectedDiamonds={setSelectedDiamonds}
+                        />
+                      ))
+                    ) : data ? (
+                      <DiamondRow
+                        key={data.diamondId}
+                        diamond={data}
+                        selectedDiamonds={selectedDiamonds}
+                        setSelectedDiamonds={setSelectedDiamonds}
+                      />
+                    ) : (
+                      <p>There is no diamond</p>
+                    )}
                   </tbody>
                 </table>
                 <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
@@ -367,7 +407,10 @@ export default function ProductsManage() {
                     current={currentPage}
                     total={totalPages * pageSize}
                     pageSize={pageSize}
-                    onChange={(page) => setCurrentPage(page)}
+                    onChange={(page) => {
+                      setCurrentPage(page);
+                      setSearchTerm(""); // Clear the search term when the page changes
+                    }}
                     showSizeChanger={true}
                     onShowSizeChange={(current, size) => setPageSize(size)}
                   />
