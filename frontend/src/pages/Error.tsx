@@ -9,7 +9,8 @@ export default function Error() {
         <div
           className="aspect-square bg-contain bg-no-repeat w-[200px]"
           style={{
-            backgroundImage: "url(/images/face-without-mouth_1f636.png)",
+            // backgroundImage: "url(/images/face-without-mouth_1f636.png)",
+             backgroundImage: "url(/images/error.png)",
           }}
         ></div>
         <div className="font-bold text-3xl">Oops!</div>
