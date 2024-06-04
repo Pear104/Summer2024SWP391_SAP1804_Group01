@@ -4,10 +4,12 @@ export default function DiamondRow({
   diamond,
   selectedDiamonds,
   setSelectedDiamonds,
+  price,
 }: {
   diamond: any;
   selectedDiamonds: number[];
   setSelectedDiamonds: React.Dispatch<React.SetStateAction<number[]>>;
+  price: any;
 }) {
   if (!diamond) {
     return <></>;
@@ -60,7 +62,7 @@ export default function DiamondRow({
           </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          <div className="text-sm text-gray-500">${diamond.price}</div>
+          <div className="text-sm text-gray-500">{price}</div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
           {diamond.shape}

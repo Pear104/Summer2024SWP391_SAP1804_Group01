@@ -7,9 +7,10 @@ export default function Error() {
     <div className="w-screen h-screen flex justify-center items-center">
       <div className="-translate-y-10 flex flex-col gap-4 items-center">
         <div
-          className="aspect-square bg-contain bg-no-repeat w-[200px]"
+          className="aspect-square bg-contain bg-no-repeat w-[400px]"
           style={{
-            backgroundImage: "url(/images/face-without-mouth_1f636.png)",
+            // backgroundImage: "url(/images/face-without-mouth_1f636.png)",
+             backgroundImage: "url(/images/error.png)",
           }}
         ></div>
         <div className="font-bold text-3xl">Oops!</div>
