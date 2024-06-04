@@ -13,6 +13,14 @@ namespace backend.Mappers
                 OrderStatus = (OrderStatus)Enum.Parse(typeof(OrderStatus), order.OrderStatus),
             };
         }
+        
+        public static Order ToOrderFromCreate(this UpdateOrderDTO order)
+        {
+            return new Order
+            {
+                OrderStatus = (OrderStatus)Enum.Parse(typeof(OrderStatus), order.OrderStatus),
+            };
+        }
 
         public static OrderDTO ToOrderDTO(this Order order)
         {
