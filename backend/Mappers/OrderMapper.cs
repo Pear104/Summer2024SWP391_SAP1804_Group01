@@ -25,8 +25,10 @@ namespace backend.Mappers
                 CreatedAt = order.CreatedAt,
                 CustomerId = order.CustomerId,
                 SaleStaffId = order.SaleStaffId,
+                SaleStaffName = order.SaleStaff.Name,
                 DeliveryStaffId = order.DeliveryStaffId,
-                PromotionId = order.PromotionId,
+                DeliveryStaffName = order.DeliveryStaff.Name,
+                Promotion = order.Promotion,
                 OrderDetails = order.OrderDetails.Select(o => o.ToOrderDetailDTO()).ToList()
             };
         }

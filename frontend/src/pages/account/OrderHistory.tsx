@@ -5,8 +5,7 @@ const OrderList = ({ order }: { order: any }) => {
   return (
     <div className="border-b border-gray-300 p-4 mb-6">
       <div className="flex items-center justify-between mb-4">
-        <div className="font-semibold text-lg">{order.storeName}</div>
-        <div className="text-green-600">{order.status}</div>
+        <div className="text-green-600">{order.z}</div>
       </div>
       {order.orderDetails.map((detail: any, index: number) => (
         <div key={index} className="flex mb-4">
@@ -28,19 +27,14 @@ const OrderList = ({ order }: { order: any }) => {
             <div className="text-lg font-serif">{detail.accessory?.name}</div>
             <div className="text-gray-800 my-4">
               Diamond price:{" "}
-              {detail.diamondPrice.unitPrice *
-                detail.diamond.carat *
-                100 *
-                order.priceRate.percent}{" "}
-              $
+              {detail.diamondPrice.unitPrice * detail.diamond.carat * 100} $
             </div>
             {detail.accessory && (
               <div className="text-gray-800 my-4">
                 Accessory price:{" "}
-                {(detail.accessory.materialWeight *
+                {detail.accessory.materialWeight *
                   detail.materialPrice.unitPrice +
-                  detail.accessory.accessoryType.processingPrice) *
-                  order.priceRate.percent}{" "}
+                  detail.accessory.accessoryType.processingPrice}{" "}
                 $
               </div>
             )}
@@ -82,7 +76,7 @@ export default function OrderHistory() {
         </div>
       ) : (
         <div className="w-full">
-          {orderHistories.map((order: any) => (
+          {orderHistories.orders.map((order: any) => (
             <OrderList key={order.orderId} order={order} />
           ))}
         </div>

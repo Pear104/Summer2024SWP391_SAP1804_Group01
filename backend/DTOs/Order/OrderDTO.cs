@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using backend.Models;
 
 namespace backend.DTOs
 {
     public class OrderDTO
     {
         public long OrderId { get; set; }
+        public List<OrderDetailDTO>? OrderDetails { get; set; }
         public double TotalPrice { get; set; }
         public float TotalDiscountPercent { get; set; }
         public string OrderStatus { get; set; } = string.Empty;
@@ -15,9 +17,10 @@ namespace backend.DTOs
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public long CustomerId { get; set; }
         public long SaleStaffId { get; set; }
+        public string SaleStaffName { get; set; } = string.Empty;
         public long DeliveryStaffId { get; set; }
-        public long? PromotionId { get; set; }
-        public List<OrderDetailDTO> OrderDetails { get; set; }  = new List<OrderDetailDTO>();
+        public string DeliveryStaffName { get; set; } = string.Empty;
+        public Promotion? Promotion { get; set; }
         // public List<TransactionDTO> Transactions { get; set; }
         // public List<FeedbackDTO> Feedbacks { get; set; }
     }

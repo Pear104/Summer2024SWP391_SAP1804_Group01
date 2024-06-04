@@ -9,7 +9,7 @@ namespace backend.Mappers
 {
     public static class DiamondPriceMapper
     {
-        public static DiamondPriceDTO ToDiamontPriceDTO(this DiamondPrice diamondPriceDto)
+        public static DiamondPriceDTO ToDiamondPriceDTO(this DiamondPrice diamondPriceDto)
         {
             return new DiamondPriceDTO
             {

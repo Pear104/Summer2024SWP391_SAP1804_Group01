@@ -7,8 +7,9 @@ using backend.DTOs;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
-using backend.Models;
 using NuGet.Protocol;
+using backend.DTOs.Order;
+using backend.Mappers;
 
 namespace backend.Repository
 {
@@ -27,30 +28,34 @@ namespace backend.Repository
         }
 
 
-        public async Task<IEnumerable<OrderDTO>?> GetAllOrdersAsync() 
+        public async Task<OrderResult?> GetAllOrdersAsync() 
         {
-            var orderDTOs = await _context.
+            var orderDTOs = await _context.Orders
             .Include(x => x.OrderDetails)
-            .ThenInclude(x => x.Diamond)
+                .ThenInclude(x => x.Diamond)
             .Include(x => x.OrderDetails)
-            .ThenInclude(x => x.Accessory)
-            .ThenInclude(x => x.AccessoryType)
+                .ThenInclude(x => x.Accessory)
+                    .ThenInclude(x => x.AccessoryType)
             .Include(x => x.OrderDetails)
-            .ThenInclude(x => x.Accessory)
-            .ThenInclude(x => x.AccessoryImages)
-            .Include(x => x.PriceRate)
-            .Include(x => x.Customer)
+                .ThenInclude(x => x.Accessory)
+                    .ThenInclude(x => x.AccessoryImages)
+            .Include(x => x.OrderDetails)
+                .ThenInclude(x => x.MaterialPrice)
+            .Include(x => x.OrderDetails)
+                .ThenInclude(x => x.DiamondPrice)
             .Include(x => x.SaleStaff)
             .Include(x => x.DeliveryStaff)
-            .Include(x => x.Promotion)
-            .Include(x => x.OrderDetails)
-            .ThenInclude(x => x.DiamondPrice)
-            .Include(x => x.OrderDetails)
-            .ThenInclude(x => x.MaterialPrice)
+            .Select(x => x.ToOrderDTO())
             .ToListAsync();
-    
             
-            return orders;
+            return new OrderResult
+            {
+                Orders = orderDTOs,
+                TotalCount = 1,
+                PageSize = 1,
+                CurrentPage = 1,
+                TotalPages = 1
+            };
         }
 
         public Task<Order> GetOrderByIdAsync(long id)
