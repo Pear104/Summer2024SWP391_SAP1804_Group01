@@ -23,7 +23,7 @@ export default function DiamondRow({
               <input
                 type="checkbox"
                 value="0"
-                className="form-checkbox"
+                className="form-checkbox w-5 h-5"
                 checked={selectedDiamonds.includes(diamond.diamondId)}
                 onChange={(e) => {
                   if (e.target.checked) {

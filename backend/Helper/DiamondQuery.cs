@@ -14,8 +14,11 @@ namespace backend.Helper
         public string? MinColor { get; set; } = null;
         public string? MaxColor { get; set; } = null;
         public string? Shape { get; set; }
+        public string? Color { get; set; }
+        public string? Clarity { get; set; }
         public string? SortBy { get; set; }
         public bool IsDescending { get; set; }
+        public bool? IsAvailability{ get; set; } = null;
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 20;
     }

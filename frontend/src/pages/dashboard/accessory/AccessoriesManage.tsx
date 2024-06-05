@@ -330,29 +330,31 @@ export default function AccessoriesManage() {
                 </table>
                 <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
                   {accessories?.data &&
-                  accessories?.data.accessories.length != 0 ? (
-                    <Pagination
-                      showTotal={(total, range) =>
-                        `${range[0]}-${range[1]} of ${total} items`
-                      }
-                      className="text-center"
-                      current={accessories.data.currentPage}
-                      total={accessories.data.totalCount}
-                      pageSize={accessories.data.pageSize}
-                      onChange={(page) => {
-                        setSearchTerm("");
-                        params.set("PageNumber", page.toString());
-                        navigate(url.pathname + "?" + params.toString());
-                        setQueryUrl("/api/Accessories?" + params.toString());
-                      }}
-                      showSizeChanger={true}
-                      // onShowSizeChange={(current, size) => setPageSize(size)}
-                    />
-                  ) : (
-                    <div className="text-center text-2xl">
-                      No Accessories Found.
-                    </div>
-                  )}
+                    accessories?.data.accessories.length != 0 && (
+                      <Pagination
+                        showTotal={(total, range) =>
+                          `${range[0]}-${range[1]} of ${total} items`
+                        }
+                        className="text-center"
+                        current={accessories.data.currentPage}
+                        total={accessories.data.totalCount}
+                        pageSize={accessories.data.pageSize}
+                        onChange={(page) => {
+                          setSearchTerm("");
+                          params.set("PageNumber", page.toString());
+                          navigate(url.pathname + "?" + params.toString());
+                          setQueryUrl("/api/Accessories?" + params.toString());
+                        }}
+                        showSizeChanger={true}
+                        // onShowSizeChange={(current, size) => setPageSize(size)}
+                      />
+                    )}
+                  {!accessories.isLoading &&
+                    accessories.data.accessories.length == 0 && (
+                      <div className="text-center text-2xl">
+                        No Accessories Found.
+                      </div>
+                    )}
                 </div>
               </div>
             </div>

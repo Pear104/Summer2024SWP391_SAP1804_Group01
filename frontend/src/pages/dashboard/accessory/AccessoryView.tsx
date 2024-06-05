@@ -223,7 +223,7 @@ export default function AccessoryView() {
                 className="flex items-center px-4 py-5 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
                 htmlType="submit"
               >
-                CREATE
+                {accessory?.accessoryId ? "UPDATE" : "CREATE"}
               </Button>
             </div>
           </Form.Item>

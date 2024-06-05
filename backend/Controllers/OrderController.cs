@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.DTOs;
+using backend.Helper;
 using backend.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,10 +19,10 @@ namespace backend.Controllers
             _orderRepo = orderRepo;
         }
         [HttpGet]
-        public async Task<ActionResult> GetOrders()
+        public async Task<ActionResult> GetOrders([FromQuery] OrderQuery query)
         {
-            var orderDTOs = await _orderRepo.GetAllOrdersAsync();
-            return Ok(orderDTOs);
+            var orderResult = await _orderRepo.GetAllOrdersAsync(query);
+            return Ok(orderResult);
         }
         [HttpGet("{id}")]
         public async Task<ActionResult> GetOrder(long id)
