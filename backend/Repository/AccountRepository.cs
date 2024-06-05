@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using backend.Data;
 using backend.DTOs.Account;
 using backend.Enums;
@@ -5,7 +6,7 @@ using backend.Helper;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+
 namespace backend.Repository
 {
     public class AccountRepository : IAccountRepository
@@ -42,7 +43,6 @@ namespace backend.Repository
 
         public async Task<Account?> UpdateAccountAsync(long id, UpdateAccountDTO accountDto)
         {
-            Console.WriteLine(id);
             var existedAccount = await _context.Accounts.FindAsync(id);
             if (existedAccount == null)
             {
@@ -62,15 +62,15 @@ namespace backend.Repository
         public async Task<IEnumerable<Account>> GetAllAccountsAsync(AccountQuery query)
         {
             var accountsQuery = _context.Accounts.AsQueryable();
-            if(!string.IsNullOrEmpty(query.Role))
+            if (!string.IsNullOrEmpty(query.Role))
             {
                 var role = Enum.Parse<Role>(query.Role);
                 accountsQuery = accountsQuery.Where(x => x.Role == role);
             }
             return await accountsQuery
-            .Skip((query.PageNumber - 1) * query.PageSize)
-            .Take(query.PageSize)
-            .ToListAsync();
+                .Skip((query.PageNumber - 1) * query.PageSize)
+                .Take(query.PageSize)
+                .ToListAsync();
         }
 
         public async Task<Account?> GetAccountByEmailAsync(string email)

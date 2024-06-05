@@ -13,7 +13,7 @@ namespace backend.Mappers
                 DiamondId = diamond.DiamondId,
                 Lab = diamond.Lab,
                 CertificateNumber = diamond.CertificateNumber,
-                CertificateUrl = diamond.Lab,
+                CertificateUrl = diamond.CertificateUrl,
                 ImageUrl = diamond.ImageUrl,
                 Carat = diamond.Carat,
                 Cut = diamond.Cut,
@@ -33,7 +33,7 @@ namespace backend.Mappers
             {
                 Lab = diamondDto.Lab,
                 CertificateNumber = diamondDto.CertificateNumber,
-                CertificateUrl = diamondDto.Lab,
+                CertificateUrl = diamondDto.CertificateUrl,
                 ImageUrl = diamondDto.ImageUrl,
                 Carat = diamondDto.Carat,
                 Cut = diamondDto.Cut,

@@ -15,21 +15,17 @@ namespace backend.Repository
     public class AccessoryRepository : IAccessoryRepository
     {
         private readonly ApplicationDbContext _context;
+
         public AccessoryRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<Accessory> CreateAccessoryAsync(Accessory accessory)
-        {
-            await _context.Accessories.AddAsync(accessory);
-            await _context.SaveChangesAsync();
-            return accessory;
-        }
-
         public async Task<Accessory?> DeleteAccessoryAsync(long id)
         {
-            var deletedModel = await _context.Accessories.FirstOrDefaultAsync(x => x.AccessoryId == id);
+            var deletedModel = await _context.Accessories.FirstOrDefaultAsync(x =>
+                x.AccessoryId == id
+            );
             if (deletedModel != null)
             {
                 _context.Accessories.Remove(deletedModel);
@@ -41,29 +37,36 @@ namespace backend.Repository
 
         public async Task<AccessoryResult> GetAllAccessoriesAsync(AccessoryQuery query)
         {
-            var accessoriesQuery = _context.Accessories
-                .Include(x => x.Shape)
+            var accessoriesQuery = _context
+                .Accessories.Include(x => x.Shape)
                 .Include(x => x.AccessoryType)
                 .Include(x => x.AccessoryImages)
                 .AsQueryable();
-            if(query.Karat != 0)
+            if (query.Karat != 0)
             {
                 accessoriesQuery = accessoriesQuery.Where(x => x.Karat == query.Karat);
             }
 
-            if(!string.IsNullOrEmpty(query.NameType))
+            if (!string.IsNullOrEmpty(query.NameType))
             {
-                accessoriesQuery = accessoriesQuery.Where(x => x.AccessoryType.Name.ToLower() == query.NameType.ToLower());
+                accessoriesQuery = accessoriesQuery.Where(x =>
+                    x.AccessoryType.Name.ToLower() == query.NameType.ToLower()
+                );
             }
 
-            if(!string.IsNullOrEmpty(query.ShapeType))
+            if (!string.IsNullOrEmpty(query.ShapeType))
             {
-                accessoriesQuery = accessoriesQuery.Where(x => x.Shape.Name.ToLower() == query.ShapeType.ToLower());
+                accessoriesQuery = accessoriesQuery.Where(x =>
+                    x.Shape.Name.ToLower() == query.ShapeType.ToLower()
+                );
             }
 
-            if(query.MinMaterialWeight != 0 || query.MaxMaterialWeight != 100)
+            if (query.MinMaterialWeight != 0 || query.MaxMaterialWeight != 100)
             {
-                accessoriesQuery = accessoriesQuery.Where(x => x.MaterialWeight >= query.MinMaterialWeight && x.MaterialWeight <= query.MaxMaterialWeight);
+                accessoriesQuery = accessoriesQuery.Where(x =>
+                    x.MaterialWeight >= query.MinMaterialWeight
+                    && x.MaterialWeight <= query.MaxMaterialWeight
+                );
             }
 
             var totalCount = await accessoriesQuery.CountAsync();
@@ -73,36 +76,110 @@ namespace backend.Repository
                 .Take(query.PageSize)
                 .Select(x => x.ToAccessoryDTO())
                 .ToListAsync();
-                return new AccessoryResult
-                {
-                    Accessories = accessories,
-                    TotalPages = totalPages,
-                    TotalCount = totalCount,
-                    PageSize = query.PageSize,
-                    CurrentPage = query.PageNumber
-                };
+            return new AccessoryResult
+            {
+                Accessories = accessories,
+                TotalPages = totalPages,
+                TotalCount = totalCount,
+                PageSize = query.PageSize,
+                CurrentPage = query.PageNumber
+            };
         }
 
         public async Task<Accessory?> GetAccessoryByIdAsync(long id)
         {
-            return await _context.Accessories
-                .Include(x => x.Shape)
+            return await _context
+                .Accessories.Include(x => x.Shape)
                 .Include(x => x.AccessoryType)
                 .Include(x => x.AccessoryImages)
                 .FirstOrDefaultAsync(x => x.AccessoryId == id);
         }
 
-        public async Task<Accessory?> UpdateAccessoryAsync(long id, Accessory accessory)
+        public async Task<Accessory?> UpdateAccessoryAsync(long id, UpdateAccessoryDTO accessoryDto)
         {
-            var existingAccessory = await _context.Accessories.FindAsync(id);
+            var existingAccessory = await _context
+                .Accessories.Include(x => x.AccessoryImages)
+                .FirstOrDefaultAsync(x => x.AccessoryId == id);
             if (existingAccessory == null)
             {
                 return null;
             }
-            existingAccessory = accessory;
+            existingAccessory.Name = accessoryDto.Name;
+            existingAccessory.Karat = accessoryDto.Karat;
+            existingAccessory.MaterialWeight = accessoryDto.MaterialWeight;
+            if (accessoryDto.Shape != existingAccessory.Shape.Name)
+            {
+                var shape = await _context.Shapes.FirstOrDefaultAsync(x =>
+                    x.Name == accessoryDto.Shape
+                );
+                if (shape == null)
+                {
+                    System.Console.WriteLine("Shape not found");
+                    return null;
+                }
+                existingAccessory.Shape = shape;
+            }
+
+            if (accessoryDto.AccessoryType != existingAccessory.AccessoryType.Name)
+            {
+                var accessoryType = await _context.AccessoryTypes.FirstOrDefaultAsync(x =>
+                    x.Name == accessoryDto.AccessoryType
+                );
+                if (accessoryType == null)
+                {
+                    System.Console.WriteLine("Type not found");
+                    return null;
+                }
+                existingAccessory.AccessoryType = accessoryType;
+            }
+            System.Console.WriteLine("Xoa hinh cu ne");
+            foreach (var image in existingAccessory.AccessoryImages)
+            {
+                System.Console.WriteLine("xoa: " + image.Url);
+                _context.AccessoryImages.Remove(image);
+            }
+            System.Console.WriteLine("Them hinh moi ne");
+            foreach (var image in accessoryDto.AccessoryImages)
+            {
+                var accessoryImage = new AccessoryImage()
+                {
+                    Url = image,
+                    Accessory = existingAccessory
+                };
+                System.Console.WriteLine("them: " + image);
+                await _context.AccessoryImages.AddAsync(accessoryImage);
+            }
+
+            _context.Entry(existingAccessory).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return existingAccessory;
         }
 
+        public async Task<Accessory?> CreateAccessoryAsync(CreateAccessoryDTO accessoryDto)
+        {
+            var shape = await _context.Shapes.FirstOrDefaultAsync(x =>
+                x.Name == accessoryDto.Shape
+            );
+            var accessoryType = await _context.AccessoryTypes.FirstOrDefaultAsync(x =>
+                x.Name == accessoryDto.AccessoryType
+            );
+            if (shape == null || accessoryType == null)
+            {
+                return null;
+            }
+            var accessory = accessoryDto.ToAccessoryFromCreate();
+            accessory.Shape = shape;
+            accessory.AccessoryType = accessoryType;
+            await _context.Accessories.AddAsync(accessory);
+
+            foreach (var image in accessoryDto.AccessoryImages)
+            {
+                var accessoryImage = new AccessoryImage() { Url = image, Accessory = accessory };
+                await _context.AccessoryImages.AddAsync(accessoryImage);
+            }
+
+            await _context.SaveChangesAsync();
+            return accessory;
+        }
     }
 }

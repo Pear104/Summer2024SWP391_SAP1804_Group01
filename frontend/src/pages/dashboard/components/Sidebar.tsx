@@ -1,4 +1,4 @@
-import { Gem } from "lucide-react";
+import { Gem, Sparkles } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import classNames from "classnames";
 import {
@@ -13,6 +13,7 @@ import {
   HiCurrencyDollar,
 } from "react-icons/hi";
 import { BsTextParagraph } from "react-icons/bs";
+import RingIcon from "../../product/components/RingIcon";
 const linkClasses =
   "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline active:bg-neutral-600 round-sm text-base";
 
@@ -29,6 +30,12 @@ export default function Sidebar() {
       label: "Diamonds",
       path: "/admin/diamonds",
       icon: <HiOutlineCube />,
+    },
+    {
+      key: "accessories",
+      label: "Accessories",
+      path: "/admin/accessories",
+      icon: <Sparkles size={20} />,
     },
     {
       key: "orders",

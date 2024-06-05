@@ -19,7 +19,19 @@ namespace backend.Mappers
                 Name = accessory.Name,
                 Shape = accessory.Shape.ToShapeDTO(),
                 AccessoryType = accessory.AccessoryType.ToAccessoryTypeDTO(),
-                AccessoryImages = accessory.AccessoryImages.Select(x => x.ToAccessoryImageDTO()).ToList(),
+                AccessoryImages = accessory
+                    .AccessoryImages.Select(x => x.ToAccessoryImageDTO())
+                    .ToList(),
+            };
+        }
+
+        public static Accessory ToAccessoryFromCreate(this CreateAccessoryDTO accessoryDto)
+        {
+            return new Accessory
+            {
+                Karat = accessoryDto.Karat,
+                MaterialWeight = accessoryDto.MaterialWeight,
+                Name = accessoryDto.Name,
             };
         }
     }

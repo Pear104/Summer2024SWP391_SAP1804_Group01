@@ -57,7 +57,10 @@ namespace backend.Repository
 
         public async Task<DiamondResult> GetAllDiamondsAsync(DiamondQuery query)
         {
-            var diamondsQuery = _context.Diamonds.Include(x => x.Shape).AsQueryable();
+            var diamondsQuery = _context
+                .Diamonds.Include(x => x.Shape)
+                .Where(x => x.Availability == true)
+                .AsQueryable();
 
             // Sorting
             if (!string.IsNullOrEmpty(query.SortBy))
@@ -176,7 +179,7 @@ namespace backend.Repository
                 .Diamonds.Include(x => x.Shape)
                 .FirstOrDefaultAsync(x => x.DiamondId == id);
         }
-        
+
         public async Task<Diamond?> GetDiamondByCertificateNumberAsync(long CertificateNumber)
         {
             return await _context

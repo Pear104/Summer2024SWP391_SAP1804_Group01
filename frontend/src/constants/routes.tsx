@@ -27,6 +27,8 @@ import EditAccount from "../pages/account/EditAccount";
 import CompleteProduct from "../pages/product/complete/CompleteProduct";
 import BlogsManage from "../pages/dashboard/blog/BlogsManage";
 import NewBlog from "../pages/dashboard/blog/NewBlog";
+import AccessoriesManage from "../pages/dashboard/accessory/AccessoriesManage";
+import AccessoryView from "../pages/dashboard/accessory/AccessoryView";
 
 const routes = [
   {
@@ -46,12 +48,39 @@ const routes = [
             path: "/admin/diamonds",
           },
           {
-            element: <BlogsManage />,
             path: "/admin/blogs",
+            children: [
+              {
+                index: true,
+                element: <BlogsManage />,
+              },
+              {
+                element: <NewBlog />,
+                path: "/admin/blogs/new",
+              },
+            ],
           },
           {
-            element: <NewBlog />,
-            path: "/admin/blogs/new",
+            path: "/admin/accessories",
+            children: [
+              {
+                index: true,
+                element: <AccessoriesManage />,
+              },
+              {
+                path: "/admin/accessories/detail",
+                children: [
+                  {
+                    index: true,
+                    element: <AccessoryView />,
+                  },
+                  {
+                    path: "/admin/accessories/detail/:accessoryId",
+                    element: <AccessoryView />,
+                  },
+                ],
+              },
+            ],
           },
         ],
       },

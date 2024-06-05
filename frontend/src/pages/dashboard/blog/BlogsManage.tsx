@@ -78,7 +78,7 @@ export default function BlogsManage() {
   return (
     <div className="p-4">
       {/* header */}
-      <div className="flex justify-between items-center mt-6 mx-auto mb-8">
+      <div className="flex justify-between items-center mx-auto mb-8">
         <div className="flex justify-start space-x-1 items-center">
           <div className="self-center">
             <h1 className="text-2xl"> Blogs</h1>

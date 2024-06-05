@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
 import { GET } from "../../../utils/request";
 import { ExternalLink } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Image } from "antd";
+import { Image, Skeleton } from "antd";
 import { useCartStore } from "../../../store/cartStore";
 import scrollTo from "../../../utils/scroll";
 import { useQueries } from "@tanstack/react-query";
@@ -26,10 +25,19 @@ export default function DiamondDetail() {
   });
 
   const navigate = useNavigate();
+  const setCart = useCartStore((state) => state.setCart);
   const setCurrentDiamond = useCartStore((state) => state.setCurrentDiamond);
   return (
     <div className="flex justify-center mb-20">
-      {diamond.data && (
+      {(diamond?.isLoading || diamondPrice?.isLoading) && (
+        <Skeleton
+          active
+          paragraph={{
+            rows: 20,
+          }}
+        />
+      )}
+      {diamond?.data && diamondPrice?.data && (
         <div className="w-[1200px] grid grid-cols-6 gap-10">
           {/* <div
           className="col-span-4 place-self-center aspect-square bg-cover bg-top bg-no-repeat w-4/5 border "
@@ -83,36 +91,42 @@ export default function DiamondDetail() {
                 <div>FLUORESCENCE</div>
               </div>
               <div className="flex flex-col gap-2">
-                <div>{diamond?.data.lab}</div>
+                <div>{diamond.data.lab}</div>
                 <a
                   className="text-blue-500 flex"
-                  target="blank"
-                  href={diamond?.data.certificateUrl}
+                  target="_blank"
+                  href={diamond.data.certificateUrl}
                 >
-                  {diamond?.data.certificateNumber}
+                  {diamond.data.certificateNumber}
                   <ExternalLink size={12} />
                 </a>
-                <div>{diamond?.data.shape}</div>
-                <div>{diamond?.data.carat}</div>
-                <div>{diamond?.data.cut}</div>
-                <div>{diamond?.data.color}</div>
-                <div>{diamond?.data.clarity}</div>
-                <div>{diamond?.data.polish}</div>
-                <div>{diamond?.data.symmetry}</div>
-                <div>{diamond?.data.fluorescence}</div>
+                <div>{diamond.data.shape}</div>
+                <div>{diamond.data.carat}</div>
+                <div>{diamond.data.cut}</div>
+                <div>{diamond.data.color}</div>
+                <div>{diamond.data.clarity}</div>
+                <div>{diamond.data.polish}</div>
+                <div>{diamond.data.symmetry}</div>
+                <div>{diamond.data.fluorescence}</div>
               </div>
             </div>
             <div className="flex flex-col gap-4 mt-8">
               <div
-                className="text-xl w-full flex justify-center px-4 py-3 bg-primary text-white hover:scale-95 transition-all"
+                className="tracking-wider text-xl w-full flex justify-center px-4 py-3 bg-primary text-white hover:scale-95 transition-all"
                 onClick={() => {
                   navigate("/product/accessory");
-                  setCurrentDiamond(diamond?.data.diamondId);
+                  setCurrentDiamond(diamond.data.diamondId);
                 }}
               >
                 ADD TO ACCESSORY
               </div>
-              <div className="text-xl w-full flex justify-center border border-black px-4 py-3 bg-white hover:scale-95 transition-all">
+              <div
+                className="tracking-widest text-xl w-full flex justify-center border border-black px-4 py-3 bg-white hover:scale-95 transition-all"
+                onClick={() => {
+                  setCart(diamond.data.diamondId);
+                  navigate("/cart");
+                }}
+              >
                 BUY LOOSE
               </div>
             </div>

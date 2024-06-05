@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-
 const AccessoryItem = ({
   accessory,
   price,
@@ -8,9 +6,9 @@ const AccessoryItem = ({
   price: any;
 }) => {
   return (
-    <Link
-      className="items-center w-full justify-around hover:shadow-xl p-2 m-2 duration-150"
-      to={`/product/accessory/detail/${accessory.accessoryId}`}
+    <a
+      className="items-center w-full justify-around hover:shadow-xl py-2 px-4 m-2 duration-150"
+      href={`/product/accessory/detail/${accessory.accessoryId}`}
     >
       <div
         className="my-2 aspect-square bg-cover bg-center bg-no-repeat w-full"
@@ -26,7 +24,7 @@ const AccessoryItem = ({
         {/* luc nao co gia thi thay karat = price*/}
         <div className="w-full flex ">{price}</div>
       </div>
-    </Link>
+    </a>
   );
 };
 
