@@ -62,6 +62,7 @@ namespace backend.Repository
             if (!string.IsNullOrEmpty(query.SortBy))
             {
                 bool isDescending = query.IsDescending;
+                
                 System.Console.WriteLine(query.SortBy.ToLower());
                 System.Console.WriteLine(query.IsDescending);
                 diamondsQuery = query.SortBy.ToLower() switch
@@ -93,7 +94,13 @@ namespace backend.Repository
                     _ => diamondsQuery.OrderBy(x => x.Carat),
                 };
             }
+            
+            bool? IsAvailability = query.IsAvailability;
 
+            if (IsAvailability.HasValue)
+            {
+                diamondsQuery = diamondsQuery.Where(d => d.Availability == IsAvailability.Value);
+            }
             // Filtering
             if (query.MinCarat != null)
             {

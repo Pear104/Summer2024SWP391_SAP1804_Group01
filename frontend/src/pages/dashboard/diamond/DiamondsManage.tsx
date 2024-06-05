@@ -1,4 +1,4 @@
-import { Form, Input, Pagination } from "antd";
+import { Form, Input, Pagination, Skeleton } from "antd";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { GET } from "../../../utils/request";
@@ -7,19 +7,15 @@ import { useQueries } from "@tanstack/react-query";
 import { useSearchStore } from "../../../store/searchStore";
 import { getDiamondPrice } from "../../../utils/getPrice";
 import { ProductTypeMenu, StatusMenu } from "./DiamondsManageHeader";
+import DiamondColumnHeader from "./DiamondColumnHeader";
 
 export default function ProductsManage() {
   const location = useLocation();
-  const navigate = useNavigate();
   const [statusText, setStatusText] = useState("Status");
   const [productTypeText, setProductTypeText] = useState("Product Type");
-  const [data, setData] = useState<any>([]);
   // sort item
-  const [sortConfig, setSortConfig] = useState<{
-    field: string;
-    direction: "asc" | "desc" | "none";
-    isNumber: boolean;
-  }>({ field: "", direction: "none", isNumber: false });
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.searchParams);
 
   const columnHeaders = [
     "Thumbnail",
@@ -32,57 +28,20 @@ export default function ProductsManage() {
     "Cut",
     "Status",
   ];
-  // search and filter
-  const handleStatusClick = (status: string, statusText: string) => {
-    setStatusText(statusText);
-    const params = new URLSearchParams(location.search);
-    params.set("status", status);
-    navigate({ search: params.toString() });
-  };
-
-  const handleProductTypeClick = (type: string, typeText: string) => {
-    setProductTypeText(typeText);
-    const params = new URLSearchParams(location.search);
-    params.set("type", type);
-    navigate({ search: params.toString() });
-  };
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const status = params.get("status");
-
-    const type = params.get("type");
-    if (status) {
-      setStatusText(status === "1" ? "Enable" : "Disable");
-    }
-    if (type) {
-      setProductTypeText(type === "1" ? "Type 1" : "Type 2");
-    }
-  }, [location.search]);
-
-  const sortableColumns = [
-    "price",
-    "shape",
-    "carat",
-    "color",
-    "clarity",
-    "cut",
-  ];
-  // search item
-  const [searchTerm, setSearchTerm] = useState("");
-  // selected diamonds
-  const [selectedDiamonds, setSelectedDiamonds] = useState<number[]>([]);
-  // select all
-  const [selectAll, setSelectAll] = useState(false);
-  // pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
-  // many diamond action
-
-  // get diamond price
+  const navigate = useNavigate();
   const queryUrl = useSearchStore((state) => state.queryUrl);
-  const [diamond, diamondPrice] = useQueries({
+  const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
+  const searchTerm = useSearchStore((state) => state.searchTerm);
+  const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
+  console.log("query url: " + queryUrl);
+  useEffect(() => {
+    params.delete("IsAvailability");
+    params.delete("IsDescending");
+    params.delete("SortBy");
+    setQueryUrl("/api/Diamonds?");
+  }, []);
+
+  const [diamond, diamondPrice, diamondSearch] = useQueries({
     queries: [
       {
         queryKey: ["diamonds", queryUrl],
@@ -94,63 +53,82 @@ export default function ProductsManage() {
         queryFn: () => GET("/api/DiamondPrices/"),
         staleTime: Infinity,
       },
+      {
+        queryKey: ["diamondSearch", searchTerm],
+        queryFn: () => GET(`/api/Diamonds/cert/${searchTerm || ""}`),
+        staleTime: Infinity,
+      },
     ],
   });
-  // fetch data
-  useEffect(() => {
-    (async () => {
-      const data = await GET(
-        `/api/Diamonds?PageNumber=${currentPage}&PageSize=${pageSize}`
-      );
-      console.log(data); // Log the data here
-      setData(data);
-      setTotalPages(data.totalPages);
-    })();
-  }, [currentPage, pageSize]);
 
-  const handleSort = async (field: string) => {
-    let direction: "asc" | "desc" | "none" = "asc";
-    let isNumber = false;
-    if (sortConfig.field === field && sortConfig.direction === "asc") {
-      direction = "desc";
-    } else if (sortConfig.field === field && sortConfig.direction === "desc") {
-      direction = "none";
-    }
+  const renderDiamondRow = (diamond: any) => (
+    <DiamondRow
+      key={diamond.diamondId}
+      diamond={diamond}
+      selectedDiamonds={selectedDiamonds}
+      setSelectedDiamonds={setSelectedDiamonds}
+      price={getDiamondPrice(diamond, diamondPrice.data).toLocaleString(
+        "en-US",
+        {
+          style: "currency",
+          currency: "USD",
+          maximumFractionDigits: 0,
+        }
+      )}
+    />
+  );
 
-    // Check if the field should be sorted as a number
-    if (field === "price") {
-      isNumber = true;
-    }
-
-    setSortConfig({ field, direction, isNumber });
-
-    // Make a request to the API with the new sort configuration
-    const queryUrl = `/api/Diamonds?SortBy=${field}&IsDescending=${
-      direction === "desc"
-    }&PageNumber=${currentPage}&PageSize=${pageSize}`;
-    const data = await GET(queryUrl);
-    setData(data);
+  const diamondsData = searchTerm
+    ? diamondSearch.data
+      ? [diamondSearch.data]
+      : []
+    : diamond?.data?.diamonds || [];
+  // search and filter
+  const handleStatusClick = (status: string, statusText: string) => {
+    setStatusText(statusText);
+    params.set("IsAvailability", status == "1" ? "true" : "false");
+    setQueryUrl(`/api/Diamonds?` + params.toString());
+    navigate("/admin/diamonds?" + params.toString());
   };
+
+  const handleProductTypeClick = (type: string, typeText: string) => {
+    setProductTypeText(typeText);
+    params.set("IsAvailability", type == "Available" ? "true" : "false");
+    navigate({ search: params.toString() });
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const status = params.get("status");
+
+    const type = params.get("type");
+    if (status) {
+      setStatusText(status === "1" ? "Available" : "UnAvailable");
+    }
+    if (type) {
+      setProductTypeText(type === "1" ? "Type 1" : "Type 2");
+    }
+  }, [location.search]);
+
+  // selected diamonds
+  const [selectedDiamonds, setSelectedDiamonds] = useState<number[]>([]);
+  // select all
+  const [selectAll, setSelectAll] = useState(false);
+  // pagination, change page size
+  const [pageSize, setPageSize] = useState(10);
+  useEffect(() => {
+    params.set("PageSize", pageSize.toString());
+    navigate(url.pathname + "?" + params.toString());
+    setQueryUrl("/api/Diamonds?" + params.toString());
+  }, [pageSize]);
 
   const handleAction = (action: string) => {
+    if (action === "clear") {
+      setSelectedDiamonds([]);
+      setSelectAll(false);
+    }
     console.log(action);
   };
-  //search item
-  useEffect(() => {
-    (async () => {
-      let data;
-      if (searchTerm) {
-        // Fetch data based on searchTerm
-        data = await GET(`/api/Diamonds/cert/${searchTerm}`);
-      } else {
-        // Fetch original data when searchTerm is empty
-        data = await GET(
-          `/api/Diamonds?PageNumber=${currentPage}&PageSize=${pageSize}`
-        );
-      }
-      setData(data);
-    })();
-  }, [searchTerm, currentPage, pageSize]);
 
   return (
     <div className="p-4">
@@ -163,7 +141,7 @@ export default function ProductsManage() {
         </div>
         <div className="flex justify-end space-x-1 items-center">
           <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
-            <a href="/admin/products/new" className="button primary">
+            <a href="/admin/diamonds/new" className="button primary">
               <span>New Diamond</span>
             </a>
           </button>
@@ -207,16 +185,20 @@ export default function ProductsManage() {
             <div className="flex space-x-075">
               <div className="card-action ">
                 <a
-                  href="/admin/products"
+                  href="/admin/diamonds"
                   className="text-interactive "
                   onClick={(event) => {
                     event.preventDefault();
                     setStatusText("Status");
                     setProductTypeText("Product Type");
+                    setSearchTerm("");
                     // Clear the URL parameters
                     const params = new URLSearchParams(location.search);
-                    params.delete("status");
-                    params.delete("type");
+                    params.delete("IsAvailability");
+                    params.delete("IsDescending");
+                    params.delete("SortBy");
+                    setQueryUrl(`/api/Diamonds?` + params.toString());
+                    // params.delete("type");
                     navigate({ search: params.toString() });
                   }}
                 >
@@ -245,13 +227,13 @@ export default function ProductsManage() {
                             <input
                               type="checkbox"
                               value="0"
-                              className="form-checkbox"
+                              className="form-checkbox w-5 h-5"
                               checked={selectAll}
                               onChange={(e) => {
                                 setSelectAll(e.target.checked);
                                 if (e.target.checked) {
                                   setSelectedDiamonds(
-                                    data.diamonds.map(
+                                    diamondsData.map(
                                       (diamond: any) => diamond.diamondId
                                     )
                                   );
@@ -267,62 +249,16 @@ export default function ProductsManage() {
                           </label>
                         </div>
                       </th>
-                      {columnHeaders.map((header) => (
-                        <th
-                          key={header}
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider "
-                        >
-                          <div className="flex flex-row items-center gap-[5px]">
-                            <span>{header}</span>
-                            {sortableColumns.includes(header.toLowerCase()) && (
-                              <div className="sort">
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    handleSort(header.toLowerCase())
-                                  }
-                                >
-                                  <svg
-                                    width="12"
-                                    height="12"
-                                    viewBox="0 0 17 23"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      d="M1 8.5L8.5 1L16 8.5"
-                                      stroke={
-                                        sortConfig.field ===
-                                          header.toLowerCase() &&
-                                        sortConfig.direction === "asc"
-                                          ? "black"
-                                          : "#e1e3e5"
-                                      }
-                                      strokeWidth="1.5"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    />
-                                    <path
-                                      d="M16 14L8.5 21.5L1 14"
-                                      stroke={
-                                        sortConfig.field ===
-                                          header.toLowerCase() &&
-                                        sortConfig.direction === "desc"
-                                          ? "black"
-                                          : "#e1e3e5"
-                                      }
-                                      strokeWidth="1.5"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    />
-                                  </svg>
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        </th>
-                      ))}
+                      {columnHeaders.map((header) => {
+                        return (
+                          <DiamondColumnHeader
+                            header={header}
+                            setQueryUrl={setQueryUrl}
+                            params={params}
+                            type="diamond"
+                          />
+                        );
+                      })}
                     </tr>
                   </thead>
                   {/* body */}
@@ -355,43 +291,26 @@ export default function ProductsManage() {
                             >
                               Delete
                             </button>
+                            <button
+                              onClick={() => handleAction("clear")}
+                              className="font-semibold py-1 px-2 border-l border-gray-300"
+                            >
+                              Clear
+                            </button>
                           </div>
                         </td>
                       </tr>
                     )}
-
-                    {data && data.diamonds && diamondPrice?.data ? (
-                      data.diamonds.map((diamond: any) => (
-                        <DiamondRow
-                          key={diamond.diamondId}
-                          diamond={diamond}
-                          selectedDiamonds={selectedDiamonds}
-                          setSelectedDiamonds={setSelectedDiamonds}
-                          price={getDiamondPrice(
-                            diamond,
-                            diamondPrice.data
-                          ).toLocaleString("en-US", {
-                            style: "currency",
-                            currency: "USD",
-                            maximumFractionDigits: 0,
-                          })}
-                        />
-                      ))
-                    ) : data ? (
-                      <DiamondRow
-                        key={data.diamondId}
-                        diamond={data}
-                        selectedDiamonds={selectedDiamonds}
-                        setSelectedDiamonds={setSelectedDiamonds}
-                        price={getDiamondPrice(
-                          diamond,
-                          diamondPrice.data
-                        ).toLocaleString("en-US", {
-                          style: "currency",
-                          currency: "USD",
-                          maximumFractionDigits: 0,
-                        })}
+                    {(diamond?.isLoading || diamondPrice?.isLoading) && (
+                      <Skeleton
+                        active
+                        paragraph={{
+                          rows: 20,
+                        }}
                       />
+                    )}
+                    {diamondsData.length > 0 ? (
+                      diamondsData.map(renderDiamondRow)
                     ) : (
                       <div className="text-center items-center">
                         <p>There is no diamond</p>
@@ -400,18 +319,39 @@ export default function ProductsManage() {
                   </tbody>
                 </table>
                 <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
-                  <Pagination
-                    className="text-center"
-                    current={currentPage}
-                    total={totalPages * pageSize}
-                    pageSize={pageSize}
-                    onChange={(page) => {
-                      setCurrentPage(page);
-                      setSearchTerm(""); // Clear the search term when the page changes
-                    }}
-                    showSizeChanger={true}
-                    onShowSizeChange={(current, size) => setPageSize(size)}
-                  />
+                  {diamond?.data && diamond?.data.diamonds.length == 0 ? (
+                    <div className="text-center text-2xl">
+                      No Diamonds Found.
+                    </div>
+                  ) : (
+                    <Pagination
+                      showTotal={(total, range) =>
+                        `${range[0]}-${range[1]} of ${total} items`
+                      }
+                      current={Number(params.get("PageNumber")) || 1}
+                      defaultCurrent={
+                        (diamond?.data &&
+                          diamond?.data.currentPage.toString()) ||
+                        "1"
+                      }
+                      total={diamond?.data && diamond?.data.totalCount}
+                      pageSize={Number(params.get("PageSize")) || 20}
+                      onChange={(page, _pageSize) => {
+                        params.set("PageNumber", page.toString());
+                        params.set("PageSize", pageSize.toString());
+                        navigate(url.pathname + "?" + params.toString());
+                        setQueryUrl("/api/Diamonds?" + params.toString());
+                        setSearchTerm("");
+                      }}
+                      showSizeChanger={true}
+                      onShowSizeChange={(current, size) => {
+                        setPageSize(size);
+                        params.set("PageSize", size.toString()); // Add this line
+                        navigate(url.pathname + "?" + params.toString());
+                        setQueryUrl("/api/Diamonds?" + params.toString());
+                      }}
+                    />
+                  )}
                 </div>
               </div>
             </div>

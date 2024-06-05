@@ -33,6 +33,7 @@ import AccessoryPriceManage from "../pages/dashboard/accessoryprice/AccessoryPri
 import CustomerManage from "../pages/dashboard/customer/CustomerManage";
 import TransactionManage from "../pages/dashboard/transacction/TransactionManage";
 import OrderManage from "../pages/dashboard/order/OrderManage";
+import NewDiamond from "../pages/dashboard/diamond/NewDiamond";
 
 const routes = [
   {
@@ -46,6 +47,10 @@ const routes = [
           {
             index: true,
             element: <Dashboard />,
+          },
+          {
+            element: <NewDiamond />,
+            path: "/admin/diamonds/new",
           },
           {
             element: <DiamondsManage />,

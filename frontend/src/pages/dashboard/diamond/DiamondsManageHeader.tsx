@@ -13,10 +13,12 @@ export const StatusMenu = ({
     overlay={
       <Menu>
         <Menu.Item key="1">
-          <a onClick={() => handleStatusClick("1", "Enable")}>Enable</a>
+          <a onClick={() => handleStatusClick("1", "Available")}>Available</a>
         </Menu.Item>
         <Menu.Item key="2">
-          <a onClick={() => handleStatusClick("2", "Disable")}>Disable</a>
+          <a onClick={() => handleStatusClick("2", "UnAvailable")}>
+            UnAvailable
+          </a>
         </Menu.Item>
       </Menu>
     }
