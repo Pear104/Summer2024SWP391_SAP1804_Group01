@@ -1,8 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { GET } from "../../utils/request";
 import { Pagination, Skeleton } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSearchStore } from "../../store/searchStore";
+import { useQueries } from "@tanstack/react-query";
+
+export const OrderStatus = ({ order }: { order: any }) => {
+  return (
+    <div className="items-center justify-between mb-4">
+      Order status:{" "}
+      <span
+        className={`${
+          order.orderStatus === "Pending"
+            ? "text-red-600"
+            : order.orderStatus === "Processing"
+            ? "text-yellow-600"
+            : order.orderStatus === "Delivering"
+            ? "text-orange-600"
+            : "text-teal-600"
+        }`}
+      >
+        {order.orderStatus}
+      </span>
+    </div>
+  );
+};
 
 const OrderList = ({ order }: { order: any }) => {
   return (
@@ -38,22 +60,7 @@ const OrderList = ({ order }: { order: any }) => {
                 $
               </div>
             )}
-            <div className="items-center justify-between mb-4">
-              Order status:{" "}
-              <span
-                className={`text-${
-                  order.orderStatus === "Pending"
-                    ? "green"
-                    : order.orderStatus === "Processing"
-                    ? "yellow"
-                    : order.orderStatus === "Delivering"
-                    ? "orange"
-                    : "dark-green"
-                }-600`}
-              >
-                {order.orderStatus}
-              </span>
-            </div>
+            <OrderStatus order={order} />
           </div>
         </div>
       ))}
@@ -77,7 +84,7 @@ const OrderList = ({ order }: { order: any }) => {
 
 export default function OrderHistory() {
   useEffect(() => {
-    setQueryUrl("/api/Accessories?");
+    setQueryUrl("/api/Order?");
   }, []);
 
   const url = new URL(window.location.href);
@@ -85,25 +92,25 @@ export default function OrderHistory() {
   const navigate = useNavigate();
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
-
-  const [orderHistories, setOrderHistories] = useState<any>([]);
-  useEffect(() => {
-    (async () => {
-      const orders = await GET("/api/Order");
-      setOrderHistories(orders);
-    })();
-  }, []);
-
+  const [orderHistories] = useQueries({
+    queries: [
+      {
+        queryKey: ["orders", queryUrl],
+        queryFn: () => GET(queryUrl),
+        staleTime: Infinity,
+      },
+    ],
+  });
   return (
-    <div className="p-4 w-full">
+    <a className="p-4 w-full" href="/account/order-history/detail">
       <div className="text-2xl font-serif mb-6">ORDER HISTORY</div>
-      {orderHistories.length === 0 ? (
+      {orderHistories?.data?.orders?.length === 0 ? (
         <div className="border-2 border-slate-400 p-5">
           <p>You haven't placed any orders yet</p>
         </div>
       ) : (
         <div className="w-full">
-          {orderHistories.orders.map((order: any) => (
+          {orderHistories?.data?.orders.map((order: any) => (
             <OrderList key={order.orderId} order={order} />
           ))}
         </div>
@@ -119,25 +126,29 @@ export default function OrderHistory() {
         )}
       </div>
       <div className="mt-10 flex justify-center">
-        <Pagination
-          showTotal={(total, range) =>
-            `${range[0]}-${range[1]} of ${total} items`
-          }
-          current={Number(params.get("PageNumber")) || 1}
-          defaultCurrent={
-            (orderHistories.orders?.data &&
-              orderHistories.orders?.data.currentPage.toString()) ||
-            "1"
-          }
-          total={orderHistories.orders?.data?.totalCount}
-          pageSize={Number(params.get("PageSize")) || 20}
-          showSizeChanger={false}
-          onChange={(page, _pageSize) => {
-            params.set("PageNumber", page.toString());
-            navigate(url.pathname + "?" + params.toString());
-            setQueryUrl("/api/Order?" + params.toString());
-          }}
-        />
+        {orderHistories?.data?.totalCount <= orderHistories?.data?.pageSize ? (
+          ""
+        ) : (
+          <Pagination
+            showTotal={(total, range) =>
+              `${range[0]}-${range[1]} of ${total} items`
+            }
+            current={Number(params.get("PageNumber")) || 1}
+            defaultCurrent={
+              (orderHistories?.data &&
+                orderHistories?.data.currentPage.toString()) ||
+              "1"
+            }
+            total={orderHistories?.data?.totalCount}
+            pageSize={Number(params.get("PageSize")) || 20}
+            showSizeChanger={false}
+            onChange={(page, _pageSize) => {
+              params.set("PageNumber", page.toString());
+              navigate(url.pathname + "?" + params.toString());
+              setQueryUrl("/api/Order?" + params.toString());
+            }}
+          />
+        )}
       </div>
       <div className="flex justify-center mt-10">
         <a
@@ -147,6 +158,6 @@ export default function OrderHistory() {
           Continue Shopping
         </a>
       </div>
-    </div>
+    </a>
   );
 }

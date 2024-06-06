@@ -35,15 +35,26 @@ namespace backend.Controllers
             return Ok(order);
         }
         [HttpPost]
-        public async Task<ActionResult> CreateOrder([FromBody] OrderDTO order)
+        public async Task<ActionResult> CreateOrderDetail([FromBody] CreateOrderDetailDTO order)
         {
-            var createdOrder = await _orderRepo.CreateOrderAsync(order);
+            var createdOrder = await _orderRepo.CreateOrderDetailAsync(order);
             if(createdOrder == null)
             {
                 return BadRequest("The order could not be created.");
             }
             return Ok(createdOrder);
         }
+
+        // [HttpPost]
+        // public async Task<ActionResult> CreateOrder([FromBody] CreateOrderDTO order)
+        // {
+        //     var createdOrder = await _orderRepo.CreateOrderAsync(order);
+        //     if(createdOrder == null)
+        //     {
+        //         return BadRequest("The order could not be created.");
+        //     }
+        //     return Ok(createdOrder);
+        // }
         // [HttpPut("{id}")]
         // public async Task<ActionResult> UpdateOrder(long id, [FromBody] UpdateOrderDTO order)
         // {

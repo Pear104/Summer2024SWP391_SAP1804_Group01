@@ -10,8 +10,9 @@ namespace backend.Interfaces
     public interface IOrderRepository
     {
         Task<OrderResult?> GetAllOrdersAsync(OrderQuery query);
-        Task<Order> GetOrderByIdAsync(long id);
-        Task<Order> CreateOrderAsync(OrderDTO order);
+        Task<OrderDTO?> GetOrderByIdAsync(long id);
+        Task<OrderDetail> CreateOrderDetailAsync(CreateOrderDetailDTO order);
+        // Task<OrderDetail> CreateOrderAsync(CreateOrderDTO order);
         Task<Order> UpdateOrderAsync(OrderDTO order);
         
     }
