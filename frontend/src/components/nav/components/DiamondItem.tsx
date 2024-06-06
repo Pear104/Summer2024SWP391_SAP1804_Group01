@@ -13,7 +13,7 @@ const DiamondItem = ({ shapes }: { shapes: any }) => {
             Shape
           </span>
           <div className="grid grid-cols-2 mt-4">
-            {shapes.map((shape: any) => (
+            {shapes?.map((shape: any) => (
               <Link to={`/product/diamond?Shape=${shape.name}`}>
                 <ListItem key={shape.shapeId}>{shape.name}</ListItem>
               </Link>

@@ -34,15 +34,15 @@ namespace backend.Controllers
             }
             return Ok(order);
         }
-        [HttpPost]
+        [HttpPost("order-detail")]
         public async Task<ActionResult> CreateOrderDetail([FromBody] CreateOrderDetailDTO order)
         {
-            var createdOrder = await _orderRepo.CreateOrderDetailAsync(order);
-            if(createdOrder == null)
+            var createdOrderDetail = await _orderRepo.CreateOrderDetailAsync(order);
+            if(createdOrderDetail == null)
             {
-                return BadRequest("The order could not be created.");
+                return BadRequest("The order detail could not be created.");
             }
-            return Ok(createdOrder);
+            return Ok(createdOrderDetail);
         }
 
         // [HttpPost]

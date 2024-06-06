@@ -11,6 +11,7 @@ using backend.Models;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
 using backend.Helper;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace backend.Repository
 {
@@ -22,40 +23,48 @@ namespace backend.Repository
         {
             _context = context;
         }
-
-        // public Task<Order> CreateOrderDetailAsync(OrderDTO order)
-        // {
-        //     var 
-        // }
-        public Task<Order> CreateOrderAsync(OrderDTO order)
+        public Task<Order> CreateOrderAsync(CreateOrderDTO order)
         {
             throw new NotImplementedException();
         }
 
-        public Task<OrderDetail> CreateOrderDetailAsync(CreateOrderDetailDTO order)
+        public async Task<OrderDetail?> CreateOrderDetailAsync(CreateOrderDetailDTO order)
         {
-            throw new NotImplementedException();
+            var diamond = _context.Diamonds.FirstOrDefault(x => x.DiamondId == order.DiamondId);
+            var accessory = _context.Accessories.FirstOrDefault(x => x.AccessoryId == order.AccessoryId);
+            var materialPrice = _context.MaterialPrices.FirstOrDefault(x => x.MaterialPriceId == order.MaterialPriceId);
+            var diamondPrice = _context.DiamondPrices.FirstOrDefault(x => x.DiamondPriceId == order.DiamondPriceId);
+            if(diamond != null && materialPrice != null && diamondPrice != null)
+            {
+                var orderDetail = order.ToOrderDetailFromCreate();
+                orderDetail.Accessory = accessory;
+                orderDetail.Diamond = diamond;
+                orderDetail.MaterialPrice = materialPrice;
+                orderDetail.DiamondPrice = diamondPrice;
+                await _context.OrderDetails.AddAsync(orderDetail);
+                await _context.SaveChangesAsync();
+            }
+            return null;
         }
 
         public async Task<OrderResult?> GetAllOrdersAsync(OrderQuery query)
-{
-        var orderQueries = _context.Orders
-            .Include(x => x.OrderDetails)
+        {
+            var orderQueries = _context.Orders
+                .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Diamond)
-            .Include(x => x.OrderDetails)
+                .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Accessory)
-                    .ThenInclude(x => x.AccessoryType)
-            .Include(x => x.OrderDetails)
+                .ThenInclude(x => x.AccessoryType)
+                .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Accessory)
-                    .ThenInclude(x => x.AccessoryImages)
-            .Include(x => x.OrderDetails)
+                .ThenInclude(x => x.AccessoryImages)
+                .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.MaterialPrice)
-            .Include(x => x.OrderDetails)
+                .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.DiamondPrice)
-            .Include(x => x.SaleStaff)
-            .Include(x => x.DeliveryStaff)
-            .AsQueryable();
-
+                .Include(x => x.SaleStaff)
+                .Include(x => x.DeliveryStaff)
+                .AsQueryable();
 
             if (query.OrderStatus != null)
             {
@@ -156,5 +165,6 @@ namespace backend.Repository
         {
             throw new NotImplementedException();
         }
+
     }
 }

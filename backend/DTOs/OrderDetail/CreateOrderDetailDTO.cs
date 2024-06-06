@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 using backend.DTOs.Accessory;
-using backend.Models;
+using backend.DTOs.DiamondPrice;
 
 namespace backend.DTOs
 {
@@ -14,10 +9,11 @@ namespace backend.DTOs
         [Required]
         public float Size { get; set; }
         [Required]
-        public required DiamondDTO Diamond { get; set; }
-        public AccessoryDTO? Accessory { get; set; }
+        public required long DiamondId { get; set; }
+        public long? AccessoryId { get; set; }
         [Required]
-        public required string ShippingAddress { get; set; }
+        public required long DiamondPriceId { get; set; }
+        public required long? MaterialPriceId { get; set; }
 
     }
 }

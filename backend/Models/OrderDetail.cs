@@ -16,7 +16,7 @@ namespace backend.Models
 
         [Column("item_price")]
         [Range(0.01, double.MaxValue)]
-        public double ItemPrice { get; set; }
+        public double? ItemPrice { get; set; }
 
         [Column("order_id")]
         public long OrderId { get; set; }
@@ -27,15 +27,15 @@ namespace backend.Models
         public Diamond Diamond { get; set; } = new Diamond();
 
         [Column("accessory_id")]
-        public long AccessoryId { get; set; }
-        public Accessory Accessory { get; set; } = new Accessory();
+        public long? AccessoryId { get; set; }
+        public Accessory? Accessory { get; set; } = new Accessory();
 
         [Column("diamond_price_id")]
         public long DiamondPriceId { get; set; }
         public DiamondPrice DiamondPrice { get; set; } = new DiamondPrice();
 
         [Column("material_price_id")]
-        public long MaterialPriceId { get; set; }
+        public long? MaterialPriceId { get; set; }
         public MaterialPrice MaterialPrice { get; set; } = new MaterialPrice();
 
         public WarrantyCard WarrantyCard { get; set; } = new WarrantyCard();

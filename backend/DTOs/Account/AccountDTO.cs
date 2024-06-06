@@ -5,7 +5,7 @@ namespace backend.DTOs.Account
     public class AccountDTO
     {
         public long AccountId { get; set; }
-        public string Role { get; set; }
+        public string? Role { get; set; }
         public RankDTO Rank { get; set; } = new RankDTO();
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;

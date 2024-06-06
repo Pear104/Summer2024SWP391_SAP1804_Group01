@@ -289,12 +289,15 @@ namespace backend.Controllers
                 var rank = _context.Ranks.Find(account.RankId);
                 var hashedPassword = PasswordHasher.HashPassword(account.Password);
                 account.Password = hashedPassword;
-                account.Rank = rank;
+                if (rank != null)
+                {
+                    account.Rank = rank;
+                }
                 _context.Accounts.Add(account);
             }
 
             _context.SaveChanges();
-            return Ok("add 1 ok");
+            return Ok("add account ok");
         }
 
         [HttpGet("/seed/diamond")]
@@ -303,24 +306,40 @@ namespace backend.Controllers
             foreach (var shape in _shapes)
             {
                 var shapeModel = _context.Shapes.FirstOrDefault(x => x.Name == shape);
-                var diamondList = await CrawlHelper.CrawlDiamond(shapeModel);
-                foreach (var diamond in diamondList)
+                if (shapeModel != null)
                 {
-                    await _context.Diamonds.AddAsync(diamond);
+                    var diamondList = await CrawlHelper.CrawlDiamond(shapeModel);
+                    foreach (var diamond in diamondList)
+                    {
+                        await _context.Diamonds.AddAsync(diamond);
+                    }
                 }
             }
             await _context.SaveChangesAsync();
             var diamond1 = await _context.Diamonds.FindAsync((long)1);
-            diamond1.ImageUrl = "https://video.diamondasset.in:8080/imagesM/632443228.jpg";
+            if (diamond1 != null)
+            {
+                diamond1.ImageUrl = "https://video.diamondasset.in:8080/imagesM/632443228.jpg";
+            }
             var diamond2 = await _context.Diamonds.FindAsync((long)2);
-            diamond2.ImageUrl = "https://video.diamondasset.in:8080/imagesM/631455159.jpg";
+            if (diamond2 != null)
+            {
+                diamond2.ImageUrl = "https://video.diamondasset.in:8080/imagesM/631455159.jpg";
+            }
             var diamond3 = await _context.Diamonds.FindAsync((long)3);
-            diamond3.ImageUrl = "https://video.diamondasset.in:8080/imagesM/632416490.jpg";
+            if (diamond3 != null)
+            {
+                diamond3.ImageUrl = "https://video.diamondasset.in:8080/imagesM/632416490.jpg";
+            }
+            
             var diamond4 = await _context.Diamonds.FindAsync((long)4);
-            diamond4.ImageUrl = "https://magnifier.s3.us-west-1.amazonaws.com/5493332667.jpg";
+            if (diamond4 != null)
+            {
+                diamond4.ImageUrl = "https://magnifier.s3.us-west-1.amazonaws.com/5493332667.jpg";
+            }
             await _context.SaveChangesAsync();
 
-            return Ok("add 2 ok");
+            return Ok("add diamond ok");
         }
 
         [HttpGet("/seed/accessory")]
@@ -348,20 +367,8 @@ namespace backend.Controllers
                             MaterialWeight = float.Parse(temp["Price"]) / (float)56.13,
                         };
                         List<AccessoryImage> accessoryImages = new List<AccessoryImage>();
-                        accessoryImages.Add(
-                            new AccessoryImage { Accessory = accessoryModel, Url = temp["Image"], }
-                        );
-                        if (temp["Image"].Contains("FRONTVIEW_400x"))
-                        {
-                            accessoryImages.Add(
-                                new AccessoryImage
-                                {
-                                    Url = temp["Image"].Replace("FRONTVIEW", "SIDEVIEW"),
-                                }
-                            );
-                        }
-                        accessoryModel.AccessoryType = typeModel;
-                        accessoryModel.Shape = shapeModel;
+                        accessoryModel.AccessoryType = typeModel ?? throw new ArgumentNullException(nameof(typeModel));
+                        accessoryModel.Shape = shapeModel ?? throw new ArgumentNullException(nameof(shapeModel));
                         accessoryModel.AccessoryImages = accessoryImages;
                         //accessories.Add(accessoryModel);
                         _context.Accessories.Add(accessoryModel);
@@ -370,7 +377,7 @@ namespace backend.Controllers
             }
             await _context.SaveChangesAsync();
 
-            return Ok("add 3 ok");
+            return Ok("add accessory ok");
         }
 
         private static string ReplaceCaseInsensitive(
@@ -395,7 +402,7 @@ namespace backend.Controllers
             //var test = new List<Accessory>();
             foreach (string shape in this._shapes)
             {
-                var shapeModel = _context.Shapes.FirstOrDefault(x => x.Name == shape);
+                var shapeModel = _context.Shapes.FirstOrDefault(x => x.Name == shape)?? throw new ArgumentNullException();
                 var rings = await Crawler.CrawlHelper.CrawlRing(shapeModel);
                 foreach (var item in rings)
                 {
@@ -405,7 +412,7 @@ namespace backend.Controllers
                         Karat = RandomKarat(),
                         MaterialWeight = float.Parse(item["Price"]) / (float)56.13,
                     };
-                    accessoryModel.AccessoryType = typeModel;
+                    accessoryModel.AccessoryType = typeModel ?? throw new ArgumentNullException();;
                     accessoryModel.Shape = shapeModel;
 
                     List<AccessoryImage> accessoryImages = new List<AccessoryImage>();
@@ -491,7 +498,7 @@ namespace backend.Controllers
             var admin = _context.Accounts.FirstOrDefault(x => x.Name == "ToiLaAdministrator");
             foreach (var percent in percents)
             {
-                _context.PriceRates.Add(new PriceRate() { Account = admin, Percent = percent });
+                _context.PriceRates.Add(new PriceRate() { Account = admin ?? throw new ArgumentNullException(), Percent = percent });
                 _context.SaveChanges();
             }
             var crawler = new CrawlHelper(_context);
@@ -523,20 +530,19 @@ namespace backend.Controllers
             var deliveryStaff = await _context.Accounts.FirstOrDefaultAsync(x =>
                 x.Email == "delivery_staff@gmail.com"
             );
-
-            var order = new Order()
-            {
-                Customer = customer,
-                SaleStaff = saleStaff,
-                DeliveryStaff = deliveryStaff,
-                Rank = customer.Rank,
-                PriceRate = await _context
-                    .PriceRates.OrderByDescending(x => x.CreatedAt)
-                    .FirstOrDefaultAsync(),
-                ShippingAddress = customer.Address,
-                PhoneNumber = customer.PhoneNumber,
-                OrderStatus = OrderStatus.Pending,
-            };
+                var order = new Order()
+                {
+                    Customer = customer,
+                    SaleStaff = saleStaff,
+                    DeliveryStaff = deliveryStaff,
+                    Rank = customer.Rank,
+                    PriceRate = await _context
+                        .PriceRates.OrderByDescending(x => x.CreatedAt)
+                        .FirstOrDefaultAsync(),
+                    ShippingAddress = customer.Address,
+                    PhoneNumber = customer.PhoneNumber,
+                    OrderStatus = OrderStatus.Pending,
+                };
 
             var diamond = await _context.Diamonds.FindAsync((long)12);
             var accessory = await _context
@@ -565,7 +571,7 @@ namespace backend.Controllers
                 + orderDetail.MaterialPrice.UnitPrice * accessory.MaterialWeight
                 + accessory.AccessoryType.ProcessingPrice;
             order.OrderDetails = new List<OrderDetail> { orderDetail };
-            order.TotalPrice = order.OrderDetails.Sum(x => x.ItemPrice) * order.PriceRate.Percent;
+            order.TotalPrice = (double)(order.OrderDetails.Sum(x => x.ItemPrice) * order.PriceRate.Percent);
 
             var warrantyCard = new WarrantyCard();
             orderDetail.WarrantyCard = warrantyCard;
@@ -576,7 +582,7 @@ namespace backend.Controllers
 
             _context.SaveChangesAsync();
 
-            return Ok("add 6 ok");
+            return Ok("add order ok");
         }
     }
 }

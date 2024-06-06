@@ -33,11 +33,15 @@ namespace backend.Repository
                 return null;
             }
             var shape = await _context.Shapes.FindAsync(diamondDto.ShapeId);
-            var diamond = diamondDto.ToDiamondFromCreate();
-            diamond.Shape = shape;
-            await _context.Diamonds.AddAsync(diamond);
-            await _context.SaveChangesAsync();
-            return diamond;
+            if (shape != null)
+            {
+                var diamond = diamondDto.ToDiamondFromCreate();
+                diamond.Shape = shape;
+                await _context.Diamonds.AddAsync(diamond);
+                await _context.SaveChangesAsync();
+                return diamond;
+            }
+            return null;
         }
 
         public async Task<Diamond?> DeleteDiamondAsync(long id)
@@ -203,18 +207,10 @@ namespace backend.Repository
             var shape = await _context.Shapes.FindAsync(diamondDto.ShapeId);
 
             existingDiamond.Lab = diamondDto.Lab;
-            existingDiamond.CertificateUrl = diamondDto.CertificateUrl;
-            existingDiamond.Availability = diamondDto.Availability;
-            existingDiamond.CertificateNumber = diamondDto.CertificateNumber;
-            existingDiamond.Carat = diamondDto.Carat;
-            existingDiamond.Clarity = diamondDto.Clarity;
-            existingDiamond.Color = diamondDto.Color;
-            existingDiamond.Cut = diamondDto.Cut;
-            existingDiamond.ImageUrl = diamondDto.ImageUrl;
-            existingDiamond.Symmetry = diamondDto.Symmetry;
-            existingDiamond.Polish = diamondDto.Polish;
-            existingDiamond.Fluorescence = diamondDto.Fluorescence;
-            existingDiamond.Shape = shape;
+            if (shape != null)
+            {
+                existingDiamond.Shape = shape;
+            }
 
             _context.Entry(existingDiamond).State = EntityState.Modified;
             await _context.SaveChangesAsync();

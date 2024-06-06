@@ -14,11 +14,15 @@ namespace backend.Mappers
             };
         }
         
-        public static Order ToOrderFromCreate(this UpdateOrderDTO order)
+        public static OrderDetail ToOrderDetailFromCreate(this CreateOrderDetailDTO order)
         {
-            return new Order
+            return new OrderDetail
             {
-                OrderStatus = (OrderStatus)Enum.Parse(typeof(OrderStatus), order.OrderStatus),
+                Size = order.Size,
+                DiamondId = order.DiamondId,
+                AccessoryId = order.AccessoryId,
+                DiamondPriceId = order.DiamondPriceId,
+                MaterialPriceId = order.MaterialPriceId,
             };
         }
 

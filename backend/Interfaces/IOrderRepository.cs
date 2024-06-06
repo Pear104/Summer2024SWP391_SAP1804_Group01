@@ -11,8 +11,8 @@ namespace backend.Interfaces
     {
         Task<OrderResult?> GetAllOrdersAsync(OrderQuery query);
         Task<OrderDTO?> GetOrderByIdAsync(long id);
-        Task<OrderDetail> CreateOrderDetailAsync(CreateOrderDetailDTO order);
-        // Task<OrderDetail> CreateOrderAsync(CreateOrderDTO order);
+        Task<OrderDetail?> CreateOrderDetailAsync(CreateOrderDetailDTO order);
+        Task<Order> CreateOrderAsync(CreateOrderDTO order);
         Task<Order> UpdateOrderAsync(OrderDTO order);
         
     }
