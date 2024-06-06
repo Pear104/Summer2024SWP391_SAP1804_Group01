@@ -83,6 +83,7 @@ export default function ProductsManage() {
       ? [diamondSearch.data]
       : []
     : diamond?.data?.diamonds || [];
+  console.log(diamondsData);
   // search and filter
   const handleStatusClick = (status: string, statusText: string) => {
     setStatusText(statusText);

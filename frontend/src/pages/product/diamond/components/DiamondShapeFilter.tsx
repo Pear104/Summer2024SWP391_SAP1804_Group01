@@ -24,6 +24,7 @@ const DiamondShapeFilter = ({
         } else {
           params.set("Shape", title);
         }
+        params.set("IsAvailability", "true");
         navigate("/product/diamond?" + params.toString());
         setQueryUrl(`/api/Diamonds?${params.toString()}`);
       }}

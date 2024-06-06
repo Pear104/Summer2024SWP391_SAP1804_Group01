@@ -153,6 +153,7 @@ export default function Filter() {
             params.delete("PageNumber");
             params.set("MinCarat", value[0]);
             params.set("MaxCarat", value[1]);
+            params.set("IsAvailability", "true");
             navigate("/product/diamond?" + params.toString());
             setQueryUrl(`/api/Diamonds?${params.toString()}`);
           }}
@@ -171,6 +172,7 @@ export default function Filter() {
           params.delete("PageNumber");
           params.set("MinClarity", value[0]);
           params.set("MaxClarity", value[1]);
+          params.set("IsAvailability", "true");
           navigate("/product/diamond?" + params.toString());
           setQueryUrl(`/api/Diamonds?${params.toString()}`);
         }}
@@ -188,6 +190,7 @@ export default function Filter() {
           params.delete("PageNumber");
           params.set("MinColor", value[0]);
           params.set("MaxColor", value[1]);
+          params.set("IsAvailability", "true");
           navigate("/product/diamond?" + params.toString());
           setQueryUrl(`/api/Diamonds?${params.toString()}`);
         }}

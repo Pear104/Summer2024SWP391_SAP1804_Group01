@@ -58,7 +58,7 @@ namespace backend.Repository
         {
             var diamondsQuery = _context
                 .Diamonds.Include(x => x.Shape)
-                .Where(x => x.Availability == true)
+                // .Where(x => x.Availability == true)
                 .AsQueryable();
 
             // Sorting

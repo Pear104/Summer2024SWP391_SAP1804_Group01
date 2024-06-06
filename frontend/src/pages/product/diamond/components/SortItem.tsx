@@ -20,6 +20,7 @@ const SortItem = ({
         const isDescending = params.get("IsDescending") === "true";
         params.set("IsDescending", (!isDescending).toString());
         params.set("SortBy", property);
+        params.set("IsAvailability", "true");
         navigate(`/product/${type}?` + params.toString());
         setQueryUrl(`/api/${type}s?` + params.toString());
       }}
