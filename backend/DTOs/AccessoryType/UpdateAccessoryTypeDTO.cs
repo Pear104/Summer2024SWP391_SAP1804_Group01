@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace backend.DTOs.Shape
+namespace backend.DTOs.AccessoryType
 {
-    public class ShapeDTO
+    public class UpdateAccessoryTypeDTO
     {
-        public long ShapeId { get; set; }
         public string Name { get; set; } = string.Empty;
+        public double ProcessingPrice { get; set; }
     }
 }

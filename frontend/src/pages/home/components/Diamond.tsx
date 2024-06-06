@@ -11,16 +11,16 @@ import Princess from "../../../components/svg/Princess";
 import { Link } from "react-router-dom";
 
 const items = [
-  <Round />,
-  <Pear />,
-  <Heart />,
-  <Marquise />,
-  <Emerald />,
-  <Cushion />,
-  <Radiant />,
-  <Asscher />,
-  <Oval />,
-  <Princess />,
+  <Round className="w-[100px] h-[100px]" />,
+  <Pear className="w-[100px] h-[100px]" />,
+  <Heart className="w-[100px] h-[100px]" />,
+  <Marquise className="w-[100px] h-[100px]" />,
+  <Emerald className="w-[100px] h-[100px]" />,
+  <Cushion className="w-[100px] h-[100px]" />,
+  <Radiant className="w-[100px] h-[100px]" />,
+  <Asscher className="w-[100px] h-[100px]" />,
+  <Oval className="w-[100px] h-[100px]" />,
+  <Princess className="w-[100px] h-[100px]" />,
 ];
 
 export default function Diamond() {
@@ -29,7 +29,7 @@ export default function Diamond() {
       <div className="w-full flex justify-center great-vibes-regular text-7xl mt-16">
         Diverse gemstones
       </div>
-      <div className="mt-8 flex gap-4 justify-evenly px-8 overflow-x-hidden">
+      <div className="w-full mt-8 gap-4 justify-evenly px-8 overflow-x-hidden grid grid-cols-10">
         {items.map((item: any, index) => {
           return (
             <div className="text-sm" key={index}>

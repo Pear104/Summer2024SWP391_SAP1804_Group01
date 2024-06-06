@@ -119,6 +119,8 @@ namespace backend
                     };
                 });
 
+            builder.Services.AddScoped<IShapeRepository, ShapeRepository>();
+            builder.Services.AddScoped<IAccessoryTypeRepository, AccessoryTypeRepository>();
             builder.Services.AddScoped<IMaterialPriceRepository, MaterialPriceRepository>();
             builder.Services.AddScoped<IDiamondPriceRepository, DiamondPriceRepository>();
             builder.Services.AddScoped<IBlogRepository, BlogRepository>();

@@ -27,10 +27,12 @@ export default function DiamondDetail() {
   const navigate = useNavigate();
   const setCart = useCartStore((state) => state.setCart);
   const setCurrentDiamond = useCartStore((state) => state.setCurrentDiamond);
+  console.log(diamond?.data);
   return (
     <div className="flex justify-center mb-20">
       {(diamond?.isLoading || diamondPrice?.isLoading) && (
         <Skeleton
+          className="px-20 pt-6"
           active
           paragraph={{
             rows: 20,
@@ -39,12 +41,6 @@ export default function DiamondDetail() {
       )}
       {diamond?.data && diamondPrice?.data && (
         <div className="w-[1200px] grid grid-cols-6 gap-10">
-          {/* <div
-          className="col-span-4 place-self-center aspect-square bg-cover bg-top bg-no-repeat w-4/5 border "
-          style={{
-            backgroundImage: `url(${diamond?.imageUrl})`,
-          }}
-        ></div> */}
           <div className="col-span-4 place-self-center aspect-square bg-cover bg-top bg-no-repeat w-4/5">
             <Image
               style={{ height: "100%" }}

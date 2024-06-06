@@ -11,12 +11,14 @@ import {
 } from "lucide-react";
 import Logo from "../logo/Logo";
 import SearchBar from "../SearchBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import JewelryItem from "./components/JewelryItem";
 import DiamondItem from "./components/DiamondItem";
 import { getCookie } from "../../utils/cookie";
 import { Link } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
+import { GET } from "../../utils/request";
+import { useQueries } from "@tanstack/react-query";
 
 const TopNavItem = ({
   children,
@@ -35,13 +37,27 @@ const TopNavItem = ({
   );
 };
 
-
 export default function TopNav() {
   // const isLoged = useSelector((state: any) => state.auth.isLoged);
   const cart = useCartStore((state) => state.cart);
   const cartItemCount = cart.length;
   const [jewelryDrop, setJewelryDrop] = useState(false);
   const [diamondDrop, setDiamondDrop] = useState(false);
+
+  const [shapes, accessoryTypes] = useQueries({
+    queries: [
+      {
+        queryKey: ["shapes"],
+        queryFn: () => GET("/api/Shapes/"),
+        staleTime: Infinity,
+      },
+      {
+        queryKey: ["accessoryTypes"],
+        queryFn: () => GET("/api/AccessoryTypes/"),
+        staleTime: Infinity,
+      },
+    ],
+  });
   return (
     <div className="top-0 left-0 relative gap-4 py-3 px-4 bg-white w-full shadow-lg">
       <div className="flex justify-between">
@@ -109,20 +125,23 @@ export default function TopNav() {
         >
           Accessory <ChevronDown size={16} />
           {jewelryDrop && (
-            <div className="absolute z-50 w-[100vw] mx-auto top-[36px] -left-[184px] right-0 bg-white">
+            <div className="pb-8 absolute z-50 w-[100vw] mx-auto top-[36px] -left-[184px] right-0 bg-white">
               <div className="mt-4"></div>
-              <div className="grid grid-cols-3 px-4 pb-4">
-                <JewelryItem />
-                <JewelryItem />
-                <JewelryItem />
-                <JewelryItem />
-                <JewelryItem />
-                <div
+              <div className="grid grid-cols-4 px-4 pb-4 gap-y-2">
+                {accessoryTypes?.data.map((item: any) => {
+                  return (
+                    <JewelryItem
+                      shapes={shapes?.data}
+                      accessoryType={item.name}
+                    />
+                  );
+                })}
+                {/* <div
                   className="bg-contain bg-no-repeat h-[200px]"
                   style={{
                     backgroundImage: "url(/images/Reserve_1000x.webp)",
                   }}
-                ></div>
+                ></div> */}
               </div>
             </div>
           )}
@@ -142,7 +161,7 @@ export default function TopNav() {
             <div className="z-50 w-[100vw] absolute mx-auto top-[36px] -left-[326px] right-0 bg-white">
               <div className="mt-4"></div>
               <div className="flex gap-4">
-                <DiamondItem />
+                <DiamondItem shapes={shapes?.data} />
                 <div
                   className="aspect-[2/1] bg-contain bg-no-repeat h-[240px]"
                   style={{

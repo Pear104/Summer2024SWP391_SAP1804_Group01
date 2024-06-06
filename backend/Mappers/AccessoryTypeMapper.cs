@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using backend.DTOs.AccessoryType;
 using backend.Models;
 
 namespace backend.Mappers
@@ -14,6 +15,17 @@ namespace backend.Mappers
             {
                 Name = accessoryType.Name,
                 ProcessingPrice = accessoryType.ProcessingPrice
+            };
+        }
+
+        public static AccessoryType ToAccessoryTypeFromCreate(
+            this CreateAccessoryTypeDTO accessoryTypeDto
+        )
+        {
+            return new AccessoryType
+            {
+                Name = accessoryTypeDto.Name,
+                ProcessingPrice = accessoryTypeDto.ProcessingPrice
             };
         }
     }

@@ -28,13 +28,21 @@ const schema = z
     name: z
       .string()
       .min(6, { message: "Name should be at least 6 characters" })
-      .max(32, { message: "Name should be less than 32 characters" }),
+      .max(32, { message: "Name should be less than 32 characters" })
+      .refine((value) => value.trim().length > 0, {
+        message: "Name cannot be empty",
+      }),
     phoneNumber: z
       .string()
       .regex(phoneRegex, "Invalid phone number!")
       .min(10, "Invalid phone number!")
       .max(16, "Invalid phone number!"),
-    address: z.string().min(1, { message: "Required" }),
+    address: z
+      .string()
+      .min(12, { message: "Invalid address" })
+      .refine((value) => value.trim().length > 0, {
+        message: "Address cannot be empty",
+      }),
     birthday: z.coerce.date(),
     gender: z.string().min(1, { message: "Required" }),
   })

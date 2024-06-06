@@ -21,12 +21,17 @@ import UploadImage from "./components/UploadImage";
 import { storage } from "../../../utils/firebase";
 
 const schema = z.object({
-  name: z.string().min(1, { message: "Required" }),
+  name: z
+    .string()
+    .min(1, { message: "Required" })
+    .refine((value) => value.trim().length > 0, {
+      message: "Name cannot be empty",
+    }),
   karat: z.coerce.number().min(8, { message: "Required" }),
   materialWeight: z.coerce.number().min(8, { message: "Required" }),
   shape: z.string().min(1, { message: "Required" }),
   accessoryType: z.string().min(1, { message: "Required" }),
-  // images: z.string().min(1, { message: "Required" }),
+  images: z.string().min(0, { message: "Required" }),
 });
 export default function AccessoryView() {
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +42,7 @@ export default function AccessoryView() {
     if (isSuccess) {
       api.open({
         message: "Success",
-        description: "You have successfully updated accessory",
+        description: "Your action have successfully completed",
         icon: <Check color="#1fadea" />,
       });
     } else {
@@ -49,12 +54,12 @@ export default function AccessoryView() {
     }
   };
 
-  const { control, handleSubmit, reset } = useForm({
+  const { control, handleSubmit, reset, setError } = useForm({
     defaultValues: {
       name: "",
       karat: "",
       materialWeight: "",
-      // images: "",
+      images: "",
       shape: "",
       accessoryType: "",
     },
@@ -70,7 +75,7 @@ export default function AccessoryView() {
           name: data?.name,
           karat: data?.karat,
           materialWeight: data?.materialWeight,
-          // images: data.accessoryImages,
+          images: "",
           shape: data?.shape.name,
           accessoryType: data?.accessoryType.name,
         });
@@ -97,6 +102,15 @@ export default function AccessoryView() {
           className=""
           layout="vertical"
           onFinish={handleSubmit(async (formData) => {
+            console.log("fileList");
+            console.log(fileList);
+            if (!fileList || fileList?.length == 0) {
+              setError("images", {
+                type: "manual",
+                message: "Please upload at least one image",
+              });
+              return;
+            }
             setIsLoading(true);
             let submitForm: any;
             for (const [key, value] of Object.entries(formData)) {
@@ -106,16 +120,19 @@ export default function AccessoryView() {
             }
             let response = null;
 
-            const urlList: string[] = [];
             // Delete old images
             accessory?.accessoryImages?.forEach(async (image: any) => {
-              if (fileList.every((file) => file?.url !== image.url)) {
+              if (
+                image.url.includes("firebase") &&
+                fileList.every((file) => file?.url !== image.url)
+              ) {
                 const oldImageRef = ref(storage, image.url);
                 await deleteObject(oldImageRef);
               }
             });
 
-            // Update new image
+            // Update new image to firebase
+            const urlList: string[] = [];
             const uploadPromises = fileList.map(async (file: UploadFile) => {
               const imgRef = ref(storage, `images/${v4()}`);
               console.log(file);
@@ -124,8 +141,10 @@ export default function AccessoryView() {
                 const uploadResult = await uploadBytes(imgRef, blob as Blob);
                 const url = await getDownloadURL(uploadResult.ref);
                 urlList.push(url);
-                const oldImageRef = ref(storage, file?.url);
-                await deleteObject(oldImageRef);
+                if (file?.url.includes("firebase")) {
+                  const oldImageRef = ref(storage, file?.url);
+                  await deleteObject(oldImageRef);
+                }
               } else {
                 const uploadResult = await uploadBytes(
                   imgRef,
@@ -137,6 +156,7 @@ export default function AccessoryView() {
             });
             await Promise.all(uploadPromises);
 
+            // Add firebase's image url to DATJ database
             submitForm["accessoryImages"] = urlList;
             console.log("form: ");
             console.log(submitForm);
@@ -146,10 +166,11 @@ export default function AccessoryView() {
                 "/api/Accessories/" + accessory.accessoryId,
                 submitForm
               );
-              console.log(response);
             } else {
+              console.log("POST");
               response = await POST("/api/Accessories/", submitForm);
             }
+            console.log(response);
 
             setIsLoading(false);
             if (response) {
@@ -216,7 +237,9 @@ export default function AccessoryView() {
               ]}
             />
           </FormItem>
-          <UploadImage fileList={fileList} setFileList={setFileList} />
+          <FormItem label="Images" name="images" control={control} required>
+            <UploadImage fileList={fileList} setFileList={setFileList} />
+          </FormItem>
           <Form.Item className="mt-8 mb-0">
             <div className="mt-8">
               <Button

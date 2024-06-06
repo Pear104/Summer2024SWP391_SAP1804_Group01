@@ -45,6 +45,7 @@ export default function AccessoryDetail() {
     <div>
       {(accessory.isLoading || materialPrices.isLoading) && (
         <Skeleton
+          className="px-20 pt-6"
           active
           paragraph={{
             rows: 20,
@@ -66,7 +67,14 @@ export default function AccessoryDetail() {
                 {`${accessory?.data.name}`}
               </div>
               <div className="text-3xl">
-                $ {getAccessoryPrice(accessory?.data, materialPrices?.data)}
+                {getAccessoryPrice(
+                  accessory?.data,
+                  materialPrices?.data
+                ).toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 0,
+                })}
               </div>
               <div className="w-full grid grid-cols-2 gap-4 my-4 mulish-regular text-slate-950 ">
                 <div className="flex flex-col gap-2">
@@ -84,7 +92,7 @@ export default function AccessoryDetail() {
               </div>
               <div className="flex flex-col gap-4">
                 <div
-                  className={`text-xl w-full flex justify-center px-4 py-3 bg-primary hover:scale-95 transition-all ${
+                  className={`mt-10 text-xl w-full flex justify-center px-4 py-3 bg-primary hover:scale-95 transition-all ${
                     currentDiamond
                       ? "text-white"
                       : "bg-gray-300 px-4 py-2 rounded-md cursor-not-allowed opacity-50 text-slate-400"
@@ -110,9 +118,6 @@ export default function AccessoryDetail() {
                     CHOOSE DIAMOND
                   </div>
                 )}
-                <div className="text-xl w-full flex justify-center border border-black px-4 py-3 bg-white hover:scale-95 transition-all">
-                  ADD TO CART
-                </div>
               </div>
             </div>
           </div>
