@@ -55,16 +55,16 @@ namespace backend.Controllers
         //     }
         //     return Ok(createdOrder);
         // }
-        // [HttpPut("{id}")]
-        // public async Task<ActionResult> UpdateOrder(long id, [FromBody] UpdateOrderDTO order)
-        // {
-        //     var updatedOrder = await _orderRepo.UpdateOrderAsync(order);
-        //     if(updatedOrder == null)
-        //     {
-        //         return BadRequest("The order could not be updated.");
-        //     }
-        //     return Ok(updatedOrder);
-        // }
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateOrder( [FromRoute] long id, [FromBody] UpdateOrderDTO order)
+        {
+            var updatedOrder = await _orderRepo.UpdateOrderAsync(id, order);
+            if(updatedOrder == null)
+            {
+                return BadRequest("The order could not be updated.");
+            }
+            return Ok(updatedOrder);
+        }
         
     }
 }

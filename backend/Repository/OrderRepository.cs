@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
 using backend.Helper;
 using Microsoft.AspNetCore.Http.HttpResults;
+using backend.Enums;
 
 namespace backend.Repository
 {
@@ -161,10 +162,17 @@ namespace backend.Repository
             return orderDTO;
         }
 
-        public Task<Order> UpdateOrderAsync(OrderDTO order)
+        public async Task<Order?> UpdateOrderAsync(long id, UpdateOrderDTO order)
         {
-            throw new NotImplementedException();
+            var existedOrder = _context.Orders.FirstOrDefault(x => x.OrderId == id);
+            if(existedOrder == null)
+            {
+                return null;
+            }
+            existedOrder.OrderStatus = Enum.Parse<OrderStatus>(order.OrderStatus);
+            _context.Entry(existedOrder).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return existedOrder;
         }
-
     }
 }

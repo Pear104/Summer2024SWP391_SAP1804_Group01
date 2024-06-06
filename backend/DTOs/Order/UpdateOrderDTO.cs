@@ -7,9 +7,6 @@ namespace backend.DTOs
 {
     public class UpdateOrderDTO
     {
-        public string ContactStatus { get; set; } = string.Empty;
-        public string ConfirmStatus { get; set; } = string.Empty;
-        public string DeliveryStatus { get; set; } = string.Empty;
         public string OrderStatus { get; set; } = string.Empty;
     }
 }
