@@ -30,7 +30,7 @@ export default function DiamondList() {
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   console.log("query url: " + queryUrl);
   useEffect(() => {
-    setQueryUrl("/api/Diamonds?");
+    setQueryUrl("/api/Diamonds?IsAvailability=true");
   }, []);
 
   const [diamond, diamondPrice] = useQueries({
@@ -126,6 +126,7 @@ export default function DiamondList() {
               onChange={(page, _pageSize) => {
                 scrollTo("table-header");
                 params.set("PageNumber", page.toString());
+                params.set("IsAvailability", "true");
                 navigate(url.pathname + "?" + params.toString());
                 setQueryUrl("/api/Diamonds?" + params.toString());
               }}
