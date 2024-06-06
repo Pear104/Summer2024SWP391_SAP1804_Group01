@@ -3,10 +3,10 @@ export const getDiamondPrice = (diamond: any, diamondPrice: any) => {
     diamond?.carat *
     diamondPrice?.find(
       (price: any) =>
-        diamond.color == price.color &&
-        diamond.clarity == price.clarity &&
-        price.minCaratEff <= diamond.carat &&
-        diamond.carat <= price.maxCaratEff
+        diamond?.color == price.color &&
+        diamond?.clarity == price.clarity &&
+        price.minCaratEff <= diamond?.carat &&
+        diamond?.carat <= price.maxCaratEff
     )?.unitPrice *
     100
   );
