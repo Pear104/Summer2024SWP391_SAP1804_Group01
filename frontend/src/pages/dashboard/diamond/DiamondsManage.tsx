@@ -319,11 +319,9 @@ export default function ProductsManage() {
                       diamondsData.map(renderDiamondRow)
                     ) : (
                       <tr>
-                        <td>
-                          <div className="text-center items-center">
-                            <p>There is no diamond</p>
-                          </div>
-                        </td>
+                        <div className="text-center items-center">
+                          There is no diamond
+                        </div>
                       </tr>
                     )}
                   </tbody>

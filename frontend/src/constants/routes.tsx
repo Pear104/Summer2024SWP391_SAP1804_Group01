@@ -34,8 +34,7 @@ import AccessoryPriceManage from "../pages/dashboard/accessoryprice/AccessoryPri
 import CustomerManage from "../pages/dashboard/customer/CustomerManage";
 import TransactionManage from "../pages/dashboard/transacction/TransactionManage";
 import OrderManage from "../pages/dashboard/order/OrderManage";
-import NewDiamond from "../pages/dashboard/diamond/NewDiamond";
-
+import DiamondView from "../pages/dashboard/diamond/DiamondView";
 const routes = [
   {
     errorElement: <Error />,
@@ -57,8 +56,12 @@ const routes = [
                 element: <DiamondsManage />,
               },
               {
-                element: <NewDiamond />,
+                element: <DiamondView />,
                 path: "/admin/diamonds/new",
+              },
+              {
+                element: <DiamondView />,
+                path: "/admin/diamonds/detail/:diamondId",
               },
             ],
           },

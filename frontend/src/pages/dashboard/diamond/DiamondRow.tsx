@@ -57,7 +57,7 @@ export default function DiamondRow({
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="flex items-center">
-            <a href="#">
+            <a href={`/admin/diamonds/detail/${diamond.diamondId}`}>
               <img
                 className="h-14  w-14 square-full"
                 src={diamond.imageUrl}

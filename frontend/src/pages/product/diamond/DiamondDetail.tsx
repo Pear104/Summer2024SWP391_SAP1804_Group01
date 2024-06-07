@@ -60,12 +60,12 @@ export default function DiamondDetail() {
                 (
                   diamondPrice?.data.find(
                     (price: any) =>
-                      diamond.data.color == price.color &&
-                      diamond.data.clarity == price.clarity &&
-                      price.minCaratEff <= diamond.data.carat &&
-                      diamond.data.carat <= price.maxCaratEff
-                  ).unitPrice *
-                  diamond.data.carat *
+                      diamond?.data?.color == price.color &&
+                      diamond?.data?.clarity == price.clarity &&
+                      price.minCaratEff <= diamond?.data?.carat &&
+                      diamond?.data?.carat <= price?.maxCaratEff
+                  )?.unitPrice *
+                  diamond?.data?.carat *
                   10
                 ).toLocaleString("en-US", {
                   style: "currency",
