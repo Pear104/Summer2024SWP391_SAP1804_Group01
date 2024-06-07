@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.DTOs;
+using backend.DTOs.Order;
 using backend.Helper;
 using backend.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -34,15 +35,15 @@ namespace backend.Controllers
             }
             return Ok(order);
         }
-        [HttpPost("order-detail")]
-        public async Task<ActionResult> CreateOrderDetail([FromBody] CreateOrderDetailDTO order)
+        [HttpPost]
+        public async Task<ActionResult> CreateOrder([FromBody] CreateOrderDTO order)
         {
-            var createdOrderDetail = await _orderRepo.CreateOrderDetailAsync(order);
-            if(createdOrderDetail == null)
+            var createdOrder = await _orderRepo.CreateOrderAsync(order);
+            if(createdOrder == null)
             {
-                return BadRequest("The order detail could not be created.");
+                return BadRequest("The order could not be created.");
             }
-            return Ok(createdOrderDetail);
+            return Ok(createdOrder);
         }
 
         // [HttpPost]

@@ -8,7 +8,7 @@ namespace backend.DTOs.Order
 {
     public class CreateOrderDTO
     {
-        List<OrderDetailDTO> OrderDetails { get; set; } = new List<OrderDetailDTO>();
+        public List<CreateOrderDetailDTO> OrderDetails { get; set; } = new List<CreateOrderDetailDTO>();
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public double TotalPrice { get; set; }
         public float TotalDiscountPercent { get; set; }

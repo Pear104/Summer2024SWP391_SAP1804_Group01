@@ -24,9 +24,34 @@ namespace backend.Repository
         {
             _context = context;
         }
-        public Task<Order> CreateOrderAsync(CreateOrderDTO order)
+        public async Task<Order?> CreateOrderAsync(CreateOrderDTO order)
         {
-            throw new NotImplementedException();
+            var createdAt = _context.Orders.FirstOrDefault(x => x.CreatedAt == order.CreatedAt);
+            var TotalPrice = _context.Orders.FirstOrDefault(x => x.TotalPrice == order.TotalPrice);
+            var TotalDiscountPercent = _context.Orders.FirstOrDefault(x => x.TotalDiscountPercent == order.TotalDiscountPercent);
+            var OrderStatus = _context.Orders.FirstOrDefault(x => x.OrderStatus.ToString() == order.OrderStatus);
+            var ShippingAddress = _context.Orders.FirstOrDefault(x => x.ShippingAddress == order.ShippingAddress);
+            var Customer = await _context.Accounts.FindAsync(order.CustomerId);
+            var SaleStaff = await _context.Accounts.FindAsync(order.SaleStaffId);
+            var DeliveryStaff = await _context.Accounts.FindAsync(order.DeliveryStaffId);
+            foreach(var orderDetail in order.OrderDetails)
+            {
+                var diamond = _context.Diamonds.FirstOrDefault(x => x.DiamondId == orderDetail.DiamondId);
+                var accessory = _context.Accessories.FirstOrDefault(x => x.AccessoryId == orderDetail.AccessoryId);
+                var materialPrice = _context.MaterialPrices.FirstOrDefault(x => x.MaterialPriceId == orderDetail.MaterialPriceId);
+                var diamondPrice = _context.DiamondPrices.FirstOrDefault(x => x.DiamondPriceId == orderDetail.DiamondPriceId);
+                if(diamond != null && materialPrice != null && diamondPrice != null)
+                {
+                    var orderDetailFromCreate = orderDetail.ToOrderDetailFromCreate();
+                    orderDetailFromCreate.Accessory = accessory;
+                    orderDetailFromCreate.Diamond = diamond;
+                    orderDetailFromCreate.MaterialPrice = materialPrice;
+                    orderDetailFromCreate.DiamondPrice = diamondPrice;
+                    await _context.OrderDetails.AddAsync(orderDetailFromCreate);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            return null;
         }
 
         public async Task<OrderDetail?> CreateOrderDetailAsync(CreateOrderDetailDTO order)
