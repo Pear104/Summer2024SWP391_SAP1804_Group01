@@ -49,7 +49,7 @@ namespace backend.Mappers
                 Diamond = orderDetail.Diamond.ToDiamondDTO(),
                 Accessory = orderDetail.Accessory?.ToAccessoryDTO(),
                 DiamondPrice = orderDetail.DiamondPrice.ToDiamondPriceDTO(),
-                MaterialPrice = orderDetail.MaterialPrice.ToMaterialPriceDTO()
+                MaterialPrice = orderDetail.MaterialPrice?.ToMaterialPriceDTO()
             };
         }
 

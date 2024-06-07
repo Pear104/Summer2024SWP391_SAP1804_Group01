@@ -17,7 +17,7 @@ namespace backend.Helper
         public DateTime? MaxDate { get; set; } = null;
         public double? MinTotalPrice { get; set; } = 0;
         public double? MaxTotalPrice { get; set; } = 1000000000;
-        public int PageSize { get; set; } = 20;
+        public int PageSize { get; set; } = 5;
         public int PageNumber { get; set; } = 1;
     }
 }

@@ -35,9 +35,9 @@ namespace backend.Mappers
                 CreatedAt = order.CreatedAt,
                 CustomerId = order.CustomerId,
                 SaleStaffId = order.SaleStaffId,
-                SaleStaffName = order.SaleStaff.Name,
+                SaleStaffName = order.SaleStaff?.Name,
                 DeliveryStaffId = order.DeliveryStaffId,
-                DeliveryStaffName = order.DeliveryStaff.Name,
+                DeliveryStaffName = order.DeliveryStaff?.Name,
                 Promotion = order.Promotion,
                 OrderDetails = order.OrderDetails.Select(o => o.ToOrderDetailDTO()).ToList()
             };

@@ -21,22 +21,20 @@ namespace backend.Repository
 
         public async Task<Order?> CreateOrderAsync(long customerId, CreateOrderDTO orderDto)
         {
-            System.Console.WriteLine("hehe");
             var customer = await _context.Accounts.FindAsync(customerId);
-            System.Console.WriteLine("hihi");
             if (customer == null)
             {
                 return null;
             }
             var rank = await _context.Ranks.FindAsync(customer.RankId);
-            System.Console.WriteLine(rank.RankName);
             var priceRate = await _context
                 .PriceRates.OrderBy(x => x.CreatedAt)
                 .FirstOrDefaultAsync();
-            System.Console.WriteLine("percent: " + priceRate.Percent);
-            Promotion promotion = null;
-            System.Console.WriteLine("promotion: " + promotion);
-
+            Promotion? promotion = null;
+            if (rank == null || priceRate == null)
+            {
+                return null;
+            }
             var newOrder = new Order()
             {
                 Customer = customer,
@@ -52,6 +50,10 @@ namespace backend.Repository
                     x.PromotionId == orderDto.PromotionId
                 );
                 newOrder.Promotion = promotion;
+                if (promotion == null)
+                {
+                    return null;
+                }
                 newOrder.TotalDiscountPercent = promotion.PromotionId + rank.Discount;
             }
             else
@@ -64,6 +66,10 @@ namespace backend.Repository
                 var diamond = _context.Diamonds.FirstOrDefault(x =>
                     x.DiamondId == orderDetailDto.DiamondId
                 );
+                if(diamond == null)
+                {
+                    return null;
+                }
                 if (diamond.Availability == false)
                 {
                     return null;
@@ -91,6 +97,10 @@ namespace backend.Repository
                         var accessory = _context.Accessories.FirstOrDefault(x =>
                             x.AccessoryId == orderDetailDto.AccessoryId
                         );
+                        if(accessory == null)
+                        {
+                            return null;
+                        }
                         var materialPrice = _context
                             .MaterialPrices.Where(x => x.Karat == accessory.Karat)
                             .OrderBy(x => x.EffTime)
@@ -157,10 +167,10 @@ namespace backend.Repository
                 .ThenInclude(x => x.Diamond)
                 .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Accessory)
-                .ThenInclude(x => x.AccessoryType)
+                .ThenInclude(x => x != null ? x.AccessoryType : null)
                 .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Accessory)
-                .ThenInclude(x => x.AccessoryImages)
+                .ThenInclude(x => x != null ? x.AccessoryImages : null)
                 .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.MaterialPrice)
                 .Include(x => x.OrderDetails)
@@ -242,13 +252,13 @@ namespace backend.Repository
                 .ThenInclude(x => x.Diamond)
                 .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Accessory)
-                .ThenInclude(x => x.AccessoryType)
+                .ThenInclude(x => x != null ? x.AccessoryType : null)
                 .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Accessory)
-                .ThenInclude(x => x.AccessoryImages)
+                .ThenInclude(x => x != null ? x.AccessoryImages : null)
                 .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Accessory)
-                .ThenInclude(x => x.Shape)
+                .ThenInclude(x => x != null ? x.Shape : null)
                 .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.MaterialPrice)
                 .Include(x => x.OrderDetails)

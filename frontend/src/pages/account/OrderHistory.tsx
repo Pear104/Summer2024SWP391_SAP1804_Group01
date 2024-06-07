@@ -5,6 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { useSearchStore } from "../../store/searchStore";
 import { useQueries } from "@tanstack/react-query";
 
+const formatDate = (dateString: any) => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${hours}:${minutes}, ${day}/${month}/${year}`;
+};
+
 export const OrderStatus = ({ order }: { order: any }) => {
   return (
     <div className="items-center justify-between mb-4">
@@ -12,13 +22,15 @@ export const OrderStatus = ({ order }: { order: any }) => {
       <span
         className={`${
           order.orderStatus === "Pending"
-            ? "text-red-600"
+            ? "bg-red-600"
             : order.orderStatus === "Processing"
-            ? "text-yellow-600"
+            ? "bg-yellow-500"
             : order.orderStatus === "Delivering"
-            ? "text-orange-600"
-            : "text-teal-600"
-        }`}
+            ? "bg-orange-600"
+            : order.orderStatus === "Completed"
+            ? "bg-green-600"
+            : "bg-red-800"
+        } border-2 border-solid p-2 text-white px-4 rounded-full`}
       >
         {order.orderStatus}
       </span>
@@ -26,56 +38,71 @@ export const OrderStatus = ({ order }: { order: any }) => {
   );
 };
 
-const OrderList = ({ order }: { order: any }) => {
+const OrderDetailList = ({ order }: { order: any }) => {
   return (
-    <div className="border-b border-gray-300 p-4 mb-6">
-      {order.orderDetails.map((detail: any, index: number) => (
-        <div key={index} className="flex mb-4">
-          <div className="w-1/4">
-            <img
-              className="w-24 h-24 object-cover"
-              src={detail.diamond.imageUrl}
-              alt="diamond"
-            />
-            {detail.accessory?.accessoryImages[0]?.url && (
+    <div>
+      <div className="p-4">
+        <div>Order ID: {order.orderId}</div>
+        <div>Created at: {formatDate(order.createdAt)}</div>
+      </div>
+      <div className="border-b border-gray-300 p-4 mb-6">
+        {order.orderDetails.map((detail: any, index: number) => (
+          <div key={index} className="flex mb-4">
+            <div className="w-1/4">
               <img
-                className="w-24 h-24 object-cover mt-2"
-                src={detail.accessory.accessoryImages[0].url}
-                alt="accessory"
+                className="w-24 h-24 object-cover"
+                src={detail.diamond.imageUrl}
+                alt="diamond"
               />
-            )}
-          </div>
-          <div className="w-3/4 pl-4">
-            <div className="text-lg font-serif">{detail.accessory?.name}</div>
-            <div className="text-gray-800 my-4">
-              Diamond price:{" "}
-              {detail.diamondPrice.unitPrice * detail.diamond.carat * 100} $
+              {detail.accessory != null
+                ? detail.accessory?.accessoryImages[0]?.url && (
+                    <img
+                      className="w-24 h-24 object-cover mt-2"
+                      src={detail.accessory.accessoryImages[0].url}
+                      alt="accessory"
+                    />
+                  )
+                : ""}
             </div>
-            {detail.accessory && (
-              <div className="text-gray-800 my-4">
-                Accessory price:{" "}
-                {detail.accessory.materialWeight *
-                  detail.materialPrice.unitPrice +
-                  detail.accessory.accessoryType.processingPrice}{" "}
-                $
-              </div>
-            )}
-            <OrderStatus order={order} />
-          </div>
-        </div>
-      ))}
-      <div className="flex justify-between items-center mt-4">
-        <div className="text-xl font-bold text-gray-800">
-          Total: {order.totalPrice} $
-        </div>
 
-        <div>
-          <button className="bg-gray-800 text-white px-4 py-2 rounded mr-2">
-            Buy Again
-          </button>
-          <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded">
-            Contact Seller
-          </button>
+            <div className="w-3/4 pl-4">
+              <div className="text-lg font-serif">
+                {detail.accessory != null ? detail.accessory?.name : ""}
+              </div>
+              <div className="text-gray-800 my-4">
+                Diamond price:{" "}
+                {detail.diamondPrice.unitPrice * detail.diamond.carat * 100} $
+              </div>
+              {detail.accessory != null
+                ? detail.accessory && (
+                    <div className="text-gray-800 my-4">
+                      Accessory price:{" "}
+                      {detail.accessory.materialWeight *
+                        detail.materialPrice.unitPrice +
+                        detail.accessory.accessoryType.processingPrice}{" "}
+                      $
+                    </div>
+                  )
+                : ""}
+            </div>
+          </div>
+        ))}
+        <div className="flex justify-end text-xl">
+          <OrderStatus order={order} />
+        </div>
+        <div className="flex justify-between items-center mt-4">
+          <div className="text-xl font-bold text-gray-800">
+            Total: {order.totalPrice} $
+          </div>
+
+          <div>
+            <button className="bg-gray-800 text-white px-4 py-2 rounded mr-2">
+              Buy Again
+            </button>
+            <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded">
+              Contact Seller
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -102,7 +129,7 @@ export default function OrderHistory() {
     ],
   });
   return (
-    <a className="p-4 w-full" href="/account/order-history/detail">
+    <div className="p-4 w-full">
       <div className="text-2xl font-serif mb-6">ORDER HISTORY</div>
       {orderHistories?.data?.orders?.length === 0 ? (
         <div className="border-2 border-slate-400 p-5">
@@ -111,7 +138,7 @@ export default function OrderHistory() {
       ) : (
         <div className="w-full">
           {orderHistories?.data?.orders.map((order: any) => (
-            <OrderList key={order.orderId} order={order} />
+            <OrderDetailList key={order.orderId} order={order} />
           ))}
         </div>
       )}
@@ -133,14 +160,14 @@ export default function OrderHistory() {
             showTotal={(total, range) =>
               `${range[0]}-${range[1]} of ${total} items`
             }
-            current={Number(params.get("PageNumber")) || 1}
+            current={Number(orderHistories.data?.currentPage)}
             defaultCurrent={
               (orderHistories?.data &&
                 orderHistories?.data.currentPage.toString()) ||
               "1"
             }
             total={orderHistories?.data?.totalCount}
-            pageSize={Number(params.get("PageSize")) || 20}
+            pageSize={Number(orderHistories.data?.pageSize)}
             showSizeChanger={false}
             onChange={(page, _pageSize) => {
               params.set("PageNumber", page.toString());
@@ -158,6 +185,6 @@ export default function OrderHistory() {
           Continue Shopping
         </a>
       </div>
-    </a>
+    </div>
   );
 }

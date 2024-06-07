@@ -38,13 +38,11 @@ namespace backend.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] CreateOrderDTO orderDto)
         {
-            long customerId = long.Parse(User.FindFirst("accountId")?.Value);
-            System.Console.WriteLine(customerId);
-            // System.Console.WriteLine(typeof(customerId));
-            if (customerId == null)
-            {
+            if(User.FindFirst("accountId")?.Value == null) {
                 return BadRequest("The order could not be created.");
             }
+            long customerId = Convert.ToInt64(User.FindFirst("accountId")?.Value);
+            System.Console.WriteLine(customerId);
             var createdOrder = await _orderRepo.CreateOrderAsync(customerId, orderDto);
             if (createdOrder == null)
             {
