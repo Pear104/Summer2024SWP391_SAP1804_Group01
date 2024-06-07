@@ -128,7 +128,7 @@ export default function TopNav() {
             <div className="pb-8 absolute z-50 w-[100vw] mx-auto top-[36px] -left-[184px] right-0 bg-white">
               <div className="mt-4"></div>
               <div className="grid grid-cols-4 px-4 pb-4 gap-y-2">
-                {accessoryTypes?.data.map((item: any) => {
+                {accessoryTypes?.data?.map((item: any) => {
                   return (
                     <JewelryItem
                       shapes={shapes?.data}

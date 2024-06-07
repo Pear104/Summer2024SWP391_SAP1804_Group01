@@ -201,7 +201,7 @@ export default function AccessoriesManage() {
                             <input
                               type="checkbox"
                               value="0"
-                              className="form-checkbox"
+                              className="form-checkbox w-5 h-5"
                               checked={selectAll}
                               onChange={(e) => {
                                 setSelectAll(e.target.checked);
@@ -230,7 +230,7 @@ export default function AccessoriesManage() {
                       </th>
                       <th
                         scope="col"
-                        className={`flex justify-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider col-span-4`}
+                        className={`flex px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider col-span-4`}
                       >
                         Name
                       </th>
@@ -312,7 +312,7 @@ export default function AccessoriesManage() {
                     )}
                     {accessories?.data &&
                       materialPrices?.data &&
-                      accessories.data.accessories.map(
+                      accessories?.data.accessories?.map(
                         (accessory: any, index: number) => (
                           <AccessoryRow
                             key={index}
@@ -330,7 +330,7 @@ export default function AccessoriesManage() {
                 </table>
                 <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
                   {accessories?.data &&
-                    accessories?.data.accessories.length != 0 && (
+                    accessories?.data?.accessories?.length != 0 && (
                       <Pagination
                         showTotal={(total, range) =>
                           `${range[0]}-${range[1]} of ${total} items`
@@ -349,8 +349,8 @@ export default function AccessoriesManage() {
                         // onShowSizeChange={(current, size) => setPageSize(size)}
                       />
                     )}
-                  {!accessories.isLoading &&
-                    accessories.data.accessories.length == 0 && (
+                  {!accessories?.isLoading &&
+                    accessories?.data?.accessories?.length == 0 && (
                       <div className="text-center text-2xl">
                         No Accessories Found.
                       </div>

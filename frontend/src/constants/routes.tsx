@@ -50,12 +50,17 @@ const routes = [
             element: <Dashboard />,
           },
           {
-            element: <NewDiamond />,
-            path: "/admin/diamonds/new",
-          },
-          {
-            element: <DiamondsManage />,
             path: "/admin/diamonds",
+            children: [
+              {
+                index: true,
+                element: <DiamondsManage />,
+              },
+              {
+                element: <NewDiamond />,
+                path: "/admin/diamonds/new",
+              },
+            ],
           },
           {
             element: <DiamondPriceManage />,

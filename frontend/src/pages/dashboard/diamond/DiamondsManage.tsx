@@ -303,56 +303,58 @@ export default function ProductsManage() {
                       </tr>
                     )}
                     {(diamond?.isLoading || diamondPrice?.isLoading) && (
-                      <Skeleton
-                        active
-                        paragraph={{
-                          rows: 20,
-                        }}
-                      />
+                      <tr>
+                        <td colSpan={100}>
+                          <Skeleton
+                            active
+                            paragraph={{
+                              rows: 10,
+                            }}
+                            className="w-full"
+                          />
+                        </td>
+                      </tr>
                     )}
                     {diamondsData.length > 0 ? (
                       diamondsData.map(renderDiamondRow)
                     ) : (
-                      <div className="text-center items-center">
-                        <p>There is no diamond</p>
-                      </div>
+                      <tr>
+                        <td>
+                          <div className="text-center items-center">
+                            <p>There is no diamond</p>
+                          </div>
+                        </td>
+                      </tr>
                     )}
                   </tbody>
                 </table>
                 <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
-                  {diamond?.data && diamond?.data.diamonds.length == 0 ? (
-                    <div className="text-center text-2xl">
-                      No Diamonds Found.
-                    </div>
-                  ) : (
-                    <Pagination
-                      showTotal={(total, range) =>
-                        `${range[0]}-${range[1]} of ${total} items`
-                      }
-                      current={Number(params.get("PageNumber")) || 1}
-                      defaultCurrent={
-                        (diamond?.data &&
-                          diamond?.data.currentPage.toString()) ||
-                        "1"
-                      }
-                      total={diamond?.data && diamond?.data.totalCount}
-                      pageSize={Number(params.get("PageSize")) || 20}
-                      onChange={(page, _pageSize) => {
-                        params.set("PageNumber", page.toString());
-                        params.set("PageSize", pageSize.toString());
-                        navigate(url.pathname + "?" + params.toString());
-                        setQueryUrl("/api/Diamonds?" + params.toString());
-                        setSearchTerm("");
-                      }}
-                      showSizeChanger={true}
-                      onShowSizeChange={(current, size) => {
-                        setPageSize(size);
-                        params.set("PageSize", size.toString()); // Add this line
-                        navigate(url.pathname + "?" + params.toString());
-                        setQueryUrl("/api/Diamonds?" + params.toString());
-                      }}
-                    />
-                  )}
+                  <Pagination
+                    showTotal={(total, range) =>
+                      `${range[0]}-${range[1]} of ${total} items`
+                    }
+                    current={Number(params.get("PageNumber")) || 1}
+                    defaultCurrent={
+                      (diamond?.data && diamond?.data.currentPage.toString()) ||
+                      "1"
+                    }
+                    total={diamond?.data && diamond?.data.totalCount}
+                    pageSize={Number(params.get("PageSize")) || 20}
+                    onChange={(page, _pageSize) => {
+                      params.set("PageNumber", page.toString());
+                      params.set("PageSize", pageSize.toString());
+                      navigate(url.pathname + "?" + params.toString());
+                      setQueryUrl("/api/Diamonds?" + params.toString());
+                      setSearchTerm("");
+                    }}
+                    showSizeChanger={true}
+                    onShowSizeChange={(current, size) => {
+                      setPageSize(size);
+                      params.set("PageSize", size.toString()); // Add this line
+                      navigate(url.pathname + "?" + params.toString());
+                      setQueryUrl("/api/Diamonds?" + params.toString());
+                    }}
+                  />
                 </div>
               </div>
             </div>

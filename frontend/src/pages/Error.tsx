@@ -11,7 +11,7 @@ export default function Error() {
     "url(/images/error_5.png)",
     "url(/images/error_6.png)",
     "url(/images/error_7.png)",
-    "url(/images/error_8.png)"
+    "url(/images/error_8.png)",
   ];
 
   function getRandomInteger(min: number, max: number) {
@@ -25,8 +25,8 @@ export default function Error() {
         <div
           className="aspect-square bg-contain bg-no-repeat w-[500px]"
           style={{
-            // backgroundImage: "url(/images/face-without-mouth_1f636.png)",
-            backgroundImage: randomImage,
+            backgroundImage: "url(/images/face-without-mouth_1f636.png)",
+            // backgroundImage: randomImage,
           }}
         ></div>
         <div className="font-bold text-3xl">Oops!</div>

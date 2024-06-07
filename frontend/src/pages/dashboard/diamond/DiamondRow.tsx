@@ -12,7 +12,17 @@ export default function DiamondRow({
   price: any;
 }) {
   if (!diamond) {
-    return <></>;
+    return (
+      <>
+        <tr>
+          <td>
+            <div className="text-center items-center">
+              <p>There is no diamond</p>
+            </div>
+          </td>
+        </tr>
+      </>
+    );
   }
   return (
     <>

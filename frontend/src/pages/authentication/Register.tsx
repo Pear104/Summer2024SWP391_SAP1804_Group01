@@ -180,7 +180,7 @@ export default function Register() {
                   options={[
                     { value: "Female", label: "Female" },
                     { value: "Male", label: "Male" },
-                    { value: "Gay", label: "Gay" },
+                    // { value: "Gay", label: "Gay" },
                     { value: "Other", label: "Other" },
                   ]}
                   defaultValue="Other"

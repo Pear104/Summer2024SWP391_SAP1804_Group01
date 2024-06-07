@@ -17,7 +17,7 @@ export default function AccessoryRow({
             <input
               type="checkbox"
               value="0"
-              className="form-checkbox"
+              className="form-checkbox w-5 h-5"
               checked={selectedAccessories.includes(accessory.accessoryId)}
               onChange={(e) => {
                 if (e.target.checked) {

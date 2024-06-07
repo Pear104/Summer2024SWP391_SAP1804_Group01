@@ -75,20 +75,20 @@ export default function Sidebar() {
     },
   ];
 
-  const DASHBOARD_SIDEBAR_BOTTOM_LINKS = [
-    {
-      key: "settings",
-      label: "Settings",
-      path: "/admin/settings",
-      icon: <HiOutlineCog />,
-    },
-    {
-      key: "support",
-      label: "Help & Support",
-      path: "/admin/support",
-      icon: <HiOutlineQuestionMarkCircle />,
-    },
-  ];
+  // const DASHBOARD_SIDEBAR_BOTTOM_LINKS = [
+  //   {
+  //     key: "settings",
+  //     label: "Settings",
+  //     path: "/admin/settings",
+  //     icon: <HiOutlineCog />,
+  //   },
+  //   {
+  //     key: "support",
+  //     label: "Help & Support",
+  //     path: "/admin/support",
+  //     icon: <HiOutlineQuestionMarkCircle />,
+  //   },
+  // ];
 
   return (
     <div className="flex flex-col bg-neutral-900 w-60 p-3 text-white">
@@ -105,9 +105,9 @@ export default function Sidebar() {
         ))}
       </div>
       <div className="flex flex-col gap-0.5 pt-2 border-t border-neutral-700">
-        {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((items) => (
+        {/* {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((items) => (
           <SidebarLink key={items.key} items={items} />
-        ))}
+        ))} */}
 
         <Link
           to="/"
