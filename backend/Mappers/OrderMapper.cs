@@ -13,7 +13,7 @@ namespace backend.Mappers
                 OrderStatus = (OrderStatus)Enum.Parse(typeof(OrderStatus), order.OrderStatus),
             };
         }
-        
+
         public static OrderDetail ToOrderDetailFromCreate(this CreateOrderDetailDTO order)
         {
             return new OrderDetail
@@ -21,8 +21,6 @@ namespace backend.Mappers
                 Size = order.Size,
                 DiamondId = order.DiamondId,
                 AccessoryId = order.AccessoryId,
-                DiamondPriceId = order.DiamondPriceId,
-                MaterialPriceId = order.MaterialPriceId,
             };
         }
 

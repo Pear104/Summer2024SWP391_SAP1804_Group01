@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { useEffect, useState } from "react";
 import { useCartStore } from "../../../store/cartStore";
 import { GET } from "../../../utils/request";
@@ -21,6 +21,7 @@ type DiamondDetail = {
 };
 
 type AccessoryDetail = {
+  accessoryId: number;
   karat: number;
   materialWeight: number;
   name: string;
@@ -54,9 +55,16 @@ const ringOptions = [
   },
 ];
 
-const CartItem: React.FC<CartItemProps> = ({ diamondId, accessoryId, size }) => {
-  const [diamondDetail, setDiamondDetail] = useState<DiamondDetail | null>(null);
-  const [accessoryDetail, setAccessoryDetail] = useState<AccessoryDetail | null>(null);
+const CartItem: React.FC<CartItemProps> = ({
+  diamondId,
+  accessoryId,
+  size,
+}) => {
+  const [diamondDetail, setDiamondDetail] = useState<DiamondDetail | null>(
+    null
+  );
+  const [accessoryDetail, setAccessoryDetail] =
+    useState<AccessoryDetail | null>(null);
 
   useEffect(() => {
     // Gọi API để lấy chi tiết kim cương
@@ -81,7 +89,7 @@ const CartItem: React.FC<CartItemProps> = ({ diamondId, accessoryId, size }) => 
 
   return (
     // Cart item
-    <div className="relative  flex justify-between items-center pl-4 pr-4 bg-white shadow-md m-2">
+    <div className="relative flex justify-between items-center bg-white shadow-md m-2">
       {/* Xóa nút */}
       <button
         className="absolute top-0 right-0 mt-2 mr-2 text-gray-500 hover:text-slate-300 text-bold text-3xl"
@@ -92,18 +100,20 @@ const CartItem: React.FC<CartItemProps> = ({ diamondId, accessoryId, size }) => 
       {/* Diamond in the left */}
       <div className="flex-1">
         {diamondDetail ? (
-          <div className='flex justify-between items-center'>
-            <div className="flex-1 col-span-1">
-              <Image style={{ height: "100%" }} src={`${diamondDetail.imageUrl}`} className="h-auto w-4/5 flex-1" />
+          <div className="flex justify-between items-center text-sm m-3">
+            <div className="w-full bg-cover flex-1 col-span-1 m-2">
+              <Image src={`${diamondDetail.imageUrl}`} />
             </div>
             <div className="flex-1 col-span-1">
               <h3 className="text-lg font-bold">{`${diamondDetail?.carat} Carat ${diamondDetail?.shape} Shape Lab Diamond`}</h3>
-              <p>Color: {diamondDetail.color}</p>
-              <p>Lab: {diamondDetail.lab}</p>
-              <p>Carat: {diamondDetail.carat}</p>
-              <p>Cut: {diamondDetail.cut}</p>
-              <p>Clarity: {diamondDetail.clarity}</p>
-              <p>Polish: {diamondDetail.polish}</p>
+              <div className="grid grid-cols-2 mt-2">
+                <p>Color: {diamondDetail.color}</p>
+                <p>Lab: {diamondDetail.lab}</p>
+                <p>Carat: {diamondDetail.carat}</p>
+                <p>Cut: {diamondDetail.cut}</p>
+                <p>Clarity: {diamondDetail.clarity}</p>
+                <p>Polish: {diamondDetail.polish}</p>
+              </div>
             </div>
           </div>
         ) : (
@@ -112,19 +122,23 @@ const CartItem: React.FC<CartItemProps> = ({ diamondId, accessoryId, size }) => 
       </div>
       {/* Accessory in the right */}
       <div className="flex-1 border-l">
-        {accessoryDetail ? (
-          <div className='flex justify-between items-center gap-4'>
+        {accessoryDetail?.accessoryId ? (
+          <div className="flex justify-between items-center gap-4">
             <div
               className="col-span-4 place-self-center aspect-square bg-cover bg-top bg-no-repeat w-4/5 "
               style={{
-                backgroundImage: `url(${accessoryDetail?.accessoryImages[0]?.url.replace('400x', '800x')})`,
+                backgroundImage: `url(${accessoryDetail?.accessoryImages[0]?.url.replace(
+                  "400x",
+                  "800x"
+                )})`,
               }}
             ></div>
             <div>
               <h3 className="text-lg font-bold">{accessoryDetail.name}</h3>
               <p>Karat: {accessoryDetail.karat}</p>
               <p>Material Weight: {accessoryDetail.materialWeight}g</p>
-              <div>Size:
+              <div>
+                Size:
                 <Select
                   className="border ml-4"
                   defaultValue={size}
@@ -135,11 +149,14 @@ const CartItem: React.FC<CartItemProps> = ({ diamondId, accessoryId, size }) => 
                     setSize(diamondId, e);
                   }}
                   options={ringOptions}
-                /></div>
+                />
+              </div>
             </div>
           </div>
+        ) : accessoryId !== undefined ? (
+          <p> Loading accessory details... </p>
         ) : (
-          accessoryId !== undefined ? <p> Loading accessory details... </p> : <p>No accessory</p>
+          <p>No accessory</p>
         )}
       </div>
     </div>

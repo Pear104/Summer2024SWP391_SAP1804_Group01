@@ -7,8 +7,6 @@ namespace backend.Models
     [Table("order")]
     public class Order
     {
-        internal readonly object AccessoryImages;
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("order_id")]
@@ -47,12 +45,12 @@ namespace backend.Models
         public Account Customer { get; set; } = new Account();
 
         [Column("sale_staff_id")]
-        public long SaleStaffId { get; set; }
-        public Account SaleStaff { get; set; } = new Account();
+        public long? SaleStaffId { get; set; }
+        public Account? SaleStaff { get; set; }
 
         [Column("delivery_staff_id")]
-        public long DeliveryStaffId { get; set; }
-        public Account DeliveryStaff { get; set; } = new Account();
+        public long? DeliveryStaffId { get; set; }
+        public Account? DeliveryStaff { get; set; }
 
         [Column("promotion_id")]
         public long? PromotionId { get; set; }

@@ -162,7 +162,7 @@ namespace backend.Data
                 .HasOne(o => o.OrderDetail)
                 .WithOne(o => o.WarrantyCard)
                 .HasForeignKey<WarrantyCard>(w => w.OrderDetaiId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             //Them khoa ngoai giua WarrantyCard voi WarrantyRequest
             builder

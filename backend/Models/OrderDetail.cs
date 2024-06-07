@@ -28,7 +28,7 @@ namespace backend.Models
 
         [Column("accessory_id")]
         public long? AccessoryId { get; set; }
-        public Accessory? Accessory { get; set; } = new Accessory();
+        public Accessory? Accessory { get; set; }
 
         [Column("diamond_price_id")]
         public long DiamondPriceId { get; set; }
@@ -36,7 +36,7 @@ namespace backend.Models
 
         [Column("material_price_id")]
         public long? MaterialPriceId { get; set; }
-        public MaterialPrice MaterialPrice { get; set; } = new MaterialPrice();
+        public MaterialPrice? MaterialPrice { get; set; }
 
         public WarrantyCard WarrantyCard { get; set; } = new WarrantyCard();
     }

@@ -331,7 +331,7 @@ namespace backend.Controllers
             {
                 diamond3.ImageUrl = "https://video.diamondasset.in:8080/imagesM/632416490.jpg";
             }
-            
+
             var diamond4 = await _context.Diamonds.FindAsync((long)4);
             if (diamond4 != null)
             {
@@ -367,10 +367,24 @@ namespace backend.Controllers
                             MaterialWeight = float.Parse(temp["Price"]) / (float)56.13,
                         };
                         List<AccessoryImage> accessoryImages = new List<AccessoryImage>();
-                        accessoryModel.AccessoryType = typeModel ?? throw new ArgumentNullException(nameof(typeModel));
-                        accessoryModel.Shape = shapeModel ?? throw new ArgumentNullException(nameof(shapeModel));
+                        accessoryImages.Add(
+                            new AccessoryImage { Accessory = accessoryModel, Url = temp["Image"], }
+                        );
+                        if (temp["Image"].Contains("FRONTVIEW_400x"))
+                        {
+                            accessoryImages.Add(
+                                new AccessoryImage
+                                {
+                                    Url = temp["Image"].Replace("FRONTVIEW", "SIDEVIEW"),
+                                }
+                            );
+                        }
+                        accessoryModel.AccessoryType =
+                            typeModel ?? throw new ArgumentNullException(nameof(typeModel));
+                        accessoryModel.Shape =
+                            shapeModel ?? throw new ArgumentNullException(nameof(shapeModel));
                         accessoryModel.AccessoryImages = accessoryImages;
-                        //accessories.Add(accessoryModel);
+                        // accessories.Add(accessoryModel);
                         _context.Accessories.Add(accessoryModel);
                     }
                 }
@@ -402,7 +416,9 @@ namespace backend.Controllers
             //var test = new List<Accessory>();
             foreach (string shape in this._shapes)
             {
-                var shapeModel = _context.Shapes.FirstOrDefault(x => x.Name == shape)?? throw new ArgumentNullException();
+                var shapeModel =
+                    _context.Shapes.FirstOrDefault(x => x.Name == shape)
+                    ?? throw new ArgumentNullException();
                 var rings = await Crawler.CrawlHelper.CrawlRing(shapeModel);
                 foreach (var item in rings)
                 {
@@ -412,7 +428,8 @@ namespace backend.Controllers
                         Karat = RandomKarat(),
                         MaterialWeight = float.Parse(item["Price"]) / (float)56.13,
                     };
-                    accessoryModel.AccessoryType = typeModel ?? throw new ArgumentNullException();;
+                    accessoryModel.AccessoryType = typeModel ?? throw new ArgumentNullException();
+                    ;
                     accessoryModel.Shape = shapeModel;
 
                     List<AccessoryImage> accessoryImages = new List<AccessoryImage>();
@@ -498,7 +515,13 @@ namespace backend.Controllers
             var admin = _context.Accounts.FirstOrDefault(x => x.Name == "ToiLaAdministrator");
             foreach (var percent in percents)
             {
-                _context.PriceRates.Add(new PriceRate() { Account = admin ?? throw new ArgumentNullException(), Percent = percent });
+                _context.PriceRates.Add(
+                    new PriceRate()
+                    {
+                        Account = admin ?? throw new ArgumentNullException(),
+                        Percent = percent
+                    }
+                );
                 _context.SaveChanges();
             }
             var crawler = new CrawlHelper(_context);
@@ -530,19 +553,19 @@ namespace backend.Controllers
             var deliveryStaff = await _context.Accounts.FirstOrDefaultAsync(x =>
                 x.Email == "delivery_staff@gmail.com"
             );
-                var order = new Order()
-                {
-                    Customer = customer,
-                    SaleStaff = saleStaff,
-                    DeliveryStaff = deliveryStaff,
-                    Rank = customer.Rank,
-                    PriceRate = await _context
-                        .PriceRates.OrderByDescending(x => x.CreatedAt)
-                        .FirstOrDefaultAsync(),
-                    ShippingAddress = customer.Address,
-                    PhoneNumber = customer.PhoneNumber,
-                    OrderStatus = OrderStatus.Pending,
-                };
+            var order = new Order()
+            {
+                Customer = customer,
+                SaleStaff = saleStaff,
+                DeliveryStaff = deliveryStaff,
+                Rank = customer.Rank,
+                PriceRate = await _context
+                    .PriceRates.OrderByDescending(x => x.CreatedAt)
+                    .FirstOrDefaultAsync(),
+                ShippingAddress = customer.Address,
+                PhoneNumber = customer.PhoneNumber,
+                OrderStatus = OrderStatus.Pending,
+            };
 
             var diamond = await _context.Diamonds.FindAsync((long)12);
             var accessory = await _context
@@ -571,7 +594,9 @@ namespace backend.Controllers
                 + orderDetail.MaterialPrice.UnitPrice * accessory.MaterialWeight
                 + accessory.AccessoryType.ProcessingPrice;
             order.OrderDetails = new List<OrderDetail> { orderDetail };
-            order.TotalPrice = (double)(order.OrderDetails.Sum(x => x.ItemPrice) * order.PriceRate.Percent);
+            order.TotalPrice = (double)(
+                order.OrderDetails.Sum(x => x.ItemPrice) * order.PriceRate.Percent
+            );
 
             var warrantyCard = new WarrantyCard();
             orderDetail.WarrantyCard = warrantyCard;

@@ -16,10 +16,10 @@ namespace backend.DTOs
         public string ShippingAddress { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public long CustomerId { get; set; }
-        public long SaleStaffId { get; set; }
-        public string SaleStaffName { get; set; } = string.Empty;
-        public long DeliveryStaffId { get; set; }
-        public string DeliveryStaffName { get; set; } = string.Empty;
+        public long? SaleStaffId { get; set; }
+        public string? SaleStaffName { get; set; } = string.Empty;
+        public long? DeliveryStaffId { get; set; }
+        public string? DeliveryStaffName { get; set; } = string.Empty;
         public Promotion? Promotion { get; set; }
         // public List<TransactionDTO> Transactions { get; set; }
         // public List<FeedbackDTO> Feedbacks { get; set; }

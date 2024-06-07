@@ -1,18 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using backend.Data;
 using backend.DTOs;
 using backend.DTOs.Order;
+using backend.Enums;
+using backend.Helper;
 using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol;
-using backend.Helper;
-using Microsoft.AspNetCore.Http.HttpResults;
-using backend.Enums;
 
 namespace backend.Repository
 {
@@ -24,59 +18,142 @@ namespace backend.Repository
         {
             _context = context;
         }
-        public async Task<Order?> CreateOrderAsync(CreateOrderDTO order)
+
+        public async Task<Order?> CreateOrderAsync(long customerId, CreateOrderDTO orderDto)
         {
-            var createdAt = _context.Orders.FirstOrDefault(x => x.CreatedAt == order.CreatedAt);
-            var TotalPrice = _context.Orders.FirstOrDefault(x => x.TotalPrice == order.TotalPrice);
-            var TotalDiscountPercent = _context.Orders.FirstOrDefault(x => x.TotalDiscountPercent == order.TotalDiscountPercent);
-            var OrderStatus = _context.Orders.FirstOrDefault(x => x.OrderStatus.ToString() == order.OrderStatus);
-            var ShippingAddress = _context.Orders.FirstOrDefault(x => x.ShippingAddress == order.ShippingAddress);
-            var Customer = await _context.Accounts.FindAsync(order.CustomerId);
-            var SaleStaff = await _context.Accounts.FindAsync(order.SaleStaffId);
-            var DeliveryStaff = await _context.Accounts.FindAsync(order.DeliveryStaffId);
-            foreach(var orderDetail in order.OrderDetails)
+            System.Console.WriteLine("hehe");
+            var customer = await _context.Accounts.FindAsync(customerId);
+            System.Console.WriteLine("hihi");
+            if (customer == null)
             {
-                var diamond = _context.Diamonds.FirstOrDefault(x => x.DiamondId == orderDetail.DiamondId);
-                var accessory = _context.Accessories.FirstOrDefault(x => x.AccessoryId == orderDetail.AccessoryId);
-                var materialPrice = _context.MaterialPrices.FirstOrDefault(x => x.MaterialPriceId == orderDetail.MaterialPriceId);
-                var diamondPrice = _context.DiamondPrices.FirstOrDefault(x => x.DiamondPriceId == orderDetail.DiamondPriceId);
-                if(diamond != null && materialPrice != null && diamondPrice != null)
+                return null;
+            }
+            var rank = await _context.Ranks.FindAsync(customer.RankId);
+            System.Console.WriteLine(rank.RankName);
+            var priceRate = await _context
+                .PriceRates.OrderBy(x => x.CreatedAt)
+                .FirstOrDefaultAsync();
+            System.Console.WriteLine("percent: " + priceRate.Percent);
+            Promotion promotion = null;
+            System.Console.WriteLine("promotion: " + promotion);
+
+            var newOrder = new Order()
+            {
+                Customer = customer,
+                Rank = rank,
+                PriceRate = priceRate,
+                OrderStatus = OrderStatus.Pending,
+                ShippingAddress = orderDto.ShippingAddress ?? customer.Address,
+                PhoneNumber = orderDto.PhoneNumber ?? customer.PhoneNumber,
+            };
+            if (orderDto.PromotionId != null)
+            {
+                promotion = await _context.Promotions.FirstOrDefaultAsync(x =>
+                    x.PromotionId == orderDto.PromotionId
+                );
+                newOrder.Promotion = promotion;
+                newOrder.TotalDiscountPercent = promotion.PromotionId + rank.Discount;
+            }
+            else
+            {
+                newOrder.TotalDiscountPercent = rank.Discount;
+            }
+            double totalPrice = 0;
+            foreach (var orderDetailDto in orderDto.OrderDetails)
+            {
+                var diamond = _context.Diamonds.FirstOrDefault(x =>
+                    x.DiamondId == orderDetailDto.DiamondId
+                );
+                if (diamond.Availability == false)
                 {
-                    var orderDetailFromCreate = orderDetail.ToOrderDetailFromCreate();
-                    orderDetailFromCreate.Accessory = accessory;
-                    orderDetailFromCreate.Diamond = diamond;
-                    orderDetailFromCreate.MaterialPrice = materialPrice;
-                    orderDetailFromCreate.DiamondPrice = diamondPrice;
-                    await _context.OrderDetails.AddAsync(orderDetailFromCreate);
-                    await _context.SaveChangesAsync();
+                    return null;
+                }
+
+                var diamondPrice = _context
+                    .DiamondPrices.Where(x =>
+                        x.Clarity == diamond.Clarity
+                        && x.Color == diamond.Color
+                        && x.MinCaratEff <= diamond.Carat
+                        && x.MaxCaratEff >= diamond.Carat
+                    )
+                    .OrderBy(x => x.EffTime)
+                    .FirstOrDefault();
+
+                if (diamond != null && diamondPrice != null)
+                {
+                    var orderDetail = orderDetailDto.ToOrderDetailFromCreate();
+                    orderDetail.Order = newOrder;
+                    orderDetail.Diamond = diamond;
+                    orderDetail.DiamondPrice = diamondPrice;
+
+                    if (orderDetailDto.AccessoryId != null)
+                    {
+                        var accessory = _context.Accessories.FirstOrDefault(x =>
+                            x.AccessoryId == orderDetailDto.AccessoryId
+                        );
+                        var materialPrice = _context
+                            .MaterialPrices.Where(x => x.Karat == accessory.Karat)
+                            .OrderBy(x => x.EffTime)
+                            .FirstOrDefault();
+                        orderDetail.Accessory = accessory;
+                        orderDetail.MaterialPrice = materialPrice;
+                        orderDetail.ItemPrice =
+                            (
+                                diamond.Carat * diamondPrice.UnitPrice * 100
+                                + accessory?.MaterialWeight * materialPrice?.UnitPrice
+                                + accessory?.AccessoryType.ProcessingPrice
+                            ) * priceRate?.Percent;
+                    }
+                    else
+                    {
+                        System.Console.WriteLine("No accessory: ");
+                        orderDetail.ItemPrice =
+                            diamond.Carat * diamondPrice.UnitPrice * 100 * priceRate?.Percent;
+                    }
+                    var warrantyCard = new WarrantyCard() { OrderDetail = orderDetail };
+                    totalPrice += orderDetail.ItemPrice ?? 0;
+                    await _context.WarrantyCards.AddAsync(warrantyCard);
+                    await _context.OrderDetails.AddAsync(orderDetail);
+                    diamond.Availability = false;
+                    _context.Entry(diamond).State = EntityState.Modified;
                 }
             }
-            return null;
+            System.Console.WriteLine("totalPrice: " + totalPrice);
+            newOrder.TotalPrice = totalPrice;
+            await _context.Orders.AddAsync(newOrder);
+            await _context.SaveChangesAsync();
+            return newOrder;
         }
 
-        public async Task<OrderDetail?> CreateOrderDetailAsync(CreateOrderDetailDTO order)
-        {
-            var diamond = _context.Diamonds.FirstOrDefault(x => x.DiamondId == order.DiamondId);
-            var accessory = _context.Accessories.FirstOrDefault(x => x.AccessoryId == order.AccessoryId);
-            var materialPrice = _context.MaterialPrices.FirstOrDefault(x => x.MaterialPriceId == order.MaterialPriceId);
-            var diamondPrice = _context.DiamondPrices.FirstOrDefault(x => x.DiamondPriceId == order.DiamondPriceId);
-            if(diamond != null && materialPrice != null && diamondPrice != null)
-            {
-                var orderDetail = order.ToOrderDetailFromCreate();
-                orderDetail.Accessory = accessory;
-                orderDetail.Diamond = diamond;
-                orderDetail.MaterialPrice = materialPrice;
-                orderDetail.DiamondPrice = diamondPrice;
-                await _context.OrderDetails.AddAsync(orderDetail);
-                await _context.SaveChangesAsync();
-            }
-            return null;
-        }
+        //public async Task<OrderDetail?> CreateOrderDetailAsync(CreateOrderDetailDTO order)
+        //{
+        //    var diamond = _context.Diamonds.FirstOrDefault(x => x.DiamondId == order.DiamondId);
+        //    var accessory = _context.Accessories.FirstOrDefault(x =>
+        //        x.AccessoryId == order.AccessoryId
+        //    );
+        //    var materialPrice = _context.MaterialPrices.FirstOrDefault(x =>
+        //        x.MaterialPriceId == order.MaterialPriceId
+        //    );
+        //    var diamondPrice = _context.DiamondPrices.FirstOrDefault(x =>
+        //        x.DiamondPriceId == order.DiamondPriceId
+        //    );
+        //    if (diamond != null && materialPrice != null && diamondPrice != null)
+        //    {
+        //        var orderDetail = order.ToOrderDetailFromCreate();
+        //        orderDetail.Accessory = accessory;
+        //        orderDetail.Diamond = diamond;
+        //        orderDetail.MaterialPrice = materialPrice;
+        //        orderDetail.DiamondPrice = diamondPrice;
+        //        await _context.OrderDetails.AddAsync(orderDetail);
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    return null;
+        //}
 
         public async Task<OrderResult?> GetAllOrdersAsync(OrderQuery query)
         {
-            var orderQueries = _context.Orders
-                .Include(x => x.OrderDetails)
+            var orderQueries = _context
+                .Orders.Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Diamond)
                 .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Accessory)
@@ -99,7 +176,9 @@ namespace backend.Repository
 
             if (!string.IsNullOrEmpty(query.ShippingAddress))
             {
-                orderQueries = orderQueries.Where(x => x.ShippingAddress.ToLower() == query.ShippingAddress.ToLower());
+                orderQueries = orderQueries.Where(x =>
+                    x.ShippingAddress.ToLower() == query.ShippingAddress.ToLower()
+                );
             }
 
             if (query.CustomerId > 0)
@@ -119,10 +198,12 @@ namespace backend.Repository
 
             if (query.MinTotalPrice != 0 || query.MaxTotalPrice != 1000000000)
             {
-                orderQueries = orderQueries.Where(x => x.TotalPrice >= query.MinTotalPrice && x.TotalPrice <= query.MaxTotalPrice);
+                orderQueries = orderQueries.Where(x =>
+                    x.TotalPrice >= query.MinTotalPrice && x.TotalPrice <= query.MaxTotalPrice
+                );
             }
 
-            //Chua dung lam, nhung lam tam tam. Nho sua lai rang buoc max > min 
+            //Chua dung lam, nhung lam tam tam. Nho sua lai rang buoc max > min
             if (query.MinDate != null)
             {
                 orderQueries = orderQueries.Where(x => x.CreatedAt >= query.MinDate);
@@ -154,11 +235,10 @@ namespace backend.Repository
             };
         }
 
-
         public async Task<OrderDTO?> GetOrderByIdAsync(long id)
         {
-            var order = await _context.Orders
-                .Include(x => x.OrderDetails)
+            var order = await _context
+                .Orders.Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Diamond)
                 .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Accessory)
@@ -179,7 +259,7 @@ namespace backend.Repository
 
             var orderDTO = order?.ToOrderDTO();
 
-            if(orderDTO == null)
+            if (orderDTO == null)
             {
                 return null;
             }
@@ -190,7 +270,7 @@ namespace backend.Repository
         public async Task<Order?> UpdateOrderAsync(long id, UpdateOrderDTO order)
         {
             var existedOrder = _context.Orders.FirstOrDefault(x => x.OrderId == id);
-            if(existedOrder == null)
+            if (existedOrder == null)
             {
                 return null;
             }
