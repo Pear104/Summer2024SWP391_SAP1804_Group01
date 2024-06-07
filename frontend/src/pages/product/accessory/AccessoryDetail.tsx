@@ -104,9 +104,14 @@ export default function AccessoryDetail() {
                     }
                   }}
                 >
-                  {currentDiamond
-                    ? "CHOOSE THIS ACCESSORY"
-                    : "YOU NEED TO CHOOSE DIAMOND FIRST"}
+                  {currentDiamond ? (
+                    "CHOOSE THIS ACCESSORY"
+                  ) : (
+                    <div>
+                      <div className="text-center">ADD TO CART</div>
+                      <div>(YOU NEED TO CHOOSE DIAMOND FIRST)</div>
+                    </div>
+                  )}
                 </div>
                 {!currentDiamond && (
                   <div
