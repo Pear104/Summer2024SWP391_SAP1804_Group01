@@ -44,7 +44,7 @@ export default function ProductsManage() {
   const [diamond, diamondPrice, diamondSearch] = useQueries({
     queries: [
       {
-        queryKey: ["diamonds", queryUrl],
+        queryKey: ["orders", queryUrl],
         queryFn: () => GET(queryUrl),
         staleTime: Infinity,
       },

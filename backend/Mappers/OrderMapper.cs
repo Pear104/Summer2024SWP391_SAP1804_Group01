@@ -34,10 +34,12 @@ namespace backend.Mappers
                 ShippingAddress = order.ShippingAddress,
                 CreatedAt = order.CreatedAt,
                 CustomerId = order.CustomerId,
+                CustomerName = order.Customer.Name,
                 SaleStaffId = order.SaleStaffId,
                 SaleStaffName = order.SaleStaff?.Name,
                 DeliveryStaffId = order.DeliveryStaffId,
                 DeliveryStaffName = order.DeliveryStaff?.Name,
+                PhoneNumber = order.PhoneNumber,
                 Promotion = order.Promotion,
                 OrderDetails = order.OrderDetails.Select(o => o.ToOrderDetailDTO()).ToList()
             };

@@ -17,20 +17,20 @@ const formatDate = (dateString: any) => {
 
 export const OrderStatus = ({ order }: { order: any }) => {
   return (
-    <div className="items-center justify-between mb-4">
+    <div className="items-center justify-between mb-4 text-base">
       Order status:{" "}
       <span
         className={`${
           order.orderStatus === "Pending"
-            ? "bg-red-600"
+            ? "bg-red-200 border-red-300"
             : order.orderStatus === "Processing"
-            ? "bg-yellow-500"
+            ? "bg-yellow-200 border-yellow-300"
             : order.orderStatus === "Delivering"
-            ? "bg-orange-600"
+            ? "bg-orange-200 border-orange-300"
             : order.orderStatus === "Completed"
-            ? "bg-green-600"
-            : "bg-red-800"
-        } border-2 border-solid p-2 text-white px-4 rounded-full`}
+            ? "bg-green-200 border-green-300"
+            : "bg-red-200 border-red-300"
+        } border-2 p-2 px-4 rounded-md text-base`}
       >
         {order.orderStatus}
       </span>

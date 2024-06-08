@@ -177,6 +177,7 @@ namespace backend.Repository
                 .ThenInclude(x => x.DiamondPrice)
                 .Include(x => x.SaleStaff)
                 .Include(x => x.DeliveryStaff)
+                .Include(x => x.Customer)
                 .AsQueryable();
 
             if (query.OrderStatus != null)
@@ -211,6 +212,11 @@ namespace backend.Repository
                 orderQueries = orderQueries.Where(x =>
                     x.TotalPrice >= query.MinTotalPrice && x.TotalPrice <= query.MaxTotalPrice
                 );
+            }
+
+            if(query.PhoneNumber != string.Empty)
+            {
+                orderQueries = orderQueries.Where(x => x.PhoneNumber == query.PhoneNumber);
             }
 
             //Chua dung lam, nhung lam tam tam. Nho sua lai rang buoc max > min
@@ -265,6 +271,8 @@ namespace backend.Repository
                 .ThenInclude(x => x.DiamondPrice)
                 .Include(x => x.SaleStaff)
                 .Include(x => x.DeliveryStaff)
+                .Include(x => x.Customer)
+                .Include(x => x.Promotion)
                 .FirstOrDefaultAsync(x => x.OrderId == id);
 
             var orderDTO = order?.ToOrderDTO();
