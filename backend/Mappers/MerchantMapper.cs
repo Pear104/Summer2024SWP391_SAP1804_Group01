@@ -12,7 +12,7 @@ namespace backend.Mappers
             {
                 MerchantName = createMerchant.MerchantName,
                 MerchantWebLink = createMerchant.MerchantWebLink,
-                MerchentIpnUrl = createMerchant.MerchentIpnUrl,
+                MerchantIpnUrl = createMerchant.MerchentIpnUrl,
                 MerchantReturnUrl = createMerchant.MerchantReturnUrl,
                 IsActive = createMerchant.IsActive
             };
@@ -25,7 +25,7 @@ namespace backend.Mappers
             {
                 MerchantName = merchantModel.MerchantName,
                 MerchantWebLink = merchantModel.MerchantWebLink,
-                MerchentIpnUrl = merchantModel.MerchentIpnUrl,
+                MerchentIpnUrl = merchantModel.MerchantIpnUrl,
                 MerchantReturnUrl = merchantModel.MerchantReturnUrl,
                 IsActive = merchantModel.IsActive
             };

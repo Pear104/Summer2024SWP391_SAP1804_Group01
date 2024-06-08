@@ -31,9 +31,11 @@ namespace backend.Models.Payment.Domain.Entities
         public string? PaymentId { get; set; } = string.Empty;
         public Payment? Payment { get; set; }
 
+        //FK??
+        //user Id??
         [Column("TranRefId", TypeName = "nvarchar(250)")]
         public string? TranRefId { get; set; } = string.Empty;
-
+        public Account? Account { get; set; }
 
     }
 }

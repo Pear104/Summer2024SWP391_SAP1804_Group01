@@ -19,7 +19,7 @@ namespace backend.Models.Payment.Domain.Entities
         [Column("MerchantWebLink", TypeName = "nvarchar(250)")]
         public string? MerchantWebLink { get; set; } = string.Empty;
         [Column("MerchentIpnUrl", TypeName = "nvarchar(250)")]
-        public string? MerchentIpnUrl { get; set; } = string.Empty;
+        public string? MerchantIpnUrl { get; set; } = string.Empty;
         [Column("MerchantReturnUrl", TypeName = "nvarchar(250)")]
         public string? MerchantReturnUrl { get; set; } = string.Empty;
         [Column("SecretKey", TypeName = "nvarchar(50)")]
@@ -33,6 +33,7 @@ namespace backend.Models.Payment.Domain.Entities
         //One merchannt can have many notification
         public List<PaymentNotification> Notifications { get; set; } = new List<PaymentNotification>();
 
+        //turn this into a extention class
         public string GenerateHashedId()
         {
             // Example hash function (you can replace this with your actual hash function)

@@ -2,7 +2,7 @@
 {
     public class MomoConfig
     {
-        public static string ConfigName => "Momo_Test";
+        public static string ConfigName => "Momo";
         public string PartnerCode { get; set; } = string.Empty;
         public string ReturnUrl { get; set; } = string.Empty;
         public string IpnUrl { get; set; } = string.Empty;

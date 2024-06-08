@@ -13,22 +13,23 @@ namespace backend.Models.Payment.Domain.Entities
         public string Id { get; set; }
 
         [Column("PaymentContent", TypeName = "nvarchar(250)")]
-        public string? PaymentContent { get; set; } = string.Empty;
+        public string PaymentContent { get; set; } = string.Empty;
 
         [Column("PaymentCurrency", TypeName = "nvarchar(250)")]
-        public string? PaymentCurrency { get; set; } = string.Empty;
+        public string PaymentCurrency { get; set; } = string.Empty;
 
         /// <summary>
         /// Which Store's order does this payment reference to?
         /// </summary>
         [Column("PaymentRefId", TypeName = "nvarchar(250)")]
-        public string? PaymentRefId { get; set; } = string.Empty;
+        public string PaymentRefId { get; set; } = string.Empty;
 
         [Column("RequiredAmount", TypeName = "decimal(19, 2)")]
         public decimal? RequiredAmount { get; set; }
 
+        //nullable?? dunno. Quick fixed => might be technical dept
         [Column("PaymentDate")]
-        public DateTime? PaymentDate { get; set; } = DateTime.Now;
+        public DateTime PaymentDate { get; set; } = DateTime.Now;
 
         [Column("ExpireDate")]
         public DateTime? ExpireDate { get; set; }
@@ -70,10 +71,10 @@ namespace backend.Models.Payment.Domain.Entities
         public List<PaymentTransaction> Transactions { get; set; } = new List<PaymentTransaction>();
 
 
-        public void SetIdAfterCurrentTime()
-        {
-            this.Id = DateTime.Now.Ticks.ToString()+"id";   //No special reason for this format, can be changed.
-        }
+        //public void SetIdAfterCurrentTime()
+        //{
+        //    this.Id = DateTime.Now.Ticks.ToString() + "id";   //No special reason for this format, can be changed.
+        //}
 
         //public void SetOrderIdAfterCurrentTime()
         //{

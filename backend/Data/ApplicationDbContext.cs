@@ -414,6 +414,7 @@ namespace backend.Data
         {
             SetMerchantIds();
             SetPaymentIds();
+            SetPaymentSignitureIds();
             return base.SaveChangesAsync(cancellationToken);
         }
 
@@ -435,10 +436,21 @@ namespace backend.Data
             {
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Entity.SetIdAfterCurrentTime();
+                    entry.Entity.Id = ObjectExtention.PostFixPlusDateTimeNow("PAY");
                 }
             }
         }
+        //also set signiture id
 
+        private void SetPaymentSignitureIds()
+        {
+            foreach (var entry in ChangeTracker.Entries<PaymentSignature>())
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.Id = ObjectExtention.PostFixPlusDateTimeNow("PSIG");
+                }
+            }
+        }
     }
 }

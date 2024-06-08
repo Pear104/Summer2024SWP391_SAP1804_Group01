@@ -12,5 +12,11 @@ namespace backend.Helper
             string queryString = string.Join("&", properties.ToArray());
             return queryString;
         }
+
+        public static string PostFixPlusDateTimeNow(string postFix)
+        {
+            string result = postFix + DateTime.Now.Ticks.ToString();   //No special reason for this format, can be changed.
+            return result;
+        }
     }
 }

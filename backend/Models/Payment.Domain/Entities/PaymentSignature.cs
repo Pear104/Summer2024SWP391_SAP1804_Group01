@@ -28,8 +28,8 @@ namespace backend.Models.Payment.Domain.Entities
         [Column("PaymentId", TypeName = "nvarchar(50)")]
         public string? PaymentId { get; set; } = string.Empty;
         public Payment? Payment { get; set; }
-         
-        public bool IsValid { get; set; }
+
+        public bool IsValid { get; set; } = true;
         
     }
 }

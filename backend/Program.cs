@@ -1,6 +1,7 @@
 ﻿using backend.Data;
 using backend.Interfaces;
 using backend.Payment_src.core.Payment.Service.Momo.Config;
+using backend.Payment_src.core.Payment.Service.Vnpay.Config;
 using backend.Repository;
 using backend.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -42,7 +43,7 @@ namespace backend
                     Version = "v1"
                 });
                 var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var path = Path.Combine(AppContext.BaseDirectory,xmlFileName);
+                var path = Path.Combine(AppContext.BaseDirectory, xmlFileName);
                 option.IncludeXmlComments(path);
                 option.AddSecurityDefinition(
                     "Bearer",
@@ -79,9 +80,15 @@ namespace backend
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            builder.Services.AddHttpContextAccessor();
+
             //Payment cofiguration
             builder.Services.Configure<MomoConfig>(
                 builder.Configuration.GetSection(MomoConfig.ConfigName)
+                );
+            //Payment cofiguration
+            builder.Services.Configure<VnpayConfig>(
+                builder.Configuration.GetSection(VnpayConfig.ConfigName)
                 );
 
             builder
@@ -113,7 +120,9 @@ namespace backend
                 });
 
 
+            builder.Services.AddScoped<IPaymentTransactionRepository, PaymentTransactionRepository>();
             builder.Services.AddScoped<IAccessoryRepository, AccessoryRepository>();
+            builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IDiamondRepository, DiamondRepository>();
@@ -123,6 +132,7 @@ namespace backend
             builder.Services.AddScoped<IRankRepository, RankRepository>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+            builder.Services.AddScoped<IPaymentSignatureRepository, PaymentSinatureRepository>();
 
 
             var app = builder.Build();
@@ -140,7 +150,7 @@ namespace backend
                 x.AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()
-                    .WithOrigins("http://localhost:3000")
+                    .WithOrigins("http://localhost:44376")
                     .SetIsOriginAllowed(origin => true)
             );
 
