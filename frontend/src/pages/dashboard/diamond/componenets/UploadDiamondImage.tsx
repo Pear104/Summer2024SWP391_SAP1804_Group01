@@ -12,7 +12,7 @@ const getBase64 = (file: FileType): Promise<string> =>
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = (error) => reject(error);
   });
-const UploadImage = ({
+const UploadDiamondImage = ({
   fileList,
   setFileList,
 }: {
@@ -32,9 +32,9 @@ const UploadImage = ({
   };
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-    console.log(fileList);
-    // setImages();
+    // Only keep the last uploaded file
+    setFileList(newFileList.slice(-1));
+    // setFileList(newFileList);
   };
 
   const uploadButton = (
@@ -69,4 +69,4 @@ const UploadImage = ({
   );
 };
 
-export default UploadImage;
+export default UploadDiamondImage;

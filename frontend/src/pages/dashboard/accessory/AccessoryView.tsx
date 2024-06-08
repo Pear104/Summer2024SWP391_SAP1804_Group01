@@ -83,6 +83,8 @@ export default function AccessoryView() {
     })();
   }, [reset]);
   const [api, contextHolder] = notification.useNotification();
+  console.log("fileList");
+  console.log(fileList);
   return (
     <div>
       {isLoading && <Loading />}

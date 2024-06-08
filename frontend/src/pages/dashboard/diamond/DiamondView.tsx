@@ -22,8 +22,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { POST } from "../../../utils/request";
 import { FormItem } from "react-hook-form-antd";
 import Loading from "../../../components/Loading";
-import UploadImage from "./componenets/UploadDiamondImage";
 import { storage } from "../../../utils/firebase";
+import UploadDiamondImage from "./componenets/UploadDiamondImage";
 
 const Color = {
   D: "D",
@@ -60,18 +60,18 @@ const Clarity = {
   I2: "I2",
   I3: "I3",
 };
-const shapeOptions = [
-  { value: "1", label: "Round" },
-  { value: "2", label: "Emerald" },
-  { value: "3", label: "Heart" },
-  { value: "4", label: "Pear" },
-  { value: "5", label: "Oval" },
-  { value: "6", label: "Cushion" },
-  { value: "7", label: "Princess" },
-  { value: "8", label: "Radiant" },
-  { value: "9", label: "Marquise" },
-  { value: "10", label: "Asscher" },
-];
+// const shapeOptions = [
+//   { value: "1", label: "Round" },
+//   { value: "2", label: "Emerald" },
+//   { value: "3", label: "Heart" },
+//   { value: "4", label: "Pear" },
+//   { value: "5", label: "Oval" },
+//   { value: "6", label: "Cushion" },
+//   { value: "7", label: "Princess" },
+//   { value: "8", label: "Radiant" },
+//   { value: "9", label: "Marquise" },
+//   { value: "10", label: "Asscher" },
+// ];
 const schema = z.object({
   lab: z
     .string()
@@ -85,8 +85,8 @@ const schema = z.object({
       message: "Must be a 9-digit number",
     })
     .transform((value) => parseInt(value, 10)),
-  certificateImg: z.string().min(0, { message: "Required" }),
-  diamondImg: z.string().min(0, { message: "Required" }),
+  certificateUrl: z.string().min(0, { message: "Required" }),
+  imageUrl: z.string().min(0, { message: "Required" }),
 
   carat: z.coerce.number().min(0.1, { message: "Required" }),
 
@@ -99,11 +99,11 @@ const schema = z.object({
   polish: z.string().min(1, { message: "Required" }),
   symmetry: z.string().min(1, { message: "Required" }),
   fluorescence: z.string().min(1, { message: "Required" }),
-  shape: z.coerce.number().min(1, { message: "Required" }),
+  shapeId: z.coerce.number().min(1, { message: "Required" }),
 });
 export default function DiamondView() {
   const [isLoading, setIsLoading] = useState(false);
-  const [certificateFile, setCertificateFile] = useState<UploadFile[]>([]);
+  // const [certificateFile, setCertificateFile] = useState<UploadFile[]>([]);
   const [diamondFile, setDiamondFile] = useState<UploadFile[]>([]);
   const [diamond, setDiamond] = useState<any>();
   const { diamondId } = useParams();
@@ -127,8 +127,8 @@ export default function DiamondView() {
     defaultValues: {
       lab: "",
       certificateNumber: "",
-      certificateImg: "",
-      diamondImg: "",
+      certificateUrl: "",
+      imageUrl: "",
       carat: "",
       cut: "",
       color: Color.D,
@@ -136,7 +136,7 @@ export default function DiamondView() {
       polish: "",
       symmetry: "",
       fluorescence: "",
-      shape: "",
+      shapeId: "",
     },
     resolver: zodResolver(schema),
   });
@@ -144,16 +144,34 @@ export default function DiamondView() {
     (async () => {
       const data = await GET(`/api/Diamonds/${diamondId}`);
       if (data) {
-        setCertificateFile(data?.certificateNumber);
-        setDiamondFile(data?.ImageUrl);
+        // if (data?.certificateUrl) {
+        //   setCertificateFile([
+        //     {
+        //       uid: "-1",
+        //       name: "image.png",
+        //       status: "done",
+        //       url: data?.certificateUrl,
+        //     },
+        //   ]);
+        // }
+        if (data?.imageUrl) {
+          setDiamondFile([
+            {
+              uid: "-1",
+              name: "image.png",
+              status: "done",
+              url: data?.imageUrl,
+            },
+          ]);
+        }
         setDiamond(data);
         reset({
           lab: data?.lab || "",
           certificateNumber: data?.certificateNumber
             ? data.certificateNumber.toString()
             : "",
-          certificateImg: data?.CertificateUrl || "",
-          diamondImg: data?.ImageUrl || "",
+          certificateUrl: data?.CertificateUrl || "",
+          imageUrl: data?.ImageUrl || "",
           carat: data?.carat || "",
           cut: data?.cut || "",
           color: data?.color || Color.D,
@@ -161,12 +179,15 @@ export default function DiamondView() {
           polish: data?.polish || "",
           symmetry: data?.symmetry || "",
           fluorescence: data?.fluorescence || "",
-          shape: data?.shapeId || "",
+          shapeId: data?.shape,
         });
       }
     })();
   }, [reset]);
   const [api, contextHolder] = notification.useNotification();
+  console.log("file");
+  // console.log(certificateFile);
+  console.log(diamondFile);
   return (
     <div>
       {isLoading && <Loading />}
@@ -186,15 +207,22 @@ export default function DiamondView() {
           className=""
           layout="vertical"
           onFinish={handleSubmit(async (formData) => {
-            console.log("diamondFileList");
-            console.log(diamondFile);
-            if (!diamondFile || diamondFile?.length == 0) {
-              setError("diamondImg", {
+            // console.log("diamondFileList");
+            // console.log(diamondFile);
+            if (!diamondFile || diamondFile?.length === 0) {
+              setError("imageUrl", {
                 type: "manual",
-                message: "Please upload at least one image",
+                message: "Please upload an image",
               });
               return;
             }
+            // if (!certificateFile || certificateFile?.length === 0) {
+            //   setError("imageUrl", {
+            //     type: "manual",
+            //     message: "Please upload an image",
+            //   });
+            //   return;
+            // }
             setIsLoading(true);
             let submitForm: any;
             for (const [key, value] of Object.entries(formData)) {
@@ -205,44 +233,62 @@ export default function DiamondView() {
             let response = null;
 
             // Delete old images
-            diamond?.ImageUrl?.forEach(async (image: any) => {
-              if (
-                image.url.includes("firebase") &&
-                diamondFile.every((file) => file?.url !== image.url)
-              ) {
-                const oldImageRef = ref(storage, image.url);
-                await deleteObject(oldImageRef);
-              }
-            });
+            if (
+              diamond?.ImageUrl &&
+              typeof diamond.ImageUrl === "string" &&
+              !diamondFile[0]?.url?.includes(diamond.ImageUrl)
+            ) {
+              const oldImageRef = ref(storage, diamond.ImageUrl);
+              await deleteObject(oldImageRef);
+            }
 
             // Update new image to firebase
-            const urlList: string[] = [];
-            const uploadPromises = diamondFile.map(async (file: UploadFile) => {
-              const imgRef = ref(storage, `images/${v4()}`);
-              console.log(file);
-              if (file?.url) {
-                const blob = await fetch(file?.url).then((r) => r.blob());
-                const uploadResult = await uploadBytes(imgRef, blob as Blob);
-                const url = await getDownloadURL(uploadResult.ref);
-                urlList.push(url);
-                if (file?.url.includes("firebase")) {
-                  const oldImageRef = ref(storage, file?.url);
-                  await deleteObject(oldImageRef);
-                }
-              } else {
-                const uploadResult = await uploadBytes(
-                  imgRef,
-                  file.originFileObj as Blob
-                );
-                const url = await getDownloadURL(uploadResult.ref);
-                urlList.push(url);
+            const diaFile = diamondFile[0];
+            let diamondImageUrl = "";
+            // let certificateUrl = "";
+            // const certFile = certificateFile[0];
+            const imgRef = ref(storage, `images/${v4()}`);
+            if (diaFile?.url) {
+              const blob = await fetch(diaFile?.url).then((r) => r.blob());
+              const uploadResult = await uploadBytes(imgRef, blob as Blob);
+              const url = await getDownloadURL(uploadResult.ref);
+              diamondImageUrl = url;
+              if (diaFile?.url.includes("firebase")) {
+                const oldImageRef = ref(storage, diaFile?.url);
+                await deleteObject(oldImageRef);
               }
-            });
-            await Promise.all(uploadPromises);
+            } else {
+              const uploadResult = await uploadBytes(
+                imgRef,
+                diaFile.originFileObj as Blob
+              );
+              const url = await getDownloadURL(uploadResult.ref);
+              diamondImageUrl = url;
+            }
+            // if (certFile?.url) {
+            //   const blob = await fetch(certFile?.url).then((r) => r.blob());
+            //   const uploadResult = await uploadBytes(imgRef, blob as Blob);
+            //   const url = await getDownloadURL(uploadResult.ref);
+            //   certificateUrl = url;
+            //   if (certFile?.url.includes("firebase")) {
+            //     const oldImageRef = ref(storage, certFile?.url);
+            //     await deleteObject(oldImageRef);
+            //   }
+            // } else {
+            //   const uploadResult = await uploadBytes(
+            //     imgRef,
+            //     certFile.originFileObj as Blob
+            //   );
+            //   const url = await getDownloadURL(uploadResult.ref);
+            //   certificateUrl = url;
+            // }
+            // await Promise.all(uploadPromises);
 
             // Add firebase's image url to DATJ database
-            submitForm["diamondImages"] = urlList;
+            submitForm["ImageUrl"] = diamondImageUrl;
+            // submitForm["CertificateUrl"] = certificateUrl; // Since we only have one image
             console.log("form: ");
+
             console.log(submitForm);
             if (diamond.diamondId) {
               console.log("PUT");
@@ -262,7 +308,7 @@ export default function DiamondView() {
             } else {
               openNotification(false);
             }
-            location.href = "/admin/diamonds/detail/" + response.diamondId;
+            // location.href = "/admin/diamonds/detail/" + response.diamondId;
           })}
         >
           <FormItem label="Lab" name="lab" control={control} required>
@@ -381,35 +427,53 @@ export default function DiamondView() {
               value="none"
             />
           </FormItem>
-          <FormItem label="Shape" name="shape" control={control} required>
+          <FormItem label="Shape" name="shapeId" control={control} required>
             <Select
               size="large"
               className="font-thin border w-full text-sm"
-              options={shapeOptions}
-              defaultValue={shapeOptions.find(
-                (option) => option.value === diamond?.ShapeId
-              )}
+              options={[
+                { value: "1", label: "Round" },
+                { value: "2", label: "Emerald" },
+                { value: "3", label: "Heart" },
+                { value: "4", label: "Pear" },
+                { value: "5", label: "Oval" },
+                { value: "6", label: "Cushion" },
+                { value: "7", label: "Princess" },
+                { value: "8", label: "Radiant" },
+                { value: "9", label: "Marquise" },
+                { value: "10", label: "Asscher" },
+              ]}
+              defaultValue={diamond?.shape}
             />
           </FormItem>
-          {/* <FormItem
+          <FormItem
             label="Diamond Image"
-            name="diamondImg"
+            name="imageUrl"
             control={control}
             required
           >
-            <UploadImage fileList={diamondFile} setFileList={setDiamondFile} />
+            <UploadDiamondImage
+              fileList={diamondFile}
+              setFileList={setDiamondFile}
+            />
           </FormItem>
           <FormItem
             label="Certificate Image"
-            name="certificateImg"
+            name="certificateUrl"
             control={control}
             required
           >
-            <UploadImage
+            {/* <UploadDiamondImage
               fileList={certificateFile}
               setFileList={setCertificateFile}
+            /> */}
+            <Input
+              type="text"
+              placeholder="Certificate Url"
+              className="font-thin border p-2 rounded-md w-full"
+              value="none"
             />
-          </FormItem> */}
+          </FormItem>
           <Form.Item className="mt-8 mb-0">
             <div className="mt-8">
               <Button

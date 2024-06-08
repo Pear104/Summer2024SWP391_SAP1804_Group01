@@ -54,11 +54,14 @@ namespace backend.Controllers
         public async Task<ActionResult> CreateDiamond([FromBody] CreateDiamondDTO diamond)
         {
             var diamondModel = await _diamondRepo.CreateDiamondAsync(diamond);
-            if (diamondModel == null)
-            {
-                return BadRequest("The diamond's certificate number already exists.");
-            }
-            return Ok(diamondModel);
+            // if (diamondModel == null)
+            // {
+            //     return BadRequest("The diamond's certificate number already exists.");
+            // }
+            // return Ok(diamondModel);
+            System.Console.WriteLine("ahihi");
+            System.Console.WriteLine("diamond: " + diamond.CertificateNumber);
+            return Ok(diamond);
         }
 
         [HttpPut("{id}")]
