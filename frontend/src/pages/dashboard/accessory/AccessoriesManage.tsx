@@ -45,6 +45,7 @@ export default function AccessoriesManage() {
       {
         queryKey: ["materialPrices"],
         queryFn: () => GET("/api/MaterialPrices/"),
+        staleTime: Infinity,
       },
     ],
   });

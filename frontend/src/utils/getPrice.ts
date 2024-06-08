@@ -15,7 +15,7 @@ export const getDiamondPrice = (diamond: any, diamondPrice: any) => {
 export const getAccessoryPrice = (accessory: any, materialPrice: any) => {
   return (
     accessory?.materialWeight *
-    materialPrice?.find((price: any) => price.karat == accessory.karat)
-      .unitPrice
+    materialPrice?.find((price: any) => price.karat == accessory?.karat)
+      ?.unitPrice
   );
 };

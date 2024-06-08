@@ -18,9 +18,7 @@ import EmailLoading from "../pages/authentication/EmailLoading";
 import ForgetPassword from "../pages/authentication/ForgetPassword";
 import ResetPasswordForm from "../pages/authentication/ResetPasswordForm";
 import Dashboard from "../pages/dashboard/Dashboard";
-
 import Cart from "../pages/cart/Cart";
-
 import Test from "../pages/test/Test";
 import OrderDetail from "../pages/account/OrderDetail";
 import EditAccount from "../pages/account/EditAccount";
@@ -35,11 +33,34 @@ import CustomerManage from "../pages/dashboard/customer/CustomerManage";
 import TransactionManage from "../pages/dashboard/transacction/TransactionManage";
 import OrderManage from "../pages/dashboard/order/OrderManage";
 import DiamondView from "../pages/dashboard/diamond/DiamondView";
+import CheckoutLayout from "../layouts/CheckoutLayout";
+import CheckoutInfo from "../pages/checkout/CheckoutInfo";
+import CheckoutShipping from "../pages/checkout/CheckoutShipping";
+import CheckoutPayment from "../pages/checkout/CheckoutPayment";
+
 const routes = [
   {
     errorElement: <Error />,
     path: "/",
     children: [
+      {
+        path: "checkout",
+        element: <CheckoutLayout />,
+        children: [
+          {
+            index: true,
+            element: <CheckoutInfo />,
+          },
+          {
+            path: "shipping",
+            element: <CheckoutShipping />,
+          },
+          {
+            path: "payment",
+            element: <CheckoutPayment />,
+          },
+        ],
+      },
       {
         element: <DashBoardLayout />,
         path: "/admin",
@@ -132,31 +153,31 @@ const routes = [
             element: <Home />,
           },
           {
-            path: "/authentication",
+            path: "authentication",
             children: [
               {
-                path: "/authentication/login",
+                path: "login",
                 element: <Login />,
               },
               {
                 element: <Register />,
-                path: "/authentication/register",
+                path: "register",
               },
               {
                 element: <EmailLoading />,
-                path: "/authentication/verify-gmail",
+                path: "verify-gmail",
               },
               {
                 element: <ConfirmEmail />,
-                path: "/authentication/email-redirect",
+                path: "email-redirect",
               },
               {
                 element: <ResetPasswordForm />,
-                path: "/authentication/reset-password",
+                path: "reset-password",
               },
               {
                 element: <ForgetPassword />,
-                path: "/authentication/forget-password",
+                path: "forget-password",
               },
             ],
           },

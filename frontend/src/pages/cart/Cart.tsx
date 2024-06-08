@@ -3,11 +3,14 @@ import React, { useState } from "react";
 import CartItem from "./components/CartItem";
 import { useCartStore } from "../../store/cartStore";
 import { Button } from "antd";
-import { POST } from "../../utils/request";
+import { GET, POST } from "../../utils/request";
 import Loading from "./../../components/Loading";
+import { useCheckoutStore } from "../../store/checkoutStore";
+import { useNavigate } from "react-router-dom";
 
 const Cart: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const cart = useCartStore((state) => state.cart);
   const totalPrice = cart.reduce((total, item) => {
     // Placeholder, you should replace with actual price from fetched data
@@ -73,7 +76,7 @@ const Cart: React.FC = () => {
             <div className="max-w-md mx-auto border border-gray-400 p-6 rounded-lg">
               <h2 className="text-3xl mb-4 text-center">Order Summary</h2>
               <div className="flex justify-between items-center">
-                <span className="font-bold">Total:</span>
+                <span className="font-bold">Total estimated:</span>
                 <span className="font-bold">${totalPrice.toFixed(2)}</span>
               </div>
               <p className="text-gray-500 mb-4 text-center">
@@ -84,13 +87,28 @@ const Cart: React.FC = () => {
                 className="w-full hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
                 type="default"
                 onClick={async () => {
-                  console.log(cart);
-                  setIsLoading(true);
-                  const response = await POST("/api/Order", {
-                    orderDetails: cart,
-                  });
-                  setIsLoading(false);
-                  useCartStore.getState().clearCart();
+                  const infor = await GET("/api/Accounts/me");
+                  if (!infor) {
+                    navigate("/authentication/login");
+                    return;
+                  } else {
+                    useCheckoutStore
+                      .getState()
+                      .setPhoneNumber(infor?.phoneNumber);
+                    useCheckoutStore.getState().setEmail(infor?.email);
+                    useCheckoutStore
+                      .getState()
+                      .setShippingAddress(infor?.address);
+
+                    // console.log(cart);
+                    // setIsLoading(true);
+                    // const response = await POST("/api/Order", {
+                    //   orderDetails: cart,
+                    // });
+                    // setIsLoading(false);
+                    // useCartStore.getState().clearCart();
+                    navigate("/checkout");
+                  }
                 }}
               >
                 CHECK OUT
