@@ -55,7 +55,7 @@ export default function EditAccount() {
     })();
   }, [reset]);
   return (
-    <div className="ml-10">
+    <div className="ml-4 mt-4 mb-8">
       <div className="font-semibold mulish-regular text-2xl">
         ACCOUNT DETAIL
       </div>
@@ -65,7 +65,7 @@ export default function EditAccount() {
         <Form
           layout="vertical"
           autoComplete="off"
-          className="w-[440px] flex flex-col gap-[2px]"
+          className="w-full grid grid-cols-2 gap-x-4"
           onFinish={handleSubmit(async (formData) => {
             // setIsLoading(true);
             await PUT("/api/Accounts/" + formData.id, formData);
@@ -84,36 +84,60 @@ export default function EditAccount() {
               defaultValue={profile?.accountId}
             />
           </FormItem>
-          <FormItem label="Name" name="name" control={control}>
-            <Input defaultValue={profile?.name} />
-          </FormItem>
-          <FormItem label="Phone Number" name="phoneNumber" control={control}>
-            <Input defaultValue={profile?.phoneNumber} />
-          </FormItem>
-          <FormItem label="Address" name="address" control={control}>
-            <Input defaultValue={profile?.address} />
-          </FormItem>
-          <FormItem label="Birthday" name="birthday" control={control}>
-            <DatePicker
-              defaultValue={profile ? moment(profile.birthday) : null}
-            />
-          </FormItem>
-          <FormItem label="Gender" name="gender" control={control}>
-            <Select
-              size="large"
-              className="text-sm w-[120px] border border-primary h-[38px]"
-              options={[
-                { value: "Female", label: "Female" },
-                { value: "Male", label: "Male" },
-                { value: "Other", label: "Other" },
-              ]}
-              defaultValue={profile?.gender}
-            />
+          <FormItem
+            label={<p className="border-b border-black">Name</p>}
+            // label="Name"
+            name="name"
+            control={control}
+          >
+            <Input className="h-10" defaultValue={profile?.name} />
           </FormItem>
 
+          <FormItem
+            label={<p className="border-b border-black">Phone Number</p>}
+            name="phoneNumber"
+            control={control}
+          >
+            <Input className="h-10" defaultValue={profile?.phoneNumber} />
+          </FormItem>
+          <FormItem
+            label={<p className="border-b border-black">Address</p>}
+            name="address"
+            control={control}
+          >
+            <Input className="h-10" defaultValue={profile?.address} />
+          </FormItem>
+          <div className="grid grid-cols-2 gap-x-4">
+            <FormItem
+              label={<p className="border-b border-black">Birthday</p>}
+              name="birthday"
+              control={control}
+            >
+              <DatePicker
+                className="w-full h-10"
+                defaultValue={profile ? moment(profile.birthday) : null}
+              />
+            </FormItem>
+            <FormItem
+              label={<p className="border-b border-black">Gender</p>}
+              name="gender"
+              control={control}
+            >
+              <Select
+                size="large"
+                className="text-sm w-full border hover:border-blue-400 h-10"
+                options={[
+                  { value: "Female", label: "Female" },
+                  { value: "Male", label: "Male" },
+                  { value: "Other", label: "Other" },
+                ]}
+                defaultValue={profile?.gender}
+              />
+            </FormItem>
+          </div>
           <Form.Item className="mb-0">
             <Button
-              className="w-full hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
+              className="w-[200px] uppercase hover:scale-95 font-bold text-white bg-primary py-5 flex items-center justify-center"
               htmlType="submit"
             >
               Save Change

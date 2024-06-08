@@ -38,7 +38,7 @@ namespace backend.Repository
 
         public async Task<Account?> GetAccountByIdAsync(long id)
         {
-            return await _context.Accounts.FindAsync(id);
+            return await _context.Accounts.Include(x => x.Rank).FirstOrDefaultAsync(x => x.AccountId == id);
         }
 
         public async Task<Account?> UpdateAccountAsync(long id, UpdateAccountDTO accountDto)

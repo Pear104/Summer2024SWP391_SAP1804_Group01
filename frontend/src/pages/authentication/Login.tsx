@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useAuthStore } from "../../store/authStore";
+import { useNavigate } from "react-router-dom";
 const GoogleIcon = () => {
   return (
     <svg
@@ -57,6 +58,7 @@ export default function Login() {
     resolver: zodResolver(schema),
   });
   const setGoogleProfile = useAuthStore((state) => state.setGoogleProfile);
+  const navigate = useNavigate();
   const login = useGoogleLogin({
     onSuccess: async (codeResponse) => {
       setIsLoading(true);
@@ -74,10 +76,10 @@ export default function Login() {
             email: data.email,
             name: data.name,
           });
-          location.href = "/authentication/register";
+          navigate("/authentication/register");
         } else {
           setCookie("accessToken", tokenData.token, 7);
-          location.href = "/account";
+          navigate("/account");
         }
       }
     },

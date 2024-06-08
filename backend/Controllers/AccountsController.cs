@@ -31,7 +31,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("me")]
-        [Authorize(Roles = ("Customer"))]
+        [Authorize(Roles = ("Customer, Manager, Administrator, SaleStaff, DeliveryStaff"))]
         public async Task<ActionResult> GetCurrentAccount()
         {
             var accountId = User.FindFirst("accountId")?.Value;

@@ -231,7 +231,7 @@ export default function AccessoriesManage() {
                       </th>
                       <th
                         scope="col"
-                        className={`flex px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider col-span-4`}
+                        className={`justify-center flex px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider col-span-4`}
                       >
                         Name
                       </th>

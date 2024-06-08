@@ -5,3 +5,10 @@ export function camelCaseToSentenceCase(camelCaseStr: string) {
     sentenceCaseStr.charAt(0).toUpperCase() + sentenceCaseStr.slice(1);
   return sentenceCaseStr;
 }
+
+export function formatPhoneNumber(phoneNo: string) {
+  const formatNum =
+    phoneNo.slice(0, 3) + "-" + phoneNo.slice(3, 6) + "-" + phoneNo.slice(6);
+
+  return formatNum;
+}
