@@ -59,7 +59,7 @@ export default function DiamondRow({
           <div className="flex items-center">
             <a href={`/admin/diamonds/detail/${diamond.diamondId}`}>
               <img
-                className="h-14  w-14 square-full"
+                className="h-14 w-14 square-full"
                 src={diamond.imageUrl}
                 alt=""
               />

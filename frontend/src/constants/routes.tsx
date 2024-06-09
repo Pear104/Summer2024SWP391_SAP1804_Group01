@@ -37,6 +37,7 @@ import CheckoutLayout from "../layouts/CheckoutLayout";
 import CheckoutInfo from "../pages/checkout/CheckoutInfo";
 import CheckoutShipping from "../pages/checkout/CheckoutShipping";
 import CheckoutPayment from "../pages/checkout/CheckoutPayment";
+import About from "../pages/about/About";
 
 const routes = [
   {
@@ -151,6 +152,10 @@ const routes = [
           {
             path: "/",
             element: <Home />,
+          },
+          {
+            path: "/about",
+            element: <About />,
           },
           {
             path: "authentication",
