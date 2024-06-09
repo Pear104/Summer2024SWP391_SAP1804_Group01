@@ -5,7 +5,7 @@ import { GET } from "../../../utils/request";
 import OrderRow from "./OrderRow";
 import { useQueries } from "@tanstack/react-query";
 import { useSearchStore } from "../../../store/searchStore";
-import { StatusMenu } from "./OrderManagementHeader";
+import { StatusFilter } from "./StatusFilter";
 import OrderColumnHeader from "./OrderColumnHeader";
 
 export default function OrderManage() {
@@ -131,10 +131,7 @@ export default function OrderManage() {
                   />
                 </Form.Item>
                 <Form.Item>
-                  <StatusMenu
-                    handleStatusClick={handleStatusClick}
-                    statusText={statusText}
-                  />
+                  <StatusFilter statusText={statusText} />
                 </Form.Item>
               </Form>
             </h3>

@@ -69,6 +69,7 @@ namespace backend.Controllers
             [FromBody] UpdateOrderDTO order
         )
         {
+            System.Console.WriteLine("ahihi");
             var updatedOrder = await _orderRepo.UpdateOrderAsync(id, order);
             if (updatedOrder == null)
             {

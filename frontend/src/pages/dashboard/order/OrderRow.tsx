@@ -1,6 +1,4 @@
-import React from "react";
-import { StatusMenu } from "./OrderManagementHeader";
-
+import OrderUpdateComponent from "./OrderUpdateComponent";
 const formatDate = (dateString: any) => {
   const date = new Date(dateString);
   const day = String(date.getDate()).padStart(2, "0");
@@ -8,41 +6,12 @@ const formatDate = (dateString: any) => {
   const year = date.getFullYear();
   return `${day}/${month}/${year}`;
 };
-export const OrderStatus = ({ order }: { order: any }) => {
-  return (
-    <div className="items-center justify-between mb-4">
-      Order status:{" "}
-      <span
-        className={`${
-          order.orderStatus === "Pending"
-            ? "bg-red-600"
-            : order.orderStatus === "Processing"
-            ? "bg-yellow-500"
-            : order.orderStatus === "Delivering"
-            ? "bg-orange-600"
-            : order.orderStatus === "Completed"
-            ? "bg-green-600"
-            : "bg-red-800"
-        } border-2 border-solid p-2 text-white px-4 rounded-full`}
-      >
-        {order.orderStatus}
-      </span>
-    </div>
-  );
-};
-
 export default function OrderRow({ order }: { order: any }) {
-  const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const updatedStatus = event.target.value;
-    console.log("Updated Status:", updatedStatus);
-    // updateOrderStatus(order.orderId, updatedStatus);
-  };
-
   if (!order) {
     return (
       <>
         <tr>
-          <td>
+          <td colSpan={9}>
             <div className="text-center items-center">
               <p>There are no orders!!!</p>
             </div>
@@ -96,9 +65,9 @@ export default function OrderRow({ order }: { order: any }) {
           </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          <StatusMenu
-            handleStatusClick={handleStatusChange}
-            statusText={order.orderStatus}
+          <OrderUpdateComponent
+            orderId={order.orderId}
+            currentStatus={order.orderStatus}
           />
         </td>
       </tr>
