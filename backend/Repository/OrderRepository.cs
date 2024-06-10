@@ -191,6 +191,7 @@ namespace backend.Repository
                 .Include(x => x.SaleStaff)
                 .Include(x => x.DeliveryStaff)
                 .Include(x => x.Customer)
+                .OrderByDescending(x => x.CreatedAt)
                 .AsQueryable();
 
             if (query.CustomerId != null)
