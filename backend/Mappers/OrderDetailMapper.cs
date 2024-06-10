@@ -9,8 +9,8 @@ namespace backend.Mappers
 {
     public static class OrderDetailMapper
     {
-        // public static CreateOrderDetailDTO ToCreateOrderDetailDTO(this OrderDetail orderDetail) 
-        // { 
+        // public static CreateOrderDetailDTO ToCreateOrderDetailDTO(this OrderDetail orderDetail)
+        // {
         //     return new CreateOrderDetailDTO
         //     {
         //         Size = orderDetail.Size,
@@ -18,8 +18,8 @@ namespace backend.Mappers
         //         AccessoryId = orderDetail.AccessoryId
         //     };
         // }
-        // public static OrderDetail ToOrderDetailFromCreate(this CreateOrderDetailDTO orderDetailDTO, int orderID) 
-        // { 
+        // public static OrderDetail ToOrderDetailFromCreate(this CreateOrderDetailDTO orderDetailDTO, int orderID)
+        // {
         //     return new OrderDetail
         //     {
         //         Size = orderDetailDTO.Size,
@@ -28,9 +28,9 @@ namespace backend.Mappers
         //         OrderId = orderID
         //     };
         // }
-        
-        // public static UpdateOrderDetail ToOrderDetailFromUpdate(this OrderDetailDTO orderDetailDTO, int orderID) 
-        // { 
+
+        // public static UpdateOrderDetail ToOrderDetailFromUpdate(this OrderDetailDTO orderDetailDTO, int orderID)
+        // {
         //     return new OrderDetail
         //     {
         //         Size = orderDetailDTO.Size,
@@ -39,8 +39,8 @@ namespace backend.Mappers
         //         OrderId = orderID
         //     };
         // }
-        public static OrderDetailDTO ToOrderDetailDTO(this OrderDetail orderDetail) 
-        { 
+        public static OrderDetailDTO ToOrderDetailDTO(this OrderDetail orderDetail)
+        {
             return new OrderDetailDTO
             {
                 OrderDetailId = orderDetail.OrderDetailId,
@@ -49,9 +49,9 @@ namespace backend.Mappers
                 Diamond = orderDetail.Diamond.ToDiamondDTO(),
                 Accessory = orderDetail.Accessory?.ToAccessoryDTO(),
                 DiamondPrice = orderDetail.DiamondPrice.ToDiamondPriceDTO(),
-                MaterialPrice = orderDetail.MaterialPrice?.ToMaterialPriceDTO()
+                MaterialPrice = orderDetail.MaterialPrice?.ToMaterialPriceDTO(),
+                WarrantyCardId = orderDetail.WarrantyCard.WarrantyCardId
             };
         }
-
     }
 }

@@ -1,4 +1,4 @@
-import { Button, message, Avatar, Divider } from "antd";
+import { Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { GET } from "../../utils/request";
 import { setCookie } from "../../utils/cookie";
@@ -8,7 +8,6 @@ import {
 } from "../../utils/caseConverter";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import { UserOutlined } from "@ant-design/icons";
 import { rankImages } from "../../constants/rankImages";
 
 const Field = ({ field, value }: { field: string; value: string }) => {

@@ -38,6 +38,8 @@ import CheckoutInfo from "../pages/checkout/CheckoutInfo";
 import CheckoutShipping from "../pages/checkout/CheckoutShipping";
 import CheckoutPayment from "../pages/checkout/CheckoutPayment";
 import About from "../pages/about/About";
+import WarrantyRequestList from "../pages/account/WarrantyRequestList";
+import CreateWarrantyRequest from "../pages/account/CreateWarrantyRequest";
 
 const routes = [
   {
@@ -209,6 +211,14 @@ const routes = [
               {
                 element: <OrderDetail />,
                 path: "order-history/detail",
+              },
+              {
+                element: <WarrantyRequestList />,
+                path: "warranty",
+              },
+              {
+                element: <CreateWarrantyRequest />,
+                path: "warranty/request",
               },
             ],
           },

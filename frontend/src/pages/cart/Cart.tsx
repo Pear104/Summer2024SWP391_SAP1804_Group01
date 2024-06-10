@@ -6,7 +6,7 @@ import { Button } from "antd";
 import { GET, POST } from "../../utils/request";
 import Loading from "./../../components/Loading";
 import { useCheckoutStore } from "../../store/checkoutStore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Cart: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -33,12 +33,13 @@ const Cart: React.FC = () => {
             You have no items in your shopping cart.
           </div>
           <div className="flex items-center justify-center w-full p-2">
-            <Button
-              className="w-1/5 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
+            <Link
+              className="transition-all duration-300 rounded-xl w-1/5 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
               type="default"
+              to="/product/diamond"
             >
-              <a href="/">Continue shopping.</a>
-            </Button>
+              Continue shopping.
+            </Link>
           </div>
         </div>
       ) : (
@@ -56,12 +57,13 @@ const Cart: React.FC = () => {
               ))}
             </div>
             <div className="flex items-center justify-between w-full pl-10 pr-10 pt-2">
-              <Button
-                className="w-1/5 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
+              <Link
+                className="rounded-lg transition-all duration-300 hover:scale-95 font-bold text-white bg-primary px-4 py-4 flex items-center justify-center"
                 type="default"
+                to="/product/diamond"
               >
-                <a href="/">Continue Shopping</a>
-              </Button>
+                Continue Shopping
+              </Link>
               <Button
                 className="w-1/5 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
                 type="default"

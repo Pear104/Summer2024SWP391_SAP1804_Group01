@@ -12,17 +12,20 @@ namespace backend.Models
         [Column("warranty_request_id")]
         public long WarrantyRequestId { get; set; }
 
+        [Column("warranty_reason")]
+        public string WarrantyReason { get; set; } = string.Empty;
+
         [Column("customer_id")]
         public long CustomerId { get; set; }
-        public Account Customer { get; set; } = new Account();
+        public Account? Customer { get; set; }
 
         [Column("sale_staff_id")]
-        public long SaleStaffId { get; set; }
-        public Account SaleStaff { get; set; } = new Account();
+        public long? SaleStaffId { get; set; }
+        public Account? SaleStaff { get; set; }
 
         [Column("delivery_staff_id")]
-        public long DeliveryStaffId { get; set; }
-        public Account DeliveryStaff { get; set; } = new Account();
+        public long? DeliveryStaffId { get; set; }
+        public Account? DeliveryStaff { get; set; }
 
         [Column("warranty_card_id")]
         public long WarrantyCardId { get; set; }
@@ -30,8 +33,10 @@ namespace backend.Models
 
         [Column("receive_time")]
         public DateTime ReceiveTime { get; set; }
+
         [Column("return_time")]
-        public DateTime ReturnTime { get; set; }
+        public DateTime? ReturnTime { get; set; }
+
         [Column("warranty_status")]
         public WarrantyStatus WarrantyStatus { get; set; } = WarrantyStatus.Pending;
 
@@ -40,7 +45,5 @@ namespace backend.Models
 
         [Column("phone_number")]
         public string PhoneNumber { get; set; } = string.Empty;
-
     }
-
 }

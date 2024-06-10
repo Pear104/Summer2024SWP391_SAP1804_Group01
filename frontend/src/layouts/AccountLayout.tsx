@@ -29,15 +29,16 @@ export default function AccountLayout() {
           label: "Update profile",
         },
         {
-          key: "/account/change-password",
-          icon: <LockKeyhole size={20} />,
-          label: "Change password",
-        },
-        {
           key: "/account/order-history",
           icon: <ShoppingBasket size={20} />,
           label: "Order History",
           path: "/account/order-history",
+        },
+        {
+          key: "/account/change-password",
+          icon: <LockKeyhole size={20} />,
+          label: "Change password",
+          disabled: true,
         },
       ],
     },
@@ -47,12 +48,12 @@ export default function AccountLayout() {
       label: "Warranty",
       children: [
         {
-          key: "/warranty/request",
+          key: "/account/warranty/request",
           icon: <ShieldAlert size={20} />,
           label: "Request a Warranty",
         },
         {
-          key: "/warranty",
+          key: "/account/warranty",
           icon: <ShieldCheck size={20} />,
           label: "My warranty",
         },
@@ -66,8 +67,7 @@ export default function AccountLayout() {
         <div className="flex flex-col gap-2">
           <Menu
             onClick={(e: any) => {
-              console.log("click ", e);
-              navigate(e.path);
+              navigate(e.key);
             }}
             style={{
               width: 256,

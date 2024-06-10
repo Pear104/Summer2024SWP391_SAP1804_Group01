@@ -255,52 +255,52 @@ namespace backend.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Add test data
-            List<Rank> ranks = new List<Rank>
-            {
-                new Rank
-                {
-                    RankId = 1,
-                    RankName = "Bronze",
-                    Discount = 0,
-                    RewardPoint = 0
-                },
-                new Rank
-                {
-                    RankId = 2,
-                    RankName = "Silver",
-                    Discount = 0.05f,
-                    RewardPoint = 500
-                },
-                new Rank
-                {
-                    RankId = 3,
-                    RankName = "Gold",
-                    Discount = 0.075f,
-                    RewardPoint = 1000
-                },
-                new Rank
-                {
-                    RankId = 4,
-                    RankName = "Platinum",
-                    Discount = 0.1f,
-                    RewardPoint = 1500
-                },
-                new Rank
-                {
-                    RankId = 5,
-                    RankName = "Emerald",
-                    Discount = 0.125f,
-                    RewardPoint = 2000
-                },
-                new Rank
-                {
-                    RankId = 6,
-                    RankName = "Diamond",
-                    Discount = 0.15f,
-                    RewardPoint = 2500
-                },
-            };
-            builder.Entity<Rank>().HasData(ranks);
+            // List<Rank> ranks = new List<Rank>
+            // {
+            //     new Rank
+            //     {
+            //         RankId = 1,
+            //         RankName = "Bronze",
+            //         Discount = 0,
+            //         RewardPoint = 0
+            //     },
+            //     new Rank
+            //     {
+            //         RankId = 2,
+            //         RankName = "Silver",
+            //         Discount = 0.05f,
+            //         RewardPoint = 500
+            //     },
+            //     new Rank
+            //     {
+            //         RankId = 3,
+            //         RankName = "Gold",
+            //         Discount = 0.075f,
+            //         RewardPoint = 1000
+            //     },
+            //     new Rank
+            //     {
+            //         RankId = 4,
+            //         RankName = "Platinum",
+            //         Discount = 0.1f,
+            //         RewardPoint = 1500
+            //     },
+            //     new Rank
+            //     {
+            //         RankId = 5,
+            //         RankName = "Emerald",
+            //         Discount = 0.125f,
+            //         RewardPoint = 2000
+            //     },
+            //     new Rank
+            //     {
+            //         RankId = 6,
+            //         RankName = "Diamond",
+            //         Discount = 0.15f,
+            //         RewardPoint = 2500
+            //     },
+            // };
+            // builder.Entity<Rank>().HasData(ranks);
         }
     }
 }

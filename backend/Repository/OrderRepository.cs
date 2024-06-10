@@ -28,7 +28,7 @@ namespace backend.Repository
             }
             var rank = await _context.Ranks.FindAsync(customer.RankId);
             var priceRate = await _context
-                .PriceRates.OrderBy(x => x.CreatedAt)
+                .PriceRates.OrderByDescending(x => x.CreatedAt)
                 .FirstOrDefaultAsync();
             Promotion? promotion = null;
             if (rank == null || priceRate == null)
@@ -66,7 +66,7 @@ namespace backend.Repository
                 var diamond = _context.Diamonds.FirstOrDefault(x =>
                     x.DiamondId == orderDetailDto.DiamondId
                 );
-                if(diamond == null)
+                if (diamond == null)
                 {
                     return null;
                 }
@@ -97,7 +97,7 @@ namespace backend.Repository
                         var accessory = _context.Accessories.FirstOrDefault(x =>
                             x.AccessoryId == orderDetailDto.AccessoryId
                         );
-                        if(accessory == null)
+                        if (accessory == null)
                         {
                             return null;
                         }
@@ -130,6 +130,16 @@ namespace backend.Repository
             }
             System.Console.WriteLine("totalPrice: " + totalPrice);
             newOrder.TotalPrice = totalPrice;
+            await _context.Transactions.AddAsync(
+                new Transaction()
+                {
+                    Order = newOrder,
+                    Amount = totalPrice,
+                    PaymentMethod = "Credit Card",
+                }
+            );
+            customer.RewardPoint = customer.RewardPoint + (int)(totalPrice / 1000);
+            _context.Entry(customer).State = EntityState.Modified;
             await _context.Orders.AddAsync(newOrder);
             await _context.SaveChangesAsync();
             return newOrder;
@@ -165,6 +175,9 @@ namespace backend.Repository
             var orderQueries = _context
                 .Orders.Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Diamond)
+                .ThenInclude(x => x.Shape)
+                .Include(x => x.OrderDetails)
+                .ThenInclude(x => x.WarrantyCard)
                 .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Accessory)
                 .ThenInclude(x => x != null ? x.AccessoryType : null)
@@ -179,6 +192,11 @@ namespace backend.Repository
                 .Include(x => x.DeliveryStaff)
                 .Include(x => x.Customer)
                 .AsQueryable();
+
+            if (query.CustomerId != null)
+            {
+                orderQueries = orderQueries.Where(x => x.CustomerId == query.CustomerId);
+            }
 
             if (query.OrderStatus != null)
             {

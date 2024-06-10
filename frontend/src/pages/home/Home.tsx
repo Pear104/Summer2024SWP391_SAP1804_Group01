@@ -7,6 +7,7 @@ import Banner2 from "./components/banner/Banner2";
 import Banner3 from "./components/banner/Banner3";
 import Banner4 from "./components/banner/Banner4";
 import Banner5 from "./components/banner/Banner5";
+import Banner7 from "./components/banner/Banner7";
 export default function Home() {
   return (
     <div className="">
@@ -15,7 +16,8 @@ export default function Home() {
         <Banner4 />
         <Banner1 />
         <Banner2 />
-        <Banner5 />
+        {/* <Banner5 /> */}
+        <Banner7 />
         {/* <Banner6 /> */}
       </Carousel>
       <Explore />

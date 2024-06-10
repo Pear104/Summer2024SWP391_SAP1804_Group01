@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 
-export default function Banner() {
+export default function Banner6() {
   return (
     <div
       className="aspect-[1358/452] bg-contain bg-no-repeat w-full flex items-center"
       style={{
-        backgroundImage: "url(/images/Banner_1.jpg)",
+        backgroundImage: "url(/images/banner7.jpeg)",
       }}
     >
       <div className="pl-16">

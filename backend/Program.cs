@@ -119,6 +119,7 @@ namespace backend
                     };
                 });
 
+            builder.Services.AddScoped<IWarrantyRequestRepository, WarrantyRequestRepository>();
             builder.Services.AddScoped<IShapeRepository, ShapeRepository>();
             builder.Services.AddScoped<IAccessoryTypeRepository, AccessoryTypeRepository>();
             builder.Services.AddScoped<IMaterialPriceRepository, MaterialPriceRepository>();

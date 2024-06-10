@@ -10,9 +10,9 @@ namespace backend.Helper
     {
         public OrderStatus? OrderStatus { get; set; } = null;
         public string? ShippingAddress { get; set; } = string.Empty;
-        public long? CustomerId { get; set; } = 0;
-        public long? SaleStaffId { get; set; } = 0;
-        public long? DeliveryStaffId { get; set; } = 0;
+        public long? CustomerId { get; set; }
+        public long? SaleStaffId { get; set; }
+        public long? DeliveryStaffId { get; set; }
         public DateTime? MinDate { get; set; } = null;
         public DateTime? MaxDate { get; set; } = null;
         public string PhoneNumber { get; set; } = string.Empty;

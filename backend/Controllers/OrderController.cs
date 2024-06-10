@@ -2,6 +2,7 @@ using backend.DTOs;
 using backend.DTOs.Order;
 using backend.Helper;
 using backend.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
@@ -18,8 +19,15 @@ namespace backend.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = ("Customer, Manager, Administrator, SaleStaff, DeliveryStaff"))]
         public async Task<ActionResult> GetOrders([FromQuery] OrderQuery query)
         {
+            var accountId = User.FindFirst("accountId")?.Value;
+            var role = User.FindFirst("role")?.Value;
+            if (role == "Customer")
+            {
+                query.CustomerId = long.Parse(accountId ?? "0");
+            }
             var orderResult = await _orderRepo.GetAllOrdersAsync(query);
             return Ok(orderResult);
         }
@@ -38,7 +46,8 @@ namespace backend.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] CreateOrderDTO orderDto)
         {
-            if(User.FindFirst("accountId")?.Value == null) {
+            if (User.FindFirst("accountId")?.Value == null)
+            {
                 return BadRequest("The order could not be created.");
             }
             long customerId = Convert.ToInt64(User.FindFirst("accountId")?.Value);
