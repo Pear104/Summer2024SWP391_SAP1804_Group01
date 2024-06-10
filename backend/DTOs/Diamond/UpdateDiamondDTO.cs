@@ -9,43 +9,18 @@ namespace backend.DTOs.Diamond
 {
     public class UpdateDiamondDTO
     {
-        [Required]
-        public string Lab { get; set; } = string.Empty;
-
-        [Required]
-        public long CertificateNumber { get; set; }
-
-        [Required]
-        public string CertificateUrl { get; set; } = string.Empty;
-
-        [Required]
-        public string ImageUrl { get; set; } = string.Empty;
-
-        [Required]
+        public string? Lab { get; set; }
+        public long? CertificateNumber { get; set; }
+        public string? CertificateUrl { get; set; }
+        public string? ImageUrl { get; set; }
         public float Carat { get; set; }
-
-        [Required]
-        public string Cut { get; set; } = string.Empty;
-
-        [Required]
-        public Color Color { get; set; } = Color.V;
-
-        [Required]
-        public Clarity Clarity { get; set; } = Clarity.I3;
-
-        [Required]
-        public string Polish { get; set; } = string.Empty;
-
-        [Required]
-        public string Symmetry { get; set; } = string.Empty;
-
-        [Required]
-        public string Fluorescence { get; set; } = string.Empty;
-
-        [Required]
-        public bool Availability { get; set; } = true;
-
-        [Required]
+        public string? Cut { get; set; }
+        public string? Color { get; set; }
+        public string? Clarity { get; set; }
+        public string? Polish { get; set; }
+        public string? Symmetry { get; set; }
+        public string? Fluorescence { get; set; }
+        public bool Availability { get; set; }
         public long ShapeId { get; set; }
     }
 }

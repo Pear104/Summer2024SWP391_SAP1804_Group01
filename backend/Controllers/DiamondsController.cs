@@ -41,27 +41,24 @@ namespace backend.Controllers
         
         [HttpGet("cert/{CertificateNumber}")]
         public async Task<ActionResult> GetDiamondByCertificateNumber(long CertificateNumber)
-        {
-            var diamond = await _diamondRepo.GetDiamondByCertificateNumberAsync(CertificateNumber);
-            if (diamond == null)
-            {
-                return NotFound();
-            }
-            return Ok(diamond.ToDiamondDTO());
-        }
+{
+    var diamonds = await _diamondRepo.GetDiamondByCertificateNumberAsync(CertificateNumber);
+    if (diamonds == null || diamonds.Count == 0)
+    {
+        return NotFound();
+    }
+    return Ok(diamonds.Select(diamond => diamond.ToDiamondDTO()).ToList());
+}
 
         [HttpPost]
         public async Task<ActionResult> CreateDiamond([FromBody] CreateDiamondDTO diamond)
         {
             var diamondModel = await _diamondRepo.CreateDiamondAsync(diamond);
-            // if (diamondModel == null)
-            // {
-            //     return BadRequest("The diamond's certificate number already exists.");
-            // }
-            // return Ok(diamondModel);
-            System.Console.WriteLine("ahihi");
-            System.Console.WriteLine("diamond: " + diamond.CertificateNumber);
-            return Ok(diamond);
+            if (diamondModel == null)
+            {
+                return BadRequest("The diamond's certificate number already exists.");
+            }
+            return Ok(diamondModel);
         }
 
         [HttpPut("{id}")]
