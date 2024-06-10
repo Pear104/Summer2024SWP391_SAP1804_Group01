@@ -22,12 +22,16 @@
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 using backend.Data;
 using backend.Interfaces;
+using backend.Payment_src.core.Payment.Service.Momo.Config;
+using backend.Payment_src.core.Payment.Service.Vnpay.Config;
 using backend.Repository;
 using backend.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace backend
 {
@@ -55,7 +59,14 @@ namespace backend
 
             builder.Services.AddSwaggerGen(option =>
             {
-                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
+                option.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Demo API",
+                    Version = "v1"
+                });
+                var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var path = Path.Combine(AppContext.BaseDirectory, xmlFileName);
+                option.IncludeXmlComments(path);
                 option.AddSecurityDefinition(
                     "Bearer",
                     new OpenApiSecurityScheme
@@ -90,6 +101,17 @@ namespace backend
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            builder.Services.AddHttpContextAccessor();
+
+            //Payment cofiguration
+            builder.Services.Configure<MomoConfig>(
+                builder.Configuration.GetSection(MomoConfig.ConfigName)
+                );
+            //Payment cofiguration
+            builder.Services.Configure<VnpayConfig>(
+                builder.Configuration.GetSection(VnpayConfig.ConfigName)
+                );
 
             builder
                 .Services.AddAuthentication(options =>
@@ -127,12 +149,17 @@ namespace backend
             builder.Services.AddScoped<IBlogRepository, BlogRepository>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-            builder.Services.AddScoped<IDiamondRepository, DiamondRepository>();
-            builder.Services.AddScoped<IRankRepository, RankRepository>();
-            builder.Services.AddScoped<IAccessoryRepository, AccessoryRepository>();
-            builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddScoped<IDiamondRepository, DiamondRepository>();
             builder.Services.AddTransient<IEmailSender, EmailSender>();
+            builder.Services.AddScoped<IMerchantRepository, MerchantRepository>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IRankRepository, RankRepository>();
+            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+            builder.Services.AddScoped<IPaymentSignatureRepository, PaymentSinatureRepository>();
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -148,7 +175,7 @@ namespace backend
                 x.AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()
-                    .WithOrigins("http://localhost:3000")
+                    .WithOrigins("http://localhost:44376")
                     .SetIsOriginAllowed(origin => true)
             );
 
