@@ -16,22 +16,22 @@ export default function SideNav() {
     {
       key: "why-datj",
       // icon: <UserRound size={20} />,
-      label: "Profile",
+      label: "Why DatJ",
     },
     {
       key: "our-team",
       // icon: <LockKeyhole size={20} />,
-      label: "Change password",
+      label: "About us",
     },
     {
       key: "how-to-buy",
       // icon: <LockKeyhole size={20} />,
-      label: "Change password",
+      label: "How to buy",
     },
     {
       key: "measure-guide",
       // icon: <UserRoundCog size={20} />,
-      label: "Update profile",
+      label: "How to measure finger size",
     },
   ];
   return (
