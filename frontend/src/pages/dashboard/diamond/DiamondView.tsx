@@ -1,8 +1,3 @@
-// import React from "react";
-
-// export default function ProductView() {
-//   return <div></div>;
-// }
 import { useParams } from "react-router-dom";
 import { GET, PUT } from "../../../utils/request";
 import { useEffect, useState } from "react";
@@ -13,7 +8,16 @@ import {
   uploadBytes,
   deleteObject,
 } from "firebase/storage";
-import { Button, Form, Input, notification, Select, UploadFile } from "antd";
+import {
+  Avatar,
+  Button,
+  Form,
+  Input,
+  notification,
+  Select,
+  Switch,
+  UploadFile,
+} from "antd";
 import { ArrowLeft, Check, Shapes, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import * as z from "zod";
@@ -60,18 +64,18 @@ const Clarity = {
   I2: "I2",
   I3: "I3",
 };
-// const shapeOptions = [
-//   { value: "1", label: "Round" },
-//   { value: "2", label: "Emerald" },
-//   { value: "3", label: "Heart" },
-//   { value: "4", label: "Pear" },
-//   { value: "5", label: "Oval" },
-//   { value: "6", label: "Cushion" },
-//   { value: "7", label: "Princess" },
-//   { value: "8", label: "Radiant" },
-//   { value: "9", label: "Marquise" },
-//   { value: "10", label: "Asscher" },
-// ];
+const shapeOptions = [
+  { value: 1, label: "Round" },
+  { value: 2, label: "Emerald" },
+  { value: 3, label: "Heart" },
+  { value: 4, label: "Pear" },
+  { value: 5, label: "Oval" },
+  { value: 6, label: "Cushion" },
+  { value: 7, label: "Princess" },
+  { value: 8, label: "Radiant" },
+  { value: 9, label: "Marquise" },
+  { value: 10, label: "Asscher" },
+];
 const schema = z.object({
   lab: z
     .string()
@@ -86,9 +90,12 @@ const schema = z.object({
     })
     .transform((value) => parseInt(value, 10)),
   certificateUrl: z.string().min(0, { message: "Required" }),
-  imageUrl: z.string().min(0, { message: "Required" }),
+  image: z.string().min(0, { message: "Required" }),
 
-  carat: z.coerce.number().min(0.1, { message: "Required" }),
+  carat: z.coerce
+    .number()
+    .min(0.1, { message: "Required" })
+    .max(7.99, { message: "Carat must be between 0 and 8" }),
 
   cut: z.string().min(1, { message: "Required" }),
 
@@ -100,6 +107,7 @@ const schema = z.object({
   symmetry: z.string().min(1, { message: "Required" }),
   fluorescence: z.string().min(1, { message: "Required" }),
   shapeId: z.coerce.number().min(1, { message: "Required" }),
+  availability: z.boolean(),
 });
 export default function DiamondView() {
   const [isLoading, setIsLoading] = useState(false);
@@ -107,6 +115,7 @@ export default function DiamondView() {
   const [diamondFile, setDiamondFile] = useState<UploadFile[]>([]);
   const [diamond, setDiamond] = useState<any>();
   const { diamondId } = useParams();
+  const [availability, setAvailability] = useState<boolean>(false);
   const openNotification = (isSuccess: boolean) => {
     if (isSuccess) {
       api.open({
@@ -128,7 +137,7 @@ export default function DiamondView() {
       lab: "",
       certificateNumber: "",
       certificateUrl: "",
-      imageUrl: "",
+      image: "",
       carat: "",
       cut: "",
       color: Color.D,
@@ -137,6 +146,7 @@ export default function DiamondView() {
       symmetry: "",
       fluorescence: "",
       shapeId: "",
+      availability: false,
     },
     resolver: zodResolver(schema),
   });
@@ -144,16 +154,6 @@ export default function DiamondView() {
     (async () => {
       const data = await GET(`/api/Diamonds/${diamondId}`);
       if (data) {
-        // if (data?.certificateUrl) {
-        //   setCertificateFile([
-        //     {
-        //       uid: "-1",
-        //       name: "image.png",
-        //       status: "done",
-        //       url: data?.certificateUrl,
-        //     },
-        //   ]);
-        // }
         if (data?.imageUrl) {
           setDiamondFile([
             {
@@ -164,14 +164,15 @@ export default function DiamondView() {
             },
           ]);
         }
+        setAvailability(data?.availability);
         setDiamond(data);
         reset({
           lab: data?.lab || "",
           certificateNumber: data?.certificateNumber
             ? data.certificateNumber.toString()
             : "",
-          certificateUrl: data?.CertificateUrl || "",
-          imageUrl: data?.ImageUrl || "",
+          certificateUrl: data?.certificateUrl,
+          image: data?.imageUrl,
           carat: data?.carat || "",
           cut: data?.cut || "",
           color: data?.color || Color.D,
@@ -179,15 +180,17 @@ export default function DiamondView() {
           polish: data?.polish || "",
           symmetry: data?.symmetry || "",
           fluorescence: data?.fluorescence || "",
-          shapeId: data?.shape,
+          shapeId: data?.shapeId,
+          availability: data?.availability,
         });
       }
     })();
   }, [reset]);
+
   const [api, contextHolder] = notification.useNotification();
   console.log("file");
-  // console.log(certificateFile);
   console.log(diamondFile);
+  console.log(diamond?.available);
   return (
     <div>
       {isLoading && <Loading />}
@@ -207,22 +210,15 @@ export default function DiamondView() {
           className=""
           layout="vertical"
           onFinish={handleSubmit(async (formData) => {
-            // console.log("diamondFileList");
-            // console.log(diamondFile);
+            console.log("diamondFileList");
+            console.log(diamondFile);
             if (!diamondFile || diamondFile?.length === 0) {
-              setError("imageUrl", {
+              setError("image", {
                 type: "manual",
                 message: "Please upload an image",
               });
               return;
             }
-            // if (!certificateFile || certificateFile?.length === 0) {
-            //   setError("imageUrl", {
-            //     type: "manual",
-            //     message: "Please upload an image",
-            //   });
-            //   return;
-            // }
             setIsLoading(true);
             let submitForm: any;
             for (const [key, value] of Object.entries(formData)) {
@@ -234,19 +230,17 @@ export default function DiamondView() {
 
             // Delete old images
             if (
-              diamond?.ImageUrl &&
-              typeof diamond.ImageUrl === "string" &&
-              !diamondFile[0]?.url?.includes(diamond.ImageUrl)
+              diamond?.imageUrl &&
+              typeof diamond.imageUrl === "string" &&
+              !diamondFile[0]?.url?.includes(diamond.imageUrl)
             ) {
-              const oldImageRef = ref(storage, diamond.ImageUrl);
+              const oldImageRef = ref(storage, diamond.imageUrl);
               await deleteObject(oldImageRef);
             }
 
             // Update new image to firebase
             const diaFile = diamondFile[0];
             let diamondImageUrl = "";
-            // let certificateUrl = "";
-            // const certFile = certificateFile[0];
             const imgRef = ref(storage, `images/${v4()}`);
             if (diaFile?.url) {
               const blob = await fetch(diaFile?.url).then((r) => r.blob());
@@ -265,28 +259,9 @@ export default function DiamondView() {
               const url = await getDownloadURL(uploadResult.ref);
               diamondImageUrl = url;
             }
-            // if (certFile?.url) {
-            //   const blob = await fetch(certFile?.url).then((r) => r.blob());
-            //   const uploadResult = await uploadBytes(imgRef, blob as Blob);
-            //   const url = await getDownloadURL(uploadResult.ref);
-            //   certificateUrl = url;
-            //   if (certFile?.url.includes("firebase")) {
-            //     const oldImageRef = ref(storage, certFile?.url);
-            //     await deleteObject(oldImageRef);
-            //   }
-            // } else {
-            //   const uploadResult = await uploadBytes(
-            //     imgRef,
-            //     certFile.originFileObj as Blob
-            //   );
-            //   const url = await getDownloadURL(uploadResult.ref);
-            //   certificateUrl = url;
-            // }
-            // await Promise.all(uploadPromises);
-
             // Add firebase's image url to DATJ database
-            submitForm["ImageUrl"] = diamondImageUrl;
-            // submitForm["CertificateUrl"] = certificateUrl; // Since we only have one image
+            submitForm["imageUrl"] = diamondImageUrl;
+            submitForm["availability"] = availability;
             console.log("form: ");
 
             console.log(submitForm);
@@ -301,6 +276,7 @@ export default function DiamondView() {
               response = await POST("/api/Diamonds/", submitForm);
             }
             console.log(response);
+            console.log(response?.errors);
 
             setIsLoading(false);
             if (response) {
@@ -308,7 +284,7 @@ export default function DiamondView() {
             } else {
               openNotification(false);
             }
-            // location.href = "/admin/diamonds/detail/" + response.diamondId;
+            location.href = "/admin/diamonds/detail/" + response.diamondId;
           })}
         >
           <FormItem label="Lab" name="lab" control={control} required>
@@ -343,6 +319,7 @@ export default function DiamondView() {
                 { value: "Good", label: "Good" },
                 { value: "Very Good", label: "Very Good" },
                 { value: "Excellent", label: "Excellent" },
+                { value: "Ideal", label: "Ideal" },
               ]}
             />
           </FormItem>
@@ -397,6 +374,7 @@ export default function DiamondView() {
               size="large"
               className="font-thin border w-full text-sm"
               options={[
+                { value: "Fair", label: "Fair" },
                 { value: "Good", label: "Good" },
                 { value: "Very Good", label: "Very Good" },
                 { value: "Excellent", label: "Excellent" },
@@ -408,6 +386,7 @@ export default function DiamondView() {
               size="large"
               className="font-thin border w-full text-sm"
               options={[
+                { value: "Fair", label: "Fair" },
                 { value: "Good", label: "Good" },
                 { value: "Very Good", label: "Very Good" },
                 { value: "Excellent", label: "Excellent" },
@@ -420,35 +399,43 @@ export default function DiamondView() {
             control={control}
             required
           >
-            <Input
-              type="text"
-              placeholder="Fluorescence"
-              className="font-thin border p-2 rounded-md w-full"
-              value="none"
+            <Select
+              size="large"
+              className="font-thin border w-full text-sm"
+              options={[
+                { value: "Strong", label: "Strong" },
+                { value: "Medium", label: "Medium" },
+                { value: "Faint", label: "Faint" },
+                { value: "None", label: "None" },
+              ]}
             />
           </FormItem>
           <FormItem label="Shape" name="shapeId" control={control} required>
             <Select
               size="large"
               className="font-thin border w-full text-sm"
-              options={[
-                { value: "1", label: "Round" },
-                { value: "2", label: "Emerald" },
-                { value: "3", label: "Heart" },
-                { value: "4", label: "Pear" },
-                { value: "5", label: "Oval" },
-                { value: "6", label: "Cushion" },
-                { value: "7", label: "Princess" },
-                { value: "8", label: "Radiant" },
-                { value: "9", label: "Marquise" },
-                { value: "10", label: "Asscher" },
-              ]}
-              defaultValue={diamond?.shape}
+              options={shapeOptions}
             />
           </FormItem>
           <FormItem
+            label="Certificate Url"
+            name="certificateUrl"
+            control={control}
+            required
+          >
+            <Input
+              type="text"
+              placeholder="Certificate Url"
+              className="font-thin border p-2 rounded-md w-full"
+              value="none"
+            />
+          </FormItem>
+          <FormItem label="Availability" name="availability" control={control}>
+            <Switch onChange={() => setAvailability(!availability)} />
+          </FormItem>
+          <FormItem
             label="Diamond Image"
-            name="imageUrl"
+            name="image"
             control={control}
             required
           >
@@ -457,23 +444,7 @@ export default function DiamondView() {
               setFileList={setDiamondFile}
             />
           </FormItem>
-          <FormItem
-            label="Certificate Image"
-            name="certificateUrl"
-            control={control}
-            required
-          >
-            {/* <UploadDiamondImage
-              fileList={certificateFile}
-              setFileList={setCertificateFile}
-            /> */}
-            <Input
-              type="text"
-              placeholder="Certificate Url"
-              className="font-thin border p-2 rounded-md w-full"
-              value="none"
-            />
-          </FormItem>
+
           <Form.Item className="mt-8 mb-0">
             <div className="mt-8">
               <Button
