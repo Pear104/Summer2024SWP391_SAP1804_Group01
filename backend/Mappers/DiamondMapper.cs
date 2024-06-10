@@ -24,6 +24,7 @@ namespace backend.Mappers
                 Fluorescence = diamond.Fluorescence,
                 Availability = diamond.Availability,
                 Shape = diamond.Shape.Name,
+                ShapeId = diamond.ShapeId
             };
         }
 

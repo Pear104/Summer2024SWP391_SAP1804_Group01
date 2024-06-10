@@ -190,11 +190,11 @@ namespace backend.Repository
                 .FirstOrDefaultAsync(x => x.DiamondId == id);
         }
 
-        public async Task<Diamond?> GetDiamondByCertificateNumberAsync(long CertificateNumber)
+        public async Task<List<Diamond?>> GetDiamondByCertificateNumberAsync(long CertificateNumber)
         {
             return await _context
                 .Diamonds.Include(x => x.Shape)
-                .FirstOrDefaultAsync(x => x.CertificateNumber == CertificateNumber);
+                .Where(x => x.CertificateNumber.ToString().StartsWith(CertificateNumber.ToString())).ToListAsync();
         }
 
         public async Task<Diamond?> UpdateDiamondAsync(long id, UpdateDiamondDTO diamondDto)
@@ -206,11 +206,42 @@ namespace backend.Repository
             }
             var shape = await _context.Shapes.FindAsync(diamondDto.ShapeId);
 
-            existingDiamond.Lab = diamondDto.Lab;
             if (shape != null)
             {
+                existingDiamond.ShapeId = diamondDto.ShapeId;
                 existingDiamond.Shape = shape;
             }
+            if (diamondDto.Lab != null) {
+                existingDiamond.Lab = diamondDto.Lab;
+            }
+            if (diamondDto.CertificateNumber != null) {
+                existingDiamond.CertificateNumber = (long)diamondDto.CertificateNumber;
+            }
+            if (diamondDto.CertificateUrl != null) {
+                existingDiamond.CertificateUrl = diamondDto.CertificateUrl;
+            }
+            if (diamondDto.Clarity != null) {
+                existingDiamond.Clarity = (Clarity)Enum.Parse(typeof(Clarity), diamondDto.Clarity.ToString());
+            }
+            if (diamondDto.Color != null) {
+                existingDiamond.Color = (Color)Enum.Parse(typeof(Color), diamondDto.Color.ToString()); // diamondDto.Color;
+            }
+            if (diamondDto.Carat != existingDiamond.Carat) {
+                existingDiamond.Carat = (float)diamondDto.Carat;
+            }
+            if (diamondDto.Polish != null) {
+                existingDiamond.Polish = diamondDto.Polish;
+            }
+            if (diamondDto.Symmetry != null) {
+                existingDiamond.Symmetry = diamondDto.Symmetry;
+            }
+            if (diamondDto.Fluorescence != null) {
+                existingDiamond.Fluorescence = diamondDto.Fluorescence;
+            }
+            if (diamondDto.ImageUrl != null) {
+                existingDiamond.ImageUrl = diamondDto.ImageUrl;
+            }
+            
 
             _context.Entry(existingDiamond).State = EntityState.Modified;
             await _context.SaveChangesAsync();

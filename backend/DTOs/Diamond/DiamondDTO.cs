@@ -23,5 +23,6 @@ namespace backend.DTOs
         public string Fluorescence { get; set; } = string.Empty;
         public bool Availability { get; set; } = true;
         public string Shape { get; set; }
+        public long ShapeId { get; set; }
     }
 }

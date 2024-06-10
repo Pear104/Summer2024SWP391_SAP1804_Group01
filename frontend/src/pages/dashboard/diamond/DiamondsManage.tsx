@@ -79,9 +79,7 @@ export default function ProductsManage() {
   );
 
   const diamondsData = searchTerm
-    ? diamondSearch.data
-      ? [diamondSearch.data]
-      : []
+    ? diamondSearch.data || []
     : diamond?.data?.diamonds || [];
   console.log(diamondsData);
   // search and filter
