@@ -292,7 +292,20 @@ namespace backend.Repository
             {
                 return null;
             }
-            existedOrder.OrderStatus = Enum.Parse<OrderStatus>(order.OrderStatus);
+            if (order.OrderStatus != null) {
+                System.Console.WriteLine("Dang o trong order status ne");
+                existedOrder.OrderStatus = Enum.Parse<OrderStatus>(order.OrderStatus);
+            }
+            if (order.SaleStaffId != 0)
+            {
+                var saleStaff = _context.Accounts.FirstOrDefault(x => x.AccountId == order.SaleStaffId);
+                existedOrder.SaleStaff = saleStaff;
+            }
+            if (order.DeliveryStaffId != 0)
+            {
+                var deliveryStaff = _context.Accounts.FirstOrDefault(x => x.AccountId == order.DeliveryStaffId);
+                existedOrder.DeliveryStaff = deliveryStaff;
+            }
             _context.Entry(existedOrder).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return existedOrder;

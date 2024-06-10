@@ -11,6 +11,8 @@ namespace backend.Mappers
             return new Order
             {
                 OrderStatus = (OrderStatus)Enum.Parse(typeof(OrderStatus), order.OrderStatus),
+                SaleStaffId = order.SaleStaffId,
+                DeliveryStaffId = order.DeliveryStaffId
             };
         }
 

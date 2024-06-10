@@ -70,6 +70,7 @@ namespace backend.Controllers
         )
         {
             System.Console.WriteLine("ahihi");
+            System.Console.WriteLine("status ne: "+order.OrderStatus);
             var updatedOrder = await _orderRepo.UpdateOrderAsync(id, order);
             if (updatedOrder == null)
             {

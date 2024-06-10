@@ -1,4 +1,8 @@
+import { useQueries } from "@tanstack/react-query";
+import DeliveryStaffComponent from "./DeliveryStaffComponent";
 import OrderUpdateComponent from "./OrderUpdateComponent";
+import SaleStaffComponent from "./SaleStaffComponent";
+import { GET } from "../../../utils/request";
 const formatDate = (dateString: any) => {
   const date = new Date(dateString);
   const day = String(date.getDate()).padStart(2, "0");
@@ -20,6 +24,20 @@ export default function OrderRow({ order }: { order: any }) {
       </>
     );
   }
+  const [saleStaffs, deliveryStaffs] = useQueries({
+    queries: [
+      {
+        queryKey: ["saleStaffs"],
+        queryFn: () => GET("/api/Accounts?Role=SaleStaff"),
+        staleTime: Infinity,
+      },
+      {
+        queryKey: ["deliveryStaffs"],
+        queryFn: () => GET("/api/Accounts?Role=DeliveryStaff"),
+        staleTime: Infinity,
+      },
+    ],
+  });
 
   return (
     <>
@@ -35,9 +53,9 @@ export default function OrderRow({ order }: { order: any }) {
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="text-sm text-gray-500">
-            {order.customerId}
-            {"#"}
             {order.customerName}
+            {" #"}
+            {order.customerId}
           </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
@@ -47,10 +65,18 @@ export default function OrderRow({ order }: { order: any }) {
           <div className="text-sm text-gray-500">{order.phoneNumber}</div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          <div className="text-sm text-gray-500">{""}</div>
+          <SaleStaffComponent
+            orderId={order.orderId}
+            staffs={saleStaffs?.data || []}
+            currentStaff={order?.saleStaffName}
+          />
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          <div className="text-sm text-gray-500">{""}</div>
+          <DeliveryStaffComponent
+            orderId={order.orderId}
+            staffs={deliveryStaffs?.data || []}
+            currentStaff={order?.deliveryStaffName}
+          />
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="text-sm text-gray-500">
