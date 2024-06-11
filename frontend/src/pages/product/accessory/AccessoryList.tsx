@@ -1,71 +1,99 @@
-import { Pagination } from "antd";
-import React, { useEffect, useState } from "react";
+import { Pagination, Skeleton } from "antd";
+import { useEffect } from "react";
 import { GET } from "../../../utils/request";
-
-const AccessoryItem = ({ accessory }: { accessory: any }) => {
-  return (
-    <a
-      className="flex items-center w-full justify-around hover:bg-slate-100"
-      href="/product/accessory/detail"
-    >
-      <div
-        className="my-2 aspect-square bg-cover bg-center bg-no-repeat w-[100px]"
-        style={{
-          // backgroundImage: `url(/images/face-without-mouth_1f636.png)`,
-          backgroundImage: `url(${accessory.imageUrl})`,
-        }}
-      ></div>
-      <div className="w-[80px] flex justify-center">{accessory.name}</div>
-      <div className="w-[80px] flex justify-center">Price</div>
-      <div className="w-[80px] flex justify-center">{accessory.carat}</div>
-      <div className="w-[80px] flex justify-center">{accessory.color}</div>
-      <div className="w-[80px] flex justify-center">{accessory.clarity}</div>
-      <div className="w-[80px] flex justify-center">{accessory.cut}</div>
-      <div className="w-[80px] flex justify-center">{accessory.lab}</div>
-      <div className="w-[80px] flex justify-center">
-        <a className="border-2 border-stone-800 hover:font-bold rounded-full px-4 py-2 text-sm hover:bg-black hover:text-white transition-all">
-          VIEW
-        </a>
-      </div>
-    </a>
-  );
-};
+import { useNavigate } from "react-router-dom";
+import { useSearchStore } from "../../../store/searchStore";
+import { useQueries } from "@tanstack/react-query";
+import AccessoryItem from "./AccessoryItem";
+import { getAccessoryPrice } from "../../../utils/getPrice";
 
 export default function AccessoryList() {
-  const [accessories, setAccessories] = useState([]);
-
   useEffect(() => {
-    (async () => {
-      const data = await GET("/api/Accessories");
-      setAccessories(data);
-    })();
+    setQueryUrl("/api/Accessories?");
   }, []);
+
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
+  const navigate = useNavigate();
+  const queryUrl = useSearchStore((state) => state.queryUrl);
+  const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
+
+  const [accessories, materialPrice] = useQueries({
+    queries: [
+      {
+        queryKey: ["accessories", queryUrl],
+        queryFn: () => GET(queryUrl),
+        staleTime: Infinity,
+      },
+      {
+        queryKey: ["materialPrice"],
+        queryFn: () => GET("/api/MaterialPrices/"),
+        staleTime: Infinity,
+      },
+    ],
+  });
+
+  if (accessories.error) {
+    return <div>Error: {accessories.error.message}</div>;
+  }
+
   return (
-    <div className="flex items-center justify-around flex-col mb-20">
-      <div className="w-full px-20 mt-10">
-        <div className="font-bold mulish-regular flex items-center w-full justify-around mb-4">
-          Ahihi
+    <div className="flex items-center justify-around flex-col mb-20 px-20">
+      <div className="w-full">
+        <div className="font-bold text-3xl libre-baskerville-regular flex justify-around my-10">
+          DATJ's ACCESSORY PRODUCTS
         </div>
-        <div className="grid grid-cols-3">
-          {accessories.map((accessory: any) => {
-            return <AccessoryItem accessory={accessory} />;
-          })}
-        </div>
-        <div className="mt-10 flex justify-center">
-          <Pagination
-            defaultCurrent={Number.parseInt(params.get("page") || "1")}
-            total={500}
-            onChange={(page, pageSize) => {
-              const url = new URL(window.location.href);
-              const params = new URLSearchParams(url.searchParams);
-              params.set("page", page.toString());
-              url.search = params.toString();
-              window.location.href = url.toString();
+        {(accessories.isLoading || materialPrice.isLoading) && (
+          <Skeleton
+            active
+            paragraph={{
+              rows: 20,
             }}
           />
-        </div>
+        )}
+        {accessories.data && materialPrice.data && (
+          <>
+            <div className="grid grid-cols-4 gap-3">
+              {accessories.data.accessories.map((accessory: any) => {
+                return (
+                  <AccessoryItem
+                    key={accessory.accessoryId}
+                    accessory={accessory}
+                    price={getAccessoryPrice(
+                      accessory,
+                      materialPrice.data
+                    ).toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      maximumFractionDigits: 0,
+                    })}
+                  />
+                );
+              })}
+            </div>
+            <div className="mt-10 flex justify-center">
+              <Pagination
+                showTotal={(total, range) =>
+                  `${range[0]}-${range[1]} of ${total} items`
+                }
+                current={Number(params.get("PageNumber")) || 1}
+                defaultCurrent={
+                  (accessories?.data &&
+                    accessories?.data.currentPage.toString()) ||
+                  "1"
+                }
+                total={accessories.data.totalCount}
+                pageSize={Number(params.get("PageSize")) || 20}
+                showSizeChanger={false}
+                onChange={(page, _pageSize) => {
+                  params.set("PageNumber", page.toString());
+                  navigate(url.pathname + "?" + params.toString());
+                  setQueryUrl("/api/Accessories?" + params.toString());
+                }}
+              />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

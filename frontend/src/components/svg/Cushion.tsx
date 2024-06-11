@@ -1,8 +1,7 @@
-import React from "react";
-
-export default function Cushion() {
+export default function Cushion({ className }: { className?: string }) {
   return (
     <svg
+      className={className}
       width="128"
       height="128"
       viewBox="0 0 128 128"

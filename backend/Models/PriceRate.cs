@@ -19,6 +19,7 @@ namespace backend.Models
         public float Percent { get; set; }
 
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public List<Order> Orders { get; set; } = new List<Order>();
     }
 }

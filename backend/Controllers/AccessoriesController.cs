@@ -1,5 +1,11 @@
-﻿using backend.Data;
+﻿using System.Text;
+using backend.Data;
+using backend.DTOs.Accessory;
+using backend.Helper;
+using backend.Interfaces;
+using backend.Mappers;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,78 +16,67 @@ namespace backend.Controllers
     public class AccessoriesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IAccessoryRepository _accessoryRepo;
 
-        public AccessoriesController(ApplicationDbContext context)
+        public AccessoriesController(
+            ApplicationDbContext context,
+            IAccessoryRepository accessoryRepo
+        )
         {
             _context = context;
+            _accessoryRepo = accessoryRepo;
         }
 
-        // GET: api/Accessories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Accessory>>> GetAccessories()
+        public async Task<ActionResult> GetAccessories([FromQuery] AccessoryQuery query)
         {
-            return await _context.Accessories.ToListAsync();
+            var accessoryDTOs = await _accessoryRepo.GetAllAccessoriesAsync(query);
+            return Ok(accessoryDTOs);
         }
 
-        // GET: api/Accessories/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Accessory>> GetAccessory(long id)
+        // [Authorize(Roles = ("Customer"))]
+        public async Task<ActionResult> GetAccessory(long id)
         {
-            var accessory = await _context
-                .Accessories.Include(a => a.AccessoryImages)
-                .Include(a => a.Shape)
-                .FirstOrDefaultAsync(a => a.AccessoryId == id);
+            var accessory = await _accessoryRepo.GetAccessoryByIdAsync(id);
             if (accessory == null)
             {
-                return NotFound();
+                return NotFound("The accessory does not exist");
             }
 
-            return accessory;
+            return Ok(accessory);
         }
 
-        // PUT: api/Accessories/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAccessory(long id, Accessory accessory)
+        public async Task<IActionResult> PutAccessory(
+            [FromRoute] long id,
+            [FromBody] UpdateAccessoryDTO accessoryDto
+        )
         {
-            if (id != accessory.AccessoryId)
+            var accessory = await _accessoryRepo.UpdateAccessoryAsync(id, accessoryDto);
+            System.Console.WriteLine("ahihi");
+            if (accessory == null)
             {
-                return BadRequest();
+                return NotFound("Accessory not found.");
             }
-
-            _context.Entry(accessory).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AccessoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(accessory);
         }
 
-        // POST: api/Accessories
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Accessory>> PostAccessory(Accessory accessory)
+        public async Task<ActionResult> PostAccessory([FromBody] CreateAccessoryDTO accessoryDto)
         {
-            _context.Accessories.Add(accessory);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetAccessory", new { id = accessory.AccessoryId }, accessory);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var newAccessory = await _accessoryRepo.CreateAccessoryAsync(accessoryDto);
+            if (newAccessory == null)
+            {
+                return BadRequest("The accessory's shape/type does not exist");
+            }
+            return Ok(newAccessory);
         }
 
-        // DELETE: api/Accessories/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAccessory(long id)
         {

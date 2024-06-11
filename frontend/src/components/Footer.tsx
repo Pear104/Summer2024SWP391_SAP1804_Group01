@@ -10,8 +10,8 @@ import Logo from "./logo/Logo";
 
 export default function Footer() {
   return (
-    <div className="w-screen border-t pt-10 pb-2 px-4">
-      <div className="grid grid-cols-2">
+    <div className="w-screen border-t">
+      <div className="grid grid-cols-2 py-8 bg-black/90 text-white px-8">
         <div className="flex text-base gap-8">
           <div className="flex flex-col gap-2 mulish-regular text-sm">
             <div className="font-bold">Customer Care</div>
@@ -64,20 +64,26 @@ export default function Footer() {
             <div className="flex items-center gap-2">Heart</div>
           </div>
         </div>
-        <div className="flex flex-col ml-8 font-semibold gap-4 mulish-regular text-[#151542]">
+        <div className="flex flex-col ml-8 font-semibold gap-4 mulish-regular text-white">
           <div className="flex items-center gap-2">
             <Facebook
               size={20}
-              color="#151542"
+              color="white"
               strokeWidth={1.25}
               absoluteStrokeWidth
             />
-            <a className="hover:opacity-40 cursor-pointer">Facebook</a>
+            <a
+              className="hover:opacity-40 cursor-pointer"
+              target="_blank"
+              href="https://www.facebook.com/datj.company/"
+            >
+              Facebook
+            </a>
           </div>
           <div className="flex items-center gap-2">
             <Instagram
               size={20}
-              color="#151542"
+              color="white"
               strokeWidth={1.25}
               absoluteStrokeWidth
             />
@@ -86,7 +92,7 @@ export default function Footer() {
           <div className="flex items-center gap-2">
             <Twitter
               size={20}
-              color="#151542"
+              color="white"
               strokeWidth={1.25}
               absoluteStrokeWidth
             />
@@ -95,7 +101,7 @@ export default function Footer() {
           <div className="flex items-center gap-2">
             <Youtube
               size={20}
-              color="#151542"
+              color="white"
               strokeWidth={1.25}
               absoluteStrokeWidth
             />
@@ -103,7 +109,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="border-t text-[#151542] py-4 mt-8 flex items-center justify-between">
+      <div className="border-t text-[#151542] p-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Logo />
           <div className="text-sm tracking-widest">© 2024 DAT J .Inc</div>

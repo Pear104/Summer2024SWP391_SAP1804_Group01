@@ -1,77 +1,129 @@
-import { useEffect, useState } from "react";
 import { GET } from "../../../utils/request";
 import { ExternalLink } from "lucide-react";
-
+import { useNavigate, useParams } from "react-router-dom";
+import { Image, Skeleton } from "antd";
+import { useCartStore } from "../../../store/cartStore";
+import scrollTo from "../../../utils/scroll";
+import { useQueries } from "@tanstack/react-query";
+import { getDiamondPrice } from "../../../utils/getPrice";
 export default function DiamondDetail() {
-  const [diamond, setDiamond] = useState<any>();
-  useEffect(() => {
-    (async () => {
-      const data = await GET("/api/Diamond/5");
-      setDiamond(data);
-    })();
-  }, []);
+  // const [diamond, setDiamond] = useState<any>();
+  const { diamondId } = useParams();
+  scrollTo("choose-item");
+  const [diamond, diamondPrice] = useQueries({
+    queries: [
+      {
+        queryKey: ["diamond"],
+        queryFn: () => GET(`/api/Diamonds/${diamondId}`),
+        staleTime: Infinity,
+      },
+      {
+        queryKey: ["diamondPrice"],
+        queryFn: () => GET("/api/DiamondPrices/"),
+        staleTime: Infinity,
+      },
+    ],
+  });
+
+  const navigate = useNavigate();
+  const setCart = useCartStore((state) => state.setCart);
+  const setCurrentDiamond = useCartStore((state) => state.setCurrentDiamond);
+  console.log(diamond?.data);
   return (
-    <div className="flex justify-center">
-      <div className="w-[1200px] grid grid-cols-6 gap-10">
-        <div
-          className="col-span-4 place-self-center aspect-square bg-contain bg-top bg-no-repeat w-4/5 border"
-          style={{
-            backgroundImage: `url(${diamond?.imageUrl})`,
-            // backgroundImage: `url(${diamond.imageUrl})`,
+    <div className="flex justify-center mb-20">
+      {(diamond?.isLoading || diamondPrice?.isLoading) && (
+        <Skeleton
+          className="px-20 pt-6"
+          active
+          paragraph={{
+            rows: 20,
           }}
-        ></div>
-        <div className="col-span-2">
-          <div className="mulish-regular text-2xl">
-            {`${diamond?.carat} Carat ${diamond?.shape.name} Shape Lab Diamond`}
+        />
+      )}
+      {diamond?.data && diamondPrice?.data && (
+        <div className="w-[1200px] grid grid-cols-6 gap-10">
+          <div className="col-span-4 place-self-center aspect-square bg-cover bg-top bg-no-repeat w-4/5">
+            <Image
+              style={{ height: "100%" }}
+              src={`${diamond.data.imageUrl}`}
+            />
           </div>
-          <div className="text-sm">
-            Certificate Number#:
-            <span className="ml-2">{diamond?.certificateNumber}</span>
-          </div>
-          <div className="text-3xl">$ 1.200</div>
-          <div className="w-full grid grid-cols-2 gap-4 my-4 mulish-regular text-slate-950 ">
-            <div className="flex flex-col gap-2">
-              <div>LAB</div>
-              <div>CERTIFICATE NUMBER</div>
-              <div>SHAPE</div>
-              <div>CARAT</div>
-              <div>CUT</div>
-              <div>COLOR</div>
-              <div>CLARITY</div>
-              <div>POLISH</div>
-              <div>SYMMETRY</div>
-              <div>FLUORESCENCE</div>
+          <div className="col-span-2">
+            <div className="mulish-regular text-2xl">
+              {`${diamond?.data.carat} Carat ${diamond?.data.shape} Shape Lab Diamond`}
             </div>
-            <div className="flex flex-col gap-2">
-              <div>{diamond?.lab}</div>
-              <a
-                className="text-blue-500 flex"
-                target="blank"
-                href={diamond?.certificateUrl}
+            <div className="text-sm">
+              Certificate Number#:
+              <span className="ml-2">{diamond?.data.certificateNumber}</span>
+            </div>
+            <div className="text-3xl my-2">
+              {diamond?.data &&
+                diamondPrice?.data &&
+                getDiamondPrice(
+                  diamond.data,
+                  diamondPrice?.data
+                ).toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 0,
+                })}
+            </div>
+            <div className="w-full grid grid-cols-2 gap-4 my-4 mulish-regular text-slate-950 ">
+              <div className="flex flex-col gap-2">
+                <div>LAB</div>
+                <div>CERTIFICATE NUMBER</div>
+                <div>SHAPE</div>
+                <div>CARAT</div>
+                <div>CUT</div>
+                <div>COLOR</div>
+                <div>CLARITY</div>
+                <div>POLISH</div>
+                <div>SYMMETRY</div>
+                <div>FLUORESCENCE</div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <div>{diamond.data.lab}</div>
+                <a
+                  className="text-blue-500 flex"
+                  target="_blank"
+                  href={diamond.data.certificateUrl}
+                >
+                  {diamond.data.certificateNumber}
+                  <ExternalLink size={12} />
+                </a>
+                <div>{diamond.data.shape}</div>
+                <div>{diamond.data.carat}</div>
+                <div>{diamond.data.cut}</div>
+                <div>{diamond.data.color}</div>
+                <div>{diamond.data.clarity}</div>
+                <div>{diamond.data.polish}</div>
+                <div>{diamond.data.symmetry}</div>
+                <div>{diamond.data.fluorescence}</div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-4 mt-8">
+              <div
+                className="tracking-wider text-xl w-full flex justify-center px-4 py-3 bg-primary text-white hover:scale-95 transition-all"
+                onClick={() => {
+                  navigate("/product/accessory");
+                  setCurrentDiamond(diamond.data.diamondId);
+                }}
               >
-                {diamond?.certificateNumber}
-                <ExternalLink size={12} />
-              </a>
-              <div>{diamond?.shape.name}</div>
-              <div>{diamond?.carat}</div>
-              <div>{diamond?.cut}</div>
-              <div>{diamond?.color}</div>
-              <div>{diamond?.clarity}</div>
-              <div>{diamond?.polish}</div>
-              <div>{diamond?.symmetry}</div>
-              <div>{diamond?.fluorescence}</div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-4">
-            <div className="text-xl w-full flex justify-center px-4 py-3 bg-cyan-900 text-white hover:scale-95 transition-all">
-              ADD TO RING
-            </div>
-            <div className="text-xl w-full flex justify-center border border-black px-4 py-3 bg-white hover:scale-95 transition-all">
-              BUY LOOSE
+                ADD TO ACCESSORY
+              </div>
+              <div
+                className="cursor-pointer tracking-widest text-xl w-full flex justify-center border border-black px-4 py-3 bg-white hover:scale-95 transition-all"
+                onClick={() => {
+                  setCart(diamond.data.diamondId);
+                  navigate("/cart");
+                }}
+              >
+                BUY LOOSE
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

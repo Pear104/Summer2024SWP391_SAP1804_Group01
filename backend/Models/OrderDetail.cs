@@ -10,23 +10,34 @@ namespace backend.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("order_detail_id")]
         public long OrderDetailId { get; set; }
+
         [Column("size")]
         public float? Size { get; set; }
+
         [Column("item_price")]
-        public double ItemPrice { get; set; }
+        [Range(0.01, double.MaxValue)]
+        public double? ItemPrice { get; set; }
+
         [Column("order_id")]
         public long OrderId { get; set; }
         public Order Order { get; set; } = new Order();
+
         [Column("diamond_id")]
         public long DiamondId { get; set; }
         public Diamond Diamond { get; set; } = new Diamond();
+
         [Column("accessory_id")]
-        public long AccessoryId { get; set; }
-        public Accessory Accessory { get; set; } = new Accessory();
+        public long? AccessoryId { get; set; }
+        public Accessory? Accessory { get; set; }
 
-        [Column("warranty_card_id")]
-        public long WarrantyCardId { get; set; }
+        [Column("diamond_price_id")]
+        public long DiamondPriceId { get; set; }
+        public DiamondPrice DiamondPrice { get; set; } = new DiamondPrice();
+
+        [Column("material_price_id")]
+        public long? MaterialPriceId { get; set; }
+        public MaterialPrice? MaterialPrice { get; set; }
+
         public WarrantyCard WarrantyCard { get; set; } = new WarrantyCard();
-
     }
 }

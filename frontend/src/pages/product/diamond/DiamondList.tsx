@@ -1,79 +1,137 @@
-import { Pagination } from "antd";
-import { useEffect, useState } from "react";
+import { Pagination, Skeleton } from "antd";
 import { GET } from "../../../utils/request";
-
-const DiamondItem = ({ diamond }: { diamond: any }) => {
-  return (
-    <a
-      className="flex items-center w-full justify-around hover:bg-slate-100"
-      href="/product/diamond/detail"
-    >
-      <div
-        className="my-2 aspect-square bg-cover bg-center bg-no-repeat w-[100px]"
-        style={{
-          // backgroundImage: `url(/images/face-without-mouth_1f636.png)`,
-          backgroundImage: `url(${diamond.imageUrl})`,
-        }}
-      ></div>
-      <div className="w-[80px] flex justify-center">{diamond.shape.name}</div>
-      <div className="w-[80px] flex justify-center">Price</div>
-      <div className="w-[80px] flex justify-center">{diamond.carat}</div>
-      <div className="w-[80px] flex justify-center">{diamond.color}</div>
-      <div className="w-[80px] flex justify-center">{diamond.clarity}</div>
-      <div className="w-[80px] flex justify-center">{diamond.cut}</div>
-      <div className="w-[80px] flex justify-center">{diamond.lab}</div>
-      <div className="w-[80px] flex justify-center">
-        <a className="border-2 border-stone-800 hover:font-bold rounded-full px-4 py-2 text-sm hover:bg-black hover:text-white transition-all">
-          VIEW
-        </a>
-      </div>
-    </a>
-  );
-};
+import { useQueries } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import DiamondItem from "./components/DiamondItem";
+import SortItem from "./components/SortItem";
+import Filter from "./components/Filter";
+import { useSearchStore } from "../../../store/searchStore";
+import { useEffect } from "react";
+import scrollTo from "../../../utils/scroll";
+import { getDiamondPrice } from "../../../utils/getPrice";
 
 export default function DiamondList() {
-  const [diamonds, setDiamonds] = useState([]);
-  useEffect(() => {
-    (async () => {
-      const data = await GET("/api/Diamond");
-      setDiamonds(data);
-    })();
-  }, []);
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
 
+  const properties = [
+    "Shape",
+    "Price",
+    "Carat",
+    "Color",
+    "Clarity",
+    "Cut",
+    "Lab",
+  ];
+
+  const navigate = useNavigate();
+  // scrollTo("table-header");
+  const queryUrl = useSearchStore((state) => state.queryUrl);
+  const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
+  console.log("query url: " + queryUrl);
+  useEffect(() => {
+    setQueryUrl("/api/Diamonds?IsAvailability=true");
+  }, []);
+
+  const [diamond, diamondPrice] = useQueries({
+    queries: [
+      {
+        queryKey: ["diamonds", queryUrl],
+        queryFn: () => GET(queryUrl),
+        staleTime: Infinity,
+      },
+      {
+        queryKey: ["diamondPrices"],
+        queryFn: () => GET("/api/DiamondPrices/"),
+        staleTime: Infinity,
+      },
+    ],
+  });
+
+  if (diamond?.data && diamondPrice?.data) {
+    console.log("i am bug");
+    console.log(diamond?.data);
+  }
+
   return (
     <div className="flex items-center justify-around flex-col mb-20">
-      <div className="font-bold">Diamond table</div>
+      <Filter />
+      <div
+        className="font-bold text-3xl libre-baskerville-regular"
+        id="table-header"
+      >
+        DATJ's DIAMOND PRODUCTS
+      </div>
       <div className="w-full px-20 mt-10">
-        <div className="font-bold mulish-regular flex items-center w-full justify-around mb-4">
-          <div className="w-[100px] text-center">View</div>
-          <div className="w-[80px] text-center">Shape</div>
-          <div className="w-[80px] text-center">Price</div>
-          <div className="w-[80px] text-center">Carat</div>
-          <div className="w-[80px] text-center">Color</div>
-          <div className="w-[80px] text-center">Clarity</div>
-          <div className="w-[80px] text-center">Cut</div>
-          <div className="w-[80px] text-center">Lab</div>
-          <div className="w-[80px] text-center">Detail</div>
+        <div className="border-y border-black py-5 font-bold mulish-regular flex items-center w-full justify-around mb-4">
+          <div className="w-[100px] text-center justify-center">View</div>
+          {properties.map((property) => {
+            return (
+              <SortItem
+                type="diamond"
+                key={property}
+                property={property}
+                params={params}
+                setQueryUrl={setQueryUrl}
+              />
+            );
+          })}
+          <div className="w-[80px] text-center flex gap-2 items-center justify-center">
+            Detail
+          </div>
         </div>
         <div>
-          {diamonds.map((diamond: any) => {
-            return <DiamondItem diamond={diamond} />;
-          })}
+          {(diamond?.isLoading || diamondPrice?.isLoading) && (
+            <Skeleton
+              active
+              paragraph={{
+                rows: 20,
+              }}
+            />
+          )}
+          {diamond?.data &&
+            diamondPrice?.data &&
+            diamond?.data?.diamonds?.map((diamond: any, index: number) => {
+              return (
+                <DiamondItem
+                  key={index}
+                  diamond={diamond}
+                  price={getDiamondPrice(
+                    diamond,
+                    diamondPrice.data
+                  ).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 0,
+                  })}
+                />
+              );
+            })}
         </div>
         <div className="mt-10 flex justify-center">
-          <Pagination
-            defaultCurrent={Number.parseInt(params.get("page") || "1")}
-            total={500}
-            onChange={(page, pageSize) => {
-              const url = new URL(window.location.href);
-              const params = new URLSearchParams(url.searchParams);
-              params.set("page", page.toString());
-              url.search = params.toString();
-              window.location.href = url.toString();
-            }}
-          />
+          {diamond?.data && diamond?.data.diamonds.length == 0 ? (
+            <div className="text-center text-2xl">No Diamonds Found.</div>
+          ) : (
+            <Pagination
+              showTotal={(total, range) =>
+                `${range[0]}-${range[1]} of ${total} items`
+              }
+              current={Number(params.get("PageNumber")) || 1}
+              defaultCurrent={
+                (diamond?.data && diamond?.data.currentPage.toString()) || "1"
+              }
+              total={diamond?.data && diamond?.data.totalCount}
+              pageSize={Number(params.get("PageSize")) || 20}
+              showSizeChanger={false}
+              onChange={(page, _pageSize) => {
+                scrollTo("table-header");
+                params.set("PageNumber", page.toString());
+                params.set("IsAvailability", "true");
+                navigate(url.pathname + "?" + params.toString());
+                setQueryUrl("/api/Diamonds?" + params.toString());
+              }}
+            />
+          )}
         </div>
       </div>
     </div>

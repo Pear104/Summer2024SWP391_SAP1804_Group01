@@ -153,6 +153,12 @@ div#root {
   font-style: italic;
 }
 
+.libre-baskerville-regular {
+  font-family: "Libre Baskerville", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 .prompt-black-italic {
   font-family: "Prompt", sans-serif;
   font-weight: 900;
@@ -202,4 +208,18 @@ a {
   .without-ring {
     @apply focus-visible:outline-none;
   }
+}
+
+.ant-select-selector {
+  border-radius: 0px !important;
+  border: 0px !important;
+}
+
+.ant-image {
+  width: 100% !important;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

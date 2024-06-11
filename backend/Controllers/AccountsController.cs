@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using backend.Data;
+using backend.DTOs.Account;
+using backend.Helper;
+using backend.Interfaces;
+using backend.Mappers;
+using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using backend.Data;
-using backend.Models;
+using NuGet.Packaging.Core;
 
 namespace backend.Controllers
 {
@@ -14,95 +15,83 @@ namespace backend.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IAccountRepository _accountRepo;
 
-        public AccountsController(ApplicationDbContext context)
+        public AccountsController(IAccountRepository accountRepo)
         {
-            _context = context;
+            _accountRepo = accountRepo;
         }
 
-        // GET: api/Accounts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Account>>> GetAccounts()
+        public async Task<ActionResult> GetAccounts([FromQuery] AccountQuery query)
         {
-            return await _context.Accounts.ToListAsync();
+            var accountModels = await _accountRepo.GetAllAccountsAsync(query);
+            var accountDTOs = accountModels.Select(x => x.ToAccountDTO());
+            return Ok(accountDTOs);
         }
 
-        // GET: api/Accounts/5
+        [HttpGet("me")]
+        [Authorize(Roles = ("Customer, Manager, Administrator, SaleStaff, DeliveryStaff"))]
+        public async Task<ActionResult> GetCurrentAccount()
+        {
+            var accountId = User.FindFirst("accountId")?.Value;
+            var accountModels = await _accountRepo.GetAccountByIdAsync(
+                long.Parse(accountId ?? "0")
+            );
+            return Ok(accountModels?.ToAccountDTO());
+        }
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<Account>> GetAccount(long id)
+        public async Task<ActionResult> GetAccount(long id)
         {
-            var account = await _context.Accounts.FindAsync(id);
-
+            var account = await _accountRepo.GetAccountByIdAsync(id);
             if (account == null)
             {
                 return NotFound();
             }
 
-            return account;
+            return Ok(account.ToAccountDTO());
         }
 
-        // PUT: api/Accounts/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAccount(long id, Account account)
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> PutAccount(
+            [FromRoute] long id,
+            [FromBody] UpdateAccountDTO accountDto
+        )
         {
-            if (id != account.AccountId)
+            var account = await _accountRepo.UpdateAccountAsync(id, accountDto);
+            if (account == null)
             {
-                return BadRequest();
+                return NotFound("Account not found.");
             }
-
-            _context.Entry(account).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AccountExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(account);
         }
 
-        // POST: api/Accounts
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Account>> PostAccount(Account account)
+        public async Task<IActionResult> PostAccount(Account account)
         {
-            _context.Accounts.Add(account);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetAccount", new { id = account.AccountId }, account);
-        }
-
-        // DELETE: api/Accounts/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAccount(long id)
-        {
-            var account = await _context.Accounts.FindAsync(id);
-            if (account == null)
+            var newAccount = await _accountRepo.CreateAccountAsync(account);
+            if (newAccount == null)
             {
-                return NotFound();
+                return BadRequest("The diamond's certificate number already exists.");
             }
-
-            _context.Accounts.Remove(account);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(newAccount);
         }
 
-        private bool AccountExists(long id)
-        {
-            return _context.Accounts.Any(e => e.AccountId == id);
-        }
+        // [HttpDelete("{id}")]
+        // public async Task<IActionResult> DeleteAccount(long id)
+        // {
+        //     var account = await _accountRepo.Fin;
+        //     if (account == null)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     _context.Accounts.Remove(account);
+        //     await _context.SaveChangesAsync();
+
+        //     return NoContent();
+        // }
     }
 }

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using backend.Data;
+﻿using backend.DTOs.Rank;
+using backend.Interfaces;
+using backend.Mappers;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
 {
@@ -14,95 +11,74 @@ namespace backend.Controllers
     [ApiController]
     public class RanksController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IRankRepository _rankRepo;
 
-        public RanksController(ApplicationDbContext context)
+        public RanksController(IRankRepository rankRepo)
         {
-            _context = context;
+            _rankRepo = rankRepo;
         }
 
-        // GET: api/Ranks
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Rank>>> GetRanks()
+        public async Task<ActionResult> GetRanks()
         {
-            return await _context.Ranks.ToListAsync();
+            var rankModels = await _rankRepo.GetAllRanksAsync();
+            return Ok(rankModels.Select(x => x.ToRankDTO()));
         }
 
-        // GET: api/Ranks/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Rank>> GetRank(long id)
         {
-            var rank = await _context.Ranks.FindAsync(id);
-
-            if (rank == null)
+            var rankModel = await _rankRepo.GetRankByIdAsync(id);
+            if (rankModel == null)
             {
                 return NotFound();
             }
-
-            return rank;
+            return Ok(rankModel.ToRankDTO());
         }
 
-        // PUT: api/Ranks/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRank(long id, Rank rank)
+        public async Task<IActionResult> PutRank(long id, UpdateRankDTO rankDto)
         {
-            if (id != rank.RankId)
-            {
-                return BadRequest();
-            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            _context.Entry(rank).State = EntityState.Modified;
+            var rankModel = await _rankRepo.UpdateRankAsync(id, rankDto.ToRankFromUpdate(id));
 
-            try
+            if (rankModel == null)
             {
-                await _context.SaveChangesAsync();
+                return NotFound("Rank not found");
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RankExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(rankModel.ToRankDTO());
         }
 
-        // POST: api/Ranks
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Rank>> PostRank(Rank rank)
+        public async Task<ActionResult<Rank>> PostRank([FromBody] CreateRankDTO rankDto)
         {
-            _context.Ranks.Add(rank);
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            return CreatedAtAction("GetRank", new { id = rank.RankId }, rank);
+            var rankModel = rankDto.ToRankFromCreate();
+
+            await _rankRepo.CreateRankAsync(rankModel);
+
+            return CreatedAtAction(
+                nameof(GetRank),
+                new { id = rankModel.RankId },
+                rankModel.ToRankDTO()
+            );
         }
 
-        // DELETE: api/Ranks/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRank(long id)
+        public async Task<IActionResult> DeleteRank([FromRoute] long id)
         {
-            var rank = await _context.Ranks.FindAsync(id);
-            if (rank == null)
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var rankModel = await _rankRepo.DeleteRankAsync(id);
+            if (rankModel == null)
             {
-                return NotFound();
+                return NotFound("Rank does not exist");
             }
-
-            _context.Ranks.Remove(rank);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool RankExists(long id)
-        {
-            return _context.Ranks.Any(e => e.RankId == id);
+            return Ok(rankModel);
         }
     }
 }

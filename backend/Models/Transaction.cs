@@ -14,12 +14,15 @@ namespace backend.Models
         [Column("order_id")]
         public long OrderId { get; set; }
         public Order Order { get; set; } = new Order();
+
         [Column("payment_method")]
         public string PaymentMethod { get; set; } = String.Empty;
-        [Column("transaction_status")]
-        public string TransactionStatus { get; set; } = String.Empty;
-        [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
 
+        [Column("amount")]
+        [Range(0.01, double.MaxValue)]
+        public double Amount { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

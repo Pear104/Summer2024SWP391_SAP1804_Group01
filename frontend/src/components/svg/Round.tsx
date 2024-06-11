@@ -1,8 +1,7 @@
-import React from "react";
-
-export default function Round() {
+export default function Round({ className }: { className?: string }) {
   return (
     <svg
+      className={className}
       xmlns="http://www.w3.org/2000/svg"
       width="128"
       height="128"

@@ -20,6 +20,9 @@ namespace backend.Models
         [Column("name")]
         public string Name { get; set; } = string.Empty;
 
+        [Column("quantity")]
+        public int Quantity { get; set; }
+
         [Column("accessory_type_id")]
         public long AccessoryTypeId { get; set; }
         public AccessoryType AccessoryType { get; set; } = new AccessoryType();

@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function DiamondIcon() {
   return (
     <svg viewBox="0 0 26 22" fill="none" xmlns="http://www.w3.org/2000/svg">

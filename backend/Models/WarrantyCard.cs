@@ -13,11 +13,14 @@ namespace backend.Models
 
         [Column("order_detail_id")]
         public long OrderDetaiId { get; set; }
-        public OrderDetail OrderDetail { get; set; } = new OrderDetail();
+        public OrderDetail OrderDetail { get; set; }
+
         [Column("start_time")]
-        public DateTime StartTime { get; set; }
+        public DateTime StartTime { get; set; } = DateTime.Now;
+
         [Column("end_time")]
-        public DateTime EndTime { get; set; }
+        public DateTime EndTime { get; set; } = DateTime.Now.AddMonths(12);
+
         public List<WarrantyRequest> WarrantyRequests { get; set; } = new List<WarrantyRequest>();
     }
 }
