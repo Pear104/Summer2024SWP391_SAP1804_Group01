@@ -4,6 +4,7 @@ import { Pagination, Skeleton } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSearchStore } from "../../store/searchStore";
 import { useQueries } from "@tanstack/react-query";
+import { ExternalLink } from "lucide-react";
 
 const formatDate = (dateString: any) => {
   const date = new Date(dateString);
@@ -48,9 +49,9 @@ const OrderDetailList = ({ order }: { order: any }) => {
       <div className="border-b border-gray-300 p-4 mb-6">
         {order.orderDetails.map((detail: any, index: number) => (
           <div key={index} className="flex mb-4">
-            <div className="w-1/4">
+            <div className="w-1/5">
               <img
-                className="w-24 h-24 object-cover"
+                className="w-48 h-48 object-cover"
                 src={detail.diamond.imageUrl}
                 alt="diamond"
               />
@@ -64,10 +65,20 @@ const OrderDetailList = ({ order }: { order: any }) => {
                   )
                 : ""}
             </div>
-
-            <div className="w-3/4 pl-4">
+            <div className="w-2/5 pl-4">
               <div className="text-lg font-serif">
                 {detail.accessory != null ? detail.accessory?.name : ""}
+              </div>
+              <div className="text-gray-800 my-4 flex gap-2">
+                Diamond's Certificate Number:{" "}
+                <a
+                  className="text-blue-500 flex"
+                  target="_blank"
+                  href={detail.diamond.certificateUrl}
+                >
+                  {detail.diamond.certificateNumber}
+                  <ExternalLink size={12} />
+                </a>
               </div>
               <div className="text-gray-800 my-4">
                 Diamond price:{" "}
@@ -81,6 +92,7 @@ const OrderDetailList = ({ order }: { order: any }) => {
                   maximumFractionDigits: 0,
                 })}
               </div>
+
               {detail.accessory != null
                 ? detail.accessory && (
                     <div className="text-gray-800 my-4">
@@ -97,6 +109,20 @@ const OrderDetailList = ({ order }: { order: any }) => {
                     </div>
                   )
                 : ""}
+            </div>
+            <div className="w-2/5">
+              <div className="text-gray-800 my-4">
+                Diamond Carat: {detail.diamond.carat}
+              </div>
+              <div className="text-gray-800 my-4">
+                Diamond Clarity: {detail.diamond.clarity}
+              </div>
+              <div className="text-gray-800 my-4">
+                Diamond Cut: {detail.diamond.cut}
+              </div>
+              <div className="text-gray-800 my-4">
+                Diamond Color: {detail.diamond.color}
+              </div>
             </div>
           </div>
         ))}
