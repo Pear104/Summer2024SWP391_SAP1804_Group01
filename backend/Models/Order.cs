@@ -8,9 +8,10 @@ namespace backend.Models
     public class Order
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column("order_id")]
-        public long OrderId { get; set; }
+        public long OrderId { get; set; } = DateTime.Now.Ticks/1000;
 
         [Column("total_price")]
         [Range(0.01, double.MaxValue)]

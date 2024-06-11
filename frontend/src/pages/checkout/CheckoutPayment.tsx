@@ -141,8 +141,7 @@ export default function CheckoutPayment() {
                   paymentRefId: `${response?.orderId}`,
                   requiredAmount: (
                     response?.totalPrice *
-                    (1 - response?.totalDiscountPercent / 100) *
-                    100
+                    (1 - response?.totalDiscountPercent / 100)
                   ).toFixed(0),
                   paymentLanguage: "en",
                   merchantId: "MER0001",

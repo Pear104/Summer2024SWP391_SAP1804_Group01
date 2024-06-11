@@ -22,6 +22,7 @@ namespace backend.Repository
         public async Task<Order?> CreateOrderAsync(long customerId, CreateOrderDTO orderDto)
         {
             var customer = await _context.Accounts.FindAsync(customerId);
+            System.Console.WriteLine("ahihi");
             if (customer == null)
             {
                 return null;
@@ -37,6 +38,7 @@ namespace backend.Repository
             }
             var newOrder = new Order()
             {
+                OrderId = DateTime.Now.Ticks,
                 Customer = customer,
                 Rank = rank,
                 PriceRate = priceRate,
@@ -257,7 +259,7 @@ namespace backend.Repository
                 .Take(query.PageSize)
                 .Select(x => x.ToOrderDTO())
                 .ToListAsync();
-
+            Console.WriteLine("order id: " + orderDTOs[0].OrderId);
             Console.WriteLine("Orders Retrieved: " + orderDTOs.Count);
 
             return new OrderResult

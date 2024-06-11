@@ -71,6 +71,7 @@ namespace backend.Controllers
             {
                 return BadRequest("The order could not be created.");
             }
+            System.Console.WriteLine(createdOrder.OrderId);
             return Ok(createdOrder);
             // System.Console.WriteLine("diamondId: " + orderDto.OrderDetails[0].DiamondId);
             // return Ok(orderDto);

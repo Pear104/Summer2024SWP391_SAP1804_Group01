@@ -43,7 +43,7 @@ const OrderDetailList = ({ order }: { order: any }) => {
   return (
     <div>
       <div className="p-4">
-        <div>Order ID: {order.orderId}</div>
+        <div>Order ID: {BigInt(order.orderId).toString()}</div>
         <div>Created at: {formatDate(order.createdAt)}</div>
       </div>
       <div className="border-b border-gray-300 p-4 mb-6">

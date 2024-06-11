@@ -64,7 +64,7 @@ namespace backend.Data
             builder.Entity<AccessoryType>().Property(o => o.AccessoryTypeId).ValueGeneratedOnAdd();
             builder.Entity<Account>().Property(o => o.AccountId).ValueGeneratedOnAdd();
             builder.Entity<Rank>().Property(o => o.RankId).ValueGeneratedOnAdd();
-            builder.Entity<Order>().Property(o => o.OrderId).ValueGeneratedOnAdd();
+            // builder.Entity<Order>().Property(o => o.OrderId).ValueGeneratedOnAdd();
             builder.Entity<OrderDetail>().Property(o => o.OrderDetailId).ValueGeneratedOnAdd();
             builder.Entity<Promotion>().Property(o => o.PromotionId).ValueGeneratedOnAdd();
             builder.Entity<WarrantyCard>().Property(o => o.WarrantyCardId).ValueGeneratedOnAdd();
@@ -351,6 +351,7 @@ namespace backend.Data
             SetMerchantIds();
             SetPaymentIds();
             SetPaymentSignitureIds();
+            SetOrderIds();
             return base.SaveChangesAsync(cancellationToken);
         }
 
@@ -386,6 +387,18 @@ namespace backend.Data
                 if (entry.State == EntityState.Added)
                 {
                     entry.Entity.Id = ObjectExtention.PostFixPlusDateTimeNow("PSIG");
+                }
+            }
+        }
+
+        //set order id
+        private void SetOrderIds()
+        {
+            foreach (var entry in ChangeTracker.Entries<Order>())
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.OrderId = ObjectExtention.LongDateTimeNow();
                 }
             }
         }

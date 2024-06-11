@@ -11,5 +11,6 @@ namespace backend.DTOs
         public string? OrderStatus { get; set; }
         public long? SaleStaffId { get; set; } = 0;
         public long? DeliveryStaffId { get; set; } = 0;
+        
     }
 }
