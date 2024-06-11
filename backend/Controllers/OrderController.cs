@@ -43,6 +43,20 @@ namespace backend.Controllers
             return Ok(order);
         }
 
+        [HttpGet("pay-order/{id}")]
+        public async Task<ActionResult> PayOrder([FromRoute] long id)
+        {
+            var updatedOrder = await _orderRepo.UpdateOrderAsync(
+                id,
+                new UpdateOrderDTO() { OrderStatus = "Processing" }
+            );
+            if (updatedOrder == null)
+            {
+                return BadRequest("The order could not be updated.");
+            }
+            return Redirect("http://localhost:3000/account/order-history");
+        }
+
         [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] CreateOrderDTO orderDto)
         {
@@ -79,7 +93,7 @@ namespace backend.Controllers
         )
         {
             System.Console.WriteLine("ahihi");
-            System.Console.WriteLine("status ne: "+order.OrderStatus);
+            System.Console.WriteLine("status ne: " + order.OrderStatus);
             var updatedOrder = await _orderRepo.UpdateOrderAsync(id, order);
             if (updatedOrder == null)
             {

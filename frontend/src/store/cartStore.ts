@@ -11,20 +11,25 @@ export const useCartStore = create<{
   [x: string]: any;
   currentDiamond?: number | null;
   currentAccessory?: number | null;
+  currentSize?: number | null;
   cart: CartItem[];
   setCurrentDiamond: (diamondId: number | null) => void;
-  setCurrentAccessory: (accessoryId: number | null) => void;
+  setCurrentAccessory: (
+    accessoryId: number | null,
+    size: number | null
+  ) => void;
   setCart: (diamondId: number, accessoryId?: number, size?: number) => void;
 }>()(
   persist(
     (set, get) => ({
       currentDiamond: null,
       currentAccessory: null,
+      currentSize: null,
       cart: [],
       setCurrentDiamond: (diamondId: number | null) =>
         set({ currentDiamond: diamondId }),
-      setCurrentAccessory: (accessoryId: number | null) =>
-        set({ currentAccessory: accessoryId }),
+      setCurrentAccessory: (accessoryId: number | null, size: number | null) =>
+        set({ currentAccessory: accessoryId, currentSize: size }),
       setCart: (diamondId: number, accessoryId?: number, size?: number) => {
         const existingItem = get().cart.find(
           (item) => item.diamondId === diamondId

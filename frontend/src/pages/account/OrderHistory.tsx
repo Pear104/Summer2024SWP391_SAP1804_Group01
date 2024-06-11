@@ -71,16 +71,29 @@ const OrderDetailList = ({ order }: { order: any }) => {
               </div>
               <div className="text-gray-800 my-4">
                 Diamond price:{" "}
-                {detail.diamondPrice.unitPrice * detail.diamond.carat * 100} $
+                {(
+                  detail.diamondPrice.unitPrice *
+                  detail.diamond.carat *
+                  100
+                ).toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 0,
+                })}
               </div>
               {detail.accessory != null
                 ? detail.accessory && (
                     <div className="text-gray-800 my-4">
                       Accessory price:{" "}
-                      {detail.accessory.materialWeight *
-                        detail.materialPrice.unitPrice +
-                        detail.accessory.accessoryType.processingPrice}{" "}
-                      $
+                      {(
+                        detail.accessory.materialWeight *
+                          detail.materialPrice.unitPrice +
+                        detail.accessory.accessoryType.processingPrice
+                      ).toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "USD",
+                        maximumFractionDigits: 0,
+                      })}
                     </div>
                   )
                 : ""}
@@ -92,7 +105,12 @@ const OrderDetailList = ({ order }: { order: any }) => {
         </div>
         <div className="flex justify-between items-center mt-4">
           <div className="text-xl font-bold text-gray-800">
-            Total: {order.totalPrice} $
+            Total:{" "}
+            {order.totalPrice.toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+              maximumFractionDigits: 0,
+            })}
           </div>
 
           <div>

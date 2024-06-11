@@ -9,33 +9,6 @@ import RingIcon from "../components/RingIcon";
 import ImageList from "./components/ImageList";
 import { getAccessoryPrice, getDiamondPrice } from "../../../utils/getPrice";
 
-const ringOptions = [
-  {
-    value: "3",
-    label: "3",
-  },
-  {
-    value: "3.5",
-    label: "3.5",
-  },
-  {
-    value: "4",
-    label: "4",
-  },
-  {
-    value: "4.5",
-    label: "4.5",
-  },
-  {
-    value: "5",
-    label: "5",
-  },
-  {
-    value: "5.5",
-    label: "5.5",
-  },
-];
-
 export default function CompleteProduct() {
   const currentDiamond = useCartStore((state) => state.currentDiamond);
   const currentAccessory = useCartStore((state) => state.currentAccessory);
@@ -69,6 +42,7 @@ export default function CompleteProduct() {
     (state) => state.setCurrentAccessory
   );
   const setCurrentDiamond = useCartStore((state) => state.setCurrentDiamond);
+  const currentSize = useCartStore((state) => state.currentSize);
   const [mainImage, setMainImage] = useState<string | undefined>(undefined);
   const [size, setSize] = useState(3);
   useEffect(() => {
@@ -106,7 +80,11 @@ export default function CompleteProduct() {
                 Total price:{" "}
                 {(
                   getDiamondPrice(diamond.data, diamondPrice.data) +
-                  getAccessoryPrice(accessory.data, materialPrice.data)
+                  getAccessoryPrice(
+                    accessory.data,
+                    materialPrice.data,
+                    currentSize
+                  )
                 ).toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",
@@ -156,7 +134,8 @@ export default function CompleteProduct() {
                       <div>
                         {getAccessoryPrice(
                           accessory.data,
-                          materialPrice.data
+                          materialPrice.data,
+                          currentSize
                         ).toLocaleString("en-US", {
                           style: "currency",
                           currency: "USD",
@@ -171,26 +150,6 @@ export default function CompleteProduct() {
                       Change
                     </Link>
                   </div>
-                  <div className="my-2 flex items-center gap-2">
-                    <div>Choose ring size:</div>
-                    <Select
-                      className="border"
-                      defaultValue={size}
-                      style={{
-                        width: 120,
-                      }}
-                      onChange={(e) => {
-                        setSize(e);
-                      }}
-                      options={ringOptions}
-                    />
-                    <Link
-                      to="/product/diamond"
-                      className="ml-4 text-xs border-b border-b-transparent hover:border-b-primary"
-                    >
-                      Ring size guide
-                    </Link>
-                  </div>
                 </div>
               </div>
               <div className="flex flex-col gap-4 mt-8">
@@ -203,7 +162,7 @@ export default function CompleteProduct() {
                       size
                     );
                     setCurrentDiamond(null);
-                    setCurrentAccessory(null);
+                    setCurrentAccessory(null, null);
                     console.log("add to cart");
                     console.log(currentDiamond);
                     console.log(currentAccessory);

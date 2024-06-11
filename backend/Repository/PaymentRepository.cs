@@ -19,21 +19,25 @@ namespace backend.Repository
     public class PaymentRepository : IPaymentRepository
     {
         private readonly ApplicationDbContext _dbContext;
+
         //private readonly PaymentTransactionRepository _transactionRepository;
 
         private readonly MomoConfig _momoConfig;
         private readonly VnpayConfig _vnpayConfig;
 
-        public PaymentRepository(ApplicationDbContext dbContext,
+        public PaymentRepository(
+            ApplicationDbContext dbContext,
             //PaymentTransactionRepository transactionRepository,
             IOptions<MomoConfig> momoConfig,
-            IOptions<VnpayConfig> vnpayConfig)
+            IOptions<VnpayConfig> vnpayConfig
+        )
         {
             _dbContext = dbContext;
             //_transactionRepository = transactionRepository;
             _momoConfig = momoConfig.Value;
             _vnpayConfig = vnpayConfig.Value;
         }
+
         public async Task<Payment> CreatePayment(Payment payment)
         {
             await _dbContext.AddAsync(payment);
@@ -43,7 +47,9 @@ namespace backend.Repository
 
         public async Task<Payment> UpdatePayment(Payment payment)
         {
-            var existingPayment = await _dbContext.Payments.FirstOrDefaultAsync(p => p.Id.ToLower().Equals(payment.Id.ToLower()));
+            var existingPayment = await _dbContext.Payments.FirstOrDefaultAsync(p =>
+                p.Id.ToLower().Equals(payment.Id.ToLower())
+            );
             if (existingPayment == null)
             {
                 return null;
@@ -52,24 +58,34 @@ namespace backend.Repository
             await _dbContext.SaveChangesAsync();
             return existingPayment;
         }
-        public async Task<BaseResultWithData<(PaymentReturnDtos, string)>> ProcessMomoPaymentReturn(MomoOneTimePaymentResultRequest resultRequest)
+
+        public async Task<BaseResultWithData<(PaymentReturnDtos, string)>> ProcessMomoPaymentReturn(
+            MomoOneTimePaymentResultRequest resultRequest
+        )
         {
             string returnurl = string.Empty;
             var result = new BaseResultWithData<(PaymentReturnDtos, string)>();
             //try catch??
             var resultData = new PaymentReturnDtos();
-            var isValidSignature = resultRequest.IsValidSignature(_momoConfig.AccessKey, _momoConfig.SecretKey);
+            var isValidSignature = resultRequest.IsValidSignature(
+                _momoConfig.AccessKey,
+                _momoConfig.SecretKey
+            );
 
             if (isValidSignature)
             {
                 //?!?!??!?! why search by paymentModel.Id and response.order ID??????
                 //edit: chang to paymentModel.PaymentRefId and result.orderId => Both refer to Store's order
-                var paymentModel = await _dbContext.Payments.FirstOrDefaultAsync(p => p.PaymentRefId.ToLower().Equals(resultRequest.orderId!.ToLower()));
+                var paymentModel = await _dbContext.Payments.FirstOrDefaultAsync(p =>
+                    p.PaymentRefId.ToLower().Equals(resultRequest.orderId!.ToLower())
+                );
 
                 if (paymentModel != null)
                 {
                     //resultRequest for an existing order => redirect to the store that made that order
-                    var merchant = await _dbContext.Merchants.FirstOrDefaultAsync(m => m.Id.ToLower().Equals(paymentModel.MerchantId!.ToLower()));
+                    var merchant = await _dbContext.Merchants.FirstOrDefaultAsync(m =>
+                        m.Id.ToLower().Equals(paymentModel.MerchantId!.ToLower())
+                    );
                     returnurl = merchant?.MerchantReturnUrl ?? string.Empty;
 
                     if (resultRequest.resultCode == 0)
@@ -87,23 +103,25 @@ namespace backend.Repository
 
                     result.Success = true;
                     result.Message = "Ok()";
-                    result.Data = (resultData, returnurl);  //don't know what this do, WILL BE REFACTORED
-                }//end payment is NOT null
+                    result.Data = (resultData, returnurl); //don't know what this do, WILL BE REFACTORED
+                } //end payment is NOT null
                 else
                 {
                     resultData.PaymentStatus = "11";
                     resultData.PaymentMessage = "Can't find payment at payment service";
-                }//end payment is null
-            }//end sinature is valid
+                } //end payment is null
+            } //end sinature is valid
             else
             {
                 resultData.PaymentStatus = "99";
                 resultData.PaymentMessage = "Invalid signature in response";
-            }//end sinature is NOT valid
+            } //end sinature is NOT valid
             return await Task.FromResult(result);
-        }//end ProcessMomoPaymentReturn
+        } //end ProcessMomoPaymentReturn
 
-        public async Task<BaseResultWithData<(PaymentReturnDtos, string)>> ProcessVnpayPaymentResponse(VnpayPayResponse request)
+        public async Task<
+            BaseResultWithData<(PaymentReturnDtos, string)>
+        > ProcessVnpayPaymentResponse(VnpayPayResponse request)
         {
             string returnUrl = string.Empty;
             var result = new BaseResultWithData<(PaymentReturnDtos, string)>();
@@ -115,20 +133,25 @@ namespace backend.Repository
             {
                 //?!?!??!?! why search by paymentModel.Id and response.order ID??????
                 //edit: chang to paymentModel.PaymentRefId and result.orderId => Both refer to Store's order
-                var paymentModel = await _dbContext.Payments.FirstOrDefaultAsync(p => p.PaymentRefId.ToLower().Equals(request.vnp_TxnRef!.ToLower()));
+                var paymentModel = await _dbContext.Payments.FirstOrDefaultAsync(p =>
+                    p.PaymentRefId.ToLower().Equals(request.vnp_TxnRef!.ToLower())
+                );
 
                 if (paymentModel != null)
                 {
                     //resultRequest for an existing order => redirect to the store that made that order
-                    var merchant = await _dbContext.Merchants.FirstOrDefaultAsync(m => m.Id.ToLower().Equals(paymentModel.MerchantId!.ToLower()));
-                    returnUrl = merchant?.MerchantReturnUrl ?? string.Empty;
-                    //returnUrl = "https://3705d4d4-dc54-4ea5-8437-4152db5b564b.mock.pstmn.io/request-receiver";
-                }//end payment is NOT null
+                    var merchant = await _dbContext.Merchants.FirstOrDefaultAsync(m =>
+                        m.Id.ToLower().Equals(paymentModel.MerchantId!.ToLower())
+                    );
+                    // returnUrl = merchant?.MerchantReturnUrl ?? string.Empty;
+                    returnUrl =
+                        "http://localhost:8080/api/Order/pay-order/" + paymentModel.PaymentRefId;
+                } //end payment is NOT null
                 else
                 {
                     resultData.PaymentStatus = "11";
                     resultData.PaymentMessage = "Can't find payment at payment service";
-                }//end payment is null
+                } //end payment is null
 
                 if (request.vnp_ResponseCode == "00")
                 {
@@ -146,17 +169,18 @@ namespace backend.Repository
                 result.Success = true;
                 result.Message = "Ok()";
                 result.Data = (resultData, returnUrl);
-
-            }//end sinature is valid
+            } //end sinature is valid
             else
             {
                 resultData.PaymentStatus = "99";
                 resultData.PaymentMessage = "Invalid signature in response";
-            }//end sinature is NOT valid
+            } //end sinature is NOT valid
             return await Task.FromResult(result);
-        }//end ProcessVnpayPaymentReturn
+        } //end ProcessVnpayPaymentReturn
 
-        public async Task<BaseResultWithData<VnpayPayIpnResponse>> ProcessVnpayIpnResponse(VnpayPayResponse request)
+        public async Task<BaseResultWithData<VnpayPayIpnResponse>> ProcessVnpayIpnResponse(
+            VnpayPayResponse request
+        )
         {
             string returnUrl = string.Empty;
             var result = new BaseResultWithData<VnpayPayIpnResponse>();
@@ -168,7 +192,9 @@ namespace backend.Repository
             {
                 //?!?!??!?! why search by paymentModel.Id and response.order ID??????
                 //edit: chang to paymentModel.PaymentRefId and result.orderId => Both refer to Store's order
-                var paymentModel = await _dbContext.Payments.FirstOrDefaultAsync(p => p.PaymentRefId.ToLower().Equals(request.vnp_TxnRef!.ToLower()));
+                var paymentModel = await _dbContext.Payments.FirstOrDefaultAsync(p =>
+                    p.PaymentRefId.ToLower().Equals(request.vnp_TxnRef!.ToLower())
+                );
 
                 if (paymentModel != null)
                 {
@@ -179,8 +205,10 @@ namespace backend.Repository
                             string message = "";
                             string status = "";
 
-                            if (request.vnp_ResponseCode == "00" &&
-                               request.vnp_TransactionStatus == "00")
+                            if (
+                                request.vnp_ResponseCode == "00"
+                                && request.vnp_TransactionStatus == "00"
+                            )
                             {
                                 status = "0";
                                 message = "Tran success";
@@ -220,7 +248,7 @@ namespace backend.Repository
                                 ////paymentModel.LastUpdateAt = paymentTransaction.TranDate
                                 ////paymentModel.LastUpdateBy= paymentTransaction.TranDate
 
-                                var updateResult = await UpdatePayment(paymentModel);  //AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+                                var updateResult = await UpdatePayment(paymentModel); //AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
                                 if (updateResult != null)
                                 {
                                     resultData.Set("00", "Confirm success");
@@ -230,36 +258,31 @@ namespace backend.Repository
                                 {
                                     resultData.Set("99", "Input required data");
                                 }
-                            }//end paymentTransation is null
+                            } //end paymentTransation is null
                             //TODO: Confirm success
-
-
-                        }//end paymentStatus is valid
+                        } //end paymentStatus is valid
                         else
                         {
                             resultData.Set("02", "Order already confirmed");
-                        }//end paymentStatus is NOT valid
-                    }//end payment amount is valid
+                        } //end paymentStatus is NOT valid
+                    } //end payment amount is valid
                     else
                     {
                         resultData.Set("04", "Invalid amount");
-                    }//end payment amount is NOT valid
-                }//end payment is NOT null
+                    } //end payment amount is NOT valid
+                } //end payment is NOT null
                 else
                 {
                     resultData.Set("01", "Order not found");
-                }//end payment is null
-
-            }//end sinature is valid
+                } //end payment is null
+            } //end sinature is valid
             else
             {
                 resultData.Set("97", "Invalid signature");
-            }//end sinature is NOT valid
+            } //end sinature is NOT valid
             result.Data = resultData;
             return await Task.FromResult(result);
-        }//end ProcessVnpayPaymentReturn
-
-
+        } //end ProcessVnpayPaymentReturn
 
         public async Task<List<Payment>> GetAllPayment()
         {
@@ -269,7 +292,9 @@ namespace backend.Repository
 
         public async Task<Payment>? GetPaymentById(string id)
         {
-            var payment = await _dbContext.Payments.FirstOrDefaultAsync(p => p.Id.ToLower().Equals(id.ToLower()));
+            var payment = await _dbContext.Payments.FirstOrDefaultAsync(p =>
+                p.Id.ToLower().Equals(id.ToLower())
+            );
             return payment!;
         }
 
@@ -285,6 +310,5 @@ namespace backend.Repository
         //    //var isValidSignature = response.IsValidSignature(_vnpayConfig.HashSecret);
         //    throw new NotImplementedException();
         //}
-
     }
 }

@@ -28,6 +28,7 @@ const schema = z.object({
       message: "Name cannot be empty",
     }),
   karat: z.coerce.number().min(8, { message: "Required" }),
+  quantity: z.coerce.number().min(1, { message: "Required" }),
   materialWeight: z.coerce.number().min(8, { message: "Required" }),
   shape: z.string().min(1, { message: "Required" }),
   accessoryType: z.string().min(1, { message: "Required" }),
@@ -57,6 +58,7 @@ export default function AccessoryView() {
   const { control, handleSubmit, reset, setError } = useForm({
     defaultValues: {
       name: "",
+      quantity: "",
       karat: "",
       materialWeight: "",
       images: "",
@@ -74,6 +76,7 @@ export default function AccessoryView() {
         reset({
           name: data?.name,
           karat: data?.karat,
+          quantity: data?.quantity,
           materialWeight: data?.materialWeight,
           images: "",
           shape: data?.shape.name,
@@ -186,6 +189,13 @@ export default function AccessoryView() {
           <FormItem label="Name" name="name" control={control} required>
             <Input
               placeholder="Accessory name"
+              className="font-thin border p-2 rounded-md w-full"
+            />
+          </FormItem>
+          <FormItem label="Quantity" name="quantity" control={control} required>
+            <Input
+              type="number"
+              placeholder="Quantity"
               className="font-thin border p-2 rounded-md w-full"
             />
           </FormItem>

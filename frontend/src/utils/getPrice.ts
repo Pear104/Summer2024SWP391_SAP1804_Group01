@@ -12,9 +12,13 @@ export const getDiamondPrice = (diamond: any, diamondPrice: any) => {
   );
 };
 
-export const getAccessoryPrice = (accessory: any, materialPrice: any) => {
+export const getAccessoryPrice = (
+  accessory: any,
+  materialPrice: any,
+  size: any
+) => {
   return (
-    accessory?.materialWeight *
+    (accessory?.materialWeight + (size - 3)) *
     materialPrice?.find((price: any) => price.karat == accessory?.karat)
       ?.unitPrice
   );
