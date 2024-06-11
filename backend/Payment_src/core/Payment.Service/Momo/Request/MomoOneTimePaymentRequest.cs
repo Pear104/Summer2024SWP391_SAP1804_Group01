@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
-using static backend.Crawler.CrawlClasses;
 
 namespace backend.Payment_src.core.Payment.Service.Momo.Request
 {

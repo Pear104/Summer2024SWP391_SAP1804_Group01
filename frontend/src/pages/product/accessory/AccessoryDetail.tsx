@@ -1,17 +1,39 @@
 import { useEffect, useState } from "react";
 import { GET } from "../../../utils/request";
-import { Image, Skeleton } from "antd";
-import { useNavigate, useParams } from "react-router-dom";
+import { Image, Select, Skeleton } from "antd";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useCartStore } from "../../../store/cartStore";
 import { useQueries } from "@tanstack/react-query";
 import { useSearchStore } from "../../../store/searchStore";
 import ImageList from "./components/ImageList";
 import { getAccessoryPrice } from "../../../utils/getPrice";
 
+const ringOptions = [
+  {
+    value: 3,
+  },
+  {
+    value: 3.5,
+  },
+  {
+    value: 4,
+  },
+  {
+    value: 4.5,
+  },
+  {
+    value: 5,
+  },
+  {
+    value: 5.5,
+  },
+];
+
 export default function AccessoryDetail() {
   const { accessoryId } = useParams();
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
+  const [size, setSize] = useState(3);
   useEffect(() => {
     setQueryUrl(`/api/Accessories/${accessoryId}`);
   }, []);
@@ -69,7 +91,8 @@ export default function AccessoryDetail() {
               <div className="text-3xl">
                 {getAccessoryPrice(
                   accessory?.data,
-                  materialPrices?.data
+                  materialPrices?.data,
+                  size
                 ).toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",
@@ -91,15 +114,35 @@ export default function AccessoryDetail() {
                 </div>
               </div>
               <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-2">
+                  <div>Choose ring size:</div>
+                  <Select
+                    className="border"
+                    defaultValue={size}
+                    style={{
+                      width: 120,
+                    }}
+                    onChange={(e) => {
+                      setSize(e);
+                    }}
+                    options={ringOptions}
+                  />
+                  <Link
+                    to="/product/diamond"
+                    className="ml-4 text-xs border-b border-b-transparent hover:border-b-primary"
+                  >
+                    Ring size guide
+                  </Link>
+                </div>
                 <div
-                  className={`mt-10 text-xl w-full flex justify-center px-4 py-3 bg-primary hover:scale-95 transition-all ${
+                  className={`text-xl w-full flex justify-center px-4 py-3 bg-primary hover:scale-95 transition-all ${
                     currentDiamond
                       ? "text-white"
                       : "bg-gray-300 px-4 py-2 rounded-md cursor-not-allowed opacity-50 text-slate-400"
                   }`}
                   onClick={() => {
                     if (currentDiamond) {
-                      setCurrentAccessory(accessory?.data.accessoryId);
+                      setCurrentAccessory(accessory?.data.accessoryId, size);
                       navigate("/product/complete");
                     }
                   }}
@@ -114,14 +157,16 @@ export default function AccessoryDetail() {
                   )}
                 </div>
                 {!currentDiamond && (
-                  <div
-                    className={`text-xl w-full flex justify-center px-4 py-3 text-white bg-primary hover:scale-95 transition-all `}
-                    onClick={() => {
-                      navigate("/product/diamond");
-                    }}
-                  >
-                    CHOOSE DIAMOND
-                  </div>
+                  <>
+                    <div
+                      className={`text-xl w-full flex justify-center px-4 py-3 text-white bg-primary hover:scale-95 transition-all `}
+                      onClick={() => {
+                        navigate("/product/diamond");
+                      }}
+                    >
+                      CHOOSE DIAMOND
+                    </div>
+                  </>
                 )}
               </div>
             </div>

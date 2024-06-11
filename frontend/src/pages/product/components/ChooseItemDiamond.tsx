@@ -14,6 +14,9 @@ export default function ChooseItemDiamond({
 }) {
   const currentDiamond = useCartStore((state) => state.currentDiamond);
   const setCurrentDiamond = useCartStore((state) => state.setCurrentDiamond);
+  const setCurrentAccessory = useCartStore(
+    (state) => state.setCurrentAccessory
+  );
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   const navigate = useNavigate();
   return (
@@ -48,6 +51,7 @@ export default function ChooseItemDiamond({
                   className="border-b border-b-transparent cursor-pointer hover:border-b-slate-600"
                   onClick={() => {
                     setCurrentDiamond(null);
+                    setCurrentAccessory(null, null);
                     setQueryUrl("/api/Diamonds?");
                     // if (location.pathname.includes("complete")) {
                     // }

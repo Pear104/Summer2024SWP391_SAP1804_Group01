@@ -9,6 +9,7 @@ import { getAccessoryPrice, getDiamondPrice } from "../../../utils/getPrice";
 export default function ChooseItem() {
   const currentDiamond = useCartStore((state) => state.currentDiamond);
   const currentAccessory = useCartStore((state) => state.currentAccessory);
+  const currentSize = useCartStore((state) => state.currentSize);
   const [diamond, accessory, diamondPrice, materialPrice] = useQueries({
     queries: [
       {
@@ -55,7 +56,8 @@ export default function ChooseItem() {
           materialPrice?.data &&
           getAccessoryPrice(
             accessory?.data,
-            materialPrice?.data
+            materialPrice?.data,
+            currentSize
           ).toLocaleString("en-US", {
             style: "currency",
             currency: "USD",
@@ -72,7 +74,11 @@ export default function ChooseItem() {
           materialPrice?.data
             ? (
                 getDiamondPrice(diamond.data, diamondPrice.data) +
-                getAccessoryPrice(accessory.data, materialPrice.data)
+                getAccessoryPrice(
+                  accessory.data,
+                  materialPrice.data,
+                  currentSize
+                )
               ).toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",

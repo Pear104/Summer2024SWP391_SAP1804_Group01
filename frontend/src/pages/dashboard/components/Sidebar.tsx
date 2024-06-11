@@ -92,12 +92,10 @@ export default function Sidebar() {
 
   return (
     <div className="flex flex-col bg-neutral-900 w-60 p-3 text-white">
-      <div className="flex items-center gap-2 px-1 py-3">
+      <Link to={"/"} className="flex items-center gap-2 px-1 py-3">
         <Gem strokeWidth={1.75} />
-        <a href="/" className="text-neutral-100 text-xl">
-          DatJ
-        </a>
-      </div>
+        <div className="text-neutral-100 text-xl">DatJ</div>
+      </Link>
 
       <div className="flex-1 py-8 flex flex-col gap-0.5">
         {DASHBOARD_SIDEBAR_LINKS.map((items) => (

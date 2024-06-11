@@ -1,5 +1,5 @@
 import Information from "./components/Information";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CartItem from "./components/CartItem";
 import { useCartStore } from "../../store/cartStore";
 import { Button } from "antd";
@@ -7,17 +7,54 @@ import { GET, POST } from "../../utils/request";
 import Loading from "./../../components/Loading";
 import { useCheckoutStore } from "../../store/checkoutStore";
 import { useNavigate, Link } from "react-router-dom";
+import { useQueries } from "@tanstack/react-query";
+import { getAccessoryPrice, getDiamondPrice } from "../../utils/getPrice";
 
 const Cart: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [totalPriceCart, setTotalPriceCart] = useState(0);
   const navigate = useNavigate();
   const cart = useCartStore((state) => state.cart);
-  const totalPrice = cart.reduce((total, item) => {
-    // Placeholder, you should replace with actual price from fetched data
-    const diamondPrice = item.diamondId;
-    const accessoryPrice = item.accessoryId || 0;
-    return total + diamondPrice + accessoryPrice;
-  }, 0);
+  const [diamondPrice, materialPrice] = useQueries({
+    queries: [
+      {
+        queryKey: ["diamondPrice"],
+        queryFn: () => GET("/api/DiamondPrices/"),
+      },
+      {
+        queryKey: ["materialPrice"],
+        queryFn: () => GET("/api/MaterialPrices/"),
+      },
+    ],
+  });
+  useEffect(() => {
+    (async () => {
+      const totalPricePromise = Promise.all(
+        cart.map(async (item) => {
+          const diamond = await GET(`/api/Diamonds/${item.diamondId}`);
+          const accessory = await GET(`/api/Accessories/${item?.accessoryId}`);
+          let totalPrice = getDiamondPrice(diamond, diamondPrice?.data);
+          if (accessory?.accessoryId) {
+            totalPrice += getAccessoryPrice(
+              accessory,
+              materialPrice?.data,
+              item.size
+            );
+          }
+
+          return totalPrice;
+        })
+      );
+
+      const totalPrice = await totalPricePromise.then((prices) =>
+        prices.reduce((total, price) => total + price, 0)
+      );
+      console.log(totalPrice);
+      setTotalPriceCart(totalPrice);
+    })();
+  }, [diamondPrice, materialPrice, cart]);
+  console.log(totalPriceCart);
+
   function EmptyCart() {
     useCartStore.getState().clearCart();
   }
@@ -79,7 +116,13 @@ const Cart: React.FC = () => {
               <h2 className="text-3xl mb-4 text-center">Order Summary</h2>
               <div className="flex justify-between items-center">
                 <span className="font-bold">Total estimated:</span>
-                <span className="font-bold">${totalPrice.toFixed(2)}</span>
+                <span className="font-bold">
+                  {totalPriceCart.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 0,
+                  })}
+                </span>
               </div>
               <p className="text-gray-500 mb-4 text-center">
                 Taxes and shipping calculated at checkout

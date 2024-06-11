@@ -30,6 +30,7 @@ namespace backend.Mappers
             return new Accessory
             {
                 Karat = accessoryDto.Karat,
+                Quantity = accessoryDto.Quantity,
                 MaterialWeight = accessoryDto.MaterialWeight,
                 Name = accessoryDto.Name,
             };

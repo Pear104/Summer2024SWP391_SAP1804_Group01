@@ -21,6 +21,7 @@ import Loading from "../../components/Loading";
 export default function CheckoutPayment() {
   const [isLoading, setIsLoading] = useState(false);
   const cart = useCartStore((state) => state.cart);
+  const clearCart = useCartStore((state) => state.clearCart);
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
   return (
@@ -131,19 +132,28 @@ export default function CheckoutPayment() {
               const response = await POST("/api/Order", {
                 orderDetails: cart,
               });
-              
-              const paymentResponse = await POST("/api/payment/vnpay-sent-request", { "paymentContent": "Thanh toan don hang "+response?.orderId, 
-                "paymentCurrency": "VND", 
-                "paymentRefId": `ORD:${response?.orderId}`, 
-                "requiredAmount": (response?.totalPrice * (1- response?.totalDiscountPercent/100)*1000).toFixed(0), 
-                "paymentLanguage": "vn", 
-                "merchantId": "MER0001", 
-                "paymentDestinationId": "VNPAY", 
-                "signature": "123456789ABC" });
-
-                if (paymentResponse?.paymentUrl) {
-                  location.href = paymentResponse.paymentUrl;
+              clearCart();
+              const paymentResponse = await POST(
+                "/api/payment/vnpay-sent-request",
+                {
+                  paymentContent: "Thanh toan don hang " + response?.orderId,
+                  paymentCurrency: "USD",
+                  paymentRefId: `${response?.orderId}`,
+                  requiredAmount: (
+                    response?.totalPrice *
+                    (1 - response?.totalDiscountPercent / 100) *
+                    100
+                  ).toFixed(0),
+                  paymentLanguage: "en",
+                  merchantId: "MER0001",
+                  paymentDestinationId: "VNPAY",
+                  signature: "123456789ABC",
                 }
+              );
+
+              if (paymentResponse?.paymentUrl) {
+                location.href = paymentResponse.paymentUrl;
+              }
 
               await new Promise((resolve) => setTimeout(resolve, 2000));
               setIsLoading(false);

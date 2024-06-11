@@ -87,14 +87,15 @@ const CheckoutCartItem = ({
             </div>
           </div>
           <div className="font-semibold mr-4 text-sm">
-            {getAccessoryPrice(accessory?.data, materialPrice).toLocaleString(
-              "en-US",
-              {
-                style: "currency",
-                currency: "USD",
-                maximumFractionDigits: 0,
-              }
-            )}
+            {getAccessoryPrice(
+              accessory?.data,
+              materialPrice,
+              cartItem.size
+            ).toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+              maximumFractionDigits: 0,
+            })}
           </div>
         </div>
       )}

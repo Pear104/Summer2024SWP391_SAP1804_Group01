@@ -18,6 +18,9 @@ namespace backend.DTOs.Accessory
         public string Name { get; set; } = string.Empty;
 
         [Required]
+        public int Quantity { get; set; }
+
+        [Required]
         public string AccessoryType { get; set; } = string.Empty;
 
         [Required]
