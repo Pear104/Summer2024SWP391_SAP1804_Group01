@@ -158,7 +158,9 @@ namespace backend
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
             builder.Services.AddScoped<IPaymentSignatureRepository, PaymentSinatureRepository>();
-
+            builder.Services.AddScoped<IPaymentTransactionRepository, PaymentTransactionRepository>();
+            builder.Services.AddScoped<IAccessoryRepository, AccessoryRepository>();
+            builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             var app = builder.Build();
 

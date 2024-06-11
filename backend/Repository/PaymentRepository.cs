@@ -121,8 +121,8 @@ namespace backend.Repository
                 {
                     //resultRequest for an existing order => redirect to the store that made that order
                     var merchant = await _dbContext.Merchants.FirstOrDefaultAsync(m => m.Id.ToLower().Equals(paymentModel.MerchantId!.ToLower()));
-                    //returnUrl = merchant?.MerchantReturnUrl ?? string.Empty;
-                    returnUrl = "https://3705d4d4-dc54-4ea5-8437-4152db5b564b.mock.pstmn.io/request-receiver";
+                    returnUrl = merchant?.MerchantReturnUrl ?? string.Empty;
+                    //returnUrl = "https://3705d4d4-dc54-4ea5-8437-4152db5b564b.mock.pstmn.io/request-receiver";
                 }//end payment is NOT null
                 else
                 {
