@@ -150,6 +150,7 @@ export default function ProductsManage() {
       <div className="shadow bg-slate-50-200 border border-r-white">
         {/* filter bar */}
         <div className="border-b-gray-200 p-[1rem] box-border">
+          {/* filter */}
           <div className="flex justify-between mb-1 items-center">
             <h3>
               <Form
@@ -173,12 +174,12 @@ export default function ProductsManage() {
                     statusText={statusText}
                   />
                 </Form.Item>
-                <Form.Item>
+                {/* <Form.Item>
                   <ProductTypeMenu
                     handleProductTypeClick={handleProductTypeClick}
                     productTypeText={productTypeText}
                   />
-                </Form.Item>
+                </Form.Item> */}
               </Form>
             </h3>
             <div className="flex space-x-075">
@@ -261,6 +262,7 @@ export default function ProductsManage() {
                     </tr>
                   </thead>
                   {/* body */}
+                  {/* selected diamond pop up */}
                   <tbody className="bg-white divide-y divide-gray-200">
                     {selectedDiamonds.length > 0 && (
                       <tr>
@@ -346,7 +348,7 @@ export default function ProductsManage() {
                     showSizeChanger={true}
                     onShowSizeChange={(current, size) => {
                       setPageSize(size);
-                      params.set("PageSize", size.toString()); // Add this line
+                      params.set("PageSize", size.toString());
                       navigate(url.pathname + "?" + params.toString());
                       setQueryUrl("/api/Diamonds?" + params.toString());
                     }}
