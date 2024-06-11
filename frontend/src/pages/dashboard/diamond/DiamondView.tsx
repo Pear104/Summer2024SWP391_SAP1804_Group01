@@ -115,7 +115,7 @@ export default function DiamondView() {
   const [diamondFile, setDiamondFile] = useState<UploadFile[]>([]);
   const [diamond, setDiamond] = useState<any>();
   const { diamondId } = useParams();
-  const [availability, setAvailability] = useState<boolean>(false);
+
   const openNotification = (isSuccess: boolean) => {
     if (isSuccess) {
       api.open({
@@ -150,6 +150,7 @@ export default function DiamondView() {
     },
     resolver: zodResolver(schema),
   });
+  // getdata
   useEffect(() => {
     (async () => {
       const data = await GET(`/api/Diamonds/${diamondId}`);
@@ -164,7 +165,7 @@ export default function DiamondView() {
             },
           ]);
         }
-        setAvailability(data?.availability);
+
         setDiamond(data);
         reset({
           lab: data?.lab || "",
@@ -190,7 +191,6 @@ export default function DiamondView() {
   const [api, contextHolder] = notification.useNotification();
   console.log("file");
   console.log(diamondFile);
-  console.log(diamond?.available);
   return (
     <div>
       {isLoading && <Loading />}
@@ -209,6 +209,7 @@ export default function DiamondView() {
           name="search_form"
           className=""
           layout="vertical"
+          //submit form
           onFinish={handleSubmit(async (formData) => {
             console.log("diamondFileList");
             console.log(diamondFile);
@@ -261,7 +262,7 @@ export default function DiamondView() {
             }
             // Add firebase's image url to DATJ database
             submitForm["imageUrl"] = diamondImageUrl;
-            submitForm["availability"] = availability;
+
             console.log("form: ");
 
             console.log(submitForm);
@@ -430,8 +431,15 @@ export default function DiamondView() {
               value="none"
             />
           </FormItem>
-          <FormItem label="Availability" name="availability" control={control}>
-            <Switch onChange={() => setAvailability(!availability)} />
+          <FormItem label="Status" name="availability" control={control}>
+            <Select
+              size="large"
+              className="font-thin border w-full text-sm"
+              options={[
+                { value: "true", label: "Available" },
+                { value: "false", label: "Unavailable" },
+              ]}
+            />
           </FormItem>
           <FormItem
             label="Diamond Image"

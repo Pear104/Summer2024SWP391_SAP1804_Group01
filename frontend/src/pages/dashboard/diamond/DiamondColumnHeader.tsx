@@ -18,6 +18,7 @@ export default function DiamondColumnHeader({
     direction: "asc" | "desc" | "none";
     isNumber: boolean;
   }>({ field: "", direction: "none", isNumber: false });
+  // column sortable
   const sortableColumns = [
     "price",
     "shape",
@@ -26,6 +27,7 @@ export default function DiamondColumnHeader({
     "clarity",
     "cut",
   ];
+  // sort click
   const handleSort = async (field: string) => {
     let direction: "asc" | "desc" | "none" = "asc";
     let isNumber = false;
