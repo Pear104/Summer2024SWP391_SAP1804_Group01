@@ -80,7 +80,7 @@ const Cart: React.FC = () => {
               type="default"
               to="/product/diamond"
             >
-              Continue shopping.
+              Continue shopping
             </Link>
           </div>
         </div>
@@ -146,11 +146,13 @@ const Cart: React.FC = () => {
                     useCheckoutStore
                       .getState()
                       .setPhoneNumber(infor?.phoneNumber);
+                    useCheckoutStore
+                      .getState()
+                      .setName(infor?.name);
                     useCheckoutStore.getState().setEmail(infor?.email);
                     useCheckoutStore
                       .getState()
                       .setShippingAddress(infor?.address);
-
                     // console.log(cart);
                     // setIsLoading(true);
                     // const response = await POST("/api/Order", {

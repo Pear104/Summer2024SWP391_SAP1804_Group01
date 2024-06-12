@@ -5,25 +5,25 @@ export const useCheckoutStore = create<{
   email?: string;
   shippingAddress?: string;
   phoneNumber?: string;
-  // totalPrice?: number;
+  name?: string;
   setShippingAddress: (address: string) => void;
   setPhoneNumber: (phoneNumber: string) => void;
   setEmail: (email: string) => void;
-  // setTotalPrice: (price: number) => void;
+  setName: (name: string) => void;
 }>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       totalPrice: 0,
       email: "",
       shippingAddress: "",
       phoneNumber: "",
+      name: "",
       setShippingAddress: (address: string) =>
         set({ shippingAddress: address }),
       setPhoneNumber: (phoneNumber: string) =>
         set({ phoneNumber: phoneNumber }),
       setEmail: (email: string) => set({ email: email }),
-      // setTotalPrice: (price: number) =>
-      //   set({ totalPrice: (get().totalPrice || 0) + price }),
+      setName: (name: string) => set({ name: name }),
     }),
 
     {

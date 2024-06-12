@@ -19,10 +19,6 @@ const item = [
     href: "/checkout/",
   },
   {
-    title: "Shipping",
-    href: "/checkout/shipping",
-  },
-  {
     title: "Payment",
     href: "/checkout/payment",
   },
@@ -85,9 +81,11 @@ export default function CheckoutLayout() {
         </div>
         <Breadcrumb separator=">" items={item} />
         <div>
+          {/* Different pages only have different forms */}
           <Outlet />
         </div>
       </div>
+      {/* The content in the right side */}
       <div className="bg-stone-200 px-10 flex flex-col gap-2 overflow-y-scroll pb-10">
         <Divider orientation="left" className="text-xl font-bold">
           Your order

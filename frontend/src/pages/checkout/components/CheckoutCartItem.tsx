@@ -27,7 +27,7 @@ const CheckoutCartItem = ({
     ],
   });
   return (
-    <div className="border border-black bg-cyan-300 rounded-lg py-2 px-3 flex flex-col gap-2 justify-between hover:bg-cyan-400 transition-all duration-300">
+    <div className="border border-black bg-slate-300 rounded-lg py-2 px-3 flex flex-col gap-2 justify-between hover:bg-slate-400 transition-all duration-300">
       {/* Diamond part */}
       <div className="flex w-full gap-4 items-center bg-white/70 hover:bg-white/95 transition-all">
         <div className="h-[80px] flex">

@@ -35,7 +35,6 @@ import OrderManage from "../pages/dashboard/order/OrderManage";
 import DiamondView from "../pages/dashboard/diamond/DiamondView";
 import CheckoutLayout from "../layouts/CheckoutLayout";
 import CheckoutInfo from "../pages/checkout/CheckoutInfo";
-import CheckoutShipping from "../pages/checkout/CheckoutShipping";
 import CheckoutPayment from "../pages/checkout/CheckoutPayment";
 import About from "../pages/about/About";
 import WarrantyRequestList from "../pages/account/WarrantyRequestList";
@@ -53,10 +52,6 @@ const routes = [
           {
             index: true,
             element: <CheckoutInfo />,
-          },
-          {
-            path: "shipping",
-            element: <CheckoutShipping />,
           },
           {
             path: "payment",

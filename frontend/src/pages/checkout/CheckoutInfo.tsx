@@ -21,10 +21,6 @@ const schema = z
       .email()
       .min(8, { message: "Invalid email" })
       .max(32, { message: "Email should be less than 32 characters" }),
-    password: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters" }),
-    confirmPassword: z.string().min(8, { message: "Required" }),
     name: z
       .string()
       .min(6, { message: "Name should be at least 6 characters" })
@@ -43,17 +39,6 @@ const schema = z
       .refine((value) => value.trim().length > 0, {
         message: "Address cannot be empty",
       }),
-    birthday: z.coerce.date(),
-    gender: z.string().min(1, { message: "Required" }),
-  })
-  .superRefine(({ confirmPassword, password }, ctx) => {
-    if (confirmPassword !== password) {
-      ctx.addIssue({
-        code: "custom",
-        message: "The passwords did not match",
-        path: ["confirmPassword"],
-      });
-    }
   });
 
 export default function CheckoutInfo() {
@@ -61,12 +46,10 @@ export default function CheckoutInfo() {
   const navigate = useNavigate();
   const { control, handleSubmit, setError, reset } = useForm({
     defaultValues: {
+      name: "", 
       email: "",
-      gender: "Other",
-      name: "",
       phoneNumber: "",
       address: "",
-      birthday: "",
     },
     resolver: zodResolver(schema),
   });
@@ -76,6 +59,7 @@ export default function CheckoutInfo() {
       email: useCheckoutStore.getState().email,
       phoneNumber: useCheckoutStore.getState().phoneNumber,
       address: useCheckoutStore.getState().shippingAddress,
+      name: useCheckoutStore.getState().name,
     });
   }, [reset]);
   return (
@@ -84,50 +68,29 @@ export default function CheckoutInfo() {
       autoComplete="off"
       className="flex flex-col gap-[4px]"
       onFinish={handleSubmit(async (formData) => {
+        console.log(formData);
         setIsLoading(true);
-        const authResponse = await POST("/api/Payment", formData);
-        if (authResponse) {
-          if (authResponse.token) {
-            setCookie("accessToken", authResponse.token, 7);
-            location.href = "/account";
-          }
-        } else {
-          setIsLoading(false);
-          setError("email", {
-            type: "manual",
-            message: "Email already be used!",
-          });
-        }
+        useCheckoutStore.getState().setEmail(formData.email);
+        useCheckoutStore.getState().setPhoneNumber(formData.phoneNumber);
+        useCheckoutStore.getState().setName(formData.name);
+        useCheckoutStore.getState().setShippingAddress(formData.address);
+        setIsLoading(false);
+        navigate("/checkout/payment");
       })}
     >
-      <Divider orientation="left" className="text-xl font-bold">
-        Contact
+      <Divider orientation="left" className="text-3xl font-bold">
+        Shipping Information
       </Divider>
       <FormItem
         className="w-full"
-        label="Email"
-        name="email"
+        label="Name"
+        name="name"
         control={control}
         required
       >
         <Input
-          placeholder="Your email"
+          placeholder="Your name"
           className="text-black text-sm border border-primary py-2 px-4 without-ring w-full rounded-none"
-        />
-      </FormItem>
-      <Divider orientation="left" className="text-xl font-bold">
-        Shipping Address
-      </Divider>
-      <FormItem
-        label="Address"
-        name="address"
-        control={control}
-        required
-        className=""
-      >
-        <Input
-          placeholder="Your address"
-          className="border text-sm border-primary py-2 px-4 without-ring w-full rounded-none"
         />
       </FormItem>
       <FormItem
@@ -142,25 +105,54 @@ export default function CheckoutInfo() {
           className="border text-sm border-primary py-2 px-4 without-ring rounded-none"
         />
       </FormItem>
+      <FormItem
+        className="w-full"
+        label="Email"
+        name="email"
+        control={control}
+        required
+      >
+        <Input
+          placeholder="Your email"
+          className="text-black text-sm border border-primary py-2 px-4 without-ring w-full rounded-none"
+        />
+      </FormItem>
+      {/* <Divider orientation="left" className="text-xl font-bold">
+        Shipping Address
+      </Divider> */}
+      <FormItem
+        label="Address"
+        name="address"
+        control={control}
+        required
+        className=""
+      >
+        <Input
+          placeholder="Your address"
+          className="border text-sm border-primary py-2 px-4 without-ring w-full rounded-none"
+        />
+      </FormItem>
 
       <div className="flex justify-between items-center">
         <div
           className="text-lg text-blue-500 hover:text-blue-400 cursor-pointer"
           onClick={() => {
+            
             navigate("/cart");
           }}
         >
           <ArrowLeftOutlined className="pr-2" />
           Return to cart
         </div>
-        <Button
-          className="px-8 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
-          onClick={() => {
-            navigate("/checkout/shipping");
-          }}
-        >
-          Continue to Shipping
-        </Button>
+        <Form.Item>
+          <Button
+            className="px-8 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
+            htmlType="submit"
+            // navigate("/checkout/payment");
+            >
+            Continue to Payment
+          </Button>
+        </Form.Item>
       </div>
     </Form>
   );
