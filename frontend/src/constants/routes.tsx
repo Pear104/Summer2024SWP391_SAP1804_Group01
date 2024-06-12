@@ -91,6 +91,10 @@ const routes = [
             path: "/admin/diamond-price",
           },
           {
+            element: <OrderManage />,
+            path: "/admin/order",
+          },
+          {
             element: <SaleStaffsManagement />,
             path: "/admin/sale-staffs",
           },

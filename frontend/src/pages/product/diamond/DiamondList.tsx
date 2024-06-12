@@ -110,7 +110,7 @@ export default function DiamondList() {
                       maximumFractionDigits: 0,
                     })
                   ) : (
-                    <Skeleton.Button active={true} size={"small"} />
+                    <Skeleton.Input active={true} size={"small"} />
                   )
                 }
               />
@@ -118,7 +118,7 @@ export default function DiamondList() {
           })}
         </div>
         <div className="mt-10 flex justify-center">
-          {diamond?.data && diamond?.data.diamonds.length == 0 ? (
+          {diamond?.data && diamond?.data.diamonds?.length == 0 ? (
             <div className="text-center text-2xl">No Diamonds Found.</div>
           ) : (
             <Pagination
@@ -127,7 +127,7 @@ export default function DiamondList() {
               }
               current={Number(params.get("PageNumber")) || 1}
               defaultCurrent={
-                (diamond?.data && diamond?.data.currentPage.toString()) || "1"
+                (diamond?.data && diamond?.data.currentPage?.toString()) || "1"
               }
               total={diamond?.data && diamond?.data.totalCount}
               pageSize={Number(params.get("PageSize")) || 20}

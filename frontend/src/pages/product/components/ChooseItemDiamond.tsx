@@ -42,7 +42,7 @@ export default function ChooseItemDiamond({
             <div className="flex items-end gap-4">
               <div className="font-semibold">
                 {price == 0 ? (
-                  <Skeleton.Button active={true} size={"small"} />
+                  <Skeleton.Input active={true} size={"small"} />
                 ) : (
                   `${price.toLocaleString("en-US", {
                     style: "currency",
@@ -59,7 +59,7 @@ export default function ChooseItemDiamond({
                   View
                 </Link>
                 <div
-                  className="border-b border-b-transparent cursor-pointer hover:border-b-slate-600"
+                  className="border-b cursor-pointer"
                   onClick={() => {
                     setCurrentDiamond(null);
                     setCurrentAccessory(null, null);

@@ -1,4 +1,5 @@
 import { Skeleton } from "antd";
+import { Link } from "react-router-dom";
 
 const AccessoryItem = ({
   accessory,
@@ -8,9 +9,9 @@ const AccessoryItem = ({
   price: any;
 }) => {
   return (
-    <a
+    <Link
       className="items-center w-full justify-around hover:shadow-xl py-2 px-4 m-2 duration-150"
-      href={`/product/accessory/detail/${accessory.accessoryId}`}
+      to={`/product/accessory/detail/${accessory.accessoryId}`}
     >
       <div
         className="my-2 aspect-square bg-cover bg-center bg-no-repeat w-full"
@@ -23,16 +24,11 @@ const AccessoryItem = ({
           {accessory.name}
         </div>
 
-        {/* luc nao co gia thi thay karat = price*/}
         <div className="w-full flex ">
-          {price == 0 ? (
-            <Skeleton.Button active={true} size={"small"} />
-          ) : (
-            price
-          )}
+          {price == 0 ? <Skeleton.Input active={true} size={"small"} /> : price}
         </div>
       </div>
-    </a>
+    </Link>
   );
 };
 

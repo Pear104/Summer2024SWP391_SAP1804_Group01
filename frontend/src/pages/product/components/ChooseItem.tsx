@@ -85,13 +85,13 @@ export default function ChooseItem() {
                 getDiamondPrice(
                   diamond.data,
                   diamondPrice.data,
-                  priceRate?.data.percent
+                  priceRate?.data?.percent
                 ) +
                 getAccessoryPrice(
                   accessory.data,
                   materialPrice.data,
                   currentSize,
-                  priceRate?.data.percent
+                  priceRate?.data?.percent
                 )
               ).toLocaleString("en-US", {
                 style: "currency",

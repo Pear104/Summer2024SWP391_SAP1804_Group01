@@ -33,9 +33,6 @@ export default function OrderManage() {
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   useEffect(() => {
-    params.delete("IsAvailability");
-    params.delete("IsDescending");
-    params.delete("SortBy");
     setQueryUrl("/api/Order?");
   }, []);
 
@@ -54,24 +51,6 @@ export default function OrderManage() {
   );
 
   // search and filter
-  const handleStatusClick = (status: string, statusText: string) => {
-    setStatusText(statusText);
-    params.set(
-      "Status",
-      status == "1"
-        ? "Pending"
-        : status == "2"
-        ? "Processing"
-        : status == "3"
-        ? "Delivering"
-        : status == "4"
-        ? "Completed"
-        : "Failed"
-    );
-    setQueryUrl(`/api/Order?` + params.toString());
-    navigate("/admin/orders?" + params.toString());
-  };
-
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const status = params.get("status");
@@ -146,9 +125,6 @@ export default function OrderManage() {
                     setSearchTerm("");
                     // Clear the URL parameters
                     const params = new URLSearchParams(location.search);
-                    params.delete("IsAvailability");
-                    params.delete("IsDescending");
-                    params.delete("SortBy");
                     setQueryUrl(`/api/Order?` + params.toString());
                     // params.delete("type");
                     navigate({ search: params.toString() });

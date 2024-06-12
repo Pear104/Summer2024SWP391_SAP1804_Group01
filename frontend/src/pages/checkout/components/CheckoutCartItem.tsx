@@ -1,13 +1,13 @@
 import { useQueries } from "@tanstack/react-query";
 import { GET } from "../../../utils/request";
-import { Image } from "antd";
+import { Image, Skeleton } from "antd";
 import { getDiamondPrice, getAccessoryPrice } from "../../../utils/getPrice";
 
 const CheckoutCartItem = ({
   cartItem,
   diamondPrice,
   materialPrice,
-  priceRate
+  priceRate,
 }: {
   cartItem: any;
   diamondPrice: any;
@@ -36,28 +36,44 @@ const CheckoutCartItem = ({
             src={diamond?.data?.imageUrl}
           />
         </div>
-        <div className="flex-grow">
-          <div
-            className="font-semibold"
-            title={`${diamond?.data?.carat} Carat ${diamond?.data?.shape} Shape Lab Diamond`}
-          >
-            {`${diamond?.data?.carat} Carat ${diamond?.data?.shape} Shape Lab Diamond`}
+        {diamond?.data ? (
+          <div className="flex-grow">
+            <div
+              className="font-semibold"
+              title={`${diamond?.data?.carat} Carat ${diamond?.data?.shape} Shape Lab Diamond`}
+            >
+              {`${diamond?.data?.carat} Carat ${diamond?.data?.shape} Shape Lab Diamond`}
+            </div>
+            <div className="text-sm text-slate-400 grid grid-cols-2 w-[300px]">
+              <div>Clarity: {diamond?.data?.clarity}</div>
+              <div>Cut: {diamond?.data?.cut}</div>
+              <div>Shape: {diamond?.data?.shape}</div>
+              <div>Carat: {diamond?.data?.carat}</div>
+            </div>
           </div>
-          <div className="text-sm text-slate-400 grid grid-cols-2 w-[300px]">
-            <div>Clarity: {diamond?.data?.clarity}</div>
-            <div>Cut: {diamond?.data?.cut}</div>
-            <div>Shape: {diamond?.data?.shape}</div>
-            <div>Carat: {diamond?.data?.carat}</div>
-          </div>
-        </div>
+        ) : (
+          <>
+            <div className="">
+              <Skeleton.Input className="mr-2" active={true} size="small" />
+              <Skeleton.Input active={true} size="small" />
+              <Skeleton.Input active={true} size="small" />
+            </div>
+          </>
+        )}
+
         <div className="font-semibold mr-4 text-sm">
-          {getDiamondPrice(diamond?.data, diamondPrice, priceRate).toLocaleString(
-            "en-US",
-            {
+          {diamondPrice && priceRate ? (
+            getDiamondPrice(
+              diamond?.data,
+              diamondPrice,
+              priceRate
+            ).toLocaleString("en-US", {
               style: "currency",
               currency: "USD",
               maximumFractionDigits: 0,
-            }
+            })
+          ) : (
+            <Skeleton.Input active={true} size="small" />
           )}
         </div>
       </div>
@@ -89,16 +105,20 @@ const CheckoutCartItem = ({
             </div>
           </div>
           <div className="font-semibold mr-4 text-sm">
-            {getAccessoryPrice(
-              accessory?.data,
-              materialPrice,
-              cartItem.size,
-              priceRate
-            ).toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-              maximumFractionDigits: 0,
-            })}
+            {materialPrice && priceRate ? (
+              getAccessoryPrice(
+                accessory?.data,
+                materialPrice,
+                cartItem.size,
+                priceRate
+              ).toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 0,
+              })
+            ) : (
+              <Skeleton.Input active={true} size="small" />
+            )}
           </div>
         </div>
       )}

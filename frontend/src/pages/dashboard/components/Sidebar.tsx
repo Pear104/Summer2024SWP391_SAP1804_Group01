@@ -38,6 +38,12 @@ export default function Sidebar() {
       icon: <Sparkles size={20} />,
     },
     {
+      key: "orders",
+      label: "Orders",
+      path: "/admin/order",
+      icon: <HiOutlineShoppingCart size={20} />,
+    },
+    {
       key: "salestaff",
       label: "Sale Staffs",
       path: "/admin/sale-staffs",
