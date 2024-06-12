@@ -190,6 +190,7 @@ namespace backend.Repository
                 .ThenInclude(x => x.MaterialPrice)
                 .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.DiamondPrice)
+                .Include(x => x.PriceRate)
                 .Include(x => x.SaleStaff)
                 .Include(x => x.DeliveryStaff)
                 .Include(x => x.Customer)

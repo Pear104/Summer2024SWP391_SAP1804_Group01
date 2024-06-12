@@ -34,6 +34,7 @@ namespace backend.Mappers
                 TotalPrice = order.TotalPrice,
                 OrderStatus = order.OrderStatus.ToString(),
                 ShippingAddress = order.ShippingAddress,
+                PriceRate = order.PriceRate.ToPriceRateDTO(),
                 CreatedAt = order.CreatedAt,
                 CustomerId = order.CustomerId,
                 CustomerName = order.Customer.Name,

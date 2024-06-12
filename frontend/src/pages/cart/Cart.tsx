@@ -11,7 +11,7 @@ import { useQueries } from "@tanstack/react-query";
 import { getAccessoryPrice, getDiamondPrice } from "../../utils/getPrice";
 
 const Cart: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const [totalPriceCart, setTotalPriceCart] = useState(0);
   const navigate = useNavigate();
   const cart = useCartStore((state) => state.cart);
