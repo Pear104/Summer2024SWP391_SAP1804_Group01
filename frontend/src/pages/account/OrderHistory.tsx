@@ -21,16 +21,17 @@ export const OrderStatus = ({ order }: { order: any }) => {
     <div className="items-center justify-between mb-4 text-base">
       Order status:{" "}
       <span
-        className={`${order.orderStatus === "Pending"
+        className={`${
+          order.orderStatus === "Pending"
             ? "bg-red-200 border-red-300"
             : order.orderStatus === "Processing"
-              ? "bg-yellow-200 border-yellow-300"
-              : order.orderStatus === "Delivering"
-                ? "bg-orange-200 border-orange-300"
-                : order.orderStatus === "Completed"
-                  ? "bg-green-200 border-green-300"
-                  : "bg-red-200 border-red-300"
-          } border-2 p-2 px-4 rounded-md text-base`}
+            ? "bg-yellow-200 border-yellow-300"
+            : order.orderStatus === "Delivering"
+            ? "bg-orange-200 border-orange-300"
+            : order.orderStatus === "Completed"
+            ? "bg-green-200 border-green-300"
+            : "bg-red-200 border-red-300"
+        } border-2 p-2 px-4 rounded-md text-base`}
       >
         {order.orderStatus}
       </span>
@@ -56,12 +57,12 @@ const OrderDetailList = ({ order }: { order: any }) => {
               />
               {detail.accessory != null
                 ? detail.accessory?.accessoryImages[0]?.url && (
-                  <img
-                    className="w-24 h-24 object-cover mt-2"
-                    src={detail.accessory.accessoryImages[0].url}
-                    alt="accessory"
-                  />
-                )
+                    <img
+                      className="w-24 h-24 object-cover mt-2"
+                      src={detail.accessory.accessoryImages[0].url}
+                      alt="accessory"
+                    />
+                  )
                 : ""}
             </div>
             <div className="w-2/5 pl-4">
@@ -84,7 +85,8 @@ const OrderDetailList = ({ order }: { order: any }) => {
                 {(
                   detail.diamondPrice.unitPrice *
                   detail.diamond.carat *
-                  order?.priceRate.percent * 100
+                  order?.priceRate.percent *
+                  100
                 ).toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",
@@ -94,20 +96,20 @@ const OrderDetailList = ({ order }: { order: any }) => {
 
               {detail.accessory != null
                 ? detail.accessory && (
-                  <div className="text-gray-800 my-4">
-                    Accessory price:{" "}
-                    {(
-                      (detail.accessory.materialWeight *
-                        detail.materialPrice.unitPrice +
-                        detail.accessory.accessoryType.processingPrice) *
-                      order?.priceRate.percent
-                    ).toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                      maximumFractionDigits: 0,
-                    })}
-                  </div>
-                )
+                    <div className="text-gray-800 my-4">
+                      Accessory price:{" "}
+                      {(
+                        (detail.accessory.materialWeight *
+                          detail.materialPrice.unitPrice +
+                          detail.accessory.accessoryType.processingPrice) *
+                        order?.priceRate.percent
+                      ).toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "USD",
+                        maximumFractionDigits: 0,
+                      })}
+                    </div>
+                  )
                 : ""}
             </div>
             <div className="w-2/5">
@@ -175,15 +177,15 @@ export default function OrderHistory() {
   return (
     <div className="p-4 w-full">
       <div className="text-2xl font-serif mb-6">ORDER HISTORY</div>
-      {orderHistories?.data?.orders?.length === 0 ? (
-        <div className="border-2 border-slate-400 p-5">
-          <p>You haven't placed any orders yet</p>
-        </div>
-      ) : (
+      {orderHistories?.data?.orders?.length != 0 ? (
         <div className="w-full">
           {orderHistories?.data?.orders.map((order: any) => (
             <OrderDetailList key={order.orderId} order={order} />
           ))}
+        </div>
+      ) : (
+        <div className="border-2 border-slate-400 p-5">
+          <p>You haven't placed any orders yet</p>
         </div>
       )}
       <div>
@@ -196,10 +198,8 @@ export default function OrderHistory() {
           />
         )}
       </div>
-      <div className="mt-10 flex justify-center">
-        {orderHistories?.data?.totalCount <= orderHistories?.data?.pageSize ? (
-          ""
-        ) : (
+      <div className="mt-4 flex justify-center">
+        {orderHistories?.data?.totalCount > orderHistories?.data?.pageSize ? (
           <Pagination
             showTotal={(total, range) =>
               `${range[0]}-${range[1]} of ${total} items`
@@ -219,6 +219,8 @@ export default function OrderHistory() {
               setQueryUrl("/api/Order?" + params.toString());
             }}
           />
+        ) : (
+          ""
         )}
       </div>
       <div className="flex justify-center mt-10">

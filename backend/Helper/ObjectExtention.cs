@@ -21,14 +21,8 @@ namespace backend.Helper
 
         public static long LongDateTimeNow()
         {
-            //remove the first 4 number to avoid frontend rouding.
-            long originalNumber = DateTime.Now.Ticks / 1000;
-            // Remove the last two digits by dividing by 100
-            originalNumber /= 100;
-
-            // Remove the first two digits
-            long result = originalNumber % 100000000000000;
-            return result;
+            long originalNumber = DateTime.Now.Ticks;
+            return originalNumber;
         }
     }
 }

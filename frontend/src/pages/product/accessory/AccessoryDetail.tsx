@@ -38,7 +38,7 @@ export default function AccessoryDetail() {
     setQueryUrl(`/api/Accessories/${accessoryId}`);
   }, []);
   console.log(queryUrl);
-  const [accessory, materialPrices,priceRate] = useQueries({
+  const [accessory, materialPrices, priceRate] = useQueries({
     queries: [
       {
         queryKey: ["accessory", queryUrl],
@@ -69,7 +69,7 @@ export default function AccessoryDetail() {
   const currentDiamond = useCartStore((state) => state.currentDiamond);
   return (
     <div>
-      {(accessory.isLoading || materialPrices.isLoading) && (
+      {accessory.isLoading && (
         <Skeleton
           className="px-20 pt-6"
           active
@@ -79,7 +79,7 @@ export default function AccessoryDetail() {
         />
       )}
       <div className="flex justify-center mb-20">
-        {accessory?.data && materialPrices?.data && (
+        {accessory?.data && (
           <div className="w-[1200px] grid grid-cols-8 gap-10">
             <ImageList
               setMainImage={setMainImage}
@@ -93,16 +93,20 @@ export default function AccessoryDetail() {
                 {`${accessory?.data.name}`}
               </div>
               <div className="text-3xl">
-                {getAccessoryPrice(
-                  accessory?.data,
-                  materialPrices?.data,
-                  size,
-                  priceRate?.data.percent
-                ).toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  maximumFractionDigits: 0,
-                })}
+                {priceRate?.data && materialPrices?.data ? (
+                  getAccessoryPrice(
+                    accessory?.data,
+                    materialPrices?.data,
+                    size,
+                    priceRate?.data.percent
+                  ).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 0,
+                  })
+                ) : (
+                  <Skeleton.Button active={true} size="large" />
+                )}
               </div>
               <div className="w-full grid grid-cols-2 gap-4 my-4 mulish-regular text-slate-950 ">
                 <div className="flex flex-col gap-2">

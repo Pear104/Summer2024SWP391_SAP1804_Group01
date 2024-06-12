@@ -1,3 +1,5 @@
+import { Skeleton } from "antd";
+
 const AccessoryItem = ({
   accessory,
   price,
@@ -22,7 +24,13 @@ const AccessoryItem = ({
         </div>
 
         {/* luc nao co gia thi thay karat = price*/}
-        <div className="w-full flex ">{price}</div>
+        <div className="w-full flex ">
+          {price == 0 ? (
+            <Skeleton.Button active={true} size={"small"} />
+          ) : (
+            price
+          )}
+        </div>
       </div>
     </a>
   );

@@ -33,7 +33,7 @@ export default function DiamondList() {
     setQueryUrl("/api/Diamonds?IsAvailability=true");
   }, []);
 
-  const [diamond, diamondPrice,priceRate] = useQueries({
+  const [diamond, diamondPrice, priceRate] = useQueries({
     queries: [
       {
         queryKey: ["diamonds", queryUrl],
@@ -85,7 +85,7 @@ export default function DiamondList() {
           </div>
         </div>
         <div>
-          {(diamond?.isLoading) && (
+          {diamond?.isLoading && (
             <Skeleton
               active
               paragraph={{
@@ -94,22 +94,28 @@ export default function DiamondList() {
             />
           )}
           {diamond?.data?.diamonds?.map((diamond: any, index: number) => {
-              return (
-                <DiamondItem
-                  key={index}
-                  diamond={diamond}
-                  price={diamondPrice?.data ? getDiamondPrice(
-                    diamond,
-                    diamondPrice.data,
-                    priceRate?.data.percent
-                  ).toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                    maximumFractionDigits: 0,
-                  }): 0}
-                />
-              );
-            })}
+            return (
+              <DiamondItem
+                key={index}
+                diamond={diamond}
+                price={
+                  diamondPrice?.data && priceRate?.data ? (
+                    getDiamondPrice(
+                      diamond,
+                      diamondPrice.data,
+                      priceRate?.data.percent
+                    ).toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      maximumFractionDigits: 0,
+                    })
+                  ) : (
+                    <Skeleton.Button active={true} size={"small"} />
+                  )
+                }
+              />
+            );
+          })}
         </div>
         <div className="mt-10 flex justify-center">
           {diamond?.data && diamond?.data.diamonds.length == 0 ? (

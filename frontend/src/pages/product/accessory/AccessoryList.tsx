@@ -18,7 +18,7 @@ export default function AccessoryList() {
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
 
-  const [accessories, materialPrice,priceRate] = useQueries({
+  const [accessories, materialPrice, priceRate] = useQueries({
     queries: [
       {
         queryKey: ["accessories", queryUrl],
@@ -63,15 +63,20 @@ export default function AccessoryList() {
                   <AccessoryItem
                     key={accessory.accessoryId}
                     accessory={accessory}
-                    price={materialPrice?.data ? getAccessoryPrice(
-                      accessory,
-                      materialPrice.data,3,
-                      priceRate?.data.percent
-                    ).toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                      maximumFractionDigits: 0,
-                    }) : 0}
+                    price={
+                      materialPrice?.data && priceRate?.data
+                        ? getAccessoryPrice(
+                            accessory,
+                            materialPrice.data,
+                            3,
+                            priceRate?.data.percent
+                          ).toLocaleString("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                            maximumFractionDigits: 0,
+                          })
+                        : 0
+                    }
                   />
                 );
               })}

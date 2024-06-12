@@ -39,6 +39,8 @@ import CheckoutPayment from "../pages/checkout/CheckoutPayment";
 import About from "../pages/about/About";
 import WarrantyRequestList from "../pages/account/WarrantyRequestList";
 import CreateWarrantyRequest from "../pages/account/CreateWarrantyRequest";
+import SaleStaffsManagement from "../pages/dashboard/sale_staffs/SaleStaffsManagement";
+import DeliveryStaffsManagement from "../pages/dashboard/delivery_staffs/DeliveryStaffsManagement";
 
 const routes = [
   {
@@ -87,6 +89,14 @@ const routes = [
           {
             element: <DiamondPriceManage />,
             path: "/admin/diamond-price",
+          },
+          {
+            element: <SaleStaffsManagement />,
+            path: "/admin/sale-staffs",
+          },
+          {
+            element: <DeliveryStaffsManagement />,
+            path: "/admin/delivery-staffs",
           },
           {
             element: <AccessoryPriceManage />,

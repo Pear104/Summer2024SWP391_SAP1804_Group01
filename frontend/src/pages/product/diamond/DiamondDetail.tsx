@@ -10,7 +10,7 @@ export default function DiamondDetail() {
   // const [diamond, setDiamond] = useState<any>();
   const { diamondId } = useParams();
   scrollTo("choose-item");
-  const [diamond, diamondPrice,priceRate] = useQueries({
+  const [diamond, diamondPrice, priceRate] = useQueries({
     queries: [
       {
         queryKey: ["diamond"],
@@ -35,7 +35,7 @@ export default function DiamondDetail() {
   console.log(diamond?.data);
   return (
     <div className="flex justify-center mb-20">
-      {(diamond?.isLoading || diamondPrice?.isLoading) && (
+      {diamond?.isLoading && (
         <Skeleton
           className="px-20 pt-6"
           active
@@ -44,7 +44,7 @@ export default function DiamondDetail() {
           }}
         />
       )}
-      {diamond?.data && diamondPrice?.data && (
+      {diamond?.data && (
         <div className="w-[1200px] grid grid-cols-6 gap-10">
           <div className="col-span-4 place-self-center aspect-square bg-cover bg-top bg-no-repeat w-4/5">
             <Image
@@ -61,8 +61,7 @@ export default function DiamondDetail() {
               <span className="ml-2">{diamond?.data.certificateNumber}</span>
             </div>
             <div className="text-3xl my-2">
-              {diamond?.data &&
-                diamondPrice?.data &&
+              {diamondPrice?.data ? (
                 getDiamondPrice(
                   diamond.data,
                   diamondPrice?.data,
@@ -71,7 +70,10 @@ export default function DiamondDetail() {
                   style: "currency",
                   currency: "USD",
                   maximumFractionDigits: 0,
-                })}
+                })
+              ) : (
+                <Skeleton.Button active={true} size="large" />
+              )}
             </div>
             <div className="w-full grid grid-cols-2 gap-4 my-4 mulish-regular text-slate-950 ">
               <div className="flex flex-col gap-2">
