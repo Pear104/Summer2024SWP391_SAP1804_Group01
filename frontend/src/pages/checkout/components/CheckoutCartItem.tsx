@@ -7,10 +7,12 @@ const CheckoutCartItem = ({
   cartItem,
   diamondPrice,
   materialPrice,
+  priceRate
 }: {
   cartItem: any;
   diamondPrice: any;
   materialPrice: any;
+  priceRate: any;
 }) => {
   const [diamond, accessory] = useQueries({
     queries: [
@@ -25,7 +27,7 @@ const CheckoutCartItem = ({
     ],
   });
   return (
-    <div className="border border-black bg-cyan-300 rounded-lg py-2 px-3 flex flex-col gap-2 justify-between hover:bg-cyan-400 transition-all duration-300">
+    <div className="border border-black bg-slate-300 rounded-lg py-2 px-3 flex flex-col gap-2 justify-between hover:bg-slate-400 transition-all duration-300">
       {/* Diamond part */}
       <div className="flex w-full gap-4 items-center bg-white/70 hover:bg-white/95 transition-all">
         <div className="h-[80px] flex">
@@ -49,7 +51,7 @@ const CheckoutCartItem = ({
           </div>
         </div>
         <div className="font-semibold mr-4 text-sm">
-          {getDiamondPrice(diamond?.data, diamondPrice).toLocaleString(
+          {getDiamondPrice(diamond?.data, diamondPrice, priceRate).toLocaleString(
             "en-US",
             {
               style: "currency",
@@ -90,7 +92,8 @@ const CheckoutCartItem = ({
             {getAccessoryPrice(
               accessory?.data,
               materialPrice,
-              cartItem.size
+              cartItem.size,
+              priceRate
             ).toLocaleString("en-US", {
               style: "currency",
               currency: "USD",

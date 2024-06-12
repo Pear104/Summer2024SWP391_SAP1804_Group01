@@ -33,7 +33,7 @@ export default function DiamondList() {
     setQueryUrl("/api/Diamonds?IsAvailability=true");
   }, []);
 
-  const [diamond, diamondPrice] = useQueries({
+  const [diamond, diamondPrice,priceRate] = useQueries({
     queries: [
       {
         queryKey: ["diamonds", queryUrl],
@@ -44,6 +44,10 @@ export default function DiamondList() {
         queryKey: ["diamondPrices"],
         queryFn: () => GET("/api/DiamondPrices/"),
         staleTime: Infinity,
+      },
+      {
+        queryKey: ["priceRate"],
+        queryFn: () => GET("/api/PriceRate/latest"),
       },
     ],
   });
@@ -81,7 +85,7 @@ export default function DiamondList() {
           </div>
         </div>
         <div>
-          {(diamond?.isLoading || diamondPrice?.isLoading) && (
+          {(diamond?.isLoading) && (
             <Skeleton
               active
               paragraph={{
@@ -89,21 +93,20 @@ export default function DiamondList() {
               }}
             />
           )}
-          {diamond?.data &&
-            diamondPrice?.data &&
-            diamond?.data?.diamonds?.map((diamond: any, index: number) => {
+          {diamond?.data?.diamonds?.map((diamond: any, index: number) => {
               return (
                 <DiamondItem
                   key={index}
                   diamond={diamond}
-                  price={getDiamondPrice(
+                  price={diamondPrice?.data ? getDiamondPrice(
                     diamond,
-                    diamondPrice.data
+                    diamondPrice.data,
+                    priceRate?.data.percent
                   ).toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
                     maximumFractionDigits: 0,
-                  })}
+                  }): 0}
                 />
               );
             })}

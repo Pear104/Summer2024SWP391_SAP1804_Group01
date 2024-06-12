@@ -33,7 +33,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetOrder(long id)
+        public async Task<ActionResult> GetOrder([FromRoute] string id)
         {
             var order = await _orderRepo.GetOrderByIdAsync(id);
             if (order == null)
@@ -44,7 +44,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("pay-order/{id}")]
-        public async Task<ActionResult> PayOrder([FromRoute] long id)
+        public async Task<ActionResult> PayOrder([FromRoute] string id)
         {
             var updatedOrder = await _orderRepo.UpdateOrderAsync(
                 id,
@@ -71,6 +71,7 @@ namespace backend.Controllers
             {
                 return BadRequest("The order could not be created.");
             }
+            System.Console.WriteLine(createdOrder.OrderId);
             return Ok(createdOrder);
             // System.Console.WriteLine("diamondId: " + orderDto.OrderDetails[0].DiamondId);
             // return Ok(orderDto);
@@ -88,7 +89,7 @@ namespace backend.Controllers
         // }
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateOrder(
-            [FromRoute] long id,
+            [FromRoute] string id,
             [FromBody] UpdateOrderDTO order
         )
         {

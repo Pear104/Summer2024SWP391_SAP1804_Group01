@@ -18,7 +18,7 @@ export default function AccessoryList() {
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
 
-  const [accessories, materialPrice] = useQueries({
+  const [accessories, materialPrice,priceRate] = useQueries({
     queries: [
       {
         queryKey: ["accessories", queryUrl],
@@ -29,6 +29,10 @@ export default function AccessoryList() {
         queryKey: ["materialPrice"],
         queryFn: () => GET("/api/MaterialPrices/"),
         staleTime: Infinity,
+      },
+      {
+        queryKey: ["priceRate"],
+        queryFn: () => GET("/api/PriceRate/latest"),
       },
     ],
   });
@@ -43,7 +47,7 @@ export default function AccessoryList() {
         <div className="font-bold text-3xl libre-baskerville-regular flex justify-around my-10">
           DATJ's ACCESSORY PRODUCTS
         </div>
-        {(accessories.isLoading || materialPrice.isLoading) && (
+        {accessories.isLoading && (
           <Skeleton
             active
             paragraph={{
@@ -51,7 +55,7 @@ export default function AccessoryList() {
             }}
           />
         )}
-        {accessories.data && materialPrice.data && (
+        {accessories?.data && (
           <>
             <div className="grid grid-cols-4 gap-3">
               {accessories.data.accessories.map((accessory: any) => {
@@ -59,14 +63,15 @@ export default function AccessoryList() {
                   <AccessoryItem
                     key={accessory.accessoryId}
                     accessory={accessory}
-                    price={getAccessoryPrice(
+                    price={materialPrice?.data ? getAccessoryPrice(
                       accessory,
-                      materialPrice.data
+                      materialPrice.data,3,
+                      priceRate?.data.percent
                     ).toLocaleString("en-US", {
                       style: "currency",
                       currency: "USD",
                       maximumFractionDigits: 0,
-                    })}
+                    }) : 0}
                   />
                 );
               })}

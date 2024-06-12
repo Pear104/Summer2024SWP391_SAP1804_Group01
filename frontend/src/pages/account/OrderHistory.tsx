@@ -4,6 +4,7 @@ import { Pagination, Skeleton } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSearchStore } from "../../store/searchStore";
 import { useQueries } from "@tanstack/react-query";
+import { ExternalLink } from "lucide-react";
 
 const formatDate = (dateString: any) => {
   const date = new Date(dateString);
@@ -20,17 +21,16 @@ export const OrderStatus = ({ order }: { order: any }) => {
     <div className="items-center justify-between mb-4 text-base">
       Order status:{" "}
       <span
-        className={`${
-          order.orderStatus === "Pending"
+        className={`${order.orderStatus === "Pending"
             ? "bg-red-200 border-red-300"
             : order.orderStatus === "Processing"
-            ? "bg-yellow-200 border-yellow-300"
-            : order.orderStatus === "Delivering"
-            ? "bg-orange-200 border-orange-300"
-            : order.orderStatus === "Completed"
-            ? "bg-green-200 border-green-300"
-            : "bg-red-200 border-red-300"
-        } border-2 p-2 px-4 rounded-md text-base`}
+              ? "bg-yellow-200 border-yellow-300"
+              : order.orderStatus === "Delivering"
+                ? "bg-orange-200 border-orange-300"
+                : order.orderStatus === "Completed"
+                  ? "bg-green-200 border-green-300"
+                  : "bg-red-200 border-red-300"
+          } border-2 p-2 px-4 rounded-md text-base`}
       >
         {order.orderStatus}
       </span>
@@ -48,55 +48,81 @@ const OrderDetailList = ({ order }: { order: any }) => {
       <div className="border-b border-gray-300 p-4 mb-6">
         {order.orderDetails.map((detail: any, index: number) => (
           <div key={index} className="flex mb-4">
-            <div className="w-1/4">
+            <div className="w-1/5">
               <img
-                className="w-24 h-24 object-cover"
+                className="w-48 h-48 object-cover"
                 src={detail.diamond.imageUrl}
                 alt="diamond"
               />
               {detail.accessory != null
                 ? detail.accessory?.accessoryImages[0]?.url && (
-                    <img
-                      className="w-24 h-24 object-cover mt-2"
-                      src={detail.accessory.accessoryImages[0].url}
-                      alt="accessory"
-                    />
-                  )
+                  <img
+                    className="w-24 h-24 object-cover mt-2"
+                    src={detail.accessory.accessoryImages[0].url}
+                    alt="accessory"
+                  />
+                )
                 : ""}
             </div>
-
-            <div className="w-3/4 pl-4">
+            <div className="w-2/5 pl-4">
               <div className="text-lg font-serif">
                 {detail.accessory != null ? detail.accessory?.name : ""}
+              </div>
+              <div className="text-gray-800 my-4 flex gap-2">
+                Diamond's Certificate Number:{" "}
+                <a
+                  className="text-blue-500 flex"
+                  target="_blank"
+                  href={detail.diamond.certificateUrl}
+                >
+                  {detail.diamond.certificateNumber}
+                  <ExternalLink size={12} />
+                </a>
               </div>
               <div className="text-gray-800 my-4">
                 Diamond price:{" "}
                 {(
                   detail.diamondPrice.unitPrice *
                   detail.diamond.carat *
-                  100
+                  order?.priceRate.percent * 100
                 ).toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",
                   maximumFractionDigits: 0,
                 })}
               </div>
+
               {detail.accessory != null
                 ? detail.accessory && (
-                    <div className="text-gray-800 my-4">
-                      Accessory price:{" "}
-                      {(
-                        detail.accessory.materialWeight *
-                          detail.materialPrice.unitPrice +
-                        detail.accessory.accessoryType.processingPrice
-                      ).toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                        maximumFractionDigits: 0,
-                      })}
-                    </div>
-                  )
+                  <div className="text-gray-800 my-4">
+                    Accessory price:{" "}
+                    {(
+                      (detail.accessory.materialWeight *
+                        detail.materialPrice.unitPrice +
+                        detail.accessory.accessoryType.processingPrice) *
+                      order?.priceRate.percent
+                    ).toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      maximumFractionDigits: 0,
+                    })}
+                  </div>
+                )
                 : ""}
+            </div>
+            <div className="w-2/5">
+              <div className="text-gray-800 my-4">
+                Diamond Carat: {detail.diamond.carat}
+              </div>
+              <div className="text-gray-800 my-4">
+                Diamond Clarity: {detail.diamond.clarity}
+              </div>
+              <div className="text-gray-800 my-4">
+                Diamond Cut: {detail.diamond.cut}
+              </div>
+              <div className="text-gray-800 my-4">
+                Diamond Color: {detail.diamond.color}
+              </div>
             </div>
           </div>
         ))}

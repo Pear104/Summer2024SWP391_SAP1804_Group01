@@ -49,7 +49,7 @@ export default function ChooseItemAccessory({
                   className="border-b cursor-pointer"
                   onClick={() => {
                     navigate("/product/accessory");
-                    setCurrentAccessory(null);
+                    setCurrentAccessory(null,null);
                   }}
                 >
                   Remove

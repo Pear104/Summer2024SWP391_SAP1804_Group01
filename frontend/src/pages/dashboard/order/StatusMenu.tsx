@@ -20,7 +20,10 @@ export const StatusMenu = ({
         <Menu.Item disabled={statusText == "Delivering" ? false : true} key="4">
           <a onClick={() => handleStatusClick("Completed")}>Completed</a>
         </Menu.Item>
-        <Menu.Item disabled={statusText == "Delivering" ? false : true} key="5">
+        <Menu.Item
+          disabled={statusText == "Failed" || statusText == "Completed"}
+          key="5"
+        >
           <a onClick={() => handleStatusClick("Failed")}>Failed</a>
         </Menu.Item>
       </Menu>
