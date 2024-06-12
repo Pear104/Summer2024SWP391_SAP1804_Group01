@@ -81,7 +81,7 @@ export default function DiamondList() {
           </div>
         </div>
         <div>
-          {(diamond?.isLoading || diamondPrice?.isLoading) && (
+          {(diamond?.isLoading) && (
             <Skeleton
               active
               paragraph={{
@@ -89,21 +89,19 @@ export default function DiamondList() {
               }}
             />
           )}
-          {diamond?.data &&
-            diamondPrice?.data &&
-            diamond?.data?.diamonds?.map((diamond: any, index: number) => {
+          {diamond?.data?.diamonds?.map((diamond: any, index: number) => {
               return (
                 <DiamondItem
                   key={index}
                   diamond={diamond}
-                  price={getDiamondPrice(
+                  price={diamondPrice?.data ? getDiamondPrice(
                     diamond,
                     diamondPrice.data
                   ).toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
                     maximumFractionDigits: 0,
-                  })}
+                  }): 0}
                 />
               );
             })}

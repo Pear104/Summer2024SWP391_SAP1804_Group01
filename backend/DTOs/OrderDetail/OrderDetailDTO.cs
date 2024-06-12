@@ -13,7 +13,7 @@ namespace backend.DTOs
     {
         public long OrderDetailId { get; set; }
         public float? Size { get; set; }
-        public long OrderId { get; set; }
+        public string OrderId { get; set; }
         public DiamondDTO? Diamond { get; set; }
         public AccessoryDTO? Accessory { get; set; }
         public double ItemPrice { get; set; } 

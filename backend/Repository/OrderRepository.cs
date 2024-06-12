@@ -38,7 +38,7 @@ namespace backend.Repository
             }
             var newOrder = new Order()
             {
-                OrderId = DateTime.Now.Ticks,
+                OrderId = DateTime.Now.Ticks.ToString(),
                 Customer = customer,
                 Rank = rank,
                 PriceRate = priceRate,
@@ -272,7 +272,7 @@ namespace backend.Repository
             };
         }
 
-        public async Task<OrderDTO?> GetOrderByIdAsync(long id)
+        public async Task<OrderDTO?> GetOrderByIdAsync(string id)
         {
             var order = await _context
                 .Orders.Include(x => x.OrderDetails)
@@ -294,7 +294,7 @@ namespace backend.Repository
                 .Include(x => x.DeliveryStaff)
                 .Include(x => x.Customer)
                 .Include(x => x.Promotion)
-                .FirstOrDefaultAsync(x => x.OrderId == id);
+                .FirstOrDefaultAsync(x => x.OrderId.Equals(id));
 
             var orderDTO = order?.ToOrderDTO();
 
@@ -306,9 +306,9 @@ namespace backend.Repository
             return orderDTO;
         }
 
-        public async Task<Order?> UpdateOrderAsync(long id, UpdateOrderDTO order)
+        public async Task<Order?> UpdateOrderAsync(string id, UpdateOrderDTO order)
         {
-            var existedOrder = _context.Orders.FirstOrDefault(x => x.OrderId == id);
+            var existedOrder = _context.Orders.FirstOrDefault(x => x.OrderId.Equals(id));
             if (existedOrder == null)
             {
                 return null;

@@ -398,7 +398,7 @@ namespace backend.Data
             {
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Entity.OrderId = ObjectExtention.LongDateTimeNow();
+                    entry.Entity.OrderId = ObjectExtention.LongDateTimeNow().ToString();
                 }
             }
         }
