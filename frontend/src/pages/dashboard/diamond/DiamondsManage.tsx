@@ -41,15 +41,15 @@ export default function ProductsManage() {
     setQueryUrl("/api/Diamonds?");
   }, []);
 
-  const [diamond, diamondPrice, diamondSearch] = useQueries({
+  const [diamond, diamondPrice, diamondSearch, priceRate] = useQueries({
     queries: [
       {
-        queryKey: ["orders", queryUrl],
+        queryKey: ["diamond", queryUrl],
         queryFn: () => GET(queryUrl),
         staleTime: Infinity,
       },
       {
-        queryKey: ["diamondPrices"],
+        queryKey: ["diamondPrice"],
         queryFn: () => GET("/api/DiamondPrices/"),
         staleTime: Infinity,
       },
@@ -58,30 +58,35 @@ export default function ProductsManage() {
         queryFn: () => GET(`/api/Diamonds/cert/${searchTerm || ""}`),
         staleTime: Infinity,
       },
+      {
+        queryKey: ["priceRate"],
+        queryFn: () => GET("/api/PriceRate/latest"),
+      },
     ],
   });
 
+  const diamondsData = searchTerm
+    ? diamondSearch.data || []
+    : diamond?.data?.diamonds || [];
+  console.log(diamondsData);
   const renderDiamondRow = (diamond: any) => (
     <DiamondRow
       key={diamond.diamondId}
       diamond={diamond}
       selectedDiamonds={selectedDiamonds}
       setSelectedDiamonds={setSelectedDiamonds}
-      price={getDiamondPrice(diamond, diamondPrice.data).toLocaleString(
-        "en-US",
-        {
-          style: "currency",
-          currency: "USD",
-          maximumFractionDigits: 0,
-        }
-      )}
+      price={getDiamondPrice(
+        diamond,
+        diamondPrice.data,
+        priceRate?.data?.percent
+      ).toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      })}
     />
   );
 
-  const diamondsData = searchTerm
-    ? diamondSearch.data || []
-    : diamond?.data?.diamonds || [];
-  console.log(diamondsData);
   // search and filter
   const handleStatusClick = (status: string, statusText: string) => {
     setStatusText(statusText);
@@ -315,13 +320,13 @@ export default function ProductsManage() {
                         </td>
                       </tr>
                     )}
-                    {diamondsData.length > 0 ? (
-                      diamondsData.map(renderDiamondRow)
+                    {diamondsData?.length > 0 ? (
+                      diamondsData?.map(renderDiamondRow)
                     ) : (
                       <tr>
-                        <div className="text-center items-center">
+                        <td className="text-center items-center">
                           There is no diamond
-                        </div>
+                        </td>
                       </tr>
                     )}
                   </tbody>

@@ -241,6 +241,10 @@ namespace backend.Repository
             if (diamondDto.ImageUrl != null) {
                 existingDiamond.ImageUrl = diamondDto.ImageUrl;
             }
+            if(diamondDto.Availability != existingDiamond.Availability)
+            {
+                existingDiamond.Availability = diamondDto.Availability;
+            }
             
 
             _context.Entry(existingDiamond).State = EntityState.Modified;
