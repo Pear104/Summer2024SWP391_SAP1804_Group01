@@ -57,7 +57,7 @@ export const useCartStore = create<{
       // Hàm xóa tất cả các mục trong cart
       clearCart: () => {
         set({ cart: [] });
-      },
+      },   
     }),
 
     {

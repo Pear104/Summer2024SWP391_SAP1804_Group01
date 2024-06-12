@@ -15,7 +15,7 @@ const Cart: React.FC = () => {
   const [totalPriceCart, setTotalPriceCart] = useState(0);
   const navigate = useNavigate();
   const cart = useCartStore((state) => state.cart);
-  const [diamondPrice, materialPrice] = useQueries({
+  const [diamondPrice, materialPrice,priceRate] = useQueries({
     queries: [
       {
         queryKey: ["diamondPrice"],
@@ -25,6 +25,10 @@ const Cart: React.FC = () => {
         queryKey: ["materialPrice"],
         queryFn: () => GET("/api/MaterialPrices/"),
       },
+      {
+        queryKey: ["priceRate"],
+        queryFn: () => GET("/api/PriceRate/latest"),
+      },
     ],
   });
   useEffect(() => {
@@ -33,12 +37,13 @@ const Cart: React.FC = () => {
         cart.map(async (item) => {
           const diamond = await GET(`/api/Diamonds/${item.diamondId}`);
           const accessory = await GET(`/api/Accessories/${item?.accessoryId}`);
-          let totalPrice = getDiamondPrice(diamond, diamondPrice?.data);
+          let totalPrice = getDiamondPrice(diamond, diamondPrice?.data, priceRate?.data.percent);
           if (accessory?.accessoryId) {
             totalPrice += getAccessoryPrice(
               accessory,
               materialPrice?.data,
-              item.size
+              item.size,
+              priceRate?.data.percent
             );
           }
 
@@ -52,7 +57,7 @@ const Cart: React.FC = () => {
       console.log(totalPrice);
       setTotalPriceCart(totalPrice);
     })();
-  }, [diamondPrice, materialPrice, cart]);
+  }, [diamondPrice, materialPrice, cart, priceRate]);
   console.log(totalPriceCart);
 
   function EmptyCart() {
@@ -133,6 +138,7 @@ const Cart: React.FC = () => {
                 type="default"
                 onClick={async () => {
                   const infor = await GET("/api/Accounts/me");
+                  // Check if user is logged in
                   if (!infor) {
                     navigate("/authentication/login");
                     return;

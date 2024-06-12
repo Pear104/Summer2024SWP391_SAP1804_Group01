@@ -7,10 +7,12 @@ const CheckoutCartItem = ({
   cartItem,
   diamondPrice,
   materialPrice,
+  priceRate
 }: {
   cartItem: any;
   diamondPrice: any;
   materialPrice: any;
+  priceRate: any;
 }) => {
   const [diamond, accessory] = useQueries({
     queries: [
@@ -49,7 +51,7 @@ const CheckoutCartItem = ({
           </div>
         </div>
         <div className="font-semibold mr-4 text-sm">
-          {getDiamondPrice(diamond?.data, diamondPrice).toLocaleString(
+          {getDiamondPrice(diamond?.data, diamondPrice, priceRate).toLocaleString(
             "en-US",
             {
               style: "currency",
@@ -90,7 +92,8 @@ const CheckoutCartItem = ({
             {getAccessoryPrice(
               accessory?.data,
               materialPrice,
-              cartItem.size
+              cartItem.size,
+              priceRate
             ).toLocaleString("en-US", {
               style: "currency",
               currency: "USD",

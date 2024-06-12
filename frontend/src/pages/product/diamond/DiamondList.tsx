@@ -33,7 +33,7 @@ export default function DiamondList() {
     setQueryUrl("/api/Diamonds?IsAvailability=true");
   }, []);
 
-  const [diamond, diamondPrice] = useQueries({
+  const [diamond, diamondPrice,priceRate] = useQueries({
     queries: [
       {
         queryKey: ["diamonds", queryUrl],
@@ -44,6 +44,10 @@ export default function DiamondList() {
         queryKey: ["diamondPrices"],
         queryFn: () => GET("/api/DiamondPrices/"),
         staleTime: Infinity,
+      },
+      {
+        queryKey: ["priceRate"],
+        queryFn: () => GET("/api/PriceRate/latest"),
       },
     ],
   });
@@ -96,7 +100,8 @@ export default function DiamondList() {
                   diamond={diamond}
                   price={diamondPrice?.data ? getDiamondPrice(
                     diamond,
-                    diamondPrice.data
+                    diamondPrice.data,
+                    priceRate?.data.percent
                   ).toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",

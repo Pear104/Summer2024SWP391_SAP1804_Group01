@@ -10,7 +10,7 @@ export default function ChooseItem() {
   const currentDiamond = useCartStore((state) => state.currentDiamond);
   const currentAccessory = useCartStore((state) => state.currentAccessory);
   const currentSize = useCartStore((state) => state.currentSize);
-  const [diamond, accessory, diamondPrice, materialPrice] = useQueries({
+  const [diamond, accessory, diamondPrice, materialPrice,priceRate] = useQueries({
     queries: [
       {
         queryKey: ["currentDiamond", currentDiamond],
@@ -32,6 +32,10 @@ export default function ChooseItem() {
         queryFn: () => GET("/api/MaterialPrices/"),
         staleTime: Infinity,
       },
+      {
+        queryKey: ["priceRate"],
+        queryFn: () => GET("/api/PriceRate/latest"),
+      },
     ],
   });
   return (
@@ -42,7 +46,7 @@ export default function ChooseItem() {
           currentDiamond &&
           diamond?.data &&
           diamondPrice?.data &&
-          getDiamondPrice(diamond?.data, diamondPrice?.data).toLocaleString(
+          getDiamondPrice(diamond?.data, diamondPrice?.data, priceRate?.data.percent).toLocaleString(
             "en-US",
             { style: "currency", currency: "USD", maximumFractionDigits: 0 }
           )
@@ -57,7 +61,8 @@ export default function ChooseItem() {
           getAccessoryPrice(
             accessory?.data,
             materialPrice?.data,
-            currentSize
+            currentSize, 
+            priceRate?.data.percent
           ).toLocaleString("en-US", {
             style: "currency",
             currency: "USD",
@@ -73,11 +78,12 @@ export default function ChooseItem() {
           diamondPrice?.data &&
           materialPrice?.data
             ? (
-                getDiamondPrice(diamond.data, diamondPrice.data) +
+                getDiamondPrice(diamond.data, diamondPrice.data, priceRate?.data.percent) +
                 getAccessoryPrice(
                   accessory.data,
                   materialPrice.data,
-                  currentSize
+                  currentSize, 
+                  priceRate?.data.percent
                 )
               ).toLocaleString("en-US", {
                 style: "currency",

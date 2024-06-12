@@ -16,7 +16,7 @@ export default function CompleteProduct() {
   if (!currentDiamond || !currentAccessory) {
     navigate("/product/diamond");
   }
-  const [diamond, accessory, diamondPrice, materialPrice] = useQueries({
+  const [diamond, accessory, diamondPrice, materialPrice,priceRate] = useQueries({
     queries: [
       {
         queryKey: ["currentDiamond", currentDiamond],
@@ -33,6 +33,10 @@ export default function CompleteProduct() {
       {
         queryKey: ["materialPrice"],
         queryFn: () => GET("/api/MaterialPrices/"),
+      },
+      {
+        queryKey: ["priceRate"],
+        queryFn: () => GET("/api/PriceRate/latest"),
       },
     ],
   });
@@ -79,11 +83,12 @@ export default function CompleteProduct() {
               <div className="text-3xl my-2">
                 Total price:{" "}
                 {(
-                  getDiamondPrice(diamond.data, diamondPrice.data) +
+                  getDiamondPrice(diamond.data, diamondPrice.data, priceRate?.data.percent) +
                   getAccessoryPrice(
                     accessory.data,
                     materialPrice.data,
-                    currentSize
+                    currentSize, 
+                    priceRate?.data.percent
                   )
                 ).toLocaleString("en-US", {
                   style: "currency",
@@ -107,7 +112,8 @@ export default function CompleteProduct() {
                       <div>
                         {getDiamondPrice(
                           diamond.data,
-                          diamondPrice.data
+                          diamondPrice.data,
+                          priceRate?.data.percent
                         ).toLocaleString("en-US", {
                           style: "currency",
                           currency: "USD",
@@ -135,7 +141,8 @@ export default function CompleteProduct() {
                         {getAccessoryPrice(
                           accessory.data,
                           materialPrice.data,
-                          currentSize
+                          currentSize,
+                          priceRate?.data.percent
                         ).toLocaleString("en-US", {
                           style: "currency",
                           currency: "USD",

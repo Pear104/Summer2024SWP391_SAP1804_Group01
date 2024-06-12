@@ -38,7 +38,7 @@ export default function AccessoryDetail() {
     setQueryUrl(`/api/Accessories/${accessoryId}`);
   }, []);
   console.log(queryUrl);
-  const [accessory, materialPrices] = useQueries({
+  const [accessory, materialPrices,priceRate] = useQueries({
     queries: [
       {
         queryKey: ["accessory", queryUrl],
@@ -47,6 +47,10 @@ export default function AccessoryDetail() {
       {
         queryKey: ["materialPrices"],
         queryFn: () => GET("/api/MaterialPrices/"),
+      },
+      {
+        queryKey: ["priceRate"],
+        queryFn: () => GET("/api/PriceRate/latest"),
       },
     ],
   });
@@ -92,7 +96,8 @@ export default function AccessoryDetail() {
                 {getAccessoryPrice(
                   accessory?.data,
                   materialPrices?.data,
-                  size
+                  size,
+                  priceRate?.data.percent
                 ).toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",

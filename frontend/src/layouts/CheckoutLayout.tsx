@@ -6,6 +6,8 @@ import { useQueries } from "@tanstack/react-query";
 import { GET } from "../utils/request";
 import CheckoutCartItem from "../pages/checkout/components/CheckoutCartItem";
 import { Tags } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getAccessoryPrice, getDiamondPrice } from "../utils/getPrice";
 
 const item = [
   {
@@ -27,7 +29,7 @@ const item = [
 ];
 
 export default function CheckoutLayout() {
-  const [diamondPrices, materialPrices] = useQueries({
+  const [diamondPrices, materialPrices,priceRate] = useQueries({
     queries: [
       {
         queryKey: ["diamondPrices"],
@@ -39,9 +41,42 @@ export default function CheckoutLayout() {
         queryFn: () => GET("/api/MaterialPrices/"),
         staleTime: Infinity,
       },
+      {
+        queryKey: ["priceRate"],
+        queryFn: () => GET("/api/PriceRate/latest"),
+        staleTime: Infinity,
+      },
     ],
   });
   const cart = useCartStore((state) => state.cart);
+  const [totalPrice, setTotalPrice] = useState(0);
+  useEffect(() => {
+    (async () => {
+      const totalPricePromise = Promise.all(
+        cart.map(async (item) => {
+          const diamond = await GET(`/api/Diamonds/${item.diamondId}`);
+          const accessory = await GET(`/api/Accessories/${item?.accessoryId}`);
+          let totalPrice = getDiamondPrice(diamond, diamondPrices?.data, priceRate?.data?.percent);
+          if (accessory?.accessoryId) {
+            totalPrice += getAccessoryPrice(
+              accessory,
+              materialPrices?.data,
+              item.size,
+              priceRate?.data?.percent
+            );
+          }
+          return totalPrice;
+        })
+      );
+      const totalPrice = await totalPricePromise.then((prices) =>
+        prices.reduce((total, price) => total + price, 0)
+      );
+      setTotalPrice(totalPrice);
+    })();
+  }, [cart, diamondPrices, materialPrices,priceRate]);
+
+  
+
   return (
     <div className="top-0 right-0 fixed w-screen h-screen grid grid-cols-2">
       <div className="border-r p-4 overflow-y-scroll">
@@ -59,19 +94,20 @@ export default function CheckoutLayout() {
         </Divider>
         {cart && diamondPrices?.data && materialPrices?.data
           ? cart.map((item, index) => (
-              <CheckoutCartItem
-                key={index}
-                cartItem={item}
-                diamondPrice={diamondPrices?.data}
-                materialPrice={materialPrices?.data}
-              />
-            ))
+            <CheckoutCartItem
+              key={index}
+              cartItem={item}
+              diamondPrice={diamondPrices?.data}
+              materialPrice={materialPrices?.data}
+              priceRate={priceRate?.data?.percent}
+            />
+          ))
           : cart.map((_item, index) => (
-              <div key={index} className="flex gap-2">
-                <Skeleton.Image active className="w-[80px] h-[80px]" />
-                <Skeleton.Input active className="h-[80px] w-full" />
-              </div>
-            ))}
+            <div key={index} className="flex gap-2">
+              <Skeleton.Image active className="w-[80px] h-[80px]" />
+              <Skeleton.Input active className="h-[80px] w-full" />
+            </div>
+          ))}
         <Divider />
         <div className="flex flex-col gap-2">
           <div className="flex gap-4">
@@ -100,11 +136,11 @@ export default function CheckoutLayout() {
           <div className="text-base">
             <div className="flex justify-between">
               <div>Subtotal</div>
-              <div className="font-semibold">$100</div>
+              <div className="font-semibold">{(totalPrice).toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 })}</div>
             </div>
             <div className="flex justify-between">
-              <div>Shipping</div>
-              <div className="font-semibold">$100</div>
+              <div>Discount</div>
+              <div className="font-semibold">{(0).toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 })}</div>
             </div>
           </div>
           <Divider />
@@ -112,7 +148,7 @@ export default function CheckoutLayout() {
             <div className="text-3xl">Total</div>
             <div className="flex items-center gap-2">
               <div className="text-xs">USD</div>
-              <div className="font-semibold text-3xl">$200</div>
+              <div className="font-semibold text-3xl">{(totalPrice).toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 })}</div>
             </div>
           </div>
         </div>
