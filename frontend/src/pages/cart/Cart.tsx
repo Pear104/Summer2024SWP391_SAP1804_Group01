@@ -79,13 +79,13 @@ const Cart: React.FC = () => {
             You have no items in your shopping cart.
           </div>
           <div className="flex items-center justify-center w-full p-2">
-            <Link
+            <a
               className="transition-all duration-300 rounded-xl w-1/5 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
               type="default"
-              to="/product/diamond"
+              href="/product/diamond"
             >
               Continue shopping
-            </Link>
+            </a>
           </div>
         </div>
       ) : (
@@ -103,13 +103,13 @@ const Cart: React.FC = () => {
               ))}
             </div>
             <div className="flex items-center justify-between w-full pl-10 pr-10 pt-2">
-              <Link
+              <a
                 className="rounded-lg transition-all duration-300 hover:scale-95 font-bold text-white bg-primary px-4 py-4 flex items-center justify-center"
                 type="default"
-                to="/product/diamond"
+                href="/product/diamond"
               >
                 Continue Shopping
-              </Link>
+              </a>
               <Button
                 className="w-1/5 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
                 type="default"
