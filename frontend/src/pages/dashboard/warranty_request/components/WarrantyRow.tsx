@@ -32,7 +32,7 @@ export default function WarrantyRow({ warranty }: { warranty: any }) {
         <tr>
           <td colSpan={9}>
             <div className="text-center items-center">
-              <p>There are no warrantys!!!</p>
+              <p>There are no warranty requests!!!</p>
             </div>
           </td>
         </tr>
@@ -51,7 +51,7 @@ export default function WarrantyRow({ warranty }: { warranty: any }) {
         <td className="px-6 py-4 whitespace-nowrap">
           <div>{warranty.warrantyCardId}</div>
         </td>
-        <td className="px-6 py-4 w-[500px] whitespace-wrap">
+        <td className="px-6 py-4 w-[500px] whitespace-normal break-words">
           <div>{warranty.warrantyReason}</div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
@@ -83,7 +83,7 @@ export default function WarrantyRow({ warranty }: { warranty: any }) {
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <WarrantyUpdateComponent
-            warrantyRequestId={warranty.warrantyId}
+            warrantyRequestId={warranty.warrantyRequestId}
             currentStatus={warranty.warrantyStatus}
           />
         </td>

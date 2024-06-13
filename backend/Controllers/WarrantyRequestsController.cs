@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using backend.DTOs.WarrantyRequest;
 using backend.Helper;
@@ -25,6 +26,21 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<ActionResult> GetWarrantyRequests([FromQuery] WarrantyRequestQuery query)
         {
+            var accountId = User.FindFirst("accountId")?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (role == "Customer")
+            {
+                query.CustomerId = long.Parse(accountId ?? "0");
+            }
+           
+            if (role == "SaleStaff")
+            {
+                query.SaleStaffId = long.Parse(accountId ?? "0");
+            }
+            if (role == "DeliveryStaff")
+            {
+                query.DeliveryStaffId = long.Parse(accountId ?? "0");
+            }
             var warrantyRequestResult = await _warrantyRequestRepo.GetAllWarrantyRequestsAsync(query);
             return Ok(warrantyRequestResult);
         }

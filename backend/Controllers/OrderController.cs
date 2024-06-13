@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using backend.DTOs;
 using backend.DTOs.Order;
 using backend.Helper;
@@ -23,10 +24,18 @@ namespace backend.Controllers
         public async Task<ActionResult> GetOrders([FromQuery] OrderQuery query)
         {
             var accountId = User.FindFirst("accountId")?.Value;
-            var role = User.FindFirst("role")?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
             if (role == "Customer")
             {
                 query.CustomerId = long.Parse(accountId ?? "0");
+            }
+            if (role == "SaleStaff")
+            {
+                query.SaleStaffId = long.Parse(accountId ?? "0");
+            }
+            if (role == "DeliveryStaff")
+            {
+                query.DeliveryStaffId = long.Parse(accountId ?? "0");
             }
             var orderResult = await _orderRepo.GetAllOrdersAsync(query);
             return Ok(orderResult);
@@ -93,8 +102,6 @@ namespace backend.Controllers
             [FromBody] UpdateOrderDTO order
         )
         {
-            System.Console.WriteLine("ahihi");
-            System.Console.WriteLine("status ne: " + order.OrderStatus);
             var updatedOrder = await _orderRepo.UpdateOrderAsync(id, order);
             if (updatedOrder == null)
             {

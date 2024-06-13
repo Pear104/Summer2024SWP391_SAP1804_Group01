@@ -3,13 +3,14 @@ import { PUT } from "../../../../utils/request";
 import { StatusMenu } from "./StatusMenu";
 
 
-const WarrantyUpdateComponent = ({
-  warrantyRequestId,
-  currentStatus,
-}: {
-  warrantyRequestId: number;
-  currentStatus: string;
-}) => {
+const WarrantyUpdateComponent = (
+  {
+    warrantyRequestId,
+    currentStatus,
+  }: {
+    warrantyRequestId: number;
+    currentStatus: string;
+  }) => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: ({
@@ -24,7 +25,7 @@ const WarrantyUpdateComponent = ({
   });
 
   const handleStatusClick = async (warrantyRequestStatus: string) => {
-    await mutation.mutate({warrantyRequestId, warrantyRequestStatus });
+    await mutation.mutate({ warrantyRequestId, warrantyRequestStatus });
   };
 
   return (

@@ -68,10 +68,27 @@ namespace backend.Repository
                 .Include(x => x.DeliveryStaff)
                 .Include(x => x.Customer)
                 .AsQueryable();
+
             if (query.WarrantyStatus != null)
             {
                 warrantyRequestQueries = warrantyRequestQueries.Where(x => x.WarrantyStatus == query.WarrantyStatus);
             }
+            if (query.CustomerId > 0)
+            {
+                warrantyRequestQueries = warrantyRequestQueries.Where(x => x.CustomerId == query.CustomerId);
+            }
+
+            if (query.SaleStaffId > 0)
+            {
+                warrantyRequestQueries = warrantyRequestQueries.Where(x => x.SaleStaffId == query.SaleStaffId);
+            }
+
+            if (query.DeliveryStaffId > 0)
+            {
+                warrantyRequestQueries = warrantyRequestQueries.Where(x => x.DeliveryStaffId == query.DeliveryStaffId);
+            }
+
+            
 
             var totalCount = await warrantyRequestQueries.CountAsync();
 
@@ -107,7 +124,8 @@ namespace backend.Repository
             {
                 return null;
             }
-            if (warrantyRequestDto.WarrantyStatus != null) {
+            if (warrantyRequestDto.WarrantyStatus != null)
+            {
                 existedWarrantyRequest.WarrantyStatus = Enum.Parse<WarrantyStatus>(warrantyRequestDto.WarrantyStatus);
             }
             if (warrantyRequestDto.SaleStaffId != 0)

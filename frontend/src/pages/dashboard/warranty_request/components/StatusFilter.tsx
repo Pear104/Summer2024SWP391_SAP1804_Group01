@@ -14,9 +14,9 @@ export const StatusFilter = ({ statusText }: { statusText: any }) => {
           <Menu.Item key="1">
             <a
               onClick={() => {
-                params.set("OrderStatus", "Pending");
-                setQueryUrl(`/api/Order?` + params.toString());
-                navigate("/admin/orders?" + params.toString());
+                params.set("WarrantyStatus", "Pending");
+                setQueryUrl(`/api/WarrantyRequests?` + params.toString());
+                navigate("/admin/warranty-request?" + params.toString());
               }}
             >
               Pending
@@ -25,45 +25,56 @@ export const StatusFilter = ({ statusText }: { statusText: any }) => {
           <Menu.Item key="2">
             <a
               onClick={() => {
-                params.set("OrderStatus", "Processing");
-                setQueryUrl(`/api/Order?` + params.toString());
-                navigate("/admin/orders?" + params.toString());
+                params.set("WarrantyStatus", "Getting");
+                setQueryUrl(`/api/WarrantyRequests?` + params.toString());
+                navigate("/admin/warranty-request?" + params.toString());
               }}
             >
-              Processing
+              Getting
             </a>
           </Menu.Item>
           <Menu.Item key="3">
             <a
               onClick={() => {
-                params.set("OrderStatus", "Delivering");
-                setQueryUrl(`/api/Order?` + params.toString());
-                navigate("/admin/orders?" + params.toString());
+                params.set("WarrantyStatus", "Processing");
+                setQueryUrl(`/api/WarrantyRequests?` + params.toString());
+                navigate("/admin/warranty-request?" + params.toString());
               }}
             >
-              Delivering
+              Processing
             </a>
           </Menu.Item>
           <Menu.Item key="4">
             <a
               onClick={() => {
-                params.set("OrderStatus", "Completed");
-                setQueryUrl(`/api/Order?` + params.toString());
-                navigate("/admin/orders?" + params.toString());
+                params.set("WarrantyStatus", "Returning");
+                setQueryUrl(`/api/WarrantyRequests?` + params.toString());
+                navigate("/admin/warranty-request?" + params.toString());
               }}
             >
-              Completed
+              Returning
             </a>
           </Menu.Item>
           <Menu.Item key="5">
             <a
               onClick={() => {
-                params.set("OrderStatus", "Failed");
-                setQueryUrl(`/api/Order?` + params.toString());
-                navigate("/admin/orders?" + params.toString());
+                params.set("WarrantyStatus", "Failed");
+                setQueryUrl(`/api/WarrantyRequests?` + params.toString());
+                navigate("/admin/warranty-request?" + params.toString());
               }}
             >
               Failed
+            </a>
+          </Menu.Item>
+          <Menu.Item key="6">
+            <a
+              onClick={() => {
+                params.set("WarrantyStatus", "Completed");
+                setQueryUrl(`/api/WarrantyRequests?` + params.toString());
+                navigate("/admin/warranty-request?" + params.toString());
+              }}
+            >
+              Completed
             </a>
           </Menu.Item>
         </Menu>

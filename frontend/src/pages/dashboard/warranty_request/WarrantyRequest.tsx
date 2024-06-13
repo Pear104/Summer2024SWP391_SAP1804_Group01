@@ -4,7 +4,7 @@ import { Form, Input, Pagination, Skeleton } from "antd";
 import { useSearchStore } from "../../../store/searchStore";
 import { GET } from "../../../utils/request";
 import { useQueries } from "@tanstack/react-query";
-import { StatusFilter } from "../order/StatusFilter";
+import { StatusFilter } from "./components/StatusFilter";
 import WarrantyRow from "./components/WarrantyRow";
 import WarrantyColumnHeader from "./components/WarrantyColumnHeader";
 
@@ -34,7 +34,7 @@ export default function WarrantyRequest() {
     const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
     useEffect(() => {
       setQueryUrl("/api/WarrantyRequests?");
-    });
+    },[]);
   
     const [warrantyRequestList] = useQueries({
       queries: [
@@ -45,6 +45,7 @@ export default function WarrantyRequest() {
         },
       ],
     });
+    console.log(queryUrl);
     console.log(warrantyRequestList?.data);
   
     const renderWarrantyRow = (warranty: any) => (
@@ -65,6 +66,8 @@ export default function WarrantyRequest() {
             : status === "3"
             ? "Delivering"
             : status === "4"
+            ? "Returning"
+            : status === "5"
             ? "Completed"
             : "Failed"
         );
@@ -76,7 +79,7 @@ export default function WarrantyRequest() {
     useEffect(() => {
       params.set("PageSize", pageSize.toString());
       navigate(url.pathname + "?" + params.toString());
-      setQueryUrl("/api/Order?" + params.toString());
+      setQueryUrl("/api/WarrantyRequests?" + params.toString());
     }, [pageSize]);
   
     return (
@@ -126,7 +129,7 @@ export default function WarrantyRequest() {
                       setSearchTerm("");
                       // Clear the URL parameters
                       const params = new URLSearchParams(location.search);
-                      setQueryUrl(`/api/Order?` + params.toString());
+                      setQueryUrl(`/api/WarrantyRequests?` + params.toString());
                       // params.delete("type");
                       navigate({ search: params.toString() });
                     }}
@@ -153,7 +156,7 @@ export default function WarrantyRequest() {
                               header={header}
                               setQueryUrl={setQueryUrl}
                               params={params}
-                              type="order"
+                              type="warranty-request"
                             />
                           );
                         })}
@@ -179,7 +182,7 @@ export default function WarrantyRequest() {
                       ) : (
                         <tr>
                           <div className="text-center items-center">
-                            There is no order
+                            There is no warranty
                           </div>
                         </tr>
                       )}
@@ -202,7 +205,7 @@ export default function WarrantyRequest() {
                         params.set("PageNumber", page.toString());
                         params.set("PageSize", pageSize.toString());
                         navigate(url.pathname + "?" + params.toString());
-                        setQueryUrl("/api/Order?" + params.toString());
+                        setQueryUrl("/api/WarrantyRequest?" + params.toString());
                         setSearchTerm("");
                       }}
                       showSizeChanger={true}
@@ -210,7 +213,7 @@ export default function WarrantyRequest() {
                         setPageSize(size);
                         params.set("PageSize", size.toString());
                         navigate(url.pathname + "?" + params.toString());
-                        setQueryUrl("/api/Order?" + params.toString());
+                        setQueryUrl("/api/WarrantyRequest?" + params.toString());
                       }}
                     />
                   </div>

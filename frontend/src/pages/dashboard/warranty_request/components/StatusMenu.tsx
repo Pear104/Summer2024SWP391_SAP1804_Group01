@@ -13,11 +13,14 @@ export const StatusMenu = ({
     case "Pending":
       style = "text-white bg-red-500";
       break;
-    case "Processing":
+    case "Getting":
       style = "text-white bg-yellow-500";
       break;
-    case "Delivering":
+    case "Processing":
       style = "text-white bg-blue-500";
+      break;
+    case "Returning":
+      style = "text-white bg-blue-800";
       break;
     case "Failed":
       style = "text-white bg-red-500";
@@ -30,26 +33,37 @@ export const StatusMenu = ({
     <Dropdown
       overlay={
         <Menu>
-          <Menu.Item disabled={statusText == "Pending" ? false : true} key="2">
+
+          <Menu.Item key="2"  
+          disabled={statusText != "Pending"}
+          >
+            <a onClick={() => handleStatusClick("Getting")}>Getting</a>
+          </Menu.Item>
+
+          <Menu.Item
+            key="3" 
+            disabled={statusText != "Getting"}
+          >
             <a onClick={() => handleStatusClick("Processing")}>Processing</a>
           </Menu.Item>
           <Menu.Item
-            disabled={statusText == "Processing" ? false : true}
-            key="3"
+            key="4" 
+             disabled={statusText != "Processing"}
           >
-            <a onClick={() => handleStatusClick("Delivering")}>Delivering</a>
+            <a onClick={() => handleStatusClick("Returning")}>Returning</a>
           </Menu.Item>
+          
           <Menu.Item
-            disabled={statusText == "Delivering" ? false : true}
-            key="4"
-          >
-            <a onClick={() => handleStatusClick("Completed")}>Completed</a>
-          </Menu.Item>
-          <Menu.Item
-            disabled={statusText == "Failed" || statusText == "Completed"}
             key="5"
+             disabled={statusText == "Completed" || statusText == "Failed"}
           >
             <a onClick={() => handleStatusClick("Failed")}>Failed</a>
+          </Menu.Item>
+          <Menu.Item
+             disabled={statusText != "Returning" || statusText == "Completed"}
+            key="6"
+          >
+            <a onClick={() => handleStatusClick("Completed")}>Completed</a>
           </Menu.Item>
         </Menu>
       }

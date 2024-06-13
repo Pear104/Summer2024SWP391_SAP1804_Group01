@@ -20,8 +20,8 @@ const SaleStaffComponent = ({
       warrantyRequestId: number;
       saleStaffId: number;
     }) => PUT(`/api/WarrantyRequests/${warrantyRequestId}`, { saleStaffId: saleStaffId }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["warranty"] }),
-    onError: () => queryClient.invalidateQueries({ queryKey: ["warranty"] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["warrantyRequests"] }),
+    onError: () => queryClient.invalidateQueries({ queryKey: ["warrantyRequests"] }),
   });
 
   const handleStaffClick = async (saleStaffId: number) => {

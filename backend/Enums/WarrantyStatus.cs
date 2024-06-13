@@ -3,9 +3,10 @@ namespace backend.Enums
     public enum WarrantyStatus
     {
         Pending,
-        ShipperIsComingToGet,
+        Getting,
         Processing,
-        ShipperIsComingToReturnBack,
-        Completed
+        Returning,
+        Failed,
+        Completed,
     }
 }
