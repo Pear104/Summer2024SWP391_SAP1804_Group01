@@ -11,7 +11,7 @@ export const SaleStatusMenu = ({
   <Dropdown
     overlay={
       <Menu>
-        <Menu.Item disabled={statusText == "Pending" ? false : true} key="2">
+        <Menu.Item disabled={true} key="2">
           <a onClick={() => handleStatusClick("Processing")}>Processing</a>
         </Menu.Item>
         <Menu.Item disabled={statusText == "Processing" ? false : true} key="3">
