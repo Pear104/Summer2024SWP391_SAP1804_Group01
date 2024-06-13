@@ -101,7 +101,10 @@ namespace backend.Repository
                     _ => diamondsQuery.OrderBy(x => x.Carat),
                 };
             }
-            
+            if(query.SearchQuery !=null)
+            {
+                diamondsQuery = diamondsQuery.Where(d => d.CertificateNumber.ToString().StartsWith(query.SearchQuery.ToString()));
+            }
             bool? IsAvailability = query.IsAvailability;
 
             if (IsAvailability.HasValue)
@@ -188,13 +191,6 @@ namespace backend.Repository
             return await _context
                 .Diamonds.Include(x => x.Shape)
                 .FirstOrDefaultAsync(x => x.DiamondId == id);
-        }
-
-        public async Task<List<Diamond?>> GetDiamondByCertificateNumberAsync(long CertificateNumber)
-        {
-            return await _context
-                .Diamonds.Include(x => x.Shape)
-                .Where(x => x.CertificateNumber.ToString().StartsWith(CertificateNumber.ToString())).ToListAsync();
         }
 
         public async Task<Diamond?> UpdateDiamondAsync(long id, UpdateDiamondDTO diamondDto)

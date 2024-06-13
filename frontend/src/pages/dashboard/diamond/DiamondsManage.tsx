@@ -41,7 +41,7 @@ export default function ProductsManage() {
     setQueryUrl("/api/Diamonds?");
   }, []);
 
-  const [diamond, diamondPrice, diamondSearch, priceRate] = useQueries({
+  const [diamond, diamondPrice, priceRate] = useQueries({
     queries: [
       {
         queryKey: ["diamond", queryUrl],
@@ -53,11 +53,11 @@ export default function ProductsManage() {
         queryFn: () => GET("/api/DiamondPrices/"),
         staleTime: Infinity,
       },
-      {
-        queryKey: ["diamondSearch", searchTerm],
-        queryFn: () => GET(`/api/Diamonds/cert/${searchTerm || ""}`),
-        staleTime: Infinity,
-      },
+      // {
+      //   queryKey: ["diamondSearch", searchTerm],
+      //   queryFn: () => GET(`/api/Diamonds/cert/${searchTerm || ""}`),
+      //   staleTime: Infinity,
+      // },
       {
         queryKey: ["priceRate"],
         queryFn: () => GET("/api/PriceRate/latest"),
@@ -65,9 +65,7 @@ export default function ProductsManage() {
     ],
   });
 
-  const diamondsData = searchTerm
-    ? diamondSearch.data || []
-    : diamond?.data?.diamonds || [];
+  const diamondsData = diamond?.data?.diamonds || [];
   console.log(diamondsData);
   const renderDiamondRow = (diamond: any) => (
     <DiamondRow
@@ -170,7 +168,12 @@ export default function ProductsManage() {
                     id="keyword"
                     className="border p-2 rounded-md w-full"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                      params.set("SearchQuery", e.target.value);
+                      setQueryUrl(`/api/Diamonds?` + params.toString());
+                      navigate({ search: params.toString() });
+                    }}
                   />
                 </Form.Item>
                 <Form.Item>
@@ -195,13 +198,14 @@ export default function ProductsManage() {
                   onClick={(event) => {
                     event.preventDefault();
                     setStatusText("Status");
-                    setProductTypeText("Product Type");
+                    // setProductTypeText("Product Type");
                     setSearchTerm("");
                     // Clear the URL parameters
                     const params = new URLSearchParams(location.search);
                     params.delete("IsAvailability");
                     params.delete("IsDescending");
                     params.delete("SortBy");
+                    params.delete("SearchQuery");
                     setQueryUrl(`/api/Diamonds?` + params.toString());
                     // params.delete("type");
                     navigate({ search: params.toString() });
@@ -331,6 +335,7 @@ export default function ProductsManage() {
                     )}
                   </tbody>
                 </table>
+
                 <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
                   <Pagination
                     showTotal={(total, range) =>
