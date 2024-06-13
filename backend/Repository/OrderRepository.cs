@@ -195,6 +195,10 @@ namespace backend.Repository
                 .Include(x => x.Customer)
                 .OrderByDescending(x => x.CreatedAt)
                 .AsQueryable();
+            if (query.CustomerId != null)
+            {
+                orderQueries = orderQueries.Where(x => x.CustomerId == query.CustomerId);
+            }
 
             if (query.OrderStatus != null)
             {
