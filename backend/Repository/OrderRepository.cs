@@ -171,7 +171,7 @@ namespace backend.Repository
         //    return null;
         //}
 
-        public async Task<OrderResult?> GetAllOrdersAsync(long accountId, OrderQuery query)
+        public async Task<OrderResult?> GetAllOrdersAsync(OrderQuery query)
         {
             var orderQueries = _context
                 .Orders.Include(x => x.OrderDetails)
@@ -195,9 +195,6 @@ namespace backend.Repository
                 .Include(x => x.Customer)
                 .OrderByDescending(x => x.CreatedAt)
                 .AsQueryable();
-
-            if (query.)
-
             if (query.CustomerId != null)
             {
                 orderQueries = orderQueries.Where(x => x.CustomerId == query.CustomerId);
