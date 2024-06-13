@@ -143,6 +143,15 @@ namespace backend.Repository
                     var merchant = await _dbContext.Merchants.FirstOrDefaultAsync(m =>
                         m.Id.ToLower().Equals(paymentModel.MerchantId!.ToLower())
                     );
+                    // Create a transaction in the db
+                    // await _context.Transactions.AddAsync(
+                    //     new Transaction()
+                    //     {
+                    //         Order = newOrder,
+                    //         Amount = totalPrice,
+                    //         PaymentMethod = "Credit Card",
+                    //     }
+                    // );
                     // returnUrl = merchant?.MerchantReturnUrl ?? string.Empty;
                     returnUrl =
                         "http://localhost:8080/api/Order/pay-order/" + paymentModel.PaymentRefId;

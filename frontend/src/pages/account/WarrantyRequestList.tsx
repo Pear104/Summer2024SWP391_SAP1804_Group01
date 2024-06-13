@@ -84,7 +84,7 @@ export default function WarrantyRequestList() {
         Warranty Requests
       </div>
       <div className="mt-2 grid gap-4">
-        {warrantyRequests?.data?.map((warrantyRequest: any, index: any) => (
+        {warrantyRequests?.data?.warrantyRequests?.map((warrantyRequest: any, index: any) => (
           <WarrantyRequestItem key={index} warrantyRequest={warrantyRequest} />
         ))}
       </div>

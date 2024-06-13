@@ -1,4 +1,4 @@
-import { Gem, Sparkles } from "lucide-react";
+import { Gem, Sparkles, Wrench } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import classNames from "classnames";
 import {
@@ -26,6 +26,24 @@ export default function Sidebar() {
       icon: <HiOutlineViewGrid />,
     },
     {
+      key: "orders",
+      label: "Orders",
+      path: "/admin/order",
+      icon: <HiOutlineShoppingCart size={20} />,
+    },
+    {
+      key: "transactions",
+      label: "Transactions",
+      path: "/admin/transactions",
+      icon: <HiOutlineDocumentText />,
+    },
+    {
+      key : "warranty-request",
+      label : "Warranty Request",
+      path : "/admin/warranty-request",
+      icon :  <Wrench/>
+    },
+    {
       key: "products",
       label: "Diamonds",
       path: "/admin/diamonds",
@@ -36,12 +54,6 @@ export default function Sidebar() {
       label: "Accessories",
       path: "/admin/accessories",
       icon: <Sparkles size={20} />,
-    },
-    {
-      key: "orders",
-      label: "Orders",
-      path: "/admin/order",
-      icon: <HiOutlineShoppingCart size={20} />,
     },
     {
       key: "salestaff",
@@ -62,12 +74,6 @@ export default function Sidebar() {
       icon: <HiOutlineUsers />,
     },
     {
-      key: "transactions",
-      label: "Transactions",
-      path: "/admin/transactions",
-      icon: <HiOutlineDocumentText />,
-    },
-    {
       key: "diamond-price",
       label: "Diamond Price",
       path: "/admin/diamond-price",
@@ -77,13 +83,13 @@ export default function Sidebar() {
       key: "accessory-price",
       label: "Accessory Price",
       path: "/admin/accessory-price",
-      icon: <HiCurrencyDollar />,
+      icon: <HiCurrencyDollar/>,
     },
     {
       key: "blog",
       label: "Blog",
       path: "/admin/blogs",
-      icon: <BsTextParagraph />,
+      icon: <BsTextParagraph/>,
     },
   ];
 
@@ -115,6 +121,7 @@ export default function Sidebar() {
         ))}
       </div>
       <div className="flex flex-col gap-0.5 pt-2 border-t border-neutral-700">
+       
         {/* {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((items) => (
           <SidebarLink key={items.key} items={items} />
         ))} */}

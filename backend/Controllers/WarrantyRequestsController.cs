@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.DTOs.WarrantyRequest;
+using backend.Helper;
 using backend.Interfaces;
 using backend.Mappers;
 using Microsoft.AspNetCore.Authorization;
@@ -22,11 +23,10 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetWarrantyRequests()
+        public async Task<ActionResult> GetWarrantyRequests([FromQuery] WarrantyRequestQuery query)
         {
-            var WarrantyRequestModels = await _warrantyRequestRepo.GetAllWarrantyRequestsAsync();
-            var WarrantyRequestDTOs = WarrantyRequestModels.Select(x => x.ToWarrantyRequestDTO());
-            return Ok(WarrantyRequestDTOs);
+            var warrantyRequestResult = await _warrantyRequestRepo.GetAllWarrantyRequestsAsync(query);
+            return Ok(warrantyRequestResult);
         }
 
         [HttpGet("{id}")]

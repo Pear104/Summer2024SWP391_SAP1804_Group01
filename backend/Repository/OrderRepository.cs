@@ -22,7 +22,6 @@ namespace backend.Repository
         public async Task<Order?> CreateOrderAsync(long customerId, CreateOrderDTO orderDto)
         {
             var customer = await _context.Accounts.FindAsync(customerId);
-            System.Console.WriteLine("ahihi");
             if (customer == null)
             {
                 return null;
@@ -172,7 +171,7 @@ namespace backend.Repository
         //    return null;
         //}
 
-        public async Task<OrderResult?> GetAllOrdersAsync(OrderQuery query)
+        public async Task<OrderResult?> GetAllOrdersAsync(long accountId, OrderQuery query)
         {
             var orderQueries = _context
                 .Orders.Include(x => x.OrderDetails)
@@ -196,6 +195,8 @@ namespace backend.Repository
                 .Include(x => x.Customer)
                 .OrderByDescending(x => x.CreatedAt)
                 .AsQueryable();
+
+            if (query.)
 
             if (query.CustomerId != null)
             {

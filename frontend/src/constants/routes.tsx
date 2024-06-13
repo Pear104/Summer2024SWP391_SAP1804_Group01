@@ -41,7 +41,7 @@ import WarrantyRequestList from "../pages/account/WarrantyRequestList";
 import CreateWarrantyRequest from "../pages/account/CreateWarrantyRequest";
 import SaleStaffsManagement from "../pages/dashboard/sale_staffs/SaleStaffsManagement";
 import DeliveryStaffsManagement from "../pages/dashboard/delivery_staffs/DeliveryStaffsManagement";
-
+import WarrantyRequest from "../pages/dashboard/warranty_request/WarrantyRequest";
 const routes = [
   {
     errorElement: <Error />,
@@ -131,6 +131,10 @@ const routes = [
                 path: "/admin/blogs/new",
               },
             ],
+          },
+          { 
+            element:<WarrantyRequest/>,
+            path : "/admin/warranty-request"
           },
           {
             path: "/admin/accessories",

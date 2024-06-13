@@ -1,11 +1,13 @@
-﻿using backend.DTOs.WarrantyRequest;
+﻿using backend.DTOs.Order;
+using backend.DTOs.WarrantyRequest;
+using backend.Helper;
 using backend.Models;
 
 namespace backend.Interfaces
 {
     public interface IWarrantyRequestRepository
     {
-        Task<IEnumerable<WarrantyRequest>> GetAllWarrantyRequestsAsync();
+        Task<WarrantyRequestResult> GetAllWarrantyRequestsAsync(WarrantyRequestQuery query);
         Task<WarrantyRequest?> GetWarrantyRequestByIdAsync(long id);
         Task<WarrantyRequest?> CreateWarrantyRequestAsync(
             long customerId,
