@@ -2,7 +2,7 @@ import Information from "./components/Information";
 import React, { useEffect, useState } from "react";
 import CartItem from "./components/CartItem";
 import { useCartStore } from "../../store/cartStore";
-import { Button } from "antd";
+import { Button, Skeleton } from "antd";
 import { GET, POST } from "../../utils/request";
 import Loading from "./../../components/Loading";
 import { useCheckoutStore } from "../../store/checkoutStore";
@@ -11,11 +11,11 @@ import { useQueries } from "@tanstack/react-query";
 import { getAccessoryPrice, getDiamondPrice } from "../../utils/getPrice";
 
 const Cart: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const [totalPriceCart, setTotalPriceCart] = useState(0);
   const navigate = useNavigate();
   const cart = useCartStore((state) => state.cart);
-  const [diamondPrice, materialPrice] = useQueries({
+  const [diamondPrice, materialPrice, priceRate] = useQueries({
     queries: [
       {
         queryKey: ["diamondPrice"],
@@ -25,6 +25,10 @@ const Cart: React.FC = () => {
         queryKey: ["materialPrice"],
         queryFn: () => GET("/api/MaterialPrices/"),
       },
+      {
+        queryKey: ["priceRate"],
+        queryFn: () => GET("/api/PriceRate/latest"),
+      },
     ],
   });
   useEffect(() => {
@@ -33,12 +37,17 @@ const Cart: React.FC = () => {
         cart.map(async (item) => {
           const diamond = await GET(`/api/Diamonds/${item.diamondId}`);
           const accessory = await GET(`/api/Accessories/${item?.accessoryId}`);
-          let totalPrice = getDiamondPrice(diamond, diamondPrice?.data);
+          let totalPrice = getDiamondPrice(
+            diamond,
+            diamondPrice?.data,
+            priceRate?.data.percent
+          );
           if (accessory?.accessoryId) {
             totalPrice += getAccessoryPrice(
               accessory,
               materialPrice?.data,
-              item.size
+              item.size,
+              priceRate?.data.percent
             );
           }
 
@@ -52,7 +61,7 @@ const Cart: React.FC = () => {
       console.log(totalPrice);
       setTotalPriceCart(totalPrice);
     })();
-  }, [diamondPrice, materialPrice, cart]);
+  }, [diamondPrice, materialPrice, cart, priceRate]);
   console.log(totalPriceCart);
 
   function EmptyCart() {
@@ -70,13 +79,13 @@ const Cart: React.FC = () => {
             You have no items in your shopping cart.
           </div>
           <div className="flex items-center justify-center w-full p-2">
-            <Link
+            <a
               className="transition-all duration-300 rounded-xl w-1/5 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
               type="default"
-              to="/product/diamond"
+              href="/product/diamond"
             >
-              Continue shopping.
-            </Link>
+              Continue shopping
+            </a>
           </div>
         </div>
       ) : (
@@ -94,13 +103,13 @@ const Cart: React.FC = () => {
               ))}
             </div>
             <div className="flex items-center justify-between w-full pl-10 pr-10 pt-2">
-              <Link
+              <a
                 className="rounded-lg transition-all duration-300 hover:scale-95 font-bold text-white bg-primary px-4 py-4 flex items-center justify-center"
                 type="default"
-                to="/product/diamond"
+                href="/product/diamond"
               >
                 Continue Shopping
-              </Link>
+              </a>
               <Button
                 className="w-1/5 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
                 type="default"
@@ -117,11 +126,15 @@ const Cart: React.FC = () => {
               <div className="flex justify-between items-center">
                 <span className="font-bold">Total estimated:</span>
                 <span className="font-bold">
-                  {totalPriceCart.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                    maximumFractionDigits: 0,
-                  })}
+                  {totalPriceCart != 0 ? (
+                    totalPriceCart.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      maximumFractionDigits: 0,
+                    })
+                  ) : (
+                    <Skeleton.Button active={true} size={"small"} />
+                  )}
                 </span>
               </div>
               <p className="text-gray-500 mb-4 text-center">
@@ -133,6 +146,7 @@ const Cart: React.FC = () => {
                 type="default"
                 onClick={async () => {
                   const infor = await GET("/api/Accounts/me");
+                  // Check if user is logged in
                   if (!infor) {
                     navigate("/authentication/login");
                     return;
@@ -140,11 +154,11 @@ const Cart: React.FC = () => {
                     useCheckoutStore
                       .getState()
                       .setPhoneNumber(infor?.phoneNumber);
+                    useCheckoutStore.getState().setName(infor?.name);
                     useCheckoutStore.getState().setEmail(infor?.email);
                     useCheckoutStore
                       .getState()
                       .setShippingAddress(infor?.address);
-
                     // console.log(cart);
                     // setIsLoading(true);
                     // const response = await POST("/api/Order", {

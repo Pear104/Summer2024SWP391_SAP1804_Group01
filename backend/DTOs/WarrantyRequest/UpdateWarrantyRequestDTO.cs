@@ -16,7 +16,7 @@ namespace backend.DTOs.WarrantyRequest
         public long? WarrantyCardId { get; set; }
         public DateTime? ReceiveTime { get; set; }
         public DateTime? ReturnTime { get; set; }
-        public WarrantyStatus WarrantyStatus { get; set; } = WarrantyStatus.Pending;
+        public string? WarrantyStatus { get; set; }
         public string? ShippingAddress { get; set; } = string.Empty;
         public string? PhoneNumber { get; set; } = string.Empty;
     }

@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { GET } from "../../utils/request";
-import { Pagination, Skeleton } from "antd";
+import { Pagination, Skeleton, Image } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSearchStore } from "../../store/searchStore";
 import { useQueries } from "@tanstack/react-query";
+import { ExternalLink } from "lucide-react";
 
 const formatDate = (dateString: any) => {
   const date = new Date(dateString);
@@ -14,7 +15,6 @@ const formatDate = (dateString: any) => {
   const minutes = String(date.getMinutes()).padStart(2, "0");
   return `${hours}:${minutes}, ${day}/${month}/${year}`;
 };
-
 export const OrderStatus = ({ order }: { order: any }) => {
   return (
     <div className="items-center justify-between mb-4 text-base">
@@ -38,6 +38,106 @@ export const OrderStatus = ({ order }: { order: any }) => {
   );
 };
 
+const DiamondItem = ({ detail, percent }: { detail: any; percent: any }) => {
+  return (
+    <div className="flex">
+      <div className="w-1/5 flex ">
+        <Image
+          className="h-full object-cover aspect-square"
+          // style={{ objectFit: "contain" }}
+          src={detail.diamond.imageUrl}
+          alt="diamond"
+          // className="w-48 h-48 object-contain"
+        />
+      </div>
+      <div className="text-lg pl-4 flex flex-col gap-2">
+        <div className="text-gray-800 flex gap-2">
+          Diamond's Certificate Number:{" "}
+          <a
+            className="text-blue-500 flex"
+            target="_blank"
+            href={detail.diamond.certificateUrl}
+          >
+            {detail.diamond.certificateNumber}
+            <ExternalLink size={12} />
+          </a>
+        </div>
+        <div className="grid grid-cols-2 gap-y-2">
+          <div className="text-gray-800">
+            <span className="font-bold">Diamond Carat:</span>{" "}
+            {detail.diamond.carat}
+          </div>
+          <div className="text-gray-800">
+            Diamond Clarity: {detail.diamond.clarity}
+          </div>
+          <div className="text-gray-800">Diamond Cut: {detail.diamond.cut}</div>
+          <div className="text-gray-800">
+            Diamond Color: {detail.diamond.color}
+          </div>
+          <div className="text-gray-800 font-bold">
+            <span className="">Diamond price:</span>{" "}
+            {(
+              detail.diamondPrice.unitPrice *
+              detail.diamond.carat *
+              percent *
+              100
+            ).toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+              maximumFractionDigits: 0,
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const AccessoryItem = ({ detail, percent }: { detail: any; percent: any }) => {
+  return (
+    <div className="flex text-lg">
+      <div className="w-1/5 flex">
+        {detail?.accessory != null
+          ? detail.accessory?.accessoryImages[0]?.url && (
+              <Image
+                // style={{ objectFit: "contain" }}
+                // object-cover full hinh bi cat, object-contain full hinh khong bi cat
+                className="h-full object-cover aspect-square"
+                src={detail?.accessory?.accessoryImages[0].url}
+                alt="accessory"
+              />
+            )
+          : ""}
+      </div>
+      <div className="pl-4 flex flex-col gap-2 text-lg">
+        <div className="font-bold">
+          {detail.accessory != null ? detail.accessory?.name : ""}
+        </div>
+        {detail.accessory != null && (
+          <div>Gold Karat: {detail.accessory?.karat}K</div>
+        )}
+        {detail?.accessory != null
+          ? detail?.accessory && (
+              <div className="text-gray-800 font-bold">
+                Accessory price:{" "}
+                {(
+                  (detail?.accessory.materialWeight *
+                    detail.materialPrice.unitPrice +
+                    detail.accessory.accessoryType.processingPrice) *
+                  percent
+                ).toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 0,
+                })}
+              </div>
+            )
+          : ""}
+      </div>
+    </div>
+  );
+};
+
 const OrderDetailList = ({ order }: { order: any }) => {
   return (
     <div>
@@ -46,59 +146,19 @@ const OrderDetailList = ({ order }: { order: any }) => {
         <div>Created at: {formatDate(order.createdAt)}</div>
       </div>
       <div className="border-b border-gray-300 p-4 mb-6">
-        {order.orderDetails.map((detail: any, index: number) => (
-          <div key={index} className="flex mb-4">
-            <div className="w-1/4">
-              <img
-                className="w-24 h-24 object-cover"
-                src={detail.diamond.imageUrl}
-                alt="diamond"
+        {order.orderDetails.map((detail: any) => (
+          <>
+            <div className="border rounded-md p-4 bg-slate-100 grid grid-cols-2 mb-4 gap-x-4 border-spacing-y-4">
+              <DiamondItem
+                detail={detail}
+                percent={order?.priceRate?.percent}
               />
-              {detail.accessory != null
-                ? detail.accessory?.accessoryImages[0]?.url && (
-                    <img
-                      className="w-24 h-24 object-cover mt-2"
-                      src={detail.accessory.accessoryImages[0].url}
-                      alt="accessory"
-                    />
-                  )
-                : ""}
+              <AccessoryItem
+                detail={detail}
+                percent={order?.priceRate?.percent}
+              />
             </div>
-
-            <div className="w-3/4 pl-4">
-              <div className="text-lg font-serif">
-                {detail.accessory != null ? detail.accessory?.name : ""}
-              </div>
-              <div className="text-gray-800 my-4">
-                Diamond price:{" "}
-                {(
-                  detail.diamondPrice.unitPrice *
-                  detail.diamond.carat *
-                  100
-                ).toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  maximumFractionDigits: 0,
-                })}
-              </div>
-              {detail.accessory != null
-                ? detail.accessory && (
-                    <div className="text-gray-800 my-4">
-                      Accessory price:{" "}
-                      {(
-                        detail.accessory.materialWeight *
-                          detail.materialPrice.unitPrice +
-                        detail.accessory.accessoryType.processingPrice
-                      ).toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                        maximumFractionDigits: 0,
-                      })}
-                    </div>
-                  )
-                : ""}
-            </div>
-          </div>
+          </>
         ))}
         <div className="flex justify-end text-xl">
           <OrderStatus order={order} />
@@ -149,15 +209,15 @@ export default function OrderHistory() {
   return (
     <div className="p-4 w-full">
       <div className="text-2xl font-serif mb-6">ORDER HISTORY</div>
-      {orderHistories?.data?.orders?.length === 0 ? (
-        <div className="border-2 border-slate-400 p-5">
-          <p>You haven't placed any orders yet</p>
-        </div>
-      ) : (
+      {orderHistories?.data?.orders?.length != 0 ? (
         <div className="w-full">
           {orderHistories?.data?.orders.map((order: any) => (
             <OrderDetailList key={order.orderId} order={order} />
           ))}
+        </div>
+      ) : (
+        <div className="border-2 border-slate-400 p-5">
+          <p>You haven't placed any orders yet</p>
         </div>
       )}
       <div>
@@ -170,10 +230,8 @@ export default function OrderHistory() {
           />
         )}
       </div>
-      <div className="mt-10 flex justify-center">
-        {orderHistories?.data?.totalCount <= orderHistories?.data?.pageSize ? (
-          ""
-        ) : (
+      <div className="mt-4 flex justify-center">
+        {orderHistories?.data?.totalCount > orderHistories?.data?.pageSize ? (
           <Pagination
             showTotal={(total, range) =>
               `${range[0]}-${range[1]} of ${total} items`
@@ -193,6 +251,8 @@ export default function OrderHistory() {
               setQueryUrl("/api/Order?" + params.toString());
             }}
           />
+        ) : (
+          ""
         )}
       </div>
       <div className="flex justify-center mt-10">

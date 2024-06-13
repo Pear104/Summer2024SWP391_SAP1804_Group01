@@ -3,6 +3,8 @@ import { Check } from "lucide-react";
 import { useCartStore } from "../../../store/cartStore";
 import { Link, useNavigate } from "react-router-dom";
 import RingIcon from "./RingIcon";
+import { Skeleton } from "antd";
+import { useSearchStore } from "../../../store/searchStore";
 
 export default function ChooseItemAccessory({
   accessory,
@@ -18,13 +20,16 @@ export default function ChooseItemAccessory({
   const navigate = useNavigate();
   return (
     <Link
-      // className="font-bold border-primary border-y-2 py-4 px-8 flex items-center w-[400px] justify-between"
+      // onClick={() => {
+      //   useSearchStore.getState().setQueryUrl("/api/Accessories?");
+      //   navigate("/product/accessory");
+      //   }}
       to="/product/accessory"
       className={`font-bold border-y-2 border-primary py-4 flex items-center w-[400px] justify-between ${
-        !currentAccessory ? "px-8" : "px-4"
+        !currentAccessory || !accessory ? "px-8" : "px-4"
       }`}
     >
-      {!currentAccessory ? (
+      {!currentAccessory || !accessory ? (
         <>
           <div className="font-bold text-2xl">2</div>
           <div className="flex-grow px-4">Choose an Accessory</div>
@@ -37,11 +42,25 @@ export default function ChooseItemAccessory({
           <div className="text-sm flex flex-col">
             <div className="text-sm truncate w-[260px]">{accessory?.name}</div>
             <div className="flex items-end gap-4">
-              <div className="font-semibold">{price}</div>
+              <div className="font-semibold">
+                {price == 0 ? (
+                  <Skeleton.Input active={true} size={"small"} />
+                ) : (
+                  price
+                )}
+              </div>
               <div className="text-xs flex gap-2 text-slate-400">
                 <Link
                   className="border-b cursor-pointer"
-                  to={`/product/accessory/detail/${currentAccessory}`}
+                  to={`/product/accessory/detail/${accessory?.accessoryId}`}
+                  onClick={() => {
+                    console.log(
+                      "/product/accessory/detail/" + accessory?.accessoryId
+                    );
+                    // navigate(
+                    //   "/product/accessory/detail/" + accessory?.accessoryId
+                    // );
+                  }}
                 >
                   View
                 </Link>
@@ -49,7 +68,7 @@ export default function ChooseItemAccessory({
                   className="border-b cursor-pointer"
                   onClick={() => {
                     navigate("/product/accessory");
-                    setCurrentAccessory(null);
+                    setCurrentAccessory(null, null);
                   }}
                 >
                   Remove

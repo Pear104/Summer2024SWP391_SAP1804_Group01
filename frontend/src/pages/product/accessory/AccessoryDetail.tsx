@@ -7,6 +7,7 @@ import { useQueries } from "@tanstack/react-query";
 import { useSearchStore } from "../../../store/searchStore";
 import ImageList from "./components/ImageList";
 import { getAccessoryPrice } from "../../../utils/getPrice";
+import scrollTo from "../../../utils/scroll";
 
 const ringOptions = [
   {
@@ -34,11 +35,12 @@ export default function AccessoryDetail() {
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   const [size, setSize] = useState(3);
+  scrollTo("choose-item");
   useEffect(() => {
     setQueryUrl(`/api/Accessories/${accessoryId}`);
   }, []);
   console.log(queryUrl);
-  const [accessory, materialPrices] = useQueries({
+  const [accessory, materialPrices, priceRate] = useQueries({
     queries: [
       {
         queryKey: ["accessory", queryUrl],
@@ -48,16 +50,22 @@ export default function AccessoryDetail() {
         queryKey: ["materialPrices"],
         queryFn: () => GET("/api/MaterialPrices/"),
       },
+      {
+        queryKey: ["priceRate"],
+        queryFn: () => GET("/api/PriceRate/latest"),
+      },
     ],
   });
   const [mainImage, setMainImage] = useState<string | undefined>(undefined);
   useEffect(() => {
-    if (accessory.data) {
-      setMainImage(
-        accessory.data.accessoryImages[0].url.replace("400x", "800x")
-      );
+    if (accessory?.data) {
+      if (accessory?.data?.accessoryImages?.length >= 1) {
+        setMainImage(
+          accessory?.data?.accessoryImages[0]?.url.replace("400x", "800x")
+        );
+      }
     }
-  }, [accessory.data]);
+  }, [accessory]);
   const navigate = useNavigate();
   const setCurrentAccessory = useCartStore(
     (state) => state.setCurrentAccessory
@@ -65,7 +73,7 @@ export default function AccessoryDetail() {
   const currentDiamond = useCartStore((state) => state.currentDiamond);
   return (
     <div>
-      {(accessory.isLoading || materialPrices.isLoading) && (
+      {accessory.isLoading && (
         <Skeleton
           className="px-20 pt-6"
           active
@@ -75,13 +83,13 @@ export default function AccessoryDetail() {
         />
       )}
       <div className="flex justify-center mb-20">
-        {accessory?.data && materialPrices?.data && (
+        {accessory?.data && (
           <div className="w-[1200px] grid grid-cols-8 gap-10">
             <ImageList
               setMainImage={setMainImage}
               images={accessory.data.accessoryImages}
             />
-            <div className="col-span-4 aspect-square bg-cover bg-top bg-no-repeat w-full">
+            <div className="border col-span-4 aspect-square bg-cover bg-top bg-no-repeat w-full">
               <Image alt="alt" className="w-full" src={`${mainImage}`} />
             </div>
             <div className="col-span-3">
@@ -89,15 +97,20 @@ export default function AccessoryDetail() {
                 {`${accessory?.data.name}`}
               </div>
               <div className="text-3xl">
-                {getAccessoryPrice(
-                  accessory?.data,
-                  materialPrices?.data,
-                  size
-                ).toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  maximumFractionDigits: 0,
-                })}
+                {priceRate?.data && materialPrices?.data ? (
+                  getAccessoryPrice(
+                    accessory?.data,
+                    materialPrices?.data,
+                    size,
+                    priceRate?.data.percent
+                  ).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 0,
+                  })
+                ) : (
+                  <Skeleton.Button active={true} size="large" />
+                )}
               </div>
               <div className="w-full grid grid-cols-2 gap-4 my-4 mulish-regular text-slate-950 ">
                 <div className="flex flex-col gap-2">
@@ -107,10 +120,10 @@ export default function AccessoryDetail() {
                   <div>SUITABLE WITH</div>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <div>{accessory?.data.materialWeight.toFixed(2)} g</div>
-                  <div>{accessory?.data.accessoryType.name}</div>
-                  <div>{accessory?.data.karat}K</div>
-                  <div>{accessory?.data.shape.name} Shape Diamond</div>
+                  <div>{accessory?.data?.materialWeight?.toFixed(2)} g</div>
+                  <div>{accessory?.data?.accessoryType?.name}</div>
+                  <div>{accessory?.data?.karat}K</div>
+                  <div>{accessory?.data?.shape?.name} Shape Diamond</div>
                 </div>
               </div>
               <div className="flex flex-col gap-4">
@@ -128,10 +141,10 @@ export default function AccessoryDetail() {
                     options={ringOptions}
                   />
                   <Link
-                    to="/product/diamond"
+                    to="/about?action=measure-guide"
                     className="ml-4 text-xs border-b border-b-transparent hover:border-b-primary"
                   >
-                    Ring size guide
+                    Ring Size Guide
                   </Link>
                 </div>
                 <div

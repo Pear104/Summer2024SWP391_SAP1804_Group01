@@ -1,4 +1,5 @@
-export const getDiamondPrice = (diamond: any, diamondPrice: any) => {
+export const getDiamondPrice = (diamond: any, diamondPrice: any, priceRate: any) => {
+  
   return (
     diamond?.carat *
     diamondPrice?.find(
@@ -8,18 +9,19 @@ export const getDiamondPrice = (diamond: any, diamondPrice: any) => {
         price.minCaratEff <= diamond?.carat &&
         diamond?.carat <= price.maxCaratEff
     )?.unitPrice *
-    100
+    100 * priceRate
   );
 };
 
 export const getAccessoryPrice = (
   accessory: any,
   materialPrice: any,
-  size: any
+  size: any,
+  priceRate: any
 ) => {
   return (
     (accessory?.materialWeight + (size - 3)) *
     materialPrice?.find((price: any) => price.karat == accessory?.karat)
-      ?.unitPrice
+      ?.unitPrice * priceRate
   );
 };

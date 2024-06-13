@@ -37,6 +37,7 @@ namespace backend.Repository
             }
             var newOrder = new Order()
             {
+                OrderId = DateTime.Now.Ticks.ToString(),
                 Customer = customer,
                 Rank = rank,
                 PriceRate = priceRate,
@@ -188,12 +189,12 @@ namespace backend.Repository
                 .ThenInclude(x => x.MaterialPrice)
                 .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.DiamondPrice)
+                .Include(x => x.PriceRate)
                 .Include(x => x.SaleStaff)
                 .Include(x => x.DeliveryStaff)
                 .Include(x => x.Customer)
                 .OrderByDescending(x => x.CreatedAt)
                 .AsQueryable();
-
             if (query.CustomerId != null)
             {
                 orderQueries = orderQueries.Where(x => x.CustomerId == query.CustomerId);
@@ -257,7 +258,7 @@ namespace backend.Repository
                 .Take(query.PageSize)
                 .Select(x => x.ToOrderDTO())
                 .ToListAsync();
-
+            Console.WriteLine("order id: " + orderDTOs[0].OrderId);
             Console.WriteLine("Orders Retrieved: " + orderDTOs.Count);
 
             return new OrderResult
@@ -270,7 +271,7 @@ namespace backend.Repository
             };
         }
 
-        public async Task<OrderDTO?> GetOrderByIdAsync(long id)
+        public async Task<OrderDTO?> GetOrderByIdAsync(string id)
         {
             var order = await _context
                 .Orders.Include(x => x.OrderDetails)
@@ -292,7 +293,7 @@ namespace backend.Repository
                 .Include(x => x.DeliveryStaff)
                 .Include(x => x.Customer)
                 .Include(x => x.Promotion)
-                .FirstOrDefaultAsync(x => x.OrderId == id);
+                .FirstOrDefaultAsync(x => x.OrderId.Equals(id));
 
             var orderDTO = order?.ToOrderDTO();
 
@@ -304,15 +305,14 @@ namespace backend.Repository
             return orderDTO;
         }
 
-        public async Task<Order?> UpdateOrderAsync(long id, UpdateOrderDTO order)
+        public async Task<Order?> UpdateOrderAsync(string id, UpdateOrderDTO order)
         {
-            var existedOrder = _context.Orders.FirstOrDefault(x => x.OrderId == id);
+            var existedOrder = _context.Orders.FirstOrDefault(x => x.OrderId.Equals(id));
             if (existedOrder == null)
             {
                 return null;
             }
             if (order.OrderStatus != null) {
-                System.Console.WriteLine("Dang o trong order status ne");
                 existedOrder.OrderStatus = Enum.Parse<OrderStatus>(order.OrderStatus);
             }
             if (order.SaleStaffId != 0)

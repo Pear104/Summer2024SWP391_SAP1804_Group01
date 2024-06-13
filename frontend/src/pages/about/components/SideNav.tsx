@@ -38,8 +38,7 @@ export default function SideNav() {
     <div className="sticky top-0 p-4">
       <Menu
         onClick={(e: any) => {
-          scrollTo(e.key);
-          scrollTo;
+          scrollTo(e.key, "center");
         }}
         className="border-transparent"
         defaultSelectedKeys={["/account"]}

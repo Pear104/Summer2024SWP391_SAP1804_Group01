@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using backend.DTOs;
 using backend.DTOs.Order;
 using backend.Helper;
@@ -23,17 +24,25 @@ namespace backend.Controllers
         public async Task<ActionResult> GetOrders([FromQuery] OrderQuery query)
         {
             var accountId = User.FindFirst("accountId")?.Value;
-            var role = User.FindFirst("role")?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
             if (role == "Customer")
             {
                 query.CustomerId = long.Parse(accountId ?? "0");
+            }
+            if (role == "SaleStaff")
+            {
+                query.SaleStaffId = long.Parse(accountId ?? "0");
+            }
+            if (role == "DeliveryStaff")
+            {
+                query.DeliveryStaffId = long.Parse(accountId ?? "0");
             }
             var orderResult = await _orderRepo.GetAllOrdersAsync(query);
             return Ok(orderResult);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetOrder(long id)
+        public async Task<ActionResult> GetOrder([FromRoute] string id)
         {
             var order = await _orderRepo.GetOrderByIdAsync(id);
             if (order == null)
@@ -44,7 +53,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("pay-order/{id}")]
-        public async Task<ActionResult> PayOrder([FromRoute] long id)
+        public async Task<ActionResult> PayOrder([FromRoute] string id)
         {
             var updatedOrder = await _orderRepo.UpdateOrderAsync(
                 id,
@@ -71,6 +80,7 @@ namespace backend.Controllers
             {
                 return BadRequest("The order could not be created.");
             }
+            System.Console.WriteLine(createdOrder.OrderId);
             return Ok(createdOrder);
             // System.Console.WriteLine("diamondId: " + orderDto.OrderDetails[0].DiamondId);
             // return Ok(orderDto);
@@ -88,12 +98,10 @@ namespace backend.Controllers
         // }
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateOrder(
-            [FromRoute] long id,
+            [FromRoute] string id,
             [FromBody] UpdateOrderDTO order
         )
         {
-            System.Console.WriteLine("ahihi");
-            System.Console.WriteLine("status ne: " + order.OrderStatus);
             var updatedOrder = await _orderRepo.UpdateOrderAsync(id, order);
             if (updatedOrder == null)
             {

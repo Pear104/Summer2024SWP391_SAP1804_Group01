@@ -38,17 +38,6 @@ namespace backend.Controllers
             }
             return Ok(diamond.ToDiamondDTO());
         }
-        
-        [HttpGet("cert/{CertificateNumber}")]
-        public async Task<ActionResult> GetDiamondByCertificateNumber(long CertificateNumber)
-{
-    var diamonds = await _diamondRepo.GetDiamondByCertificateNumberAsync(CertificateNumber);
-    if (diamonds == null || diamonds.Count == 0)
-    {
-        return NotFound();
-    }
-    return Ok(diamonds.Select(diamond => diamond.ToDiamondDTO()).ToList());
-}
 
         [HttpPost]
         public async Task<ActionResult> CreateDiamond([FromBody] CreateDiamondDTO diamond)

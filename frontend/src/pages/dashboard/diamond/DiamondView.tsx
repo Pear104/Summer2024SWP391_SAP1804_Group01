@@ -113,6 +113,7 @@ export default function DiamondView() {
   const [isLoading, setIsLoading] = useState(false);
   // const [certificateFile, setCertificateFile] = useState<UploadFile[]>([]);
   const [diamondFile, setDiamondFile] = useState<UploadFile[]>([]);
+  const [availability, setAvailability] = useState(false);
   const [diamond, setDiamond] = useState<any>();
   const { diamondId } = useParams();
 
@@ -165,7 +166,7 @@ export default function DiamondView() {
             },
           ]);
         }
-
+        setAvailability(data?.availability);
         setDiamond(data);
         reset({
           lab: data?.lab || "",
@@ -262,16 +263,22 @@ export default function DiamondView() {
             }
             // Add firebase's image url to DATJ database
             submitForm["imageUrl"] = diamondImageUrl;
-
+            submitForm["availability"] = availability;
             console.log("form: ");
 
             console.log(submitForm);
+            console.log(submitForm?.availability);
+
             if (diamond.diamondId) {
               console.log("PUT");
+              console.log("Before PUT", submitForm);
+              console.log(submitForm?.availability);
               response = await PUT(
                 "/api/Diamonds/" + diamond.diamondId,
                 submitForm
               );
+              console.log("After PUT", response);
+              console.log(response?.availability);
             } else {
               console.log("POST");
               response = await POST("/api/Diamonds/", submitForm);
@@ -431,14 +438,17 @@ export default function DiamondView() {
               value="none"
             />
           </FormItem>
-          <FormItem label="Status" name="availability" control={control}>
+          <FormItem label="Availability" name="availability" control={control}>
             <Select
               size="large"
               className="font-thin border w-full text-sm"
               options={[
-                { value: "true", label: "Available" },
-                { value: "false", label: "Unavailable" },
+                { value: true, label: "Available" },
+                { value: false, label: "Unavailable" },
               ]}
+              onChange={(value) => {
+                setAvailability(value);
+              }}
             />
           </FormItem>
           <FormItem

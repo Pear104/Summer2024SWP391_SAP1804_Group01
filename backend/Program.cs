@@ -161,6 +161,7 @@ namespace backend
             builder.Services.AddScoped<IPaymentTransactionRepository, PaymentTransactionRepository>();
             builder.Services.AddScoped<IAccessoryRepository, AccessoryRepository>();
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+            builder.Services.AddScoped<IPriceRateRepository, PriceRateRepository>();
 
             var app = builder.Build();
 

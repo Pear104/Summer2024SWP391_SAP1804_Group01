@@ -12,7 +12,7 @@ namespace backend.Models
         public long FeedbackId { get; set; }
 
         [Column("order_id")]
-        public long OrderId { get; set; }
+        public string OrderId { get; set; }
         public Order Order { get; set; } = new Order();
 
         [Column("accessory_id")]

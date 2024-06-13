@@ -33,7 +33,7 @@ export default function DiamondList() {
     setQueryUrl("/api/Diamonds?IsAvailability=true");
   }, []);
 
-  const [diamond, diamondPrice] = useQueries({
+  const [diamond, diamondPrice, priceRate] = useQueries({
     queries: [
       {
         queryKey: ["diamonds", queryUrl],
@@ -44,6 +44,10 @@ export default function DiamondList() {
         queryKey: ["diamondPrices"],
         queryFn: () => GET("/api/DiamondPrices/"),
         staleTime: Infinity,
+      },
+      {
+        queryKey: ["priceRate"],
+        queryFn: () => GET("/api/PriceRate/latest"),
       },
     ],
   });
@@ -81,7 +85,7 @@ export default function DiamondList() {
           </div>
         </div>
         <div>
-          {(diamond?.isLoading || diamondPrice?.isLoading) && (
+          {diamond?.isLoading && (
             <Skeleton
               active
               paragraph={{
@@ -89,27 +93,32 @@ export default function DiamondList() {
               }}
             />
           )}
-          {diamond?.data &&
-            diamondPrice?.data &&
-            diamond?.data?.diamonds?.map((diamond: any, index: number) => {
-              return (
-                <DiamondItem
-                  key={index}
-                  diamond={diamond}
-                  price={getDiamondPrice(
-                    diamond,
-                    diamondPrice.data
-                  ).toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                    maximumFractionDigits: 0,
-                  })}
-                />
-              );
-            })}
+          {diamond?.data?.diamonds?.map((diamond: any, index: number) => {
+            return (
+              <DiamondItem
+                key={index}
+                diamond={diamond}
+                price={
+                  diamondPrice?.data && priceRate?.data ? (
+                    getDiamondPrice(
+                      diamond,
+                      diamondPrice.data,
+                      priceRate?.data.percent
+                    ).toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      maximumFractionDigits: 0,
+                    })
+                  ) : (
+                    <Skeleton.Input active={true} size={"small"} />
+                  )
+                }
+              />
+            );
+          })}
         </div>
         <div className="mt-10 flex justify-center">
-          {diamond?.data && diamond?.data.diamonds.length == 0 ? (
+          {diamond?.data && diamond?.data.diamonds?.length == 0 ? (
             <div className="text-center text-2xl">No Diamonds Found.</div>
           ) : (
             <Pagination
@@ -118,7 +127,7 @@ export default function DiamondList() {
               }
               current={Number(params.get("PageNumber")) || 1}
               defaultCurrent={
-                (diamond?.data && diamond?.data.currentPage.toString()) || "1"
+                (diamond?.data && diamond?.data.currentPage?.toString()) || "1"
               }
               total={diamond?.data && diamond?.data.totalCount}
               pageSize={Number(params.get("PageSize")) || 20}

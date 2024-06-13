@@ -12,7 +12,7 @@ namespace backend.Models
         public long WarrantyCardId { get; set; }
 
         [Column("order_detail_id")]
-        public long OrderDetaiId { get; set; }
+        public long OrderDetailId { get; set; }
         public OrderDetail OrderDetail { get; set; }
 
         [Column("start_time")]

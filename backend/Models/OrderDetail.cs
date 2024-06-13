@@ -19,7 +19,7 @@ namespace backend.Models
         public double? ItemPrice { get; set; }
 
         [Column("order_id")]
-        public long OrderId { get; set; }
+        public string OrderId { get; set; }
         public Order Order { get; set; } = new Order();
 
         [Column("diamond_id")]

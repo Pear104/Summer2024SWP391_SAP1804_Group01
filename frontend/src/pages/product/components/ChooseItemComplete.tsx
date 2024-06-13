@@ -2,6 +2,7 @@ import { Check } from "lucide-react";
 import { useCartStore } from "../../../store/cartStore";
 import { Link } from "react-router-dom";
 import CompleteRingIcon from "./CompleteRingIcon";
+import { Skeleton } from "antd";
 
 export default function ChooseItemComplete({
   accessory,
@@ -38,7 +39,13 @@ export default function ChooseItemComplete({
           <div className="text-sm flex flex-col">
             <div className="text-sm truncate w-[260px]">Complete Accessory</div>
             <div className="flex items-end gap-4">
-              <div className="font-semibold">{totalPrice}</div>
+              <div className="font-semibold">
+                {totalPrice == 0 ? (
+                  <Skeleton.Input active={true} size={"small"} />
+                ) : (
+                  totalPrice
+                )}
+              </div>
               <div className="text-xs flex gap-2 text-slate-400">
                 <Link
                   className="border-b cursor-pointer"

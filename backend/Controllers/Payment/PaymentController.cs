@@ -248,7 +248,8 @@ namespace backend.Controllers
 
             //return NotFound();
             //redirect back to Merchant's page after a successful transaction
-            return Redirect($"{returnUrl}?{returnModel.ToQueryString()}");
+            //return Redirect($"{returnUrl}?{returnModel.ToQueryString()}");
+            return Redirect($"{returnUrl}");
         }
 
         [HttpGet]

@@ -35,12 +35,13 @@ import OrderManage from "../pages/dashboard/order/OrderManage";
 import DiamondView from "../pages/dashboard/diamond/DiamondView";
 import CheckoutLayout from "../layouts/CheckoutLayout";
 import CheckoutInfo from "../pages/checkout/CheckoutInfo";
-import CheckoutShipping from "../pages/checkout/CheckoutShipping";
 import CheckoutPayment from "../pages/checkout/CheckoutPayment";
 import About from "../pages/about/About";
 import WarrantyRequestList from "../pages/account/WarrantyRequestList";
 import CreateWarrantyRequest from "../pages/account/CreateWarrantyRequest";
-
+import SaleStaffsManagement from "../pages/dashboard/sale_staffs/SaleStaffsManagement";
+import DeliveryStaffsManagement from "../pages/dashboard/delivery_staffs/DeliveryStaffsManagement";
+import WarrantyRequest from "../pages/dashboard/warranty_request/WarrantyRequest";
 const routes = [
   {
     errorElement: <Error />,
@@ -53,10 +54,6 @@ const routes = [
           {
             index: true,
             element: <CheckoutInfo />,
-          },
-          {
-            path: "shipping",
-            element: <CheckoutShipping />,
           },
           {
             path: "payment",
@@ -94,6 +91,18 @@ const routes = [
             path: "/admin/diamond-price",
           },
           {
+            element: <OrderManage />,
+            path: "/admin/order",
+          },
+          {
+            element: <SaleStaffsManagement />,
+            path: "/admin/sale-staffs",
+          },
+          {
+            element: <DeliveryStaffsManagement />,
+            path: "/admin/delivery-staffs",
+          },
+          {
             element: <AccessoryPriceManage />,
             path: "/admin/accessory-price",
           },
@@ -122,6 +131,10 @@ const routes = [
                 path: "/admin/blogs/new",
               },
             ],
+          },
+          { 
+            element:<WarrantyRequest/>,
+            path : "/admin/warranty-request"
           },
           {
             path: "/admin/accessories",

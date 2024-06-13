@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.Data;
+using backend.DTOs.Order;
 using backend.DTOs.WarrantyRequest;
+using backend.Enums;
+using backend.Helper;
 using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
@@ -51,9 +54,9 @@ namespace backend.Repository
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<WarrantyRequest>> GetAllWarrantyRequestsAsync()
+        public async Task<WarrantyRequestResult> GetAllWarrantyRequestsAsync(WarrantyRequestQuery query)
         {
-            var existingWarrantyRequests = await _context
+            var warrantyRequestQueries = _context
                 .WarrantyRequests.Include(x => x.WarrantyCard)
                 .ThenInclude(x => x.OrderDetail)
                 .ThenInclude(x => x.Diamond)
@@ -61,8 +64,49 @@ namespace backend.Repository
                 .Include(x => x.WarrantyCard)
                 .ThenInclude(x => x.OrderDetail)
                 .ThenInclude(x => x.Accessory)
+                .Include(x => x.SaleStaff)
+                .Include(x => x.DeliveryStaff)
+                .Include(x => x.Customer)
+                .AsQueryable();
+
+            if (query.WarrantyStatus != null)
+            {
+                warrantyRequestQueries = warrantyRequestQueries.Where(x => x.WarrantyStatus == query.WarrantyStatus);
+            }
+            if (query.CustomerId > 0)
+            {
+                warrantyRequestQueries = warrantyRequestQueries.Where(x => x.CustomerId == query.CustomerId);
+            }
+
+            if (query.SaleStaffId > 0)
+            {
+                warrantyRequestQueries = warrantyRequestQueries.Where(x => x.SaleStaffId == query.SaleStaffId);
+            }
+
+            if (query.DeliveryStaffId > 0)
+            {
+                warrantyRequestQueries = warrantyRequestQueries.Where(x => x.DeliveryStaffId == query.DeliveryStaffId);
+            }
+
+            
+
+            var totalCount = await warrantyRequestQueries.CountAsync();
+
+            var totalPages = (int)Math.Ceiling((double)totalCount / query.PageSize);
+            var orderDTOs = await warrantyRequestQueries
+                .Skip((query.PageNumber - 1) * query.PageSize)
+                .Take(query.PageSize)
+                .Select(x => x.ToWarrantyRequestDTO())
                 .ToListAsync();
-            return existingWarrantyRequests;
+
+            return new WarrantyRequestResult
+            {
+                WarrantyRequests = orderDTOs,
+                TotalCount = totalCount,
+                PageSize = query.PageSize,
+                CurrentPage = query.PageNumber,
+                TotalPages = totalPages
+            };
         }
 
         public async Task<WarrantyRequest?> GetWarrantyRequestByIdAsync(long id)
@@ -75,7 +119,32 @@ namespace backend.Repository
             UpdateWarrantyRequestDTO warrantyRequestDto
         )
         {
-            throw new NotImplementedException();
+            var existedWarrantyRequest = await _context.WarrantyRequests.FirstOrDefaultAsync(x => x.WarrantyRequestId.Equals(id));
+            if (existedWarrantyRequest == null)
+            {
+                return null;
+            }
+            if (warrantyRequestDto.WarrantyStatus != null)
+            {
+                existedWarrantyRequest.WarrantyStatus = Enum.Parse<WarrantyStatus>(warrantyRequestDto.WarrantyStatus);
+            }
+            if (warrantyRequestDto.SaleStaffId != 0)
+            {
+                var saleStaff = _context.Accounts.FirstOrDefault(x => x.AccountId == warrantyRequestDto.SaleStaffId);
+                existedWarrantyRequest.SaleStaff = saleStaff;
+            }
+            if (warrantyRequestDto.DeliveryStaffId != 0)
+            {
+                var deliveryStaff = _context.Accounts.FirstOrDefault(x => x.AccountId == warrantyRequestDto.DeliveryStaffId);
+                existedWarrantyRequest.DeliveryStaff = deliveryStaff;
+            }
+            if (warrantyRequestDto.ReturnTime != null)
+            {
+                existedWarrantyRequest.ReturnTime = warrantyRequestDto.ReturnTime;
+            }
+            _context.Entry(existedWarrantyRequest).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return existedWarrantyRequest;
         }
     }
 }

@@ -18,5 +18,11 @@ namespace backend.Helper
             string result = postFix + DateTime.Now.Ticks.ToString();   //No special reason for this format, can be changed.
             return result;
         }
+
+        public static long LongDateTimeNow()
+        {
+            long originalNumber = DateTime.Now.Ticks;
+            return originalNumber;
+        }
     }
 }

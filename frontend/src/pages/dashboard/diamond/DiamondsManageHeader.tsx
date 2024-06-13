@@ -16,7 +16,7 @@ export const StatusMenu = ({
           <a onClick={() => handleStatusClick("1", "Available")}>Available</a>
         </Menu.Item>
         <Menu.Item key="2">
-          <a onClick={() => handleStatusClick("2", "UnAvailable")}>
+          <a onClick={() => handleStatusClick("2", "Unavailable")}>
             Unavailable
           </a>
         </Menu.Item>
