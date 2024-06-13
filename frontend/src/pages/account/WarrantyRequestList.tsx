@@ -9,14 +9,17 @@ const WarrantyRequestItem = ({ warrantyRequest }: { warrantyRequest: any }) => {
     case "Pending":
       statusStyle = "bg-yellow-100 border-yellow-400";
       break;
-    case "ShipperIsComingToGet":
+    case "Getting":
       statusStyle = "bg-blue-200/90";
       break;
     case "Processing":
-      statusStyle = "bg-blue-200/90";
+      statusStyle = "bg-blue-400/90";
       break;
-    case "ShipperIsComingToReturnBack":
-      statusStyle = "bg-blue-200/90";
+    case "Returning":
+      statusStyle = "bg-blue-600/90";
+      break;
+    case "Failed":
+      statusStyle = "bg-red-200/90";
       break;
     case "Completed":
       statusStyle = "bg-green-200/90";
@@ -25,7 +28,7 @@ const WarrantyRequestItem = ({ warrantyRequest }: { warrantyRequest: any }) => {
 
   return (
     <div
-      className={`border-2 bg-yellow-100 rounded-lg px-4 py-4 ${statusStyle}`}
+      className={`border-2 bg-slate-400-100 rounded-lg px-4 py-4 ${statusStyle}`}
     >
       <div className="flex flex-col gap-2">
         <div className="font-bold text-lg mb-2 col-span-4 flex items-center gap-2">

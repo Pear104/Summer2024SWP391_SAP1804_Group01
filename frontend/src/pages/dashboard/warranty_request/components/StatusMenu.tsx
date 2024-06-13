@@ -11,13 +11,13 @@ export const StatusMenu = ({
   let style = "text-white bg-green-500";
   switch (statusText) {
     case "Pending":
-      style = "text-white bg-red-500";
-      break;
-    case "Getting":
       style = "text-white bg-yellow-500";
       break;
-    case "Processing":
+    case "Getting":
       style = "text-white bg-blue-500";
+      break;
+    case "Processing":
+      style = "text-white bg-blue-600";
       break;
     case "Returning":
       style = "text-white bg-blue-800";
