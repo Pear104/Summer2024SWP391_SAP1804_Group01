@@ -31,5 +31,11 @@ namespace backend.Controllers
             }
             return Ok(newTransaction);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetTransactions()
+        {
+            var transactions = await _transactionRepo.GetAllTransactionsAsync();
+            return Ok(transactions);
+        }
     }
 }
