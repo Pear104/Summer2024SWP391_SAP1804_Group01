@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
   BarChart,
   Bar,
@@ -9,82 +10,53 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { GET } from "../../../utils/request";
 
-const data = [
-  {
-    name: "Jan",
-    Expense: 4000,
-    Income: 2400,
-  },
-  {
-    name: "Feb",
-    Expense: 3000,
-    Income: 1398,
-  },
-  {
-    name: "Mar",
-    Expense: 2000,
-    Income: 11000,
-  },
-  {
-    name: "Apr",
-    Expense: 2780,
-    Income: 3908,
-  },
-  {
-    name: "May",
-    Expense: 1890,
-    Income: 4800,
-  },
-  {
-    name: "Jun",
-    Expense: 2390,
-    Income: 3800,
-  },
-  {
-    name: "July",
-    Expense: 3490,
-    Income: 4300,
-  },
-  {
-    name: "Aug",
-    Expense: 2000,
-    Income: 9800,
-  },
-  {
-    name: "Sep",
-    Expense: 2780,
-    Income: 3908,
-  },
-  {
-    name: "Oct",
-    Expense: 1890,
-    Income: 4800,
-  },
-  {
-    name: "Nov",
-    Expense: 2390,
-    Income: 3800,
-  },
-  {
-    name: "Dec",
-    Expense: 3490,
-    Income: 4300,
-  },
-];
-
-export default function TransactionChart() {
+const TransactionChart: React.FC = () => {
+  const [data, setData] = useState([]);
+  const [formattedData, setFormattedData] = useState([]);
+  const getMonthName = (monthNumber: number) => {
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    return months[monthNumber - 1];
+  };
+  useEffect(() => {
+    (async () => {
+      const data = await GET("/api/Transactions");
+      setData(data);
+      const formattedData = data.map((item: any) => ({
+        name: getMonthName(item.month),
+        Income: item.income,
+      }));
+      setFormattedData(formattedData);
+    })();
+  }, []);
+  console.log("DATA");
+  console.log(data);
+  console.log(formattedData);
   return (
     <div className="h-[22rem] bg-white p-4 rounded-sm border border-gray-200 flex flex-col flex-1 items-center">
       <div className="items-center flex flex-col">
-        <strong className="text-gray-700 font-medium ">Transactions</strong>
+        <strong className="text-gray-700 font-medium">Transactions</strong>
         <div className="mt-3 w-full flex-1 text-xs">
           {/* <ResponsiveContainer width="100%" height="100%"> */}
           <BarChart
             className="items-center"
             width={700}
             height={300}
-            data={data}
+            data={formattedData}
             margin={{
               top: 20,
               right: 10,
@@ -97,12 +69,13 @@ export default function TransactionChart() {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar className="" dataKey="Income" fill="#0ea5e9" />
-            <Bar dataKey="Expense" fill="#ea580c" />
+            <Bar dataKey="Income" fill="#0ea5e9" />
           </BarChart>
           {/* </ResponsiveContainer> */}
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default TransactionChart;

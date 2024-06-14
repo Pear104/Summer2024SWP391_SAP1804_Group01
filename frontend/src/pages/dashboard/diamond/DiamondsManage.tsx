@@ -295,12 +295,12 @@ export default function ProductsManage() {
                             >
                               Enable
                             </button>
-                            <button
+                            {/* <button
                               onClick={() => handleAction("delete")}
                               className="font-semibold py-1 px-2 border-l border-gray-300"
                             >
                               Delete
-                            </button>
+                            </button> */}
                             <button
                               onClick={() => handleAction("clear")}
                               className="font-semibold py-1 px-2 border-l border-gray-300"
@@ -331,36 +331,46 @@ export default function ProductsManage() {
                         </td>
                       </tr>
                     )}
+                    {diamondsData?.length > 0 &&
+                      diamondsData?.map(renderDiamondRow)}
                   </tbody>
                 </table>
 
                 <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
-                  <Pagination
-                    showTotal={(total, range) =>
-                      `${range[0]}-${range[1]} of ${total} items`
-                    }
-                    current={Number(params.get("PageNumber")) || 1}
-                    defaultCurrent={
-                      (diamond?.data && diamond?.data.currentPage.toString()) ||
-                      "1"
-                    }
-                    total={diamond?.data && diamond?.data.totalCount}
-                    pageSize={Number(params.get("PageSize")) || 20}
-                    onChange={(page, _pageSize) => {
-                      params.set("PageNumber", page.toString());
-                      params.set("PageSize", pageSize.toString());
-                      navigate(url.pathname + "?" + params.toString());
-                      setQueryUrl("/api/Diamonds?" + params.toString());
-                      setSearchTerm("");
-                    }}
-                    showSizeChanger={true}
-                    onShowSizeChange={(_current, size) => {
-                      setPageSize(size);
-                      params.set("PageSize", size.toString());
-                      navigate(url.pathname + "?" + params.toString());
-                      setQueryUrl("/api/Diamonds?" + params.toString());
-                    }}
-                  />
+                  {diamond?.data && diamond?.data.diamonds.length > 0 && (
+                    <Pagination
+                      showTotal={(total, range) =>
+                        `${range[0]}-${range[1]} of ${total} items`
+                      }
+                      current={Number(params.get("PageNumber")) || 1}
+                      defaultCurrent={
+                        (diamond?.data &&
+                          diamond?.data.currentPage.toString()) ||
+                        "1"
+                      }
+                      total={diamond?.data && diamond?.data.totalCount}
+                      pageSize={Number(params.get("PageSize")) || 20}
+                      onChange={(page, _pageSize) => {
+                        params.set("PageNumber", page.toString());
+                        params.set("PageSize", pageSize.toString());
+                        navigate(url.pathname + "?" + params.toString());
+                        setQueryUrl("/api/Diamonds?" + params.toString());
+                        setSearchTerm("");
+                      }}
+                      showSizeChanger={true}
+                      onShowSizeChange={(current, size) => {
+                        setPageSize(size);
+                        params.set("PageSize", size.toString());
+                        navigate(url.pathname + "?" + params.toString());
+                        setQueryUrl("/api/Diamonds?" + params.toString());
+                      }}
+                    />
+                  )}
+                  {!diamondsData?.isLoading && diamondsData?.length == 0 && (
+                    <div className="text-center text-2xl">
+                      There is no diamond
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

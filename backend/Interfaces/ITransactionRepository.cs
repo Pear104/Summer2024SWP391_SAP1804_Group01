@@ -5,7 +5,7 @@ namespace backend.Interfaces
 {
     public interface ITransactionRepository
     {
-        Task<IEnumerable<Transaction>> GetAllTransactionsAsync();
+        Task<IEnumerable<GroupedTransactionDTO>> GetAllTransactionsAsync();
         Task<Transaction?> GetTransactionByIdAsync(long id);
         Task<Transaction?> CreateTransactionAsync(CreateTransactionDTO transactionDto);
         Task<Transaction?> UpdateTransactionAsync(long id, UpdateTransactionDTO transactionDto);
