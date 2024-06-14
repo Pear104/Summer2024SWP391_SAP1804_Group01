@@ -49,13 +49,16 @@ export default function AccessoryDetail() {
       {
         queryKey: ["materialPrices"],
         queryFn: () => GET("/api/MaterialPrices/"),
+        staleTime: Infinity,
       },
       {
         queryKey: ["priceRate"],
         queryFn: () => GET("/api/PriceRate/latest"),
+        staleTime: Infinity,
       },
     ],
   });
+
   const [mainImage, setMainImage] = useState<string | undefined>(undefined);
   useEffect(() => {
     if (accessory?.data) {
@@ -128,7 +131,7 @@ export default function AccessoryDetail() {
               </div>
               <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-2">
-                  <div>Choose ring size:</div>
+                  <div>Choose ring size (cm):</div>
                   <Select
                     className="border"
                     defaultValue={size}

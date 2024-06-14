@@ -13,7 +13,7 @@ export const useCartStore = create<{
   currentAccessory?: number | null;
   currentSize?: number | null;
   cart: CartItem[];
-  setCurrentDiamond: (diamondId: number | null) => void;
+  setCurrentDiamond: (diamondId: number | null) => boolean;
   setCurrentAccessory: (
     accessoryId: number | null,
     size: number | null
@@ -26,8 +26,17 @@ export const useCartStore = create<{
       currentAccessory: null,
       currentSize: null,
       cart: [],
-      setCurrentDiamond: (diamondId: number | null) =>
-        set({ currentDiamond: diamondId }),
+      setCurrentDiamond: (diamondId: number | null) => {
+        const existingItem = get().cart.find(
+          (item) => item.diamondId === diamondId
+        );
+        if (existingItem) {
+          return false;
+        } else {
+          set({ currentDiamond: diamondId });
+          return true;
+        }
+      },
       setCurrentAccessory: (accessoryId: number | null, size: number | null) =>
         set({ currentAccessory: accessoryId, currentSize: size }),
       setCart: (diamondId: number, accessoryId?: number, size?: number) => {
@@ -57,7 +66,7 @@ export const useCartStore = create<{
       // Hàm xóa tất cả các mục trong cart
       clearCart: () => {
         set({ cart: [] });
-      },   
+      },
     }),
 
     {

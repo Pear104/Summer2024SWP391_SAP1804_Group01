@@ -1,7 +1,7 @@
 import { GET } from "../../../utils/request";
 import { ExternalLink } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Image, Skeleton } from "antd";
+import { Image, Skeleton, App } from "antd";
 import { useCartStore } from "../../../store/cartStore";
 import scrollTo from "../../../utils/scroll";
 import { useQueries } from "@tanstack/react-query";
@@ -15,7 +15,7 @@ export default function DiamondDetail() {
       {
         queryKey: ["diamond"],
         queryFn: () => GET(`/api/Diamonds/${diamondId}`),
-        staleTime: Infinity,
+        staleTime: 0,
       },
       {
         queryKey: ["diamondPrice"],
@@ -25,6 +25,7 @@ export default function DiamondDetail() {
       {
         queryKey: ["priceRate"],
         queryFn: () => GET("/api/PriceRate/latest"),
+        staleTime: Infinity,
       },
     ],
   });
@@ -32,7 +33,7 @@ export default function DiamondDetail() {
   const navigate = useNavigate();
   const setCart = useCartStore((state) => state.setCart);
   const setCurrentDiamond = useCartStore((state) => state.setCurrentDiamond);
-  console.log(diamond?.data);
+  const { message } = App.useApp();
   return (
     <div className="flex justify-center mb-20">
       {diamond?.isLoading && (
@@ -110,13 +111,18 @@ export default function DiamondDetail() {
             </div>
             <div className="flex flex-col gap-4 mt-8">
               <div
-                className="tracking-wider text-xl w-full flex justify-center px-4 py-3 bg-primary text-white hover:scale-95 transition-all"
+                className="uppercase tracking-wider text-xl w-full flex justify-center px-4 py-3 bg-primary text-white hover:scale-95 transition-all"
                 onClick={() => {
-                  navigate("/product/accessory");
-                  setCurrentDiamond(diamond.data.diamondId);
+                  const result = setCurrentDiamond(diamond.data.diamondId);
+                  if (result) {
+                    navigate("/product/accessory");
+                  } else {
+                    message.error("The diamond is already in your cart");
+                    navigate("/product/diamond");
+                  }
                 }}
               >
-                ADD ACCESSORY
+                Choose This Diamond
               </div>
               <div
                 className="cursor-pointer tracking-widest text-xl w-full flex justify-center px-4 py-3 bg-slate-500 hover:scale-95 transition-all text-white"

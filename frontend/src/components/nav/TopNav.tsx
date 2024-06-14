@@ -126,9 +126,9 @@ export default function TopNav() {
           <div className="flex justify-center">
             <Logo />
           </div>
-          <a
+          <Link
             className="relative mulish-regular flex gap-1 items-center py-1 px-3 border-b-2 border-b-transparent text-base hover:border-b-blue-500 duration-200 transition-all"
-            href={"/product/accessory"}
+            to={"/product/accessory"}
             onMouseEnter={() => {
               setJewelryDrop(true);
             }}
@@ -159,10 +159,10 @@ export default function TopNav() {
                 </div>
               </div>
             )}
-          </a>
-          <a
+          </Link>
+          <Link
             className="relative mulish-regular flex gap-1 items-center py-1 px-3 border-b-2 border-b-transparent text-base hover:border-b-blue-500 duration-200 transition-all"
-            href={"/product/diamond"}
+            to={"/product/diamond"}
             onMouseEnter={() => {
               setDiamondDrop(true);
             }}
@@ -185,7 +185,7 @@ export default function TopNav() {
                 </div>
               </div>
             )}
-          </a>
+          </Link>
           <TopNavItem href="/blog">Blog</TopNavItem>
           <TopNavItem href="/about">About us</TopNavItem>
         </div>

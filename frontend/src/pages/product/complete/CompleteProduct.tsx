@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Divider, Image, Select, Skeleton } from "antd";
+import { App, Divider, Image, Skeleton } from "antd";
 import { useCartStore } from "../../../store/cartStore";
 import { GET } from "../../../utils/request";
 import { useQueries } from "@tanstack/react-query";
@@ -12,7 +12,9 @@ import { getAccessoryPrice, getDiamondPrice } from "../../../utils/getPrice";
 export default function CompleteProduct() {
   const currentDiamond = useCartStore((state) => state.currentDiamond);
   const currentAccessory = useCartStore((state) => state.currentAccessory);
+  const { message } = App.useApp();
   const navigate = useNavigate();
+  // Check if both diamond and accessory are choosen
   if (!currentDiamond || !currentAccessory) {
     navigate("/product/diamond");
   }
@@ -22,22 +24,27 @@ export default function CompleteProduct() {
         {
           queryKey: ["currentDiamond", currentDiamond],
           queryFn: () => GET(`/api/Diamonds/${currentDiamond}`),
+          staleTime: 0,
         },
         {
           queryKey: ["currentAccessory", currentAccessory],
           queryFn: () => GET(`/api/Accessories/${currentAccessory}`),
+          staleTime: 0,
         },
         {
           queryKey: ["diamondPrice"],
           queryFn: () => GET("/api/DiamondPrices/"),
+          staleTime: Infinity,
         },
         {
           queryKey: ["materialPrice"],
           queryFn: () => GET("/api/MaterialPrices/"),
+          staleTime: Infinity,
         },
         {
           queryKey: ["priceRate"],
           queryFn: () => GET("/api/PriceRate/latest"),
+          staleTime: Infinity,
         },
       ],
     });
@@ -49,7 +56,21 @@ export default function CompleteProduct() {
   const setCurrentDiamond = useCartStore((state) => state.setCurrentDiamond);
   const currentSize = useCartStore((state) => state.currentSize);
   const [mainImage, setMainImage] = useState<string | undefined>(undefined);
-  const [size, setSize] = useState(3);
+
+  // Check the diamond and accessory shape
+  if (
+    currentAccessory &&
+    accessory?.data &&
+    accessory?.data?.shape?.name != diamond?.data?.shape
+  ) {
+    setCurrentAccessory(null, null);
+    navigate("/product/accessory");
+    message.open({
+      type: "error",
+      content: "Your diamond and accessory doesn't fit with each other.",
+    });
+  }
+
   useEffect(() => {
     if (diamond.data) {
       setMainImage(diamond.data.imageUrl);
@@ -145,7 +166,7 @@ export default function CompleteProduct() {
                     to={`/product/accessory/detail/${currentAccessory}`}
                     className="hover:bg-slate-200 p-2 rounded-md"
                   >
-                    {`${accessory.data.name} in ${accessory.data.karat}K Stock #: ${diamond.data.diamondId}`}
+                    {`${accessory.data.name} in ${accessory.data.karat}K Id #${diamond.data.diamondId}, Size ${currentSize}cm`}
                     <div>
                       {materialPrice?.data && priceRate?.data?.percent ? (
                         getAccessoryPrice(
@@ -179,7 +200,7 @@ export default function CompleteProduct() {
                   setCart(
                     diamond.data.diamondId,
                     accessory.data.accessoryId,
-                    size
+                    currentSize || 3
                   );
                   setCurrentDiamond(null);
                   setCurrentAccessory(null, null);

@@ -24,9 +24,10 @@ export const getAccessoryPrice = (
   priceRate: any
 ) => {
   return (
-    (accessory?.materialWeight + (size - 3)) *
-    materialPrice?.find((price: any) => price.karat == accessory?.karat)
-      ?.unitPrice *
+    ((accessory?.materialWeight + (size - 3)) *
+      materialPrice?.find((price: any) => price.karat == accessory?.karat)
+        ?.unitPrice +
+      accessory?.accessoryType?.processingPrice) *
     priceRate
   );
 };

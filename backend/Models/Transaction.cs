@@ -10,10 +10,10 @@ namespace backend.Models
         [Key]
         // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("transaction_id")]
-        public string TransactionId { get; set; } = DateTime.Now.Ticks.ToString();
+        public string? TransactionId { get; set; }
 
         [Column("order_id")]
-        public string OrderId { get; set; }
+        public string? OrderId { get; set; }
         public Order Order { get; set; } = new Order();
 
         [Column("payment_method")]

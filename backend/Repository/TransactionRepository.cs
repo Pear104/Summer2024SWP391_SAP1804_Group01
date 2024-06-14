@@ -31,6 +31,7 @@ namespace backend.Repository
 
             var newTransaction = new Transaction()
             {
+                TransactionId = $"ORD{order.OrderId}-TRS{DateTime.Now.Ticks.ToString()}",
                 Order = order,
                 PaymentMethod = transactionDto.PaymentMethod,
                 Amount = transactionDto.Amount,
