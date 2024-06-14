@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function AccessoryRow({
   accessory,
   selectedAccessories,
@@ -43,13 +45,13 @@ export default function AccessoryRow({
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center">
-          <a href={`/admin/accessories/detail/${accessory.accessoryId}`}>
+          <Link to={`/admin/accessories/detail/${accessory.accessoryId}`}>
             <img
-              className="h-14  w-14 square-full"
+              className="w-14 aspect-square object-cover"
               src={accessory.accessoryImages[0].url.replace("400x", "800x")}
               alt=""
             />
-          </a>
+          </Link>
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap col-span-4 text-sm text-gray-500 truncate">

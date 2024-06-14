@@ -1,8 +1,8 @@
 import { useQueries } from "@tanstack/react-query";
 import SaleStaffComponent from "./SaleStaffComponent";
 import { GET } from "../../../../utils/request";
-import DeliveryStaffComponent from "./DeliveryStaffComponent"
-import WarrantyUpdateComponent from "./WarrantyUpdateComponent"
+import DeliveryStaffComponent from "./DeliveryStaffComponent";
+import WarrantyUpdateComponent from "./WarrantyUpdateComponent";
 
 const formatDate = (dateString: any) => {
   const date = new Date(dateString);
@@ -26,22 +26,9 @@ export default function WarrantyRow({ warranty }: { warranty: any }) {
       },
     ],
   });
-  if (!warranty) {
-    return (
-      <>
-        <tr>
-          <td colSpan={9}>
-            <div className="text-center items-center">
-              <p>There are no warranty requests!!!</p>
-            </div>
-          </td>
-        </tr>
-      </>
-    );
-  }
   return (
     <>
-      <tr key={warranty.warrantyRequestId}>
+      <tr key={warranty.warrantyRequestId} className="">
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="flex items-center">
             {"#"}
@@ -62,7 +49,9 @@ export default function WarrantyRow({ warranty }: { warranty: any }) {
           </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          <div className="text-sm text-gray-500">{warranty.shippingAddress}</div>
+          <div className="text-sm text-gray-500">
+            {warranty.shippingAddress}
+          </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="text-sm text-gray-500">{warranty.phoneNumber}</div>

@@ -11,7 +11,7 @@ const ProductItem = ({ url, title }: { url: string; title: string }) => {
           backgroundImage: `url(${url})`,
         }}
       ></div>
-      <div className="w-[260px] text-sm mulish-regular flex justify-center text-center text-ellipsis">
+      <div className="w-[260px] text-[16px] mulish-regular flex justify-center text-center text-ellipsis">
         {title}
       </div>
     </div>
@@ -20,7 +20,7 @@ const ProductItem = ({ url, title }: { url: string; title: string }) => {
 
 const ProductItemBlock = ({ products }: { products: any }) => {
   return (
-    <div className="mx-6 mt-8 flex gap-4 justify-evenly font-light mulish-regular">
+    <div className="mx-6 mt-8 flex gap-4 justify-evenly mulish-regular">
       {products.map((product: any) => (
         <ProductItem
           url={product.accessoryImages[0].url}
@@ -37,12 +37,16 @@ export default function Explore() {
       <div className="w-full flex justify-center great-vibes-regular text-7xl pt-16">
         Featured products
       </div>
-      <Carousel arrows autoplay autoplaySpeed={2000}>
-        {/* {featuredProduct.map((product: any, index) => ( */}
-        <ProductItemBlock products={featuredProduct.slice(0, 0 + 4)} />
-        <ProductItemBlock products={featuredProduct.slice(0, 0 + 4)} />
-        <ProductItemBlock products={featuredProduct.slice(0, 0 + 4)} />
-        <ProductItemBlock products={featuredProduct.slice(0, 0 + 4)} />
+      <Carousel autoplay autoplaySpeed={3000}>
+        {featuredProduct.map((_product: any, index) => {
+          if (!(index % 5)) {
+            return (
+              <ProductItemBlock
+                products={featuredProduct.slice(index, index + 5)}
+              />
+            );
+          }
+        })}
       </Carousel>
     </div>
   );

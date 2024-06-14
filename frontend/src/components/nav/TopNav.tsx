@@ -12,10 +12,9 @@ import {
 import Logo from "../logo/Logo";
 import { message } from "antd";
 import SearchBar from "../SearchBar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import JewelryItem from "./components/JewelryItem";
 import DiamondItem from "./components/DiamondItem";
-import { getCookie } from "../../utils/cookie";
 import { Link, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
 import { GET } from "../../utils/request";

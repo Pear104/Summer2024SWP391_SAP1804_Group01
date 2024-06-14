@@ -15,7 +15,7 @@ const phoneRegex = new RegExp(
 );
 
 const schema = z.object({
-  warrantyCardId: z.number().min(1, "Required!"),
+  warrantyCardId: z.coerce.number().min(1, "Please choose your product!"),
   phoneNumber: z
     .string()
     .regex(phoneRegex, "Invalid phone number!")
@@ -47,7 +47,7 @@ export default function CreateWarrantyRequest() {
     queries: [
       {
         queryKey: ["orders"],
-        queryFn: () => GET("/api/Order"),
+        queryFn: () => GET("/api/Order?OrderStatus=Completed"),
         staleTime: Infinity,
       },
     ],

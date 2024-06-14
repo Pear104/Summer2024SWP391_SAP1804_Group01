@@ -1,4 +1,4 @@
-import { Form, Input, Pagination, Skeleton } from "antd";
+import { Form, Input, Pagination, Skeleton, Empty } from "antd";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { GET } from "../../../utils/request";
@@ -161,58 +161,56 @@ export default function OrderManage() {
                   {/* body */}
                   <tbody className="bg-white divide-y divide-gray-200">
                     {orderList?.isLoading && (
-                      <tr>
-                        <td colSpan={100}>
-                          <Skeleton
-                            active
-                            paragraph={{
-                              rows: 10,
-                            }}
-                            className="w-full"
-                          />
-                        </td>
-                      </tr>
+                      <td className="p-4" colSpan={100}>
+                        <Skeleton
+                          active
+                          paragraph={{
+                            rows: 10,
+                          }}
+                          className="w-full"
+                        />
+                      </td>
                     )}
                     {orderList?.data?.orders?.length > 0 ? (
                       orderList.data.orders.map(renderOrderRow)
                     ) : (
-                      <tr>
-                        <div className="text-center items-center">
-                          There is no order
-                        </div>
-                      </tr>
+                      <td colSpan={12} className="py-20 w-full">
+                        <Empty description="No order to process" />
+                      </td>
                     )}
                   </tbody>
                 </table>
-                <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
-                  <Pagination
-                    showTotal={(total, range) =>
-                      `${range[0]}-${range[1]} of ${total} items`
-                    }
-                    current={Number(params.get("PageNumber")) || 1}
-                    defaultCurrent={
-                      (orderList?.data &&
-                        orderList?.data.currentPage.toString()) ||
-                      "1"
-                    }
-                    total={orderList?.data && orderList?.data.totalCount}
-                    pageSize={Number(params.get("PageSize")) || 20}
-                    onChange={(page, _pageSize) => {
-                      params.set("PageNumber", page.toString());
-                      params.set("PageSize", pageSize.toString());
-                      navigate(url.pathname + "?" + params.toString());
-                      setQueryUrl("/api/Order?" + params.toString());
-                      setSearchTerm("");
-                    }}
-                    showSizeChanger={true}
-                    onShowSizeChange={(current, size) => {
-                      setPageSize(size);
-                      params.set("PageSize", size.toString());
-                      navigate(url.pathname + "?" + params.toString());
-                      setQueryUrl("/api/Order?" + params.toString());
-                    }}
-                  />
-                </div>
+                {orderList?.data?.orders?.length > 0 && (
+                  <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
+                    <Pagination
+                      showTotal={(total, range) =>
+                        `${range[0]}-${range[1]} of ${total} items`
+                      }
+                      current={Number(params.get("PageNumber")) || 1}
+                      defaultCurrent={
+                        (orderList?.data &&
+                          orderList?.data.currentPage.toString()) ||
+                        "1"
+                      }
+                      total={orderList?.data && orderList?.data.totalCount}
+                      pageSize={Number(params.get("PageSize")) || 20}
+                      onChange={(page, _pageSize) => {
+                        params.set("PageNumber", page.toString());
+                        params.set("PageSize", pageSize.toString());
+                        navigate(url.pathname + "?" + params.toString());
+                        setQueryUrl("/api/Order?" + params.toString());
+                        setSearchTerm("");
+                      }}
+                      showSizeChanger={true}
+                      onShowSizeChange={(_current, size) => {
+                        setPageSize(size);
+                        params.set("PageSize", size.toString());
+                        navigate(url.pathname + "?" + params.toString());
+                        setQueryUrl("/api/Order?" + params.toString());
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>

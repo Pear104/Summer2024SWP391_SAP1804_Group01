@@ -1,8 +1,9 @@
 import { useQueries } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GET } from "../../utils/request";
 import { formatPhoneNumber } from "../../utils/caseConverter";
 import moment from "moment";
+import { Empty } from "antd";
 const WarrantyRequestItem = ({ warrantyRequest }: { warrantyRequest: any }) => {
   let statusStyle = "";
   switch (warrantyRequest.warrantyStatus) {
@@ -87,9 +88,27 @@ export default function WarrantyRequestList() {
         Warranty Requests
       </div>
       <div className="mt-2 grid gap-4">
-        {warrantyRequests?.data?.warrantyRequests?.map((warrantyRequest: any, index: any) => (
-          <WarrantyRequestItem key={index} warrantyRequest={warrantyRequest} />
-        ))}
+        {warrantyRequests?.data &&
+        warrantyRequests?.data?.warrantyRequests.length > 0 ? (
+          warrantyRequests?.data?.warrantyRequests?.map(
+            (warrantyRequest: any, index: any) => (
+              <WarrantyRequestItem
+                key={index}
+                warrantyRequest={warrantyRequest}
+              />
+            )
+          )
+        ) : (
+          <Empty description="You haven't send any warranty request yet" />
+        )}
+      </div>
+      <div className="flex justify-center">
+        <Link
+          to="/account/warranty/request"
+          className="rounded-xl px-8 py-4 mt-4 text-white bg-primary font-bold uppercase"
+        >
+          Send a warranty request
+        </Link>
       </div>
     </div>
   );

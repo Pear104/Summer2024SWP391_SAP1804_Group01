@@ -1,5 +1,5 @@
 import { Menu } from "antd";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import {
   UserRoundCog,
   UserRound,
@@ -61,6 +61,7 @@ export default function AccountLayout() {
     },
   ];
   const navigate = useNavigate();
+  const location = useLocation();
   return (
     <div className="py-6 px-6 flex">
       <div>
@@ -73,7 +74,7 @@ export default function AccountLayout() {
               width: 256,
             }}
             className="border-transparent"
-            defaultSelectedKeys={["/account"]}
+            selectedKeys={[location.pathname]}
             defaultOpenKeys={["account", "warranty"]}
             mode="inline"
             items={items}

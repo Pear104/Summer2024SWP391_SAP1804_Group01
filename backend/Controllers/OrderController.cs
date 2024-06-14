@@ -67,7 +67,6 @@ namespace backend.Controllers
                 return BadRequest("The order could not be created.");
             }
             long customerId = Convert.ToInt64(User.FindFirst("accountId")?.Value);
-            System.Console.WriteLine(customerId);
             var createdOrder = await _orderRepo.CreateOrderAsync(customerId, orderDto);
             if (createdOrder == null)
             {

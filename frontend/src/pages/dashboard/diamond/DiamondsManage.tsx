@@ -1,6 +1,6 @@
 import { Form, Input, Pagination, Skeleton } from "antd";
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { GET } from "../../../utils/request";
 import DiamondRow from "./DiamondRow";
 import { useQueries } from "@tanstack/react-query";
@@ -143,9 +143,9 @@ export default function ProductsManage() {
         </div>
         <div className="flex justify-end space-x-1 items-center">
           <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
-            <a href="/admin/diamonds/new" className="button primary">
+            <Link to="/admin/diamonds/new" className="button primary">
               <span>New Diamond</span>
-            </a>
+            </Link>
           </button>
         </div>
       </div>
@@ -311,18 +311,16 @@ export default function ProductsManage() {
                         </td>
                       </tr>
                     )}
-                    {(diamond?.isLoading || diamondPrice?.isLoading) && (
-                      <tr>
-                        <td colSpan={100}>
-                          <Skeleton
-                            active
-                            paragraph={{
-                              rows: 10,
-                            }}
-                            className="w-full"
-                          />
-                        </td>
-                      </tr>
+                    {diamond?.isLoading && (
+                      <td colSpan={100} className="p-4">
+                        <Skeleton
+                          active
+                          paragraph={{
+                            rows: 20,
+                          }}
+                          className="w-full"
+                        />
+                      </td>
                     )}
                     {diamondsData?.length > 0 ? (
                       diamondsData?.map(renderDiamondRow)
@@ -356,7 +354,7 @@ export default function ProductsManage() {
                       setSearchTerm("");
                     }}
                     showSizeChanger={true}
-                    onShowSizeChange={(current, size) => {
+                    onShowSizeChange={(_current, size) => {
                       setPageSize(size);
                       params.set("PageSize", size.toString());
                       navigate(url.pathname + "?" + params.toString());

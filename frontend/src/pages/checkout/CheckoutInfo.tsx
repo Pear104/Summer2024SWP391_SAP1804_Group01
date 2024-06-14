@@ -1,4 +1,4 @@
-import { Button, Divider, Form, Input, Select } from "antd";
+import { Button, Divider, Form, Input } from "antd";
 import * as z from "zod";
 import { FormItem } from "react-hook-form-antd";
 import { useForm } from "react-hook-form";
@@ -40,7 +40,7 @@ const schema = z.object({
 
 export default function CheckoutInfo() {
   const navigate = useNavigate();
-  const { control, handleSubmit, setError, reset } = useForm({
+  const { control, handleSubmit, reset } = useForm({
     defaultValues: {
       name: "",
       email: "",

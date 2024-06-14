@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GET, POST } from "../../utils/request";
-import { Pagination, Skeleton, Image } from "antd";
+import { Pagination, Skeleton, Image, Empty } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSearchStore } from "../../store/searchStore";
 import { useQueries } from "@tanstack/react-query";
@@ -241,19 +241,21 @@ export default function OrderHistory() {
       },
     ],
   });
+  console.log(orderHistories?.data);
   return (
     <div className="p-4 w-full">
       <div className="text-2xl font-serif mb-6">ORDER HISTORY</div>
-      {orderHistories?.data?.orders?.length != 0 ? (
+      {orderHistories?.data && orderHistories?.data?.orders?.length != 0 ? (
         <div className="w-full">
           {orderHistories?.data?.orders.map((order: any) => (
             <OrderDetailList key={order.orderId} order={order} />
           ))}
         </div>
       ) : (
-        <div className="border-2 border-slate-400 p-5">
-          <p>You haven't placed any orders yet</p>
-        </div>
+        <Empty description="You haven't placed any orders yet" />
+        // <div className="border-2 border-slate-400 p-5">
+        //   <p>You haven't placed any orders yet</p>
+        // </div>
       )}
       <div>
         {orderHistories.isLoading && (

@@ -9,7 +9,7 @@ import {
   Skeleton,
 } from "antd";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { GET } from "../../../utils/request";
 import AccessoryRow from "./AccessoryRow";
 import { useQueries } from "@tanstack/react-query";
@@ -116,9 +116,9 @@ export default function AccessoriesManage() {
         </div>
         <div className="flex justify-end space-x-1 items-center">
           <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
-            <a href="/admin/accessories/detail" className="button primary">
+            <Link to="/admin/accessories/detail" className="button primary">
               <span>New Accessory</span>
-            </a>
+            </Link>
           </button>
         </div>
       </div>
