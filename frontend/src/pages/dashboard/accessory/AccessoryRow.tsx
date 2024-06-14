@@ -69,7 +69,7 @@ export default function AccessoryRow({
         {accessory.shape.name}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-        {accessory.accessoryType.name}
+        {accessory.quantity}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-left text-gray-500 text-sm">
         {accessory.karat}K

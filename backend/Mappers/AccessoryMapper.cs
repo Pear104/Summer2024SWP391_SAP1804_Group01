@@ -18,6 +18,7 @@ namespace backend.Mappers
                 MaterialWeight = accessory.MaterialWeight,
                 Name = accessory.Name,
                 Shape = accessory.Shape.ToShapeDTO(),
+                Quantity = accessory.Quantity,
                 AccessoryType = accessory.AccessoryType.ToAccessoryTypeDTO(),
                 AccessoryImages = accessory
                     .AccessoryImages.Select(x => x.ToAccessoryImageDTO())

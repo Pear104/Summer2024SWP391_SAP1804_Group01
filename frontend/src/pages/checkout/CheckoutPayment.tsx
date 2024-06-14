@@ -1,4 +1,12 @@
-import { Button, DatePicker, Divider, Form, Input, Select, message, } from "antd";
+import {
+  Button,
+  DatePicker,
+  Divider,
+  Form,
+  Input,
+  Select,
+  message,
+} from "antd";
 import { FormItem } from "react-hook-form-antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +31,9 @@ export default function CheckoutPayment() {
         <Divider>
           <div className="font-bold text-2xl">Check Shipping Information</div>
         </Divider>
-        <div className="text-center mb-2">Please check your information again before finish payment</div>
+        <div className="text-center mb-2">
+          Please check your information again before finish payment
+        </div>
         <EditCheckoutInfo />
         {isLoading && <Loading />}
         <div className="flex flex-col gap-2 mt-6">
@@ -36,53 +46,74 @@ export default function CheckoutPayment() {
               <div className="border-b w-full p-4 font-bold flex gap-4">
                 <div>
                   <div className="text-lg flex gap-4">
-                    <Button className="px-8 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
+                    <Button
+                      className="px-8 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
                       onClick={async () => {
                         console.log(cart);
                         setIsLoading(true);
-                        const response = await POST("/api/Order", {
+                        const orderResponse = await POST("/api/Order", {
                           orderDetails: cart,
                         });
-                        clearCart();
-                        const paymentResponse = await POST(
-                          "/api/payment/vnpay-sent-request",
-                          {
-                            paymentContent: "Thanh toan don hang " + response?.orderId,
-                            paymentCurrency: "USD",
-                            paymentRefId: `${response?.orderId}`,
-                            requiredAmount: (
-                              response?.totalPrice *
-                              (1 - response?.totalDiscountPercent / 100)
-                            ).toFixed(0),
-                            paymentLanguage: "en",
-                            merchantId: "MER0001",
-                            paymentDestinationId: "VNPAY",
-                            signature: "123456789ABC",
+                        console.log("orderResponse: ", orderResponse);
+                        if (orderResponse.orderId) {
+                          const transactionResponse = await POST(
+                            "/api/Transactions",
+                            {
+                              orderId: orderResponse.orderId,
+                              amount: orderResponse.totalPrice,
+                              paymentMethod: "CREDIT_CARD",
+                            }
+                          );
+                          console.log(
+                            "transactionResponse: ",
+                            transactionResponse
+                          );
+                          const paymentResponse = await POST(
+                            "/api/payment/vnpay-sent-request",
+                            {
+                              paymentContent:
+                                "Thanh toan don hang " + orderResponse?.orderId,
+                              paymentCurrency: "USD",
+                              paymentRefId: transactionResponse?.transactionId,
+                              requiredAmount: (
+                                orderResponse?.totalPrice *
+                                (1 - orderResponse?.totalDiscountPercent / 100)
+                              ).toFixed(0),
+                              paymentLanguage: "en",
+                              merchantId: "MER0001",
+                              paymentDestinationId: "VNPAY",
+                              signature: "123456789ABC",
+                            }
+                          );
+                          if (paymentResponse?.paymentUrl) {
+                            clearCart();
+                            location.href = paymentResponse.paymentUrl;
                           }
-                        );
-
-                        if (paymentResponse?.paymentUrl) {
-                          location.href = paymentResponse.paymentUrl;
                         }
 
-                        await new Promise((resolve) => setTimeout(resolve, 2000));
                         setIsLoading(false);
-                        if (response) {
-                          useCartStore.getState().clearCart();
-                          navigate("/account/order-history");
-                          messageApi.success("Payment successfully");
-                        } else {
-                          messageApi.error("Something went wrong, please try again");
-                        }
-                      }}>
+                        // if (response) {
+                        navigate("/account/order-history");
+                        // messageApi.success("Payment successfully");
+                        // } else {
+                        //   messageApi.error(
+                        //     "Something went wrong, please try again"
+                        //   );
+                        // }
+                      }}
+                    >
                       <div className="flex gap-4 w-150">
-                        <img src="/images/vnpay.png" className="w-[100px] h-auto" /> Credit Card
-                        </div>
+                        <img
+                          src="/images/vnpay.png"
+                          className="w-[100px] h-auto"
+                        />{" "}
+                        Credit Card
+                      </div>
                     </Button>
 
                     <Button className="gap-4 px-8 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center">
-                      <Truck/>
-                        Ship COD (Coming soon)
+                      <Truck />
+                      Ship COD (Coming soon)
                     </Button>
                   </div>
                 </div>
@@ -102,7 +133,7 @@ export default function CheckoutPayment() {
             Return to Information
           </div>
         </div>
-      </div >
+      </div>
     </>
   );
 }

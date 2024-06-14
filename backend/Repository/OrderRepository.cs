@@ -102,6 +102,8 @@ namespace backend.Repository
                         {
                             return null;
                         }
+                        accessory.Quantity--;
+                        _context.Entry(accessory).State = EntityState.Modified;
                         var materialPrice = _context
                             .MaterialPrices.Where(x => x.Karat == accessory.Karat)
                             .OrderBy(x => x.EffTime)
@@ -111,7 +113,8 @@ namespace backend.Repository
                         orderDetail.ItemPrice =
                             (
                                 diamond.Carat * diamondPrice.UnitPrice * 100
-                                + accessory?.MaterialWeight * materialPrice?.UnitPrice
+                                + (accessory?.MaterialWeight + (orderDetailDto.Size - 3))
+                                    * materialPrice?.UnitPrice
                                 + accessory?.AccessoryType.ProcessingPrice
                             ) * priceRate?.Percent;
                     }
@@ -131,14 +134,6 @@ namespace backend.Repository
             }
             System.Console.WriteLine("totalPrice: " + totalPrice);
             newOrder.TotalPrice = totalPrice;
-            await _context.Transactions.AddAsync(
-                new Transaction()
-                {
-                    Order = newOrder,
-                    Amount = totalPrice,
-                    PaymentMethod = "Credit Card",
-                }
-            );
             customer.RewardPoint = customer.RewardPoint + (int)(totalPrice / 1000);
             _context.Entry(customer).State = EntityState.Modified;
             await _context.Orders.AddAsync(newOrder);
@@ -234,7 +229,7 @@ namespace backend.Repository
                 );
             }
 
-            if(query.PhoneNumber != string.Empty)
+            if (query.PhoneNumber != string.Empty)
             {
                 orderQueries = orderQueries.Where(x => x.PhoneNumber == query.PhoneNumber);
             }
@@ -312,17 +307,22 @@ namespace backend.Repository
             {
                 return null;
             }
-            if (order.OrderStatus != null) {
+            if (order.OrderStatus != null)
+            {
                 existedOrder.OrderStatus = Enum.Parse<OrderStatus>(order.OrderStatus);
             }
             if (order.SaleStaffId != 0)
             {
-                var saleStaff = _context.Accounts.FirstOrDefault(x => x.AccountId == order.SaleStaffId);
+                var saleStaff = _context.Accounts.FirstOrDefault(x =>
+                    x.AccountId == order.SaleStaffId
+                );
                 existedOrder.SaleStaff = saleStaff;
             }
             if (order.DeliveryStaffId != 0)
             {
-                var deliveryStaff = _context.Accounts.FirstOrDefault(x => x.AccountId == order.DeliveryStaffId);
+                var deliveryStaff = _context.Accounts.FirstOrDefault(x =>
+                    x.AccountId == order.DeliveryStaffId
+                );
                 existedOrder.DeliveryStaff = deliveryStaff;
             }
             _context.Entry(existedOrder).State = EntityState.Modified;

@@ -1,10 +1,12 @@
-import { useEffect } from "react";
-import { GET } from "../../utils/request";
+import { useEffect, useState } from "react";
+import { GET, POST } from "../../utils/request";
 import { Pagination, Skeleton, Image } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSearchStore } from "../../store/searchStore";
 import { useQueries } from "@tanstack/react-query";
 import { ExternalLink } from "lucide-react";
+import Loading from "../../components/Loading";
+import { useCartStore } from "./../../store/cartStore";
 
 const formatDate = (dateString: any) => {
   const date = new Date(dateString);
@@ -52,7 +54,7 @@ const DiamondItem = ({ detail, percent }: { detail: any; percent: any }) => {
       </div>
       <div className="text-lg pl-4 flex flex-col gap-2">
         <div className="text-gray-800 flex gap-2">
-          Diamond's Certificate Number:{" "}
+          Certificate Number:{" "}
           <a
             className="text-blue-500 flex"
             target="_blank"
@@ -64,18 +66,17 @@ const DiamondItem = ({ detail, percent }: { detail: any; percent: any }) => {
         </div>
         <div className="grid grid-cols-2 gap-y-2">
           <div className="text-gray-800">
-            <span className="font-bold">Diamond Carat:</span>{" "}
-            {detail.diamond.carat}
+            <span className="">Carat:</span> {detail.diamond.carat}
           </div>
           <div className="text-gray-800">
             Diamond Clarity: {detail.diamond.clarity}
           </div>
-          <div className="text-gray-800">Diamond Cut: {detail.diamond.cut}</div>
+          <div className="text-gray-800">Cut: {detail.diamond.cut}</div>
           <div className="text-gray-800">
             Diamond Color: {detail.diamond.color}
           </div>
           <div className="text-gray-800 font-bold">
-            <span className="">Diamond price:</span>{" "}
+            <span className="">Price:</span>{" "}
             {(
               detail.diamondPrice.unitPrice *
               detail.diamond.carat *
@@ -96,7 +97,7 @@ const DiamondItem = ({ detail, percent }: { detail: any; percent: any }) => {
 const AccessoryItem = ({ detail, percent }: { detail: any; percent: any }) => {
   return (
     <div className="flex text-lg">
-      <div className="w-1/5 flex">
+      <div className="w-1/5 flex aspect-square">
         {detail?.accessory != null
           ? detail.accessory?.accessoryImages[0]?.url && (
               <Image
@@ -119,7 +120,7 @@ const AccessoryItem = ({ detail, percent }: { detail: any; percent: any }) => {
         {detail?.accessory != null
           ? detail?.accessory && (
               <div className="text-gray-800 font-bold">
-                Accessory price:{" "}
+                Price:{" "}
                 {(
                   (detail?.accessory.materialWeight *
                     detail.materialPrice.unitPrice +
@@ -139,8 +140,10 @@ const AccessoryItem = ({ detail, percent }: { detail: any; percent: any }) => {
 };
 
 const OrderDetailList = ({ order }: { order: any }) => {
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <div>
+      {isLoading && <Loading />}
       <div className="p-4">
         <div>Order ID: {order.orderId}</div>
         <div>Created at: {formatDate(order.createdAt)}</div>
@@ -174,9 +177,41 @@ const OrderDetailList = ({ order }: { order: any }) => {
           </div>
 
           <div>
-            <button className="bg-gray-800 text-white px-4 py-2 rounded mr-2">
-              Buy Again
-            </button>
+            {order.orderStatus == "Pending" && (
+              <button
+                className="bg-gray-800 text-white px-4 py-2 rounded mr-2"
+                onClick={async () => {
+                  setIsLoading(true);
+                  const transactionResponse = await POST("/api/Transactions", {
+                    orderId: order.orderId,
+                    amount: order.totalPrice,
+                    paymentMethod: "CREDIT_CARD",
+                  });
+                  const paymentResponse = await POST(
+                    "/api/payment/vnpay-sent-request",
+                    {
+                      paymentContent: "Thanh toan don hang " + order?.orderId,
+                      paymentCurrency: "USD",
+                      paymentRefId: transactionResponse?.transactionId,
+                      requiredAmount: (
+                        order?.totalPrice *
+                        (1 - order?.totalDiscountPercent / 100)
+                      ).toFixed(0),
+                      paymentLanguage: "en",
+                      merchantId: "MER0001",
+                      paymentDestinationId: "VNPAY",
+                      signature: "123456789ABC",
+                    }
+                  );
+                  if (paymentResponse?.paymentUrl) {
+                    location.href = paymentResponse.paymentUrl;
+                  }
+                  setIsLoading(true);
+                }}
+              >
+                Checkout
+              </button>
+            )}
             <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded">
               Contact Seller
             </button>

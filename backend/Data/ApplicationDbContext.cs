@@ -53,6 +53,10 @@ namespace backend.Data
             builder.Entity<DiamondPrice>().Property(d => d.Color).HasConversion<string>();
             builder.Entity<Order>().Property(d => d.OrderStatus).HasConversion<string>();
             builder
+                .Entity<Transaction>()
+                .Property(d => d.TransactionStatus)
+                .HasConversion<string>();
+            builder
                 .Entity<WarrantyRequest>()
                 .Property(d => d.WarrantyStatus)
                 .HasConversion<string>();

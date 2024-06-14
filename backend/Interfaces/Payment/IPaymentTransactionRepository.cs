@@ -8,6 +8,5 @@ namespace backend.Interfaces
         public Task<PaymentTransaction>? GetTransactionById(string id);
         public Task<List<PaymentTransaction>> GetAllTransactions();
         public Task<List<PaymentTransaction>> GetAllTransactionsByPaymentId(string id);
-
     }
 }

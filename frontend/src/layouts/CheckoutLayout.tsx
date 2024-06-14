@@ -130,21 +130,29 @@ export default function CheckoutLayout() {
             <div className="flex justify-between">
               <div>Subtotal</div>
               <div className="font-semibold">
-                {totalPrice.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  maximumFractionDigits: 0,
-                })}
+                {totalPrice != 0 && totalPrice ? (
+                  totalPrice.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 0,
+                  })
+                ) : (
+                  <Skeleton.Button active={true} size="small" />
+                )}
               </div>
             </div>
             <div className="flex justify-between">
               <div>Discount</div>
               <div className="font-semibold">
-                {(0).toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  maximumFractionDigits: 0,
-                })}
+                {totalPrice != 0 && totalPrice ? (
+                  (0).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 0,
+                  })
+                ) : (
+                  <Skeleton.Button active={true} size="small" />
+                )}
               </div>
             </div>
           </div>
@@ -154,11 +162,15 @@ export default function CheckoutLayout() {
             <div className="flex items-center gap-2">
               <div className="text-xs">USD</div>
               <div className="font-semibold text-3xl">
-                {totalPrice.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  maximumFractionDigits: 0,
-                })}
+                {totalPrice != 0 && totalPrice ? (
+                  totalPrice.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 0,
+                  })
+                ) : (
+                  <Skeleton.Button active={true} size="small" />
+                )}
               </div>
             </div>
           </div>
