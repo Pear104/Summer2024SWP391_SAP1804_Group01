@@ -36,7 +36,7 @@ export default function AccessoriesManage() {
     setQueryUrl("/api/Accessories?");
   }, []);
 
-  const [accessories, materialPrices] = useQueries({
+  const [accessories, materialPrices, priceRate] = useQueries({
     queries: [
       {
         queryKey: ["accessories", queryUrl],
@@ -45,6 +45,11 @@ export default function AccessoriesManage() {
       {
         queryKey: ["materialPrices"],
         queryFn: () => GET("/api/MaterialPrices/"),
+        staleTime: Infinity,
+      },
+      {
+        queryKey: ["priceRate"],
+        queryFn: () => GET("/api/PriceRate/latest"),
         staleTime: Infinity,
       },
     ],
@@ -320,7 +325,9 @@ export default function AccessoriesManage() {
                             accessory={accessory}
                             price={getAccessoryPrice(
                               accessory,
-                              materialPrices?.data
+                              materialPrices?.data,
+                              3,
+                              priceRate?.data?.percent
                             )}
                             selectedAccessories={selectedAccessories}
                             setSelectedAccessories={setSelectedAccessories}

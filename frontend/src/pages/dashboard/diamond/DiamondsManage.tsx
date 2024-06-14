@@ -75,7 +75,7 @@ export default function ProductsManage() {
       setSelectedDiamonds={setSelectedDiamonds}
       price={getDiamondPrice(
         diamond,
-        diamondPrice.data,
+        diamondPrice?.data,
         priceRate?.data?.percent
       ).toLocaleString("en-US", {
         style: "currency",
