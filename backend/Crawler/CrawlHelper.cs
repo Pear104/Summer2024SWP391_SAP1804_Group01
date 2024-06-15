@@ -79,7 +79,7 @@ namespace backend.Crawler
                     new { symmetrys = new[] { 0, 1, 2, 3 } },
                     new { price = "100.00,700000.00" },
                     new { carat = "0.25,20.00" },
-                    new { page = 1 },
+                    new { page = page },
                     new { orderBy = "Shape" },
                     new { sortBy = "ASC" },
                     new { lwratio = "0.9,2.75" },

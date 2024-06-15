@@ -84,7 +84,7 @@ export default function CheckoutInfo() {
       >
         <Input
           placeholder="Your name"
-          className="text-black text-sm border border-primary py-2 px-4 without-ring w-full rounded-none"
+          className="text-black text-sm border border-none py-1 px-4 without-ring w-full rounded-none"
         />
       </FormItem>
       <FormItem
@@ -96,7 +96,7 @@ export default function CheckoutInfo() {
       >
         <Input
           placeholder="Your email"
-          className="text-black text-sm border border-primary py-2 px-4 without-ring w-full rounded-none"
+          className="text-black text-sm border border-none py-1 px-4 without-ring w-full rounded-none"
         />
       </FormItem>
       <FormItem
@@ -142,7 +142,7 @@ export default function CheckoutInfo() {
           <Button
             className="px-8 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
             htmlType="submit"
-            // navigate("/checkout/payment");
+          // navigate("/checkout/payment");
           >
             Continue to Payment
           </Button>

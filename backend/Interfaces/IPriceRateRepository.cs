@@ -11,7 +11,8 @@ namespace backend.Interfaces
     {
         Task<IEnumerable<PriceRate>> GetAllPriceRateAsync();
         Task<PriceRate?> GetLatestPriceRateAsync();
-        Task<PriceRate?> CreatePriceRateAsync(long authorId, CreatePriceRateDTO blogDto);
-        Task<PriceRate?> DeleteBlogAsync(long id);
+        Task<PriceRate?> CreatePriceRateAsync(long authorId, CreatePriceRateDTO priceRateDto);
+        
+
     }
 }
