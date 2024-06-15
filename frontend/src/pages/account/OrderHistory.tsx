@@ -241,11 +241,10 @@ export default function OrderHistory() {
       },
     ],
   });
-  console.log(orderHistories?.data);
   return (
     <div className="p-4 w-full">
       <div className="text-2xl font-serif mb-6">ORDER HISTORY</div>
-      {orderHistories?.data && orderHistories?.data?.orders?.length != 0 ? (
+      {orderHistories?.data?.orders?.length != 0 ? (
         <div className="w-full">
           {orderHistories?.data?.orders.map((order: any) => (
             <OrderDetailList key={order.orderId} order={order} />
@@ -253,9 +252,6 @@ export default function OrderHistory() {
         </div>
       ) : (
         <Empty description="You haven't placed any orders yet" />
-        // <div className="border-2 border-slate-400 p-5">
-        //   <p>You haven't placed any orders yet</p>
-        // </div>
       )}
       <div>
         {orderHistories.isLoading && (

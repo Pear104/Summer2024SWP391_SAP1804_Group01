@@ -127,6 +127,7 @@ export default function DiamondDetail() {
               <div
                 className="cursor-pointer tracking-widest text-xl w-full flex justify-center px-4 py-3 bg-slate-500 hover:scale-95 transition-all text-white"
                 onClick={() => {
+                  
                   setCart(diamond.data.diamondId);
                   navigate("/cart");
                 }}

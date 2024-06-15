@@ -27,8 +27,8 @@ import BlogsManage from "../pages/dashboard/blog/BlogsManage";
 import NewBlog from "../pages/dashboard/blog/NewBlog";
 import AccessoriesManage from "../pages/dashboard/accessory/AccessoriesManage";
 import AccessoryView from "../pages/dashboard/accessory/AccessoryView";
-import DiamondPriceManage from "../pages/dashboard/diamondprice/DiamondPriceManage";
-import AccessoryPriceManage from "../pages/dashboard/accessoryprice/AccessoryPriceManage";
+import DiamondPriceManage from "../pages/dashboard/diamondPrice/DiamondPriceManage";
+import AccessoryPriceManage from "../pages/dashboard/accessoryPrice/AccessoryPriceManage";
 import CustomerManage from "../pages/dashboard/customer/CustomerManage";
 import TransactionManage from "../pages/dashboard/transacction/TransactionManage";
 import OrderManage from "../pages/dashboard/order/OrderManage";
@@ -132,9 +132,9 @@ const routes = [
               },
             ],
           },
-          { 
-            element:<WarrantyRequest/>,
-            path : "/admin/warranty-request"
+          {
+            element: <WarrantyRequest />,
+            path: "/admin/warranty-request",
           },
           {
             path: "/admin/accessories",

@@ -145,21 +145,7 @@ namespace backend.Repository
                     var merchant = await _dbContext.Merchants.FirstOrDefaultAsync(m =>
                         m.Id.ToLower().Equals(paymentModel.MerchantId!.ToLower())
                     );
-                    // Create a transaction in the db
-                    var transaction = await _dbContext.Transactions.FirstOrDefaultAsync(o =>
-                        o.TransactionId == paymentModel.PaymentRefId
-                    );
 
-                    transaction.TransactionStatus = TransactionStatus.Completed;
-                    _dbContext.Entry(transaction).State = EntityState.Modified;
-                    var order = await _dbContext.Orders.FirstOrDefaultAsync(o =>
-                        o.OrderId == transaction.OrderId
-                    );
-
-                    order!.OrderStatus = OrderStatus.Processing;
-                    _dbContext.Entry(transaction).State = EntityState.Modified;
-                    _dbContext.Entry(order!).State = EntityState.Modified;
-                    _dbContext.SaveChanges();
                     // returnUrl = merchant?.MerchantReturnUrl ?? string.Empty;
                     returnUrl = "http://localhost:3000/account/order-history";
                 } //end payment is NOT null
@@ -172,6 +158,20 @@ namespace backend.Repository
                 if (request.vnp_ResponseCode == "00")
                 {
                     resultData.PaymentStatus = "00";
+                    // Update the transaction status in the db
+                    var transaction = await _dbContext.Transactions.FirstOrDefaultAsync(o =>
+                        o.TransactionId == paymentModel.PaymentRefId
+                    );
+                    transaction!.TransactionStatus = TransactionStatus.Completed;
+                    _dbContext.Entry(transaction).State = EntityState.Modified;
+                    var order = await _dbContext.Orders.FirstOrDefaultAsync(o =>
+                        o.OrderId == transaction.OrderId
+                    );
+
+                    order!.OrderStatus = OrderStatus.Processing;
+                    _dbContext.Entry(transaction).State = EntityState.Modified;
+                    _dbContext.Entry(order!).State = EntityState.Modified;
+                    _dbContext.SaveChanges();
                     resultData.PaymentId = paymentModel!.Id;
                     ///TODO: Make signature
                     resultData.Signature = Guid.NewGuid().ToString();
