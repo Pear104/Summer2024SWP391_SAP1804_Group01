@@ -4,11 +4,11 @@ import DashboardHeader from "../pages/dashboard/components/DashboardHeader";
 
 export default function DashBoardLayout() {
   return (
-    <div className="fixed flex flex-row bg-neutral-100 h-screen w-screen">
+    <div className="bg-neutral-100 h-screen w-screen overflow-hidden flex flex-row">
       <Sidebar />
-      <div className="flex-1 overflow-y-scroll">
+      <div className="flex flex-col flex-1 overflow-y-scroll">
         <DashboardHeader />
-        <div className="p-4">
+        <div className="flex-1 p-4 min-h-0 overflow-auto">
           <Outlet />
         </div>
       </div>
