@@ -21,7 +21,7 @@ export const SaleStatusMenu = ({
   return (
     <>
       <Button
-        disabled={statusText == "Confirmed" ? true : false}
+        disabled={statusText != "Processing" ? true : false}
         className="border p-2 rounded-md flex items-center"
         onClick={() => {
           Modal.confirm({
@@ -38,7 +38,7 @@ export const SaleStatusMenu = ({
           });
         }}
       >
-        {statusText}
+        {statusText != "Processing" ? "Confirmed" : "Processing"}
       </Button>
     </>
     // <Button

@@ -77,7 +77,7 @@ export default function WarrantyRequestList() {
       {
         queryKey: ["warrantyRequests"],
         queryFn: () => GET("/api/WarrantyRequests"),
-        staleTime: Infinity,
+        staleTime: 0,
       },
     ],
   });

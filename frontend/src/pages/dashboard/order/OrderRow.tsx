@@ -16,12 +16,12 @@ export default function OrderRow({ order }: { order: any }) {
       {
         queryKey: ["saleStaffs"],
         queryFn: () => GET("/api/Accounts?Role=SaleStaff"),
-        staleTime: Infinity,
+        staleTime: 0,
       },
       {
         queryKey: ["deliveryStaffs"],
         queryFn: () => GET("/api/Accounts?Role=DeliveryStaff"),
-        staleTime: Infinity,
+        staleTime: 0,
       },
     ],
   });
@@ -56,6 +56,7 @@ export default function OrderRow({ order }: { order: any }) {
             orderId={order.orderId}
             staffs={saleStaffs?.data || []}
             currentStaff={order?.saleStaffName}
+            statusText={order.orderStatus}
           />
         </td>
         <td className="px-6 py-4 whitespace-nowrap">

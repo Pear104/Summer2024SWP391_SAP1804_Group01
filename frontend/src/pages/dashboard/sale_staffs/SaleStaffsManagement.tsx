@@ -42,12 +42,12 @@ export default function SaleStaffsManagement() {
       {
         queryKey: ["orders", queryUrl],
         queryFn: () => GET(queryUrl),
-        staleTime: Infinity,
+        staleTime: 0,
       },
       {
         queryKey: ["saleStaffs"],
         queryFn: () => GET("/api/Accounts/me"),
-        staleTime: Infinity,
+        staleTime: 0,
       },
     ],
   });
@@ -55,25 +55,6 @@ export default function SaleStaffsManagement() {
   const renderSaleRow = (order: any) => (
     <SaleDataRow key={order.orderId} order={order} />
   );
-
-  // // search and filter
-  // const handleStatusClick = (status: string, statusText: string) => {
-  //   setStatusText(statusText);
-  //   params.set(
-  //     "Status",
-  //     status == "1"
-  //       ? "Pending"
-  //       : status == "2"
-  //       ? "Processing"
-  //       : status == "3"
-  //       ? "Delivering"
-  //       : status == "4"
-  //       ? "Completed"
-  //       : "Failed"
-  //   );
-  //   setQueryUrl(`/api/Order?` + params.toString());
-  //   navigate("/admin/orders?" + params.toString());
-  // };
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);

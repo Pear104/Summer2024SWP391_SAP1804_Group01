@@ -41,7 +41,7 @@ export default function OrderManage() {
       {
         queryKey: ["orders", queryUrl],
         queryFn: () => GET(queryUrl),
-        staleTime: Infinity,
+        staleTime: 0,
       },
     ],
   });

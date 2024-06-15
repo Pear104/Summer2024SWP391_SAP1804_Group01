@@ -48,7 +48,7 @@ export default function CreateWarrantyRequest() {
       {
         queryKey: ["orders"],
         queryFn: () => GET("/api/Order?OrderStatus=Completed"),
-        staleTime: Infinity,
+        staleTime: 0,
       },
     ],
   });
@@ -56,7 +56,7 @@ export default function CreateWarrantyRequest() {
     ?.map((order: any) =>
       order.orderDetails.map((orderDetail: any) => ({
         value: orderDetail.warrantyCardId,
-        label:   `${orderDetail?.diamond.carat} ct ${
+        label: `${orderDetail?.diamond.carat} ct ${
           orderDetail?.diamond.shape
         } Shape Diamond #${orderDetail?.diamond.certificateNumber} ${
           orderDetail?.accessory?.name
