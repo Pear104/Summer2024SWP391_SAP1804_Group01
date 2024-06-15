@@ -1,4 +1,4 @@
-import { Form, Input, Pagination, Skeleton } from "antd";
+import { Empty, Form, Input, Pagination, Skeleton } from "antd";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { GET } from "../../../utils/request";
@@ -325,11 +325,9 @@ export default function ProductsManage() {
                     {diamondsData?.length > 0 ? (
                       diamondsData?.map(renderDiamondRow)
                     ) : (
-                      <tr>
-                        <td className="text-center items-center">
-                          There is no diamond
-                        </td>
-                      </tr>
+                      <td colSpan={12} className="py-20 w-full">
+                        <Empty description="No order to process" />
+                      </td>
                     )}
                     {diamondsData?.length > 0 &&
                       diamondsData?.map(renderDiamondRow)}
@@ -366,11 +364,11 @@ export default function ProductsManage() {
                       }}
                     />
                   )}
-                  {!diamondsData?.isLoading && diamondsData?.length == 0 && (
+                  {/* {!diamondsData?.isLoading && diamondsData?.length == 0 && (
                     <div className="text-center text-2xl">
                       There is no diamond
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>

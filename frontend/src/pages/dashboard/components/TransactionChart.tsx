@@ -12,6 +12,20 @@ import {
 } from "recharts";
 import { GET } from "../../../utils/request";
 
+const data1 = [
+  {
+    name: "april",
+    Income: 4000,
+  },
+  {
+    name: "Page B",
+    Income: 3000,
+  },
+  {
+    name: "Page C",
+    Income: 2000,
+  },
+];
 const TransactionChart: React.FC = () => {
   const [data, setData] = useState([]);
   const [formattedData, setFormattedData] = useState([]);
@@ -47,14 +61,13 @@ const TransactionChart: React.FC = () => {
   console.log(data);
   console.log(formattedData);
   return (
-    <div className="h-[22rem] bg-white p-4 rounded-sm border border-gray-200 flex flex-col flex-1 items-center">
-      <div className="items-center flex flex-col">
-        <strong className="text-gray-700 font-medium">Transactions</strong>
-        <div className="mt-3 w-full flex-1 text-xs">
-          {/* <ResponsiveContainer width="100%" height="100%"> */}
+    <div className="h-[26rem] bg-white p-4 rounded-sm border border-gray-200 flex flex-col flex-grow">
+      <strong className="text-gray-700 font-medium">Transactions</strong>
+      <div className="mt-3 w-full flex-1 text-xs">
+        <ResponsiveContainer width="100%" height="100%">
           <BarChart
             className="items-center"
-            width={700}
+            width={500}
             height={300}
             data={formattedData}
             margin={{
@@ -64,15 +77,14 @@ const TransactionChart: React.FC = () => {
               bottom: 0,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray="3 3 0 0" vertical={false} />
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
             <Legend />
             <Bar dataKey="Income" fill="#0ea5e9" />
           </BarChart>
-          {/* </ResponsiveContainer> */}
-        </div>
+        </ResponsiveContainer>
       </div>
     </div>
   );
