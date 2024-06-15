@@ -56,7 +56,7 @@ export default function CreateWarrantyRequest() {
     ?.map((order: any) =>
       order.orderDetails.map((orderDetail: any) => ({
         value: orderDetail.warrantyCardId,
-        label: `${orderDetail?.diamond.carat} ct ${
+        label:   `${orderDetail?.diamond.carat} ct ${
           orderDetail?.diamond.shape
         } Shape Diamond #${orderDetail?.diamond.certificateNumber} ${
           orderDetail?.accessory?.name

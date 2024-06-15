@@ -11,8 +11,8 @@ import WarrantyColumnHeader from "./components/WarrantyColumnHeader";
 export default function WarrantyRequest() {
   const location = useLocation();
   const [statusText, setStatusText] = useState("Status");
-  // sort item
 
+  // sort item
   const columnHeaders = [
     "Warranty Request ID",
     "Warranty Card ID",
@@ -88,7 +88,7 @@ export default function WarrantyRequest() {
       <div className="flex justify-between items-center mt-6 mx-auto mb-8">
         <div className="flex justify-start space-x-1 items-center">
           <div className="self-center">
-            <h1 className="text-2xl"> Warranty Request List</h1>
+            <h1 className="text-2xl"> Warranty Request List </h1>
           </div>
         </div>
       </div>
@@ -147,6 +147,7 @@ export default function WarrantyRequest() {
             <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                 <table className="min-w-full divide-y divide-gray-200">
+
                   {/* theader */}
                   <thead className="bg-gray-50">
                     <tr className="">

@@ -31,7 +31,7 @@ export default function CheckoutPayment() {
         <Divider>
           <div className="font-bold text-2xl">Check Shipping Information</div>
         </Divider>
-        <div className="text-center mb-2">
+        <div className="text-center mb-2 italic">
           Please check your information again before finish payment
         </div>
         <EditCheckoutInfo />
@@ -40,7 +40,7 @@ export default function CheckoutPayment() {
           <Divider>
             <div className="font-bold text-2xl">Payment Method</div>
           </Divider>
-          <div className="text-center mb-2">Choose your payment method.</div>
+          <div className="text-center mb-2 italic">Choose your payment method.</div>
           <div>
             <div className="border rounded-xl">
               <div className="border-b w-full p-4 font-bold flex gap-4">
@@ -90,16 +90,8 @@ export default function CheckoutPayment() {
                             location.href = paymentResponse.paymentUrl;
                           }
                         }
-
                         setIsLoading(false);
-                        // if (response) {
                         navigate("/account/order-history");
-                        // messageApi.success("Payment successfully");
-                        // } else {
-                        //   messageApi.error(
-                        //     "Something went wrong, please try again"
-                        //   );
-                        // }
                       }}
                     >
                       <div className="flex gap-4 w-150">

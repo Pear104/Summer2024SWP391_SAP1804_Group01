@@ -20,15 +20,26 @@ namespace backend.Repository
         {
             _context = context;
         }
-         public async Task<IEnumerable<PriceRate>> GetAllPriceRateAsync()
+
+        public async Task<IEnumerable<PriceRate>> GetAllPriceRateAsync()
         {
              var existingPriceRate = await _context.PriceRates.ToListAsync();
             return existingPriceRate;
         }
 
-        public Task<PriceRate?> CreatePriceRateAsync(long authorId, CreatePriceRateDTO blogDto)
+        public async Task<PriceRate?> CreatePriceRateAsync(long authorId, CreatePriceRateDTO priceRateDto)
         {
-            throw new NotImplementedException();
+           var author = await _context.Accounts.FindAsync(authorId);
+            if (author == null)
+            {
+                return null;
+            }
+            var priceRate = priceRateDto.ToPriceRateFromCreate();
+            priceRate.Account = author;
+
+            await _context.PriceRates.AddAsync(priceRate);
+            await _context.SaveChangesAsync();
+            return priceRate;
         }
 
         public Task<PriceRate?> DeleteBlogAsync(long id)

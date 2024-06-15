@@ -337,7 +337,7 @@ export default function ProductsManage() {
                 </table>
 
                 <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
-                  {diamond?.data && diamond?.data.diamonds.length > 0 && (
+                  {diamond?.data && diamond?.data?.diamonds?.length > 0 && (
                     <Pagination
                       showTotal={(total, range) =>
                         `${range[0]}-${range[1]} of ${total} items`
