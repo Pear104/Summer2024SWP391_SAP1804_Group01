@@ -20,7 +20,9 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostShape([FromBody] CreateTransactionDTO transactionDto)
+        public async Task<IActionResult> PostTransaction(
+            [FromBody] CreateTransactionDTO transactionDto
+        )
         {
             var newTransaction = await _transactionRepo.CreateTransactionAsync(transactionDto);
             if (newTransaction == null)
@@ -31,6 +33,7 @@ namespace backend.Controllers
             }
             return Ok(newTransaction);
         }
+
         [HttpGet]
         public async Task<IActionResult> GetTransactions()
         {

@@ -20,7 +20,10 @@ const SaleStaffComponent = ({
       orderId: number;
       saleStaffId: number;
     }) => PUT(`/api/Order/${orderId}`, { saleStaffId: saleStaffId }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["orders"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["saleStaffs"] });
+    },
     onError: () => queryClient.invalidateQueries({ queryKey: ["orders"] }),
   });
 

@@ -173,9 +173,9 @@ export default function OrderManage() {
                         />
                       </td>
                     )}
-                    {orderList?.data?.orders?.length > 0 ? (
-                      orderList.data.orders.map(renderOrderRow)
-                    ) : (
+                    {orderList?.data?.orders?.length > 0 &&
+                      orderList.data.orders.map(renderOrderRow)}
+                    {orderList?.data?.orders?.length == 0 && (
                       <td colSpan={12} className="py-20 w-full">
                         <Empty description="No order to process" />
                       </td>

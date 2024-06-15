@@ -13,7 +13,7 @@ export const SaleStaffMenu = ({
   return (
     <Dropdown
       overlay={
-        <Menu className="w-40" defaultValue={staffText}>
+        <Menu className="w-44" defaultValue={staffText}>
           {staffs?.map((staff: any) => (
             <Menu.Item
               key={staff?.accountId}

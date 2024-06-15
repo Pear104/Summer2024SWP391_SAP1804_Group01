@@ -182,14 +182,17 @@ export default function DashboardHeader() {
               </MenuItem>
               {/* <MenuItem>
                 {({ active }) => (
-                  <a
-                    href="/"
+                  <div
+                    onClick={() => {
+                      setCookie("accessToken", "", 0);
+                      navigate("/authentication/login");
+                    }}
                     className={`${
                       active ? "bg-gray-700 text-white" : "text-white"
                     } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
                   >
                     Logout
-                  </a>
+                  </div>
                 )}
               </MenuItem> */}
             </MenuItems>
