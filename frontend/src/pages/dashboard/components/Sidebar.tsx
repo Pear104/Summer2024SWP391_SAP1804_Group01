@@ -8,16 +8,42 @@ import {
   HiOutlineShoppingCart,
   HiOutlineUsers,
   HiOutlineDocumentText,
-  HiOutlineQuestionMarkCircle,
-  HiOutlineCog,
   HiCurrencyDollar,
 } from "react-icons/hi";
 import { BsTextParagraph } from "react-icons/bs";
-import RingIcon from "../../product/components/RingIcon";
+import { useQuery } from "@tanstack/react-query";
+import { GET } from "../../../utils/request";
 const linkClasses =
   "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline active:bg-neutral-600 round-sm text-base";
 
+type Role = "Manager" | "SaleStaff" | "DeliveryStaff";
+//chia task role
+const ROLE_PERMISSIONS: Record<Role, string[]> = {
+  Manager: [
+    "dashboard",
+    "orders",
+    "transactions",
+    "warranty-request",
+    "products",
+    "accessories",
+    "salestaff",
+    "deliverystaff",
+    "customers",
+    "diamond-price",
+    "accessory-price",
+    "blog",
+  ],
+  SaleStaff: ["dashboard", "salestaff", "warranty-request"],
+  DeliveryStaff: ["dashboard", "deliverystaff"],
+};
+
 export default function Sidebar() {
+  const { data: account } = useQuery({
+    queryKey: ["account"],
+    queryFn: () => GET("/api/Accounts/me"),
+    staleTime: Infinity,
+  });
+  const userRole: Role = account?.role;
   const DASHBOARD_SIDEBAR_LINKS = [
     {
       key: "dashboard",
@@ -38,10 +64,10 @@ export default function Sidebar() {
       icon: <HiOutlineDocumentText />,
     },
     {
-      key : "warranty-request",
-      label : "Warranty Request",
-      path : "/admin/warranty-request",
-      icon :  <Wrench/>
+      key: "warranty-request",
+      label: "Warranty Request",
+      path: "/admin/warranty-request",
+      icon: <Wrench />,
     },
     {
       key: "products",
@@ -83,30 +109,19 @@ export default function Sidebar() {
       key: "accessory-price",
       label: "Accessory Price",
       path: "/admin/accessory-price",
-      icon: <HiCurrencyDollar/>,
+      icon: <HiCurrencyDollar />,
     },
     {
       key: "blog",
       label: "Blog",
       path: "/admin/blogs",
-      icon: <BsTextParagraph/>,
+      icon: <BsTextParagraph />,
     },
   ];
 
-  // const DASHBOARD_SIDEBAR_BOTTOM_LINKS = [
-  //   {
-  //     key: "settings",
-  //     label: "Settings",
-  //     path: "/admin/settings",
-  //     icon: <HiOutlineCog />,
-  //   },
-  //   {
-  //     key: "support",
-  //     label: "Help & Support",
-  //     path: "/admin/support",
-  //     icon: <HiOutlineQuestionMarkCircle />,
-  //   },
-  // ];
+  const filteredLinks = DASHBOARD_SIDEBAR_LINKS.filter((link) =>
+    ROLE_PERMISSIONS[userRole]?.includes(link.key)
+  );
 
   return (
     <div className="flex flex-col bg-neutral-900 w-60 p-3 text-white">
@@ -116,12 +131,11 @@ export default function Sidebar() {
       </Link>
 
       <div className="flex-1 py-8 flex flex-col gap-0.5">
-        {DASHBOARD_SIDEBAR_LINKS.map((items) => (
+        {filteredLinks.map((items) => (
           <SidebarLink key={items.key} items={items} />
         ))}
       </div>
       <div className="flex flex-col gap-0.5 pt-2 border-t border-neutral-700">
-       
         {/* {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((items) => (
           <SidebarLink key={items.key} items={items} />
         ))} */}

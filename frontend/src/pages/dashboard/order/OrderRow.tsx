@@ -11,19 +11,6 @@ const formatDate = (dateString: any) => {
   return `${day}/${month}/${year}`;
 };
 export default function OrderRow({ order }: { order: any }) {
-  if (!order) {
-    return (
-      <>
-        <tr>
-          <td colSpan={9}>
-            <div className="text-center items-center">
-              <p>There are no orders!!!</p>
-            </div>
-          </td>
-        </tr>
-      </>
-    );
-  }
   const [saleStaffs, deliveryStaffs] = useQueries({
     queries: [
       {
