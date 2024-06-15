@@ -26,8 +26,6 @@ const ROLE_PERMISSIONS: Record<Role, string[]> = {
     "warranty-request",
     "products",
     "accessories",
-    "salestaff",
-    "deliverystaff",
     "customers",
     "diamond-price",
     "accessory-price",
@@ -41,9 +39,10 @@ export default function Sidebar() {
   const { data: account } = useQuery({
     queryKey: ["account"],
     queryFn: () => GET("/api/Accounts/me"),
-    staleTime: Infinity,
   });
   const userRole: Role = account?.role;
+  console.log(account?.role);
+  console.log(userRole);
   const DASHBOARD_SIDEBAR_LINKS = [
     {
       key: "dashboard",

@@ -62,8 +62,10 @@ export default function OrderManage() {
           : status === "2"
           ? "Processing"
           : status === "3"
-          ? "Delivering"
+          ? "Confirmed"
           : status === "4"
+          ? "Delivering"
+          : status === "5"
           ? "Completed"
           : "Failed"
       );
@@ -117,7 +119,7 @@ export default function OrderManage() {
             <div className="flex space-x-075">
               <div className="card-action ">
                 <a
-                  href="/admin/diamonds"
+                  href="/admin/orders"
                   className="text-interactive "
                   onClick={(event) => {
                     event.preventDefault();

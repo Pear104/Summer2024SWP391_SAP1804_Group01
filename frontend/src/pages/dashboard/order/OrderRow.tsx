@@ -63,6 +63,7 @@ export default function OrderRow({ order }: { order: any }) {
             orderId={order.orderId}
             staffs={deliveryStaffs?.data || []}
             currentStaff={order?.deliveryStaffName}
+            statusText={order.orderStatus}
           />
         </td>
         <td className="px-6 py-4 whitespace-nowrap">

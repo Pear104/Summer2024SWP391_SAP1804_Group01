@@ -1,4 +1,5 @@
 using backend.DTOs;
+using backend.DTOs.Order;
 using backend.Enums;
 using backend.Models;
 
@@ -23,6 +24,19 @@ namespace backend.Mappers
                 Size = order.Size,
                 DiamondId = order.DiamondId,
                 AccessoryId = order.AccessoryId,
+            };
+        }
+
+        public static OrderStaffDTO ToOrderStaffDTO(this Order order)
+        {
+            return new OrderStaffDTO
+            {
+                OrderId = order.OrderId,
+                OrderStatus = order.OrderStatus.ToString(),
+                SaleStaffId = order.SaleStaffId,
+                SaleStaffName = order.SaleStaff?.Name,
+                DeliveryStaffId = order.DeliveryStaffId,
+                DeliveryStaffName = order.DeliveryStaff?.Name,
             };
         }
 

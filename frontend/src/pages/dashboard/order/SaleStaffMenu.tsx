@@ -14,10 +14,13 @@ export const SaleStaffMenu = ({
     <Dropdown
       overlay={
         <Menu className="w-40" defaultValue={staffText}>
-          {staffs.map((staff: any) => (
-            <Menu.Item key={staff.accountId}>
+          {staffs?.map((staff: any) => (
+            <Menu.Item
+              key={staff?.accountId}
+              disabled={staff?.ordersOfSaleStaff?.length >= 5 ? true : false}
+            >
               <a onClick={() => handleStaffClick(staff.accountId)}>
-                {staff.name}
+                {staff?.name}: {staff?.ordersOfSaleStaff?.length}
               </a>
             </Menu.Item>
           ))}

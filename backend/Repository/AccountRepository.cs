@@ -38,7 +38,12 @@ namespace backend.Repository
 
         public async Task<Account?> GetAccountByIdAsync(long id)
         {
-            return await _context.Accounts.Include(x => x.Rank).FirstOrDefaultAsync(x => x.AccountId == id);
+            return await _context.Accounts
+            .Include(x => x.Rank)
+            .Include(x => x.OrdersOfCustomer)
+            .Include(x => x.OrdersOfDeliveryStaff)
+            .Include(x => x.OrdersOfSaleStaff)
+            .FirstOrDefaultAsync(x => x.AccountId == id);
         }
 
         public async Task<Account?> UpdateAccountAsync(long id, UpdateAccountDTO accountDto)
@@ -61,7 +66,11 @@ namespace backend.Repository
 
         public async Task<IEnumerable<Account>> GetAllAccountsAsync(AccountQuery query)
         {
-            var accountsQuery = _context.Accounts.AsQueryable();
+            var accountsQuery = _context.Accounts
+                .Include(x => x.OrdersOfCustomer)
+                .Include(x => x.OrdersOfSaleStaff)
+                .Include(x => x.OrdersOfDeliveryStaff)
+                .AsQueryable();
             if (!string.IsNullOrEmpty(query.Role))
             {
                 var role = Enum.Parse<Role>(query.Role);

@@ -6,7 +6,6 @@ import { useSearchStore } from "../../store/searchStore";
 import { useQueries } from "@tanstack/react-query";
 import { ExternalLink } from "lucide-react";
 import Loading from "../../components/Loading";
-import { useCartStore } from "./../../store/cartStore";
 
 const formatDate = (dateString: any) => {
   const date = new Date(dateString);
@@ -27,6 +26,8 @@ export const OrderStatus = ({ order }: { order: any }) => {
             ? "bg-red-200 border-red-300"
             : order.orderStatus === "Processing"
             ? "bg-yellow-200 border-yellow-300"
+            : order.orderStatus === "Confirmed"
+            ? "bg-pink-200 border-pink-300"
             : order.orderStatus === "Delivering"
             ? "bg-orange-200 border-orange-300"
             : order.orderStatus === "Completed"
@@ -237,7 +238,7 @@ export default function OrderHistory() {
       {
         queryKey: ["orders", queryUrl],
         queryFn: () => GET(queryUrl),
-        staleTime: Infinity,
+        staleTime: 0,
       },
     ],
   });
@@ -246,7 +247,7 @@ export default function OrderHistory() {
       <div className="text-2xl font-serif mb-6">ORDER HISTORY</div>
       {orderHistories?.data?.orders?.length != 0 ? (
         <div className="w-full">
-          {orderHistories?.data?.orders.map((order: any) => (
+          {orderHistories?.data?.orders?.map((order: any) => (
             <OrderDetailList key={order.orderId} order={order} />
           ))}
         </div>
@@ -254,7 +255,7 @@ export default function OrderHistory() {
         <Empty description="You haven't placed any orders yet" />
       )}
       <div>
-        {orderHistories.isLoading && (
+        {orderHistories?.isLoading && (
           <Skeleton
             active
             paragraph={{

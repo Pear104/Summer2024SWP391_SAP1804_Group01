@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   HiOutlineBell,
   HiOutlineChatAlt,
@@ -12,8 +13,11 @@ import {
   MenuItems,
   Transition,
 } from "@headlessui/react";
+import { setCookie } from "../../../utils/cookie";
+import { Button } from "antd";
 
 export default function DashboardHeader() {
+  const navigate = useNavigate();
   return (
     <div className="bg-white h-16 px-4 flex items-center justify-between border-b border-gray-200">
       <div className="relative">
@@ -165,6 +169,18 @@ export default function DashboardHeader() {
                 )}
               </MenuItem>
               <MenuItem>
+                <Button
+                  className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-white bg-gray-700"
+                  htmlType="submit"
+                  onClick={() => {
+                    setCookie("accessToken", "", 0);
+                    navigate("/authentication/login");
+                  }}
+                >
+                  Logout
+                </Button>
+              </MenuItem>
+              {/* <MenuItem>
                 {({ active }) => (
                   <a
                     href="/"
@@ -175,7 +191,7 @@ export default function DashboardHeader() {
                     Logout
                   </a>
                 )}
-              </MenuItem>
+              </MenuItem> */}
             </MenuItems>
           </Transition>
         </Menu>

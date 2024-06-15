@@ -1,5 +1,3 @@
-import { useQueries } from "@tanstack/react-query";
-import { GET } from "../../../utils/request";
 import SaleUpdateComponent from "./SaleUpdateComponent";
 const formatDate = (dateString: any) => {
   const date = new Date(dateString);
@@ -9,34 +7,6 @@ const formatDate = (dateString: any) => {
   return `${day}/${month}/${year}`;
 };
 export default function OrderRow({ order }: { order: any }) {
-  if (!order) {
-    return (
-      <>
-        <tr>
-          <td colSpan={9}>
-            <div className="text-center items-center">
-              <p>There are no orders!!!</p>
-            </div>
-          </td>
-        </tr>
-      </>
-    );
-  }
-  //   const [saleStaffs, deliveryStaffs] = useQueries({
-  //     queries: [
-  //       {
-  //         queryKey: ["saleStaffs"],
-  //         queryFn: () => GET("/api/Accounts?Role=SaleStaff"),
-  //         staleTime: Infinity,
-  //       },
-  //       {
-  //         queryKey: ["deliveryStaffs"],
-  //         queryFn: () => GET("/api/Accounts?Role=DeliveryStaff"),
-  //         staleTime: Infinity,
-  //       },
-  //     ],
-  //   });
-
   return (
     <>
       <tr key={order.orderId}>

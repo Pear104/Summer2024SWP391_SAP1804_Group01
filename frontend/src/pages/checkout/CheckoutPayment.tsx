@@ -40,7 +40,9 @@ export default function CheckoutPayment() {
           <Divider>
             <div className="font-bold text-2xl">Payment Method</div>
           </Divider>
-          <div className="text-center mb-2 italic">Choose your payment method.</div>
+          <div className="text-center mb-2 italic">
+            Choose your payment method.
+          </div>
           <div>
             <div className="border rounded-xl">
               <div className="border-b w-full p-4 font-bold flex gap-4">
@@ -106,6 +108,23 @@ export default function CheckoutPayment() {
                     <Button className="gap-4 px-8 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center">
                       <Truck />
                       Ship COD (Coming soon)
+                    </Button>
+
+                    <Button
+                      className="gap-4 px-8 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
+                      onClick={async () => {
+                        console.log(cart);
+                        setIsLoading(true);
+                        await POST("/api/Order", {
+                          orderDetails: cart,
+                        });
+                        clearCart();
+                        setIsLoading(false);
+                        navigate("/account/order-history");
+                      }}
+                    >
+                      <Truck />
+                      Test
                     </Button>
                   </div>
                 </div>

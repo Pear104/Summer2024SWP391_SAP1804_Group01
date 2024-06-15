@@ -5,13 +5,16 @@ export const DeliveryStaffMenu = ({
   handleStaffClick,
   staffText,
   staffs,
+  statusText,
 }: {
   handleStaffClick: any;
   staffText: any;
   staffs: any[];
+  statusText: any;
 }) => {
   return (
     <Dropdown
+      disabled={statusText == "Confirmed" ? false : true}
       overlay={
         <Menu defaultValue={staffText}>
           {staffs.map((staff: any) => (

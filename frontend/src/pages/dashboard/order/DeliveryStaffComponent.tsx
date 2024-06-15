@@ -6,10 +6,12 @@ const DeliveryStaffComponent = ({
   orderId,
   currentStaff,
   staffs,
+  statusText,
 }: {
   orderId: number;
   currentStaff: string;
   staffs: any[];
+  statusText: any;
 }) => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
@@ -34,6 +36,7 @@ const DeliveryStaffComponent = ({
         staffs={staffs}
         handleStaffClick={handleStaffClick}
         staffText={currentStaff}
+        statusText={statusText}
       />
       {mutation.isPending && <p>Updating...</p>}
       {mutation.error && <p>Error: {(mutation.error as Error).message}</p>}

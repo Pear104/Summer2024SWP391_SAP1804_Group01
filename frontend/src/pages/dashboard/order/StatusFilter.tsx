@@ -36,6 +36,17 @@ export const StatusFilter = ({ statusText }: { statusText: any }) => {
           <Menu.Item key="3">
             <a
               onClick={() => {
+                params.set("OrderStatus", "Confirmed");
+                setQueryUrl(`/api/Order?` + params.toString());
+                navigate("/admin/orders?" + params.toString());
+              }}
+            >
+              Confirmed
+            </a>
+          </Menu.Item>
+          <Menu.Item key="4">
+            <a
+              onClick={() => {
                 params.set("OrderStatus", "Delivering");
                 setQueryUrl(`/api/Order?` + params.toString());
                 navigate("/admin/orders?" + params.toString());
@@ -44,7 +55,7 @@ export const StatusFilter = ({ statusText }: { statusText: any }) => {
               Delivering
             </a>
           </Menu.Item>
-          <Menu.Item key="4">
+          <Menu.Item key="5">
             <a
               onClick={() => {
                 params.set("OrderStatus", "Completed");
@@ -55,7 +66,7 @@ export const StatusFilter = ({ statusText }: { statusText: any }) => {
               Completed
             </a>
           </Menu.Item>
-          <Menu.Item key="5">
+          <Menu.Item key="6">
             <a
               onClick={() => {
                 params.set("OrderStatus", "Failed");

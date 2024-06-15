@@ -1,3 +1,4 @@
+using backend.DTOs;
 using backend.DTOs.Account;
 using backend.Enums;
 using backend.Models;
@@ -18,20 +19,16 @@ namespace backend.Mappers
                 Birthday = account.Birthday,
                 Gender = account.Gender.ToString(),
                 CreatedAt = account.CreatedAt,
-                OrdersOfCustomer = account
-                    .OrdersOfCustomer.Select(order => order.ToOrderDTO())
-                    .ToList(),
-                OrdersOfSaleStaff = account
-                    .OrdersOfSaleStaff.Select(order => order.ToOrderDTO())
-                    .ToList(),
-                OrdersOfDeliveryStaff = account
-                    .OrdersOfDeliveryStaff.Select(order => order.ToOrderDTO())
-                    .ToList(),
+                OrdersOfCustomer = account.OrdersOfCustomer.Select(order => order.ToOrderDTO()).ToList(),
+                OrdersOfSaleStaff = account.OrdersOfSaleStaff.Select(order => order.ToOrderDTO()).ToList(),
+                OrdersOfDeliveryStaff = account.OrdersOfDeliveryStaff.Select(order => order.ToOrderDTO()).ToList(),
                 Rank = account.Rank.ToRankDTO(),
                 Role = account.Role.ToString(),
                 RewardPoint = account.RewardPoint
             };
         }
+
+        
 
         public static Account ToAccount(this AccountDTO accountDTO)
         {

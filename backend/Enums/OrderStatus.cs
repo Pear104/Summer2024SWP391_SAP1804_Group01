@@ -4,6 +4,7 @@ namespace backend.Enums
     {
         Pending,
         Processing,
+        Confirmed,
         Delivering,
         Completed,
         Failed,
