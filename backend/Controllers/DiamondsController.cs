@@ -1,4 +1,5 @@
-﻿using backend.Data;
+﻿using System.Security.Claims;
+using backend.Data;
 using backend.DTOs.Diamond;
 using backend.Helper;
 using backend.Interfaces;
@@ -23,6 +24,12 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<ActionResult> GetDiamonds([FromQuery] DiamondQuery query)
         {
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (role == "Manager" || role == "Administrator")
+            {
+                query.IsAvailability = false;
+            }
+
             var diamondResult = await _diamondRepo.GetAllDiamondsAsync(query);
             // return Ok(diamondResult.Select(x => x.ToDiamondDTO()));
             return Ok(diamondResult);

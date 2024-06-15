@@ -44,6 +44,7 @@ export default function AccountDetail() {
   useEffect(() => {
     (async () => {
       const data = await GET(`/api/Accounts/me`);
+      console.log(data);
       if (data) {
         setUserInfo(data);
       } else {
