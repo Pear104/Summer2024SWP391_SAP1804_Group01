@@ -4,6 +4,7 @@
     {
         Administrator,
         Manager,
+        WarrantyStaff,
         DeliveryStaff,
         SaleStaff,
         Customer
