@@ -42,6 +42,12 @@ namespace backend.Data
 
         //End payment
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder
+                .UseSqlServer("server=localhost;database=DATJ;uid=sa;pwd=12345;TrustServerCertificate=true", options => options.CommandTimeout(180)); // Timeout in seconds
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

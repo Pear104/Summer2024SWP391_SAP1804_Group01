@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PUT } from "../../../utils/request";
-import { StatusMenu } from "./StatusMenu";
+import { DeliveryStatusMenu } from "./DeliveryStatusMenu";
 
 const OrderUpdateComponent = ({
   orderId,
@@ -18,11 +18,7 @@ const OrderUpdateComponent = ({
       orderId: number;
       orderStatus: string;
     }) => PUT(`/api/Order/${orderId}`, { orderStatus: orderStatus }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["orders"] });
-      queryClient.invalidateQueries({ queryKey: ["saleStaffs"] });
-      queryClient.invalidateQueries({ queryKey: ["deliveryStaffs"] });
-    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["orders"] }),
     onError: () => queryClient.invalidateQueries({ queryKey: ["orders"] }),
   });
 
@@ -32,7 +28,7 @@ const OrderUpdateComponent = ({
 
   return (
     <div>
-      <StatusMenu
+      <DeliveryStatusMenu
         handleStatusClick={handleStatusClick}
         statusText={currentStatus}
       />

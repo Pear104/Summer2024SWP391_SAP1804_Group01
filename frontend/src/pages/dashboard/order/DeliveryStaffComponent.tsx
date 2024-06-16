@@ -22,7 +22,10 @@ const DeliveryStaffComponent = ({
       orderId: number;
       deliveryStaffId: number;
     }) => PUT(`/api/Order/${orderId}`, { deliveryStaffId: deliveryStaffId }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["orders"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["deliveryStaffs"] });
+    },
     onError: () => queryClient.invalidateQueries({ queryKey: ["orders"] }),
   });
 

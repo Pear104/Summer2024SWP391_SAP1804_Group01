@@ -41,13 +41,5 @@ export const SaleStatusMenu = ({
         {statusText != "Processing" ? "Confirmed" : "Processing"}
       </Button>
     </>
-    // <Button
-    //   className="border p-2 rounded-md flex items-center"
-    //   onClick={() => {
-    //     handleStatusClick("Confirmed");
-    //   }}
-    // >
-    //   <span>{statusText}</span>
-    // </Button>
   );
 };
