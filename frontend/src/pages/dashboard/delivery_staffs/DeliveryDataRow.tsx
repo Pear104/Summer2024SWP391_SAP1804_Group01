@@ -6,7 +6,7 @@ const formatDate = (dateString: any) => {
   const year = date.getFullYear();
   return `${day}/${month}/${year}`;
 };
-export default function OrderRow({ order }: { order: any }) {
+export default function DeliveryDataRow({ order }: { order: any }) {
   return (
     <>
       <tr key={order.orderId}>

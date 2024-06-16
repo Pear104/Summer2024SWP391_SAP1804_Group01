@@ -1,28 +1,27 @@
+import { Empty, Form, Input, Pagination, Skeleton } from "antd";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Form, Input, Pagination, Skeleton, Empty } from "antd";
-import { useSearchStore } from "../../../store/searchStore";
 import { GET } from "../../../utils/request";
 import { useQueries } from "@tanstack/react-query";
-import { StatusFilter } from "./components/StatusFilter";
-import WarrantyRow from "./components/WarrantyRow";
-import WarrantyColumnHeader from "./components/WarrantyColumnHeader";
+import { useSearchStore } from "../../../store/searchStore";
+import DeliveryWarrantyDataRow from "./DeliveryWarrantyDataRow";
+import { DeliveryWarrantyStatusFilter } from "./DeliveryWarrantyStatusFilter";
+import DeliveryWarrantyColumnHeader from "./DeliveryWarrantyColumnHeader";
 
-export default function WarrantyRequest() {
+export default function DeliveryWarrantyManagement() {
   const location = useLocation();
   const [statusText, setStatusText] = useState("Status");
-
   // sort item
+
   const columnHeaders = [
-    "Warranty Request ID",
-    "Warranty Card ID",
-    "Reason",
+    "Wanrranty ID",
+    "Receive Time",
+    "Return Time",
     "Customer",
-    "Shipping Address",
+    "Customer Address",
     "Phone Number",
-    "Sale Staff",
-    "Delivery Staff",
-    "Status",
+    "Warranty Reason",
+    "Warranty Status",
   ];
 
   const searchTerm = useSearchStore((state) => state.searchTerm);
@@ -33,29 +32,37 @@ export default function WarrantyRequest() {
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   useEffect(() => {
-    setQueryUrl("/api/WarrantyRequests?");
+    params.delete("IsAvailability");
+    params.delete("IsDescending");
+    params.delete("SortBy");
+    setQueryUrl("/api/WarrantyRequest?");
   }, []);
 
-  const [warrantyRequestList] = useQueries({
+  const [warrantyRequestList, DeliveryAccount] = useQueries({
     queries: [
       {
         queryKey: ["warrantyRequests", queryUrl],
         queryFn: () => GET(queryUrl),
+        staleTime: Infinity,
+      },
+      {
+        queryKey: ["DeliveryStaffs"],
+        queryFn: () => GET("/api/Accounts/me"),
         staleTime: 0,
       },
     ],
   });
-  console.log(queryUrl);
-  console.log(warrantyRequestList?.data);
 
-  const renderWarrantyRow = (warranty: any) => (
-    <WarrantyRow key={warranty.warrantyRequestId} warranty={warranty} />
+  const renderDeliveryRow = (warranty: any) => (
+    <DeliveryWarrantyDataRow
+      key={warranty.warrantyRequestId}
+      warranty={warranty}
+    />
   );
 
-  // search and filter
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const status = params.get("warrantyStatus");
+    const status = params.get("status");
 
     if (status) {
       setStatusText(
@@ -66,8 +73,6 @@ export default function WarrantyRequest() {
           : status === "3"
           ? "Delivering"
           : status === "4"
-          ? "Returning"
-          : status === "5"
           ? "Completed"
           : "Failed"
       );
@@ -88,7 +93,10 @@ export default function WarrantyRequest() {
       <div className="flex justify-between items-center mt-6 mx-auto mb-8">
         <div className="flex justify-start space-x-1 items-center">
           <div className="self-center">
-            <h1 className="text-2xl"> Warranty Request List </h1>
+            <h1 className="text-2xl">
+              {" "}
+              Warranty List of {DeliveryAccount?.data?.name}
+            </h1>
           </div>
         </div>
       </div>
@@ -114,7 +122,7 @@ export default function WarrantyRequest() {
                   />
                 </Form.Item>
                 <Form.Item>
-                  <StatusFilter statusText={statusText} />
+                  <DeliveryWarrantyStatusFilter statusText={statusText} />
                 </Form.Item>
               </Form>
             </h3>
@@ -129,7 +137,7 @@ export default function WarrantyRequest() {
                     setSearchTerm("");
                     // Clear the URL parameters
                     const params = new URLSearchParams(location.search);
-                    setQueryUrl(`/api/WarrantyRequests?` + params.toString());
+                    setQueryUrl(`/api/Order?` + params.toString());
                     // params.delete("type");
                     navigate({ search: params.toString() });
                   }}
@@ -143,20 +151,20 @@ export default function WarrantyRequest() {
         </div>
         {/* listing items */}
         <div className="flex flex-col">
-          <div className="my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                 <table className="min-w-full divide-y divide-gray-200">
                   {/* theader */}
                   <thead className="bg-gray-50">
-                    <tr className="">
+                    <tr>
                       {columnHeaders.map((header) => {
                         return (
-                          <WarrantyColumnHeader
+                          <DeliveryWarrantyColumnHeader
                             header={header}
                             setQueryUrl={setQueryUrl}
                             params={params}
-                            type="warranty-request"
+                            type="warranty"
                           />
                         );
                       })}
@@ -165,30 +173,31 @@ export default function WarrantyRequest() {
                   {/* body */}
                   <tbody className="bg-white divide-y divide-gray-200">
                     {warrantyRequestList?.isLoading && (
-                      <td className="p-4" colSpan={100}>
-                        <Skeleton
-                          active
-                          paragraph={{
-                            rows: 20,
-                          }}
-                          className="w-full"
-                        />
-                      </td>
+                      <tr>
+                        <td colSpan={100}>
+                          <Skeleton
+                            active
+                            paragraph={{
+                              rows: 10,
+                            }}
+                            className="w-full"
+                          />
+                        </td>
+                      </tr>
                     )}
-                    {warrantyRequestList?.data &&
-                    warrantyRequestList?.data?.warrantyRequests?.length > 0 ? (
-                      warrantyRequestList?.data?.warrantyRequests?.map(
-                        renderWarrantyRow
+                    {warrantyRequestList?.data?.warrantyRequests.length > 0 ? (
+                      warrantyRequestList.data.warrantyRequests.map(
+                        renderDeliveryRow
                       )
                     ) : (
-                      <td colSpan={100} className="py-20 w-full">
-                        <Empty description="No warranty request to process" />
+                      <td colSpan={12} className="py-20 w-full">
+                        <Empty description="No warranty  to process" />
                       </td>
                     )}
                   </tbody>
                 </table>
-                {warrantyRequestList?.data?.warrantyRequests?.length > 0 && (
-                  <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
+                <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
+                  {warrantyRequestList?.data?.warrantyRequests?.length > 0 && (
                     <Pagination
                       showTotal={(total, range) =>
                         `${range[0]}-${range[1]} of ${total} items`
@@ -209,22 +218,22 @@ export default function WarrantyRequest() {
                         params.set("PageSize", pageSize.toString());
                         navigate(url.pathname + "?" + params.toString());
                         setQueryUrl(
-                          "/api/WarrantyRequest?" + params.toString()
+                          "/api/WarrantyRequests?" + params.toString()
                         );
                         setSearchTerm("");
                       }}
                       showSizeChanger={true}
-                      onShowSizeChange={(current, size) => {
+                      onShowSizeChange={(_current, size) => {
                         setPageSize(size);
                         params.set("PageSize", size.toString());
                         navigate(url.pathname + "?" + params.toString());
                         setQueryUrl(
-                          "/api/WarrantyRequest?" + params.toString()
+                          "/api/WarrantyRequests?" + params.toString()
                         );
                       }}
                     />
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           </div>

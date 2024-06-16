@@ -17,12 +17,12 @@ export default function WarrantyRow({ warranty }: { warranty: any }) {
       {
         queryKey: ["saleStaffs"],
         queryFn: () => GET("/api/Accounts?Role=SaleStaff"),
-        staleTime: Infinity,
+        staleTime: 0,
       },
       {
         queryKey: ["deliveryStaffs"],
         queryFn: () => GET("/api/Accounts?Role=DeliveryStaff"),
-        staleTime: Infinity,
+        staleTime: 0,
       },
     ],
   });

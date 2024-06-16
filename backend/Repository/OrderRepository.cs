@@ -249,6 +249,7 @@ namespace backend.Repository
                     OrderStatus = x.OrderStatus.ToString(),
                     ShippingAddress = x.ShippingAddress,
                     CreatedAt = x.CreatedAt,
+                    PhoneNumber = x.PhoneNumber,
                     CustomerId = x.CustomerId,
                     CustomerName =x.Customer.Name,
                     SaleStaffId = x.SaleStaffId ?? 0,

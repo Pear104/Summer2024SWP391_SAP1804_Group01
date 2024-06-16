@@ -42,6 +42,7 @@ import CreateWarrantyRequest from "../pages/account/CreateWarrantyRequest";
 import SaleStaffsManagement from "../pages/dashboard/sale_staffs/SaleStaffsManagement";
 import DeliveryStaffsManagement from "../pages/dashboard/delivery_staffs/DeliveryStaffsManagement";
 import WarrantyRequest from "../pages/dashboard/warranty_request/WarrantyRequest";
+import DeliveryWarrantyManagement from "../pages/dashboard/delivery_staffs/DeliveryWarrantyManagement";
 const routes = [
   {
     errorElement: <Error />,
@@ -101,6 +102,10 @@ const routes = [
           {
             element: <DeliveryStaffsManagement />,
             path: "/admin/delivery-staffs",
+          },
+          {
+            element: <DeliveryWarrantyManagement />,
+            path: "/admin/delivery-staffs-warranty",
           },
           {
             element: <AccessoryPriceManage />,

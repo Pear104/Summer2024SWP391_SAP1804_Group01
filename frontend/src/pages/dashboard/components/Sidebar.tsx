@@ -33,7 +33,7 @@ const ROLE_PERMISSIONS: Record<Role, string[]> = {
     "blog",
   ],
   SaleStaff: ["dashboard", "salestaff", "warranty-request"],
-  DeliveryStaff: ["dashboard", "deliverystaff"],
+  DeliveryStaff: ["dashboard", "deliverystaff", "deliverywarrantystaff"],
 };
 
 export default function Sidebar() {
@@ -48,8 +48,7 @@ export default function Sidebar() {
   //   navigate("/");
   // }
   const userRole: Role = account?.role;
-  console.log(account?.role);
-  console.log(userRole);
+
   const DASHBOARD_SIDEBAR_LINKS = [
     {
       key: "dashboard",
@@ -97,6 +96,12 @@ export default function Sidebar() {
       key: "deliverystaff",
       label: "Delivery Staffs",
       path: "/admin/delivery-staffs",
+      icon: <HiOutlineUsers />,
+    },
+    {
+      key: "deliverywarrantystaff",
+      label: "Delivery Staffs Warranty",
+      path: "/admin/delivery-staffs-warranty",
       icon: <HiOutlineUsers />,
     },
     {
