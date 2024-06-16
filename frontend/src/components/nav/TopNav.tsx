@@ -185,7 +185,7 @@ export default function TopNav() {
               </div>
             )}
           </Link>
-          <TopNavItem href="/blog">Blog</TopNavItem>
+          <TopNavItem href="/blogs">Blogs</TopNavItem>
           <TopNavItem href="/about">About us</TopNavItem>
         </div>
         {(jewelryDrop || diamondDrop) && (

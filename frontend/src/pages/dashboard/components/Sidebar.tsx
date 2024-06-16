@@ -44,9 +44,12 @@ export default function Sidebar() {
   });
   // console.log("account: ", account?.name);
   // console.log(account?.role);
-  // if (account?.role == "Customer" || !account) {
-  //   navigate("/");
-  // }
+  if (account?.role == "Customer") {
+    navigate("/");
+  }
+  if (!account) {
+    navigate("/authentication/login");
+  }
   const userRole: Role = account?.role;
 
   const DASHBOARD_SIDEBAR_LINKS = [

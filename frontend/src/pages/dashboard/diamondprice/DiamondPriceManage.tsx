@@ -204,10 +204,13 @@ export default function DiamondPriceManage() {
         />
       </Modal>
       <div className="flex justify-between items-center mx-auto mb-8">
-        <div className="flex justify-start space-x-1 items-center">
-          <div className="self-center">
-            <div className="text-2xl">Diamond Price</div>
-          </div>
+        <div className="flex justify-start space-x-1 items-center w-full">
+          <Divider
+            orientation="center"
+            className="text-2xl font-semibold uppercase"
+          >
+            Diamond Price
+          </Divider>
         </div>
       </div>
       <div className="grid gap-8">
