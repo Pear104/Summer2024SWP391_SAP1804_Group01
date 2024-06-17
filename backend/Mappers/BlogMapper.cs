@@ -13,7 +13,10 @@ namespace backend.Mappers
     {
         public static BlogDTO ToBlogDTO(this Blog blog)
         {
-            string cleanedContent = Regex.Replace(blog.Content, "<.*?>", string.Empty);
+            string cleanedContent = Regex
+                .Replace(blog.Content, "<.*?>", string.Empty)
+                .Replace("&nbsp;", " ")
+                .Replace("&amp;", "&");
 
             return new BlogDTO
             {
@@ -21,7 +24,7 @@ namespace backend.Mappers
                 BlogId = blog.BlogId,
                 CreatedAt = blog.CreatedAt,
                 Content =
-                    cleanedContent.Length > 200 ? cleanedContent.Substring(0, 200) : cleanedContent,
+                    cleanedContent.Length > 200 ? cleanedContent.Substring(0, 180) : cleanedContent,
                 ThumbnailUrl = HtmlParser.ExtractFirstImageFromHtml(blog.Content),
                 Title = blog.Title
             };

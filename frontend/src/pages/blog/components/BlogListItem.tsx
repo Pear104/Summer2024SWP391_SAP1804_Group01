@@ -6,7 +6,7 @@ export default function BlogListItem({ blog }: { blog: any }) {
   return (
     <Link className="flex" to={`/blogs/${blog.blogId}`}>
       <div
-        className="border w-[200px] aspect-[16/11] bg-no-repeat bg-cover rounded-lg bg-center"
+        className="border w-[280px] aspect-[16/11] bg-no-repeat bg-cover rounded-lg bg-center"
         style={{
           backgroundImage: `url(${
             blog?.thumbnailUrl != ""

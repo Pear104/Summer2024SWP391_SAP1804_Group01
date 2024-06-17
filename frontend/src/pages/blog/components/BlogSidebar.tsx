@@ -30,15 +30,15 @@ export default function BlogSidebar() {
       </Divider>
       <div className="flex flex-col gap-4">
         {/* big item */}
-        {blogs?.data?.blogs[0] && (
+        {blogs?.data?.blogs?.length > 0 && (
           <SidebarBigItem blog={blogs?.data?.blogs[0]} />
         )}
         {/* child item */}
-        {blogs?.data?.blogs.map((blog: any, index: number) => {
-          if (index != 0) {
-            return <SidebarBlogItem blog={blog} />;
-          }
-        }) || (
+        {blogs?.data?.blogs
+          ?.slice(1)
+          .map((blog: any, index: number) => (
+            <SidebarBlogItem blog={blog} />
+          )) || (
           <>
             <LoadingSidebarItem />
             <LoadingSidebarItem />
