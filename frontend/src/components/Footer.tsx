@@ -10,7 +10,7 @@ import Logo from "./logo/Logo";
 
 export default function Footer() {
   return (
-    <div className="w-screen border-t">
+    <div id="footer" className="w-screen border-t">
       <div className="grid grid-cols-2 py-8 bg-black/90 text-white px-8">
         <div className="flex text-base gap-8">
           <div className="flex flex-col gap-2 mulish-regular text-sm">

@@ -21,6 +21,6 @@ namespace backend.Helper
         public bool? IsAvailability { get; set; } = true;
         public string? SearchQuery { get; set; } = null;
         public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 20;
+        public int PageSize { get; set; } = 10;
     }
 }

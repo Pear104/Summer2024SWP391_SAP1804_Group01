@@ -14,11 +14,15 @@ const AccessoryItem = ({
       to={`/product/accessory/detail/${accessory.accessoryId}`}
     >
       <div
-        className="my-2 aspect-square bg-cover bg-center bg-no-repeat w-full"
+        className="relative my-2 aspect-square bg-cover bg-center bg-no-repeat w-full"
         style={{
           backgroundImage: `url(${accessory.accessoryImages[0].url})`,
         }}
-      ></div>
+      >
+        <div className="text-base italic text-red-400">
+          *The images is for illustration purpose.
+        </div>
+      </div>
       <div>
         <div className="w-full flex libre-baskerville-regular">
           {accessory.name}
