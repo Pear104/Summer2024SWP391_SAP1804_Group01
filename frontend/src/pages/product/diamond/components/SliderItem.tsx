@@ -1,7 +1,6 @@
 import { Slider } from "antd";
-import { useNavigate } from "react-router-dom";
-import { useSearchStore } from "../../../../store/searchStore";
 import { useDebouncedCallback } from "use-debounce";
+import scrollTo from "../../../../utils/scroll";
 export default function SliderItem({
   mark,
   min,
@@ -22,12 +21,13 @@ export default function SliderItem({
   const debounced = useDebouncedCallback(debounceCallback, 800);
 
   return (
-    <div className="flex flex-col mt-6">
+    <div className="flex flex-col">
       <div className="font-bold mulish-regular mb-2">{title}</div>
       <div className="w-full">
         <Slider
           onChange={(value) => {
             debounced(value);
+            scrollTo("table-header", "center");
           }}
           tooltip={{
             formatter: (value?: number): React.ReactNode => {

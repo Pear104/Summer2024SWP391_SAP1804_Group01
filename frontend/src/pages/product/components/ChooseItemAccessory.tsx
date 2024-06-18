@@ -4,7 +4,6 @@ import { useCartStore } from "../../../store/cartStore";
 import { Link, useNavigate } from "react-router-dom";
 import RingIcon from "./RingIcon";
 import { Skeleton } from "antd";
-import { useSearchStore } from "../../../store/searchStore";
 
 export default function ChooseItemAccessory({
   accessory,
@@ -13,7 +12,9 @@ export default function ChooseItemAccessory({
   accessory: any;
   price: any;
 }) {
+  // const location = useLocation();
   const currentAccessory = useCartStore((state) => state.currentAccessory);
+  const currentShape = useCartStore((state) => state.currentShape);
   const setCurrentAccessory = useCartStore(
     (state) => state.setCurrentAccessory
   );
@@ -24,7 +25,9 @@ export default function ChooseItemAccessory({
       //   useSearchStore.getState().setQueryUrl("/api/Accessories?");
       //   navigate("/product/accessory");
       //   }}
-      to="/product/accessory"
+      to={`/product/accessory?${
+        currentShape != null ? `Shape=${currentShape}` : ""
+      }`}
       className={`font-bold border-y-2 border-primary py-4 flex items-center w-[400px] justify-between ${
         !currentAccessory || !accessory ? "px-8" : "px-4"
       }`}

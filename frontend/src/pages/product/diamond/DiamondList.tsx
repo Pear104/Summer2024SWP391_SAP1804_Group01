@@ -1,7 +1,7 @@
 import { Pagination, Skeleton } from "antd";
 import { GET } from "../../../utils/request";
 import { useQueries } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import DiamondItem from "./components/DiamondItem";
 import SortItem from "./components/SortItem";
 import Filter from "./components/Filter";
@@ -25,12 +25,13 @@ export default function DiamondList() {
   ];
 
   const navigate = useNavigate();
+  const location = useLocation();
   // scrollTo("table-header");
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   console.log("query url: " + queryUrl);
   useEffect(() => {
-    setQueryUrl("/api/Diamonds?IsAvailability=true");
+    setQueryUrl(`/api/Diamonds${location.search}`);
   }, []);
 
   const [diamond, diamondPrice, priceRate] = useQueries({
@@ -51,11 +52,6 @@ export default function DiamondList() {
       },
     ],
   });
-
-  if (diamond?.data && diamondPrice?.data) {
-    console.log("i am bug");
-    console.log(diamond?.data);
-  }
 
   return (
     <div className="flex items-center justify-around flex-col mb-20">
@@ -130,7 +126,7 @@ export default function DiamondList() {
                 (diamond?.data && diamond?.data.currentPage?.toString()) || "1"
               }
               total={diamond?.data && diamond?.data.totalCount}
-              pageSize={Number(params.get("PageSize")) || 20}
+              pageSize={Number(params.get("PageSize")) || 10}
               showSizeChanger={false}
               onChange={(page, _pageSize) => {
                 scrollTo("table-header");

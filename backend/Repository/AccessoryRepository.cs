@@ -37,6 +37,7 @@ namespace backend.Repository
 
         public async Task<AccessoryResult> GetAllAccessoriesAsync(AccessoryQuery query)
         {
+            System.Console.WriteLine(query.Shape);
             var accessoriesQuery = _context
                 .Accessories.Include(x => x.Shape)
                 .Include(x => x.AccessoryType)
@@ -47,17 +48,17 @@ namespace backend.Repository
                 accessoriesQuery = accessoriesQuery.Where(x => x.Karat == query.Karat);
             }
 
-            if (!string.IsNullOrEmpty(query.NameType))
+            if (!string.IsNullOrEmpty(query.Name))
             {
                 accessoriesQuery = accessoriesQuery.Where(x =>
-                    x.AccessoryType.Name.ToLower() == query.NameType.ToLower()
+                    x.AccessoryType.Name.ToLower() == query.Name.ToLower()
                 );
             }
 
-            if (!string.IsNullOrEmpty(query.ShapeType))
+            if (!string.IsNullOrEmpty(query.Shape))
             {
                 accessoriesQuery = accessoriesQuery.Where(x =>
-                    x.Shape.Name.ToLower() == query.ShapeType.ToLower()
+                    x.Shape.Name.ToLower() == query.Shape.ToLower()
                 );
             }
 

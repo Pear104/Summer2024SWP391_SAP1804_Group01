@@ -111,7 +111,7 @@ export default function Filter() {
   return (
     <div className="w-full px-20">
       <div className="font-bold mulish-regular mb-4">BY SHAPE</div>
-      <div className="flex justify-between">
+      <div className="flex justify-between mb-4">
         {items.map((item) => {
           return (
             <DiamondShapeFilter key={item.name} title={item.name}>
@@ -121,7 +121,7 @@ export default function Filter() {
         })}
       </div>
 
-      <div className="grid grid-cols-1 gap-16">
+      <div className="grid grid-cols-1 gap-4">
         {/* <SliderItem
           title="BY CUT"
           mark={cut}

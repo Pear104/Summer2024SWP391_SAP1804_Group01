@@ -18,6 +18,7 @@ namespace backend.Repository
     public class DiamondRepository : IDiamondRepository
     {
         private readonly ApplicationDbContext _context;
+
         public DiamondRepository(ApplicationDbContext context)
         {
             _context = context;
@@ -60,18 +61,12 @@ namespace backend.Repository
 
         public async Task<DiamondResult> GetAllDiamondsAsync(DiamondQuery query)
         {
-            var diamondsQuery = _context
-                .Diamonds.Include(x => x.Shape)
-                // .Where(x => x.Availability == true)
-                .AsQueryable();
+            var diamondsQuery = _context.Diamonds.Include(x => x.Shape).AsQueryable();
 
             // Sorting
             if (!string.IsNullOrEmpty(query.SortBy))
             {
                 bool isDescending = query.IsDescending;
-                
-                System.Console.WriteLine(query.SortBy.ToLower());
-                System.Console.WriteLine(query.IsDescending);
                 diamondsQuery = query.SortBy.ToLower() switch
                 {
                     "lab"
@@ -101,10 +96,13 @@ namespace backend.Repository
                     _ => diamondsQuery.OrderBy(x => x.Carat),
                 };
             }
-            if(query.SearchQuery !=null)
+            if (query.SearchQuery != null)
             {
-                diamondsQuery = diamondsQuery.Where(d => d.CertificateNumber.ToString().StartsWith(query.SearchQuery.ToString()));
+                diamondsQuery = diamondsQuery.Where(d =>
+                    d.CertificateNumber.ToString().StartsWith(query.SearchQuery.ToString())
+                );
             }
+
             bool? IsAvailability = query.IsAvailability;
 
             if (IsAvailability.HasValue)
@@ -133,19 +131,21 @@ namespace backend.Repository
                     x.Color <= (Color)Enum.Parse(typeof(Color), query.MaxColor)
                 );
             }
+
             if (!string.IsNullOrEmpty(query.MinClarity))
             {
                 diamondsQuery = diamondsQuery.Where(x =>
                     x.Clarity >= (Clarity)Enum.Parse(typeof(Clarity), query.MinClarity)
                 );
             }
+
             if (!string.IsNullOrEmpty(query.MaxClarity))
             {
                 diamondsQuery = diamondsQuery.Where(x =>
                     x.Clarity <= (Clarity)Enum.Parse(typeof(Clarity), query.MaxClarity)
                 );
             }
-            System.Console.WriteLine("shape: " + query.Shape);
+
             if (!string.IsNullOrEmpty(query.Shape))
             {
                 System.Console.WriteLine(query.Shape);
@@ -160,20 +160,7 @@ namespace backend.Repository
             var diamonds = await diamondsQuery
                 .Skip(skipNumber)
                 .Take(query.PageSize)
-                .Select(x =>
-                    x.ToDiamondDTO()
-                // new DiamondDTO()
-                // {
-                //     ImageUrl = x.ImageUrl,
-                //     DiamondId = x.DiamondId,
-                //     Lab = x.Lab,
-                //     Carat = x.Carat,
-                //     Cut = x.Cut,
-                //     Color = x.Color.ToString(),
-                //     Clarity = x.Clarity.ToString(),
-                //     Shape = x.ShapeId.ToString(),
-                // }
-                )
+                .Select(x => x.ToDiamondDTO())
                 .ToListAsync();
 
             return new DiamondResult
@@ -207,41 +194,52 @@ namespace backend.Repository
                 existingDiamond.ShapeId = diamondDto.ShapeId;
                 existingDiamond.Shape = shape;
             }
-            if (diamondDto.Lab != null) {
+            if (diamondDto.Lab != null)
+            {
                 existingDiamond.Lab = diamondDto.Lab;
             }
-            if (diamondDto.CertificateNumber != null) {
+            if (diamondDto.CertificateNumber != null)
+            {
                 existingDiamond.CertificateNumber = (long)diamondDto.CertificateNumber;
             }
-            if (diamondDto.CertificateUrl != null) {
+            if (diamondDto.CertificateUrl != null)
+            {
                 existingDiamond.CertificateUrl = diamondDto.CertificateUrl;
             }
-            if (diamondDto.Clarity != null) {
-                existingDiamond.Clarity = (Clarity)Enum.Parse(typeof(Clarity), diamondDto.Clarity.ToString());
+            if (diamondDto.Clarity != null)
+            {
+                existingDiamond.Clarity = (Clarity)
+                    Enum.Parse(typeof(Clarity), diamondDto.Clarity.ToString());
             }
-            if (diamondDto.Color != null) {
-                existingDiamond.Color = (Color)Enum.Parse(typeof(Color), diamondDto.Color.ToString()); // diamondDto.Color;
+            if (diamondDto.Color != null)
+            {
+                existingDiamond.Color = (Color)
+                    Enum.Parse(typeof(Color), diamondDto.Color.ToString()); // diamondDto.Color;
             }
-            if (diamondDto.Carat != existingDiamond.Carat) {
+            if (diamondDto.Carat != existingDiamond.Carat)
+            {
                 existingDiamond.Carat = (float)diamondDto.Carat;
             }
-            if (diamondDto.Polish != null) {
+            if (diamondDto.Polish != null)
+            {
                 existingDiamond.Polish = diamondDto.Polish;
             }
-            if (diamondDto.Symmetry != null) {
+            if (diamondDto.Symmetry != null)
+            {
                 existingDiamond.Symmetry = diamondDto.Symmetry;
             }
-            if (diamondDto.Fluorescence != null) {
+            if (diamondDto.Fluorescence != null)
+            {
                 existingDiamond.Fluorescence = diamondDto.Fluorescence;
             }
-            if (diamondDto.ImageUrl != null) {
+            if (diamondDto.ImageUrl != null)
+            {
                 existingDiamond.ImageUrl = diamondDto.ImageUrl;
             }
-            if(diamondDto.Availability != existingDiamond.Availability)
+            if (diamondDto.Availability != existingDiamond.Availability)
             {
                 existingDiamond.Availability = diamondDto.Availability;
             }
-            
 
             _context.Entry(existingDiamond).State = EntityState.Modified;
             await _context.SaveChangesAsync();
