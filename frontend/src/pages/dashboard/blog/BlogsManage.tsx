@@ -1,21 +1,41 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GET } from "../../../utils/request";
-import { Button, Dropdown, Form, Input, Menu } from "antd";
+import {
+  Button,
+  Dropdown,
+  Empty,
+  Form,
+  Input,
+  Menu,
+  Pagination,
+  Skeleton,
+} from "antd";
 import { DownOutlined } from "@ant-design/icons";
+import { useSearchStore } from "../../../store/searchStore";
+import { useQueries } from "@tanstack/react-query";
+import BlogListItem from "./components/BlogListItem";
 
 export default function BlogsManage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.searchParams);
   const [statusText, setStatusText] = useState("Status");
   const [productTypeText, setProductTypeText] = useState("Product Type");
-  const [diamonds, setDiamonds] = useState<any>();
+  const queryUrl = useSearchStore((state) => state.queryUrl);
+  const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   useEffect(() => {
-    async () => {
-      const data = await GET("/api/Diamonds");
-      setDiamonds(data);
-    };
+    setQueryUrl("/api/Blogs?");
   }, []);
+  const [blogs] = useQueries({
+    queries: [
+      {
+        queryKey: ["blogs", queryUrl],
+        queryFn: () => GET(queryUrl),
+      },
+    ],
+  });
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const status = params.get("status");
@@ -42,17 +62,7 @@ export default function BlogsManage() {
     params.set("type", type);
     navigate({ search: params.toString() });
   };
-  const columnHeaders = [
-    "Thumbnail",
-    "Name",
-    "Price",
-    "Shape",
-    "Carat",
-    "Color",
-    "Clarity",
-    "Cut",
-    "Status",
-  ];
+  const columnHeaders = ["Blog Id", "Title", "Author", "Created at", "Status"];
   const statusMenu = (
     <Menu>
       <Menu.Item key="1">
@@ -81,7 +91,7 @@ export default function BlogsManage() {
       <div className="flex justify-between items-center mx-auto mb-8">
         <div className="flex justify-start space-x-1 items-center">
           <div className="self-center">
-            <h1 className="text-2xl"> Blogs</h1>
+            <h1 className="text-2xl">Blogs</h1>
           </div>
         </div>
         <div className="flex justify-end space-x-1 items-center">
@@ -186,78 +196,50 @@ export default function BlogsManage() {
                   </thead>
                   {/* body */}
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {diamonds &&
-                      diamonds.map((diamond: any) => {
-                        return (
-                          <tr key={diamond.diamondId}>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center">
-                                <label className="flex items-center">
-                                  <input
-                                    type="checkbox"
-                                    value="0"
-                                    className="form-checkbox"
-                                  />
-                                  <span className="checkbox-unchecked"></span>
-                                  <span className="pl-2"></span>
-                                  <input type="hidden" value="0" />
-                                </label>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="flex items-center">
-                                <img
-                                  className="h-10 w-10 rounded-full"
-                                  src={diamond.imageUrl}
-                                  alt=""
-                                />
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-500">
-                                {/* <a href="/">{diamond.name}</a> */}Name
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <div className="text-sm text-gray-500">
-                                {/* ${diamond.price} */} Price
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {diamond.shape}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {diamond.carat}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {diamond.color}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {diamond.clarity}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {diamond.cut}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                              <a
-                                href="#"
-                                className="text-indigo-600 hover:text-indigo-900"
-                              >
-                                {diamond.availability
-                                  ? "Available"
-                                  : "Not Available"}
-                              </a>
-                            </td>
-                          </tr>
-                        );
-                      })}
+                    {blogs.isLoading && (
+                      <td colSpan={100} className="w-full p-4">
+                        <Skeleton
+                          active
+                          paragraph={{
+                            rows: 20,
+                          }}
+                        />
+                      </td>
+                    )}
+                    {blogs?.data?.blogs?.length == 0 && (
+                      <td colSpan={100} className="py-20">
+                        <Empty />
+                      </td>
+                    )}
+                    {blogs?.data?.blogs?.map((blog: any) => (
+                      <BlogListItem blog={blog} />
+                    ))}
                   </tbody>
                 </table>
+                <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
+                  {blogs?.data && blogs?.data?.blogs?.length != 0 && (
+                    <Pagination
+                      showTotal={(total, range) =>
+                        `${range[0]}-${range[1]} of ${total} items`
+                      }
+                      className="text-center"
+                      current={blogs?.data?.currentPage}
+                      total={blogs?.data?.totalCount}
+                      pageSize={blogs?.data?.pageSize}
+                      onChange={(page) => {
+                        params.set("PageNumber", page.toString());
+                        navigate(url.pathname + "?" + params.toString());
+                        setQueryUrl("/api/Blogs?" + params.toString());
+                      }}
+                      showSizeChanger={true}
+                      // onShowSizeChange={(current, size) => setPageSize(size)}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
-        {/* listing end */}
       </div>
     </div>
   );

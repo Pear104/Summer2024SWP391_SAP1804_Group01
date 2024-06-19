@@ -7,11 +7,12 @@ import { FormItem } from "react-hook-form-antd";
 import * as z from "zod";
 import { GOOGLE_GET_INFO, POST } from "../../utils/request";
 import { setCookie } from "../../utils/cookie";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Loading from "../../components/Loading";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useAuthStore } from "../../store/authStore";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 const GoogleIcon = () => {
   return (
     <svg
@@ -112,9 +113,16 @@ export default function Login() {
                 "/api/Authentication/login",
                 data
               );
+              // Check if the server return a token
               if (authResponse.token) {
                 setCookie("accessToken", authResponse.token, 7);
-                location.href = "/account";
+                // Check the role of the user
+                const decoded = jwtDecode(authResponse.token || "") as any;
+                if (decoded.role != "Customer") {
+                  navigate("/admin");
+                } else {
+                  navigate("/");
+                }
               } else {
                 setIsLoading(false);
                 setError("password", {

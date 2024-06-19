@@ -6,10 +6,12 @@ const DeliveryStaffComponent = ({
   orderId,
   currentStaff,
   staffs,
+  statusText,
 }: {
   orderId: number;
   currentStaff: string;
   staffs: any[];
+  statusText: any;
 }) => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
@@ -20,7 +22,10 @@ const DeliveryStaffComponent = ({
       orderId: number;
       deliveryStaffId: number;
     }) => PUT(`/api/Order/${orderId}`, { deliveryStaffId: deliveryStaffId }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["orders"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["deliveryStaffs"] });
+    },
     onError: () => queryClient.invalidateQueries({ queryKey: ["orders"] }),
   });
 
@@ -34,6 +39,7 @@ const DeliveryStaffComponent = ({
         staffs={staffs}
         handleStaffClick={handleStaffClick}
         staffText={currentStaff}
+        statusText={statusText}
       />
       {mutation.isPending && <p>Updating...</p>}
       {mutation.error && <p>Error: {(mutation.error as Error).message}</p>}

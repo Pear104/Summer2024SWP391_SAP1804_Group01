@@ -73,7 +73,7 @@ const CheckoutCartItem = ({
               maximumFractionDigits: 0,
             })
           ) : (
-            <Skeleton.Input active={true} size="small" />
+            <Skeleton.Button active={true} size="small" />
           )}
         </div>
       </div>
@@ -117,7 +117,7 @@ const CheckoutCartItem = ({
                 maximumFractionDigits: 0,
               })
             ) : (
-              <Skeleton.Input active={true} size="small" />
+              <Skeleton.Button active={true} size="small" />
             )}
           </div>
         </div>

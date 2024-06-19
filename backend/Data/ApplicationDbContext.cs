@@ -42,6 +42,14 @@ namespace backend.Data
 
         //End payment
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(
+                "server=localhost;database=DATJ;uid=sa;pwd=12345;TrustServerCertificate=true",
+                options => options.CommandTimeout(180)
+            ); // Timeout in seconds
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -52,6 +60,10 @@ namespace backend.Data
             builder.Entity<DiamondPrice>().Property(d => d.Clarity).HasConversion<string>();
             builder.Entity<DiamondPrice>().Property(d => d.Color).HasConversion<string>();
             builder.Entity<Order>().Property(d => d.OrderStatus).HasConversion<string>();
+            builder
+                .Entity<Transaction>()
+                .Property(d => d.TransactionStatus)
+                .HasConversion<string>();
             builder
                 .Entity<WarrantyRequest>()
                 .Property(d => d.WarrantyStatus)
@@ -167,7 +179,7 @@ namespace backend.Data
                 .Entity<OrderDetail>()
                 .HasOne(o => o.Diamond)
                 .WithOne(o => o.OrderDetail)
-                .HasForeignKey<OrderDetail>(w => w.DiamondId)
+                .HasForeignKey<OrderDetail>(o => o.DiamondId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Them khoa ngoai giua Order voi Transaction
@@ -206,6 +218,13 @@ namespace backend.Data
                 .WithMany(o => o.PriceRates)
                 .HasForeignKey(o => o.AccountId);
 
+            //Them khoa ngoai giua Account voi Feedback
+            builder
+                .Entity<Feedback>()
+                .HasOne(o => o.Customer)
+                .WithMany(o => o.Feedbacks)
+                .HasForeignKey(o => o.CustomerId);
+
             //Them khoa ngoai giua Order voi Feedback
             builder
                 .Entity<Feedback>()
@@ -213,7 +232,15 @@ namespace backend.Data
                 .WithMany(o => o.Feedbacks)
                 .HasForeignKey(o => o.OrderId);
 
-            //Them khoa ngoai giua Order voi Feedback
+            //Them khoa ngoai giua OrderDetail voi Feedback
+            builder
+                .Entity<Feedback>()
+                .HasOne(o => o.OrderDetail)
+                .WithOne(o => o.Feedback)
+                .HasForeignKey<Feedback>(o => o.OrderDetailId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //Them khoa ngoai giua Accessory voi Feedback
             builder
                 .Entity<Feedback>()
                 .HasOne(o => o.Accessory)

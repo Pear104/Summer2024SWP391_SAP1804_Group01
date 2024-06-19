@@ -16,6 +16,9 @@ export const StatusMenu = ({
     case "Processing":
       style = "text-white bg-yellow-500";
       break;
+    case "Confirmed":
+      style = "text-white bg-pink-500";
+      break;
     case "Delivering":
       style = "text-white bg-blue-500";
       break;
@@ -37,17 +40,23 @@ export const StatusMenu = ({
             disabled={statusText == "Processing" ? false : true}
             key="3"
           >
+            <a onClick={() => handleStatusClick("Confirmed")}>Confirmed</a>
+          </Menu.Item>
+          <Menu.Item
+            disabled={statusText == "Confirmed" ? false : true}
+            key="4"
+          >
             <a onClick={() => handleStatusClick("Delivering")}>Delivering</a>
           </Menu.Item>
           <Menu.Item
             disabled={statusText == "Delivering" ? false : true}
-            key="4"
+            key="5"
           >
             <a onClick={() => handleStatusClick("Completed")}>Completed</a>
           </Menu.Item>
           <Menu.Item
             disabled={statusText == "Failed" || statusText == "Completed"}
-            key="5"
+            key="6"
           >
             <a onClick={() => handleStatusClick("Failed")}>Failed</a>
           </Menu.Item>

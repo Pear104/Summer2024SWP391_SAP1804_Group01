@@ -20,6 +20,7 @@
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //            Phật phù hộ, không bao giờ BUG
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+using System.Reflection;
 using backend.Data;
 using backend.Interfaces;
 using backend.Payment_src.core.Payment.Service.Momo.Config;
@@ -31,7 +32,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
 
 namespace backend
 {
@@ -59,11 +59,7 @@ namespace backend
 
             builder.Services.AddSwaggerGen(option =>
             {
-                option.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "Demo API",
-                    Version = "v1"
-                });
+                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
                 var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var path = Path.Combine(AppContext.BaseDirectory, xmlFileName);
                 option.IncludeXmlComments(path);
@@ -107,11 +103,11 @@ namespace backend
             //Payment cofiguration
             builder.Services.Configure<MomoConfig>(
                 builder.Configuration.GetSection(MomoConfig.ConfigName)
-                );
+            );
             //Payment cofiguration
             builder.Services.Configure<VnpayConfig>(
                 builder.Configuration.GetSection(VnpayConfig.ConfigName)
-                );
+            );
 
             builder
                 .Services.AddAuthentication(options =>
@@ -141,6 +137,7 @@ namespace backend
                     };
                 });
 
+            builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
             builder.Services.AddScoped<IWarrantyRequestRepository, WarrantyRequestRepository>();
             builder.Services.AddScoped<IShapeRepository, ShapeRepository>();
             builder.Services.AddScoped<IAccessoryTypeRepository, AccessoryTypeRepository>();
@@ -158,11 +155,15 @@ namespace backend
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
             builder.Services.AddScoped<IPaymentSignatureRepository, PaymentSinatureRepository>();
-            builder.Services.AddScoped<IPaymentTransactionRepository, PaymentTransactionRepository>();
+            builder.Services.AddScoped<
+                IPaymentTransactionRepository,
+                PaymentTransactionRepository
+            >();
             builder.Services.AddScoped<IAccessoryRepository, AccessoryRepository>();
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
             builder.Services.AddScoped<IPriceRateRepository, PriceRateRepository>();
-
+            builder.Services.AddScoped<IReportRepository, ReportRepository>();
+            builder.Services.AddScoped<IFeedbackRepository, FeedbackRepository>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

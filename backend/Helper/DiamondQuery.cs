@@ -18,9 +18,9 @@ namespace backend.Helper
         public string? Clarity { get; set; }
         public string? SortBy { get; set; }
         public bool IsDescending { get; set; }
-        public bool? IsAvailability{ get; set; } = null;
+        public bool? IsAvailability { get; set; } = true;
         public string? SearchQuery { get; set; } = null;
         public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 20;
+        public int PageSize { get; set; } = 10;
     }
 }

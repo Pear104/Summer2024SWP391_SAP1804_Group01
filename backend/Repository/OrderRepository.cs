@@ -1,5 +1,7 @@
 using backend.Data;
 using backend.DTOs;
+using backend.DTOs.Accessory;
+using backend.DTOs.Feedback;
 using backend.DTOs.Order;
 using backend.Enums;
 using backend.Helper;
@@ -102,6 +104,8 @@ namespace backend.Repository
                         {
                             return null;
                         }
+                        accessory.Quantity--;
+                        _context.Entry(accessory).State = EntityState.Modified;
                         var materialPrice = _context
                             .MaterialPrices.Where(x => x.Karat == accessory.Karat)
                             .OrderBy(x => x.EffTime)
@@ -111,7 +115,8 @@ namespace backend.Repository
                         orderDetail.ItemPrice =
                             (
                                 diamond.Carat * diamondPrice.UnitPrice * 100
-                                + accessory?.MaterialWeight * materialPrice?.UnitPrice
+                                + (accessory?.MaterialWeight + (orderDetailDto.Size - 3))
+                                    * materialPrice?.UnitPrice
                                 + accessory?.AccessoryType.ProcessingPrice
                             ) * priceRate?.Percent;
                     }
@@ -131,14 +136,6 @@ namespace backend.Repository
             }
             System.Console.WriteLine("totalPrice: " + totalPrice);
             newOrder.TotalPrice = totalPrice;
-            await _context.Transactions.AddAsync(
-                new Transaction()
-                {
-                    Order = newOrder,
-                    Amount = totalPrice,
-                    PaymentMethod = "Credit Card",
-                }
-            );
             customer.RewardPoint = customer.RewardPoint + (int)(totalPrice / 1000);
             _context.Entry(customer).State = EntityState.Modified;
             await _context.Orders.AddAsync(newOrder);
@@ -173,34 +170,13 @@ namespace backend.Repository
 
         public async Task<OrderResult?> GetAllOrdersAsync(OrderQuery query)
         {
-            var orderQueries = _context
-                .Orders.Include(x => x.OrderDetails)
-                .ThenInclude(x => x.Diamond)
-                .ThenInclude(x => x.Shape)
-                .Include(x => x.OrderDetails)
-                .ThenInclude(x => x.WarrantyCard)
-                .Include(x => x.OrderDetails)
-                .ThenInclude(x => x.Accessory)
-                .ThenInclude(x => x != null ? x.AccessoryType : null)
-                .Include(x => x.OrderDetails)
-                .ThenInclude(x => x.Accessory)
-                .ThenInclude(x => x != null ? x.AccessoryImages : null)
-                .Include(x => x.OrderDetails)
-                .ThenInclude(x => x.MaterialPrice)
-                .Include(x => x.OrderDetails)
-                .ThenInclude(x => x.DiamondPrice)
-                .Include(x => x.PriceRate)
-                .Include(x => x.SaleStaff)
-                .Include(x => x.DeliveryStaff)
-                .Include(x => x.Customer)
-                .OrderByDescending(x => x.CreatedAt)
-                .AsQueryable();
-            if (query.CustomerId != null)
+            var orderQueries = _context.Orders.AsQueryable();
+            if (query.CustomerId.HasValue)
             {
                 orderQueries = orderQueries.Where(x => x.CustomerId == query.CustomerId);
             }
 
-            if (query.OrderStatus != null)
+            if (query.OrderStatus.HasValue)
             {
                 orderQueries = orderQueries.Where(x => x.OrderStatus == query.OrderStatus);
             }
@@ -212,40 +188,37 @@ namespace backend.Repository
                 );
             }
 
-            if (query.CustomerId > 0)
-            {
-                orderQueries = orderQueries.Where(x => x.CustomerId == query.CustomerId);
-            }
-
-            if (query.SaleStaffId > 0)
+            if (query.SaleStaffId.HasValue)
             {
                 orderQueries = orderQueries.Where(x => x.SaleStaffId == query.SaleStaffId);
             }
 
-            if (query.DeliveryStaffId > 0)
+            if (query.DeliveryStaffId.HasValue)
             {
                 orderQueries = orderQueries.Where(x => x.DeliveryStaffId == query.DeliveryStaffId);
             }
 
-            if (query.MinTotalPrice != 0 || query.MaxTotalPrice != 1000000000)
+            if (query.MinTotalPrice.HasValue || query.MaxTotalPrice.HasValue)
             {
+                var minPrice = query.MinTotalPrice ?? 0;
+                var maxPrice = query.MaxTotalPrice ?? int.MaxValue;
+
                 orderQueries = orderQueries.Where(x =>
-                    x.TotalPrice >= query.MinTotalPrice && x.TotalPrice <= query.MaxTotalPrice
+                    x.TotalPrice >= minPrice && x.TotalPrice <= maxPrice
                 );
             }
 
-            if(query.PhoneNumber != string.Empty)
+            if (!string.IsNullOrEmpty(query.PhoneNumber))
             {
                 orderQueries = orderQueries.Where(x => x.PhoneNumber == query.PhoneNumber);
             }
 
-            //Chua dung lam, nhung lam tam tam. Nho sua lai rang buoc max > min
-            if (query.MinDate != null)
+            if (query.MinDate.HasValue)
             {
                 orderQueries = orderQueries.Where(x => x.CreatedAt >= query.MinDate);
             }
 
-            if (query.MaxDate != null)
+            if (query.MaxDate.HasValue)
             {
                 orderQueries = orderQueries.Where(x => x.CreatedAt <= query.MaxDate);
             }
@@ -253,12 +226,79 @@ namespace backend.Repository
             var totalCount = await orderQueries.CountAsync();
 
             var totalPages = (int)Math.Ceiling((double)totalCount / query.PageSize);
+
             var orderDTOs = await orderQueries
+                .OrderByDescending(x => x.CreatedAt)
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize)
-                .Select(x => x.ToOrderDTO())
+                .Select(x => new OrderDTO
+                {
+                    OrderId = x.OrderId,
+                    OrderDetails = x
+                        .OrderDetails.Select(y => new OrderDetailDTO
+                        {
+                            OrderDetailId = y.OrderDetailId,
+                            Diamond = y.Diamond != null ? y.Diamond.ToDiamondDTO() : null,
+                            DiamondPrice =
+                                y.DiamondPrice != null ? y.DiamondPrice.ToDiamondPriceDTO() : null,
+                            Accessory =
+                                y.Accessory != null
+                                    ? new AccessoryDTO
+                                    {
+                                        AccessoryId = y.Accessory.AccessoryId,
+                                        Karat = y.Accessory.Karat,
+                                        MaterialWeight = y.Accessory.MaterialWeight,
+                                        Name = y.Accessory.Name,
+                                        AccessoryType =
+                                            y.Accessory.AccessoryType.ToAccessoryTypeDTO(),
+                                        Shape = y.Accessory.Shape.ToShapeDTO(),
+                                        AccessoryImages =
+                                            y.Accessory.AccessoryImages != null
+                                                ? y
+                                                    .Accessory.AccessoryImages.Select(z =>
+                                                        z.ToAccessoryImageDTO()
+                                                    )
+                                                    .ToList()
+                                                : null,
+                                    }
+                                    : null,
+                            MaterialPrice =
+                                y.MaterialPrice != null
+                                    ? y.MaterialPrice.ToMaterialPriceDTO()
+                                    : null,
+                            ItemPrice = y.ItemPrice,
+                            Feedback =
+                                y.Feedback != null
+                                    ? new FeedbackDTO
+                                    {
+                                        Score = y.Feedback.Score,
+                                        CreatedAt = y.Feedback.CreatedAt,
+                                        Content = y.Feedback.Content,
+                                        Username = x.Customer.Name,
+                                    }
+                                    : null,
+                            Size = y.Size,
+                            // WarrantyCard = y.WarrantyCard.ToWarrantyCardDTO(),
+                        })
+                        .ToList(),
+                    PriceRate = x.PriceRate != null ? x.PriceRate.ToPriceRateDTO() : null,
+                    TotalPrice = x.TotalPrice,
+                    TotalDiscountPercent = x.TotalDiscountPercent,
+                    OrderStatus = x.OrderStatus.ToString(),
+                    ShippingAddress = x.ShippingAddress,
+                    CreatedAt = x.CreatedAt,
+                    PhoneNumber = x.PhoneNumber,
+                    CustomerId = x.CustomerId,
+                    CustomerName = x.Customer.Name,
+                    SaleStaffId = x.SaleStaffId ?? 0,
+                    SaleStaffName = x.SaleStaff != null ? x.SaleStaff.Name : null,
+                    DeliveryStaffId = x.DeliveryStaffId ?? 0,
+                    DeliveryStaffName = x.DeliveryStaff != null ? x.DeliveryStaff.Name : null,
+                    Promotion = x.Promotion,
+                    // Transactions = x.Transactions.Select(y => y.ToTransactionDTO()).ToList(),
+                    // Feedbacks = x.Feedbacks.Select(y => y.ToFeedbackDTO()).ToList(),
+                })
                 .ToListAsync();
-            Console.WriteLine("order id: " + orderDTOs[0].OrderId);
             Console.WriteLine("Orders Retrieved: " + orderDTOs.Count);
 
             return new OrderResult
@@ -312,17 +352,22 @@ namespace backend.Repository
             {
                 return null;
             }
-            if (order.OrderStatus != null) {
+            if (order.OrderStatus != null)
+            {
                 existedOrder.OrderStatus = Enum.Parse<OrderStatus>(order.OrderStatus);
             }
             if (order.SaleStaffId != 0)
             {
-                var saleStaff = _context.Accounts.FirstOrDefault(x => x.AccountId == order.SaleStaffId);
+                var saleStaff = _context.Accounts.FirstOrDefault(x =>
+                    x.AccountId == order.SaleStaffId
+                );
                 existedOrder.SaleStaff = saleStaff;
             }
             if (order.DeliveryStaffId != 0)
             {
-                var deliveryStaff = _context.Accounts.FirstOrDefault(x => x.AccountId == order.DeliveryStaffId);
+                var deliveryStaff = _context.Accounts.FirstOrDefault(x =>
+                    x.AccountId == order.DeliveryStaffId
+                );
                 existedOrder.DeliveryStaff = deliveryStaff;
             }
             _context.Entry(existedOrder).State = EntityState.Modified;

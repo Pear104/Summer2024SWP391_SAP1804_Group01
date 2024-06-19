@@ -11,30 +11,17 @@ const formatDate = (dateString: any) => {
   return `${day}/${month}/${year}`;
 };
 export default function OrderRow({ order }: { order: any }) {
-  if (!order) {
-    return (
-      <>
-        <tr>
-          <td colSpan={9}>
-            <div className="text-center items-center">
-              <p>There are no orders!!!</p>
-            </div>
-          </td>
-        </tr>
-      </>
-    );
-  }
   const [saleStaffs, deliveryStaffs] = useQueries({
     queries: [
       {
         queryKey: ["saleStaffs"],
         queryFn: () => GET("/api/Accounts?Role=SaleStaff"),
-        staleTime: Infinity,
+        staleTime: 0,
       },
       {
         queryKey: ["deliveryStaffs"],
         queryFn: () => GET("/api/Accounts?Role=DeliveryStaff"),
-        staleTime: Infinity,
+        staleTime: 0,
       },
     ],
   });
@@ -69,6 +56,7 @@ export default function OrderRow({ order }: { order: any }) {
             orderId={order.orderId}
             staffs={saleStaffs?.data || []}
             currentStaff={order?.saleStaffName}
+            statusText={order.orderStatus}
           />
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
@@ -76,6 +64,7 @@ export default function OrderRow({ order }: { order: any }) {
             orderId={order.orderId}
             staffs={deliveryStaffs?.data || []}
             currentStaff={order?.deliveryStaffName}
+            statusText={order.orderStatus}
           />
         </td>
         <td className="px-6 py-4 whitespace-nowrap">

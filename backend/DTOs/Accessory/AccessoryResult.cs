@@ -7,7 +7,7 @@ namespace backend.DTOs.Accessory
 {
     public class AccessoryResult
     {
-        public List<AccessoryDTO> Accessories { get; set; } = new List<AccessoryDTO>();
+        public IEnumerable<AccessoryDTO> Accessories { get; set; } = new List<AccessoryDTO>();
         public int TotalPages { get; set; }
         public int PageSize { get; set; }
         public int CurrentPage { get; set; }

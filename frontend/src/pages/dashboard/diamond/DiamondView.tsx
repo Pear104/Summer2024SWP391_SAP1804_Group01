@@ -8,17 +8,8 @@ import {
   uploadBytes,
   deleteObject,
 } from "firebase/storage";
-import {
-  Avatar,
-  Button,
-  Form,
-  Input,
-  notification,
-  Select,
-  Switch,
-  UploadFile,
-} from "antd";
-import { ArrowLeft, Check, Shapes, X } from "lucide-react";
+import { Button, Form, Input, notification, Select, UploadFile } from "antd";
+import { ArrowLeft, Check, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
@@ -190,8 +181,6 @@ export default function DiamondView() {
   }, [reset]);
 
   const [api, contextHolder] = notification.useNotification();
-  console.log("file");
-  console.log(diamondFile);
   return (
     <div>
       {isLoading && <Loading />}
@@ -212,8 +201,6 @@ export default function DiamondView() {
           layout="vertical"
           //submit form
           onFinish={handleSubmit(async (formData) => {
-            console.log("diamondFileList");
-            console.log(diamondFile);
             if (!diamondFile || diamondFile?.length === 0) {
               setError("image", {
                 type: "manual",
@@ -264,27 +251,15 @@ export default function DiamondView() {
             // Add firebase's image url to DATJ database
             submitForm["imageUrl"] = diamondImageUrl;
             submitForm["availability"] = availability;
-            console.log("form: ");
-
-            console.log(submitForm);
-            console.log(submitForm?.availability);
 
             if (diamond.diamondId) {
-              console.log("PUT");
-              console.log("Before PUT", submitForm);
-              console.log(submitForm?.availability);
               response = await PUT(
                 "/api/Diamonds/" + diamond.diamondId,
                 submitForm
               );
-              console.log("After PUT", response);
-              console.log(response?.availability);
             } else {
-              console.log("POST");
               response = await POST("/api/Diamonds/", submitForm);
             }
-            console.log(response);
-            console.log(response?.errors);
 
             setIsLoading(false);
             if (response) {

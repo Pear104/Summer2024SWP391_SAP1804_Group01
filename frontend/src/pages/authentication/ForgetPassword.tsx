@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Form, Input } from "antd";
 import { useForm } from "react-hook-form";
 import { POST } from "../../utils/request";
-import { setCookie } from "../../utils/cookie";
 import { FormItem } from "react-hook-form-antd";
 import { UserOutlined } from "@ant-design/icons";
 import { CircleArrowRight } from "lucide-react";

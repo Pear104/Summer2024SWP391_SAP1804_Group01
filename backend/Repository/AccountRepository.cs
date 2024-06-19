@@ -38,7 +38,12 @@ namespace backend.Repository
 
         public async Task<Account?> GetAccountByIdAsync(long id)
         {
-            return await _context.Accounts.Include(x => x.Rank).FirstOrDefaultAsync(x => x.AccountId == id);
+            return await _context
+                .Accounts.Include(x => x.Rank)
+                .Include(x => x.OrdersOfCustomer)
+                .Include(x => x.OrdersOfSaleStaff)
+                .Include(x => x.OrdersOfDeliveryStaff)
+                .FirstOrDefaultAsync(x => x.AccountId == id);
         }
 
         public async Task<Account?> UpdateAccountAsync(long id, UpdateAccountDTO accountDto)
@@ -61,7 +66,11 @@ namespace backend.Repository
 
         public async Task<IEnumerable<Account>> GetAllAccountsAsync(AccountQuery query)
         {
-            var accountsQuery = _context.Accounts.AsQueryable();
+            var accountsQuery = _context
+                .Accounts.Include(x => x.OrdersOfCustomer)
+                .Include(x => x.OrdersOfSaleStaff)
+                .Include(x => x.OrdersOfDeliveryStaff)
+                .AsQueryable();
             if (!string.IsNullOrEmpty(query.Role))
             {
                 var role = Enum.Parse<Role>(query.Role);
@@ -69,6 +78,22 @@ namespace backend.Repository
             }
             return await accountsQuery
                 .Skip((query.PageNumber - 1) * query.PageSize)
+                .Take(query.PageSize)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Account>> SearchAccountOnRole(AccountSearchQuery query)
+        {
+            var accountsQuery = _context
+                .Accounts.AsQueryable();
+            if (!string.IsNullOrEmpty(query.GetRole()))
+            {
+                var role = Enum.Parse<Role>(query.GetRole());
+                accountsQuery = accountsQuery.Where(x => x.Role == role);
+            }
+            accountsQuery = accountsQuery.Where(x => x.Name.Contains(query.AccountName) && x.PhoneNumber.Contains(query.AccountPhoneNumber));
+            return await accountsQuery
+                .Skip((query.pageNumber-1) * query.PageSize)
                 .Take(query.PageSize)
                 .ToListAsync();
         }

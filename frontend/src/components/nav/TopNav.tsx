@@ -12,10 +12,9 @@ import {
 import Logo from "../logo/Logo";
 import { message } from "antd";
 import SearchBar from "../SearchBar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import JewelryItem from "./components/JewelryItem";
 import DiamondItem from "./components/DiamondItem";
-import { getCookie } from "../../utils/cookie";
 import { Link, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
 import { GET } from "../../utils/request";
@@ -99,7 +98,7 @@ export default function TopNav() {
               <Link to="/cart">
                 <ShoppingCart size={20} strokeWidth={2} />
                 {cartItemCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-slate-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                  <span className="absolute -top-2 -right-2 bg-slate-500 text-white rounded-full h-4 w-4 flex items-center justify-center text-xs">
                     {cartItemCount}
                   </span>
                 )}
@@ -126,9 +125,9 @@ export default function TopNav() {
           <div className="flex justify-center">
             <Logo />
           </div>
-          <a
+          <Link
             className="relative mulish-regular flex gap-1 items-center py-1 px-3 border-b-2 border-b-transparent text-base hover:border-b-blue-500 duration-200 transition-all"
-            href={"/product/accessory"}
+            to={"/product/accessory"}
             onMouseEnter={() => {
               setJewelryDrop(true);
             }}
@@ -159,10 +158,10 @@ export default function TopNav() {
                 </div>
               </div>
             )}
-          </a>
-          <a
+          </Link>
+          <Link
             className="relative mulish-regular flex gap-1 items-center py-1 px-3 border-b-2 border-b-transparent text-base hover:border-b-blue-500 duration-200 transition-all"
-            href={"/product/diamond"}
+            to={"/product/diamond"}
             onMouseEnter={() => {
               setDiamondDrop(true);
             }}
@@ -185,8 +184,8 @@ export default function TopNav() {
                 </div>
               </div>
             )}
-          </a>
-          <TopNavItem href="/blog">Blog</TopNavItem>
+          </Link>
+          <TopNavItem href="/blogs">Blogs</TopNavItem>
           <TopNavItem href="/about">About us</TopNavItem>
         </div>
         {(jewelryDrop || diamondDrop) && (

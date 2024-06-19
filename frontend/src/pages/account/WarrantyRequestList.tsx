@@ -1,22 +1,26 @@
 import { useQueries } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { GET } from "../../utils/request";
-import { formatPhoneNumber } from "../../utils/caseConverter";
+import { formatPhoneNumber } from "../../utils/formatter";
 import moment from "moment";
+import { Empty } from "antd";
 const WarrantyRequestItem = ({ warrantyRequest }: { warrantyRequest: any }) => {
   let statusStyle = "";
   switch (warrantyRequest.warrantyStatus) {
     case "Pending":
       statusStyle = "bg-yellow-100 border-yellow-400";
       break;
-    case "ShipperIsComingToGet":
+    case "Getting":
       statusStyle = "bg-blue-200/90";
       break;
     case "Processing":
-      statusStyle = "bg-blue-200/90";
+      statusStyle = "bg-blue-400/90";
       break;
-    case "ShipperIsComingToReturnBack":
-      statusStyle = "bg-blue-200/90";
+    case "Returning":
+      statusStyle = "bg-blue-600/90";
+      break;
+    case "Failed":
+      statusStyle = "bg-red-200/90";
       break;
     case "Completed":
       statusStyle = "bg-green-200/90";
@@ -25,7 +29,7 @@ const WarrantyRequestItem = ({ warrantyRequest }: { warrantyRequest: any }) => {
 
   return (
     <div
-      className={`border-2 bg-yellow-100 rounded-lg px-4 py-4 ${statusStyle}`}
+      className={`border-2 bg-slate-400-100 rounded-lg px-4 py-4 ${statusStyle}`}
     >
       <div className="flex flex-col gap-2">
         <div className="font-bold text-lg mb-2 col-span-4 flex items-center gap-2">
@@ -66,14 +70,13 @@ const WarrantyRequestItem = ({ warrantyRequest }: { warrantyRequest: any }) => {
 };
 
 export default function WarrantyRequestList() {
-  const navigate = useNavigate();
   // const [messageApi, contextHolder] = message.useMessage();
   const [warrantyRequests] = useQueries({
     queries: [
       {
         queryKey: ["warrantyRequests"],
         queryFn: () => GET("/api/WarrantyRequests"),
-        staleTime: Infinity,
+        staleTime: 0,
       },
     ],
   });
@@ -84,9 +87,27 @@ export default function WarrantyRequestList() {
         Warranty Requests
       </div>
       <div className="mt-2 grid gap-4">
-        {warrantyRequests?.data?.warrantyRequests?.map((warrantyRequest: any, index: any) => (
-          <WarrantyRequestItem key={index} warrantyRequest={warrantyRequest} />
-        ))}
+        {warrantyRequests?.data &&
+        warrantyRequests?.data?.warrantyRequests.length > 0 ? (
+          warrantyRequests?.data?.warrantyRequests?.map(
+            (warrantyRequest: any, index: any) => (
+              <WarrantyRequestItem
+                key={index}
+                warrantyRequest={warrantyRequest}
+              />
+            )
+          )
+        ) : (
+          <Empty description="You haven't send any warranty request yet" />
+        )}
+      </div>
+      <div className="flex justify-center">
+        <Link
+          to="/account/warranty/request"
+          className="rounded-xl px-8 py-4 mt-4 text-white bg-primary font-bold uppercase"
+        >
+          Send a warranty request
+        </Link>
       </div>
     </div>
   );

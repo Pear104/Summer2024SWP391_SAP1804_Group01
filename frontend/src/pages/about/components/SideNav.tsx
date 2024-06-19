@@ -1,15 +1,5 @@
 import { Menu } from "antd";
 import scrollTo from "../../../utils/scroll";
-import {
-  UserRoundCog,
-  UserRound,
-  ShoppingBasket,
-  CircleUser,
-  Wrench,
-  LockKeyhole,
-  ShieldAlert,
-  ShieldCheck,
-} from "lucide-react";
 
 export default function SideNav() {
   const items = [

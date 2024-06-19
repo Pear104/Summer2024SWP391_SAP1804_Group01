@@ -9,7 +9,7 @@ import {
   Skeleton,
 } from "antd";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { GET } from "../../../utils/request";
 import AccessoryRow from "./AccessoryRow";
 import { useQueries } from "@tanstack/react-query";
@@ -36,7 +36,7 @@ export default function AccessoriesManage() {
     setQueryUrl("/api/Accessories?");
   }, []);
 
-  const [accessories, materialPrices] = useQueries({
+  const [accessories, materialPrices, priceRate] = useQueries({
     queries: [
       {
         queryKey: ["accessories", queryUrl],
@@ -45,6 +45,11 @@ export default function AccessoriesManage() {
       {
         queryKey: ["materialPrices"],
         queryFn: () => GET("/api/MaterialPrices/"),
+        staleTime: Infinity,
+      },
+      {
+        queryKey: ["priceRate"],
+        queryFn: () => GET("/api/PriceRate/latest"),
         staleTime: Infinity,
       },
     ],
@@ -111,9 +116,9 @@ export default function AccessoriesManage() {
         </div>
         <div className="flex justify-end space-x-1 items-center">
           <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
-            <a href="/admin/accessories/detail" className="button primary">
+            <Link to="/admin/accessories/detail" className="button primary">
               <span>New Accessory</span>
-            </a>
+            </Link>
           </button>
         </div>
       </div>
@@ -257,7 +262,7 @@ export default function AccessoriesManage() {
                         scope="col"
                         className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider`}
                       >
-                        Type
+                        Quantity
                       </th>
                       <th
                         scope="col"
@@ -320,7 +325,9 @@ export default function AccessoriesManage() {
                             accessory={accessory}
                             price={getAccessoryPrice(
                               accessory,
-                              materialPrices?.data
+                              materialPrices?.data,
+                              3,
+                              priceRate?.data?.percent
                             )}
                             selectedAccessories={selectedAccessories}
                             setSelectedAccessories={setSelectedAccessories}

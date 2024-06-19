@@ -1,35 +1,15 @@
-import { Button, message } from "antd";
+import { Button, App } from "antd";
 import { useEffect, useState } from "react";
 import { GET } from "../../utils/request";
 import { setCookie } from "../../utils/cookie";
-import {
-  camelCaseToSentenceCase,
-  formatPhoneNumber,
-} from "../../utils/caseConverter";
+import { formatPhoneNumber } from "../../utils/formatter";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { rankImages } from "../../constants/rankImages";
 
-const Field = ({ field, value }: { field: string; value: string }) => {
-  return (
-    <>
-      {/* <div className="flex items-center gap-4"> */}
-      <div className="tracking-wider prompt-light text-base w-[200px] uppercase">
-        {camelCaseToSentenceCase(field)}:
-      </div>
-      <div>
-        {!(field == "birthday" || field == "createdAt")
-          ? value
-          : moment(value).format("MM-DD-YYYY")}
-      </div>
-      {/* </div> */}
-    </>
-  );
-};
-
 export default function AccountDetail() {
   const [userInfo, setUserInfo] = useState<any>();
-  const [messageApi, contextHolder] = message.useMessage();
+  const { message } = App.useApp();
 
   const field = [
     "name",
@@ -44,22 +24,22 @@ export default function AccountDetail() {
   useEffect(() => {
     (async () => {
       const data = await GET(`/api/Accounts/me`);
+      console.log(data);
       if (data) {
         setUserInfo(data);
       } else {
         setCookie("accessToken", "", 0);
         navigate("/authentication/login");
-        messageApi.error("Your session has timed out, please login again!");
+        message.error("Your session has timed out, please login again!");
       }
     })();
   }, []);
 
   return (
     <div className="ml-4 mt-4 mb-8">
-      {contextHolder}
-      {/* <div className="font-bold mulish-regular text-2xl mb-4">
+      <div className="font-bold mulish-regular text-xl mb-4">
         ACCOUNT DETAIL
-      </div> */}
+      </div>
       <div className="flex gap-10">
         <div className="flex flex-col items-center">
           <div
@@ -112,26 +92,25 @@ export default function AccountDetail() {
       </div>
 
       <div className="mt-6 flex gap-4">
-        <a href="/account/edit">
-          <Button
-            className="uppercase px-4 hover:scale-95 font-bold text-white bg-primary py-4 flex items-center justify-center"
-            htmlType="submit"
-            onClick={() => {
-              setCookie("accessToken", "", 0);
-              location.href = "/authentication/login";
-            }}
-          >
-            Logout
-          </Button>
-        </a>
-        <a href="/account/edit">
-          <Button
-            className="px-4 hover:scale-95 font-bold text-white bg-primary py-4 flex items-center justify-center"
-            htmlType="submit"
-          >
-            EDIT PROFILE
-          </Button>
-        </a>
+        <Button
+          className="uppercase px-4 hover:scale-95 font-bold text-white bg-primary py-4 flex items-center justify-center"
+          htmlType="submit"
+          onClick={() => {
+            setCookie("accessToken", "", 0);
+            navigate("/authentication/login");
+          }}
+        >
+          Logout
+        </Button>
+        <Button
+          className="px-4 hover:scale-95 font-bold text-white bg-primary py-4 flex items-center justify-center"
+          htmlType="submit"
+          onClick={() => {
+            navigate("/account/edit");
+          }}
+        >
+          EDIT PROFILE
+        </Button>
       </div>
     </div>
   );

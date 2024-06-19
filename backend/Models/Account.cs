@@ -54,7 +54,8 @@ namespace backend.Models
             new List<WarrantyRequest>();
         public List<WarrantyRequest> WarrantyRequestsOfDeliveryStaff { get; set; } =
             new List<WarrantyRequest>();
-        public List<Blog> Blogs { get; set; } = new List<Blog>();
-        public List<PriceRate> PriceRates { get; set; } = new List<PriceRate>();
+        public List<Blog>? Blogs { get; set; }
+        public List<Feedback>? Feedbacks { get; set; }
+        public List<PriceRate>? PriceRates { get; set; }
     }
 }

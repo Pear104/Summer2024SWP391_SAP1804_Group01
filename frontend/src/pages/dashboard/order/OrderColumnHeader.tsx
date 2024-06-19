@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function DiamondColumnHeader({
+export default function OrderColumnHeader({
   header,
   params,
   setQueryUrl,

@@ -98,7 +98,7 @@ const CartItem: React.FC<CartItemProps> = ({
         ×
       </button>
       {/* Diamond in the left */}
-      <div className="flex-1">
+      <div className="flex-1 border-r">
         {diamondDetail ? (
           <div className="flex justify-between items-center text-sm m-3">
             <div className="w-full bg-cover flex-1 col-span-1 m-2">
@@ -121,7 +121,7 @@ const CartItem: React.FC<CartItemProps> = ({
         )}
       </div>
       {/* Accessory in the right */}
-      <div className="flex-1 border-l">
+      <div className="flex-1">
         {accessoryDetail?.accessoryId ? (
           <div className="flex justify-between items-center gap-4">
             <div
@@ -156,7 +156,7 @@ const CartItem: React.FC<CartItemProps> = ({
         ) : accessoryId !== undefined ? (
           <p> Loading accessory details... </p>
         ) : (
-          <p>No accessory</p>
+          <p className="text-center text-bold italic">No accessory</p>
         )}
       </div>
     </div>

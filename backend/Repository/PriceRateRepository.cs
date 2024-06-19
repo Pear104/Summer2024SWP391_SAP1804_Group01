@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using backend.Data;
 using backend.DTOs.Blog;
 using backend.DTOs.PriceRate;
+using backend.Helper;
 using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
@@ -20,25 +21,46 @@ namespace backend.Repository
         {
             _context = context;
         }
-         public async Task<IEnumerable<PriceRate>> GetAllPriceRateAsync()
+
+        public async Task<PriceRateResult> GetAllPriceRateAsync(PriceRateQuery query)
         {
-             var existingPriceRate = await _context.PriceRates.ToListAsync();
-            return existingPriceRate;
+            var priceRateQueries = _context.PriceRates.Include(x => x.Account).OrderByDescending(x => x.CreatedAt).AsQueryable();
+
+            var totalCount = await priceRateQueries.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalCount / query.PageSize);
+
+            var priceRates = await priceRateQueries
+                .Skip((query.PageNumber - 1) * query.PageSize)
+                .Take(query.PageSize)
+                .ToListAsync();
+
+            return new PriceRateResult{
+                PriceRates = priceRates.Select(x => x.ToPriceRateDTO()).ToList(),
+                TotalCount = totalCount,
+                PageSize = query.PageSize,
+                CurrentPage = query.PageNumber,
+                TotalPages = totalPages,
+            };
         }
 
-        public Task<PriceRate?> CreatePriceRateAsync(long authorId, CreatePriceRateDTO blogDto)
+        public async Task<PriceRate?> CreatePriceRateAsync(long authorId, CreatePriceRateDTO priceRateDto)
         {
-            throw new NotImplementedException();
-        }
+            var author = await _context.Accounts.FindAsync(authorId);
+            if (author == null)
+            {
+                return null;
+            }
+            var priceRate = priceRateDto.ToPriceRateFromCreate();
+            priceRate.Account = author;
 
-        public Task<PriceRate?> DeleteBlogAsync(long id)
-        {
-            throw new NotImplementedException();
+            await _context.PriceRates.AddAsync(priceRate);
+            await _context.SaveChangesAsync();
+            return priceRate;
         }
 
         public async Task<PriceRate?> GetLatestPriceRateAsync()
         {
-             var existingPriceRate = await _context.PriceRates.OrderByDescending(x => x.CreatedAt).FirstOrDefaultAsync();
+            var existingPriceRate = await _context.PriceRates.OrderByDescending(x => x.CreatedAt).FirstOrDefaultAsync();
             return existingPriceRate;
         }
     }

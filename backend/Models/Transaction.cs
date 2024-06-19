@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using backend.Enums;
 
 namespace backend.Models
 {
@@ -7,20 +8,23 @@ namespace backend.Models
     public class Transaction
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("transaction_id")]
-        public long TransactionId { get; set; }
+        public string? TransactionId { get; set; }
 
         [Column("order_id")]
-        public string OrderId { get; set; }
+        public string? OrderId { get; set; }
         public Order Order { get; set; } = new Order();
 
         [Column("payment_method")]
-        public string PaymentMethod { get; set; } = String.Empty;
+        public string PaymentMethod { get; set; } = string.Empty;
 
         [Column("amount")]
         [Range(0.01, double.MaxValue)]
         public double Amount { get; set; }
+
+        [Column("transaction_status")]
+        public TransactionStatus TransactionStatus { get; set; } = TransactionStatus.Pending;
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.Now;

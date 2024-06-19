@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Transactions;
 using backend.DTOs;
 using backend.DTOs.Order;
 using backend.Helper;
@@ -52,20 +53,6 @@ namespace backend.Controllers
             return Ok(order);
         }
 
-        [HttpGet("pay-order/{id}")]
-        public async Task<ActionResult> PayOrder([FromRoute] string id)
-        {
-            var updatedOrder = await _orderRepo.UpdateOrderAsync(
-                id,
-                new UpdateOrderDTO() { OrderStatus = "Processing" }
-            );
-            if (updatedOrder == null)
-            {
-                return BadRequest("The order could not be updated.");
-            }
-            return Redirect("http://localhost:3000/account/order-history");
-        }
-
         [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] CreateOrderDTO orderDto)
         {
@@ -74,7 +61,6 @@ namespace backend.Controllers
                 return BadRequest("The order could not be created.");
             }
             long customerId = Convert.ToInt64(User.FindFirst("accountId")?.Value);
-            System.Console.WriteLine(customerId);
             var createdOrder = await _orderRepo.CreateOrderAsync(customerId, orderDto);
             if (createdOrder == null)
             {

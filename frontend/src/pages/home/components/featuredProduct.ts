@@ -1,4 +1,4 @@
-const featuredProduct = [
+export const featuredProduct = [
   {
     accessoryId: 1,
     karat: 18,

@@ -15,6 +15,7 @@ namespace backend.DTOs.Accessory
         public int Karat { get; set; }
         public float MaterialWeight { get; set; }
         public string Name { get; set; } = string.Empty;
+        public int Quantity { get; set; }
         public AccessoryTypeDTO AccessoryType { get; set; } = new AccessoryTypeDTO();
         public ShapeDTO Shape { get; set; } = new ShapeDTO();
         public List<AccessoryImageDTO> AccessoryImages { get; set; } =

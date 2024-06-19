@@ -1,5 +1,3 @@
-import { Bird, Rabbit, Rat, Squirrel, Worm } from "lucide-react";
-
 export default function OurTeam() {
   return (
     <>

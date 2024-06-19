@@ -1,7 +1,7 @@
 import { Pagination, Skeleton } from "antd";
 import { GET } from "../../../utils/request";
 import { useQueries } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import DiamondItem from "./components/DiamondItem";
 import SortItem from "./components/SortItem";
 import Filter from "./components/Filter";
@@ -9,6 +9,7 @@ import { useSearchStore } from "../../../store/searchStore";
 import { useEffect } from "react";
 import scrollTo from "../../../utils/scroll";
 import { getDiamondPrice } from "../../../utils/getPrice";
+import LoadingItem from "./components/LoadingItem";
 
 export default function DiamondList() {
   const url = new URL(window.location.href);
@@ -25,12 +26,13 @@ export default function DiamondList() {
   ];
 
   const navigate = useNavigate();
+  const location = useLocation();
   // scrollTo("table-header");
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   console.log("query url: " + queryUrl);
   useEffect(() => {
-    setQueryUrl("/api/Diamonds?IsAvailability=true");
+    setQueryUrl(`/api/Diamonds${location.search}`);
   }, []);
 
   const [diamond, diamondPrice, priceRate] = useQueries({
@@ -51,11 +53,6 @@ export default function DiamondList() {
       },
     ],
   });
-
-  if (diamond?.data && diamondPrice?.data) {
-    console.log("i am bug");
-    console.log(diamond?.data);
-  }
 
   return (
     <div className="flex items-center justify-around flex-col mb-20">
@@ -86,36 +83,33 @@ export default function DiamondList() {
         </div>
         <div>
           {diamond?.isLoading && (
-            <Skeleton
-              active
-              paragraph={{
-                rows: 20,
-              }}
-            />
+            <>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((key) => (
+                <LoadingItem key={key} />
+              ))}
+            </>
           )}
-          {diamond?.data?.diamonds?.map((diamond: any, index: number) => {
-            return (
-              <DiamondItem
-                key={index}
-                diamond={diamond}
-                price={
-                  diamondPrice?.data && priceRate?.data ? (
-                    getDiamondPrice(
-                      diamond,
-                      diamondPrice.data,
-                      priceRate?.data.percent
-                    ).toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                      maximumFractionDigits: 0,
-                    })
-                  ) : (
-                    <Skeleton.Input active={true} size={"small"} />
-                  )
-                }
-              />
-            );
-          })}
+          {diamond?.data?.diamonds?.map((diamond: any, index: number) => (
+            <DiamondItem
+              key={index}
+              diamond={diamond}
+              price={
+                diamondPrice?.data && priceRate?.data ? (
+                  getDiamondPrice(
+                    diamond,
+                    diamondPrice.data,
+                    priceRate?.data.percent
+                  ).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 0,
+                  })
+                ) : (
+                  <Skeleton.Input active={true} size={"small"} />
+                )
+              }
+            />
+          ))}
         </div>
         <div className="mt-10 flex justify-center">
           {diamond?.data && diamond?.data.diamonds?.length == 0 ? (
@@ -130,7 +124,7 @@ export default function DiamondList() {
                 (diamond?.data && diamond?.data.currentPage?.toString()) || "1"
               }
               total={diamond?.data && diamond?.data.totalCount}
-              pageSize={Number(params.get("PageSize")) || 20}
+              pageSize={Number(params.get("PageSize")) || 10}
               showSizeChanger={false}
               onChange={(page, _pageSize) => {
                 scrollTo("table-header");

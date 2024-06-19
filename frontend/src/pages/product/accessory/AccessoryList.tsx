@@ -1,22 +1,23 @@
-import { Pagination, Skeleton } from "antd";
+import { Pagination } from "antd";
 import { useEffect } from "react";
 import { GET } from "../../../utils/request";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSearchStore } from "../../../store/searchStore";
 import { useQueries } from "@tanstack/react-query";
 import AccessoryItem from "./AccessoryItem";
 import { getAccessoryPrice } from "../../../utils/getPrice";
+import LoadingItem from "./components/LoadingItem";
 
 export default function AccessoryList() {
-  useEffect(() => {
-    setQueryUrl("/api/Accessories?");
-  }, []);
-
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
   const navigate = useNavigate();
+  const location = useLocation();
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
+  useEffect(() => {
+    setQueryUrl(`/api/Accessories${location.search}`);
+  }, []);
 
   const [accessories, materialPrice, priceRate] = useQueries({
     queries: [
@@ -37,27 +38,24 @@ export default function AccessoryList() {
     ],
   });
 
-  if (accessories.error) {
-    return <div>Error: {accessories.error.message}</div>;
-  }
-
   return (
     <div className="flex items-center justify-around flex-col mb-20 px-20">
       <div className="w-full">
         <div className="font-bold text-3xl libre-baskerville-regular flex justify-around my-10">
           DATJ's ACCESSORY PRODUCTS
         </div>
+
         {accessories.isLoading && (
-          <Skeleton
-            active
-            paragraph={{
-              rows: 20,
-            }}
-          />
+          <div className="grid grid-cols-4 gap-x-3 gap-y-10">
+            {/* Fake 12 loading items */}
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item) => (
+              <LoadingItem key={item} />
+            ))}
+          </div>
         )}
         {accessories?.data && (
           <>
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-4 gap-x-3">
               {accessories?.data?.accessories?.map((accessory: any) => (
                 <AccessoryItem
                   key={accessory.accessoryId}

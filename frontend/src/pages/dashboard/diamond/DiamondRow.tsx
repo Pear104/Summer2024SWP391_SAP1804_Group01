@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function DiamondRow({
   diamond,
@@ -58,13 +59,13 @@ export default function DiamondRow({
         {/* map diamond */}
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="flex items-center">
-            <a href={`/admin/diamonds/detail/${diamond.diamondId}`}>
+            <Link to={`/admin/diamonds/detail/${diamond.diamondId}`}>
               <img
-                className="h-14 w-14 square-full"
+                className="w-14 aspect-square object-cover"
                 src={diamond.imageUrl}
                 alt=""
               />
-            </a>
+            </Link>
           </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">

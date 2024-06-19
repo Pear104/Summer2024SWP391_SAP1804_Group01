@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import CartItem from "./components/CartItem";
 import { useCartStore } from "../../store/cartStore";
 import { Button, Skeleton } from "antd";
-import { GET, POST } from "../../utils/request";
+import { GET } from "../../utils/request";
 import Loading from "./../../components/Loading";
 import { useCheckoutStore } from "../../store/checkoutStore";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useQueries } from "@tanstack/react-query";
 import { getAccessoryPrice, getDiamondPrice } from "../../utils/getPrice";
 
@@ -159,20 +159,12 @@ const Cart: React.FC = () => {
                     useCheckoutStore
                       .getState()
                       .setShippingAddress(infor?.address);
-                    // console.log(cart);
-                    // setIsLoading(true);
-                    // const response = await POST("/api/Order", {
-                    //   orderDetails: cart,
-                    // });
-                    // setIsLoading(false);
-                    // useCartStore.getState().clearCart();
                     navigate("/checkout");
                   }
                 }}
               >
                 CHECK OUT
               </Button>
-
               <Information />
             </div>
           </div>

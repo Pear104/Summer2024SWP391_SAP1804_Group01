@@ -1,18 +1,18 @@
-import { Form, Input, Pagination, Skeleton } from "antd";
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Empty, Form, Input, Pagination, Skeleton } from "antd";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { GET } from "../../../utils/request";
 import DiamondRow from "./DiamondRow";
 import { useQueries } from "@tanstack/react-query";
 import { useSearchStore } from "../../../store/searchStore";
 import { getDiamondPrice } from "../../../utils/getPrice";
-import { ProductTypeMenu, StatusMenu } from "./DiamondsManageHeader";
+import { StatusMenu } from "./DiamondsManageHeader";
 import DiamondColumnHeader from "./DiamondColumnHeader";
 
 export default function ProductsManage() {
   const location = useLocation();
   const [statusText, setStatusText] = useState("Status");
-  const [productTypeText, setProductTypeText] = useState("Product Type");
+  const [_productTypeText, setProductTypeText] = useState("Product Type");
   // sort item
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
@@ -75,7 +75,7 @@ export default function ProductsManage() {
       setSelectedDiamonds={setSelectedDiamonds}
       price={getDiamondPrice(
         diamond,
-        diamondPrice.data,
+        diamondPrice?.data,
         priceRate?.data?.percent
       ).toLocaleString("en-US", {
         style: "currency",
@@ -93,11 +93,11 @@ export default function ProductsManage() {
     navigate("/admin/diamonds?" + params.toString());
   };
 
-  const handleProductTypeClick = (type: string, typeText: string) => {
-    setProductTypeText(typeText);
-    params.set("IsAvailability", type == "Available" ? "true" : "false");
-    navigate({ search: params.toString() });
-  };
+  // const handleProductTypeClick = (type: string, typeText: string) => {
+  //   setProductTypeText(typeText);
+  //   params.set("IsAvailability", type == "Available" ? "true" : "false");
+  //   navigate({ search: params.toString() });
+  // };
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -143,9 +143,9 @@ export default function ProductsManage() {
         </div>
         <div className="flex justify-end space-x-1 items-center">
           <button className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
-            <a href="/admin/diamonds/new" className="button primary">
+            <Link to="/admin/diamonds/new" className="button primary">
               <span>New Diamond</span>
-            </a>
+            </Link>
           </button>
         </div>
       </div>
@@ -295,12 +295,12 @@ export default function ProductsManage() {
                             >
                               Enable
                             </button>
-                            <button
+                            {/* <button
                               onClick={() => handleAction("delete")}
                               className="font-semibold py-1 px-2 border-l border-gray-300"
                             >
                               Delete
-                            </button>
+                            </button> */}
                             <button
                               onClick={() => handleAction("clear")}
                               className="font-semibold py-1 px-2 border-l border-gray-300"
@@ -311,58 +311,64 @@ export default function ProductsManage() {
                         </td>
                       </tr>
                     )}
-                    {(diamond?.isLoading || diamondPrice?.isLoading) && (
-                      <tr>
-                        <td colSpan={100}>
-                          <Skeleton
-                            active
-                            paragraph={{
-                              rows: 10,
-                            }}
-                            className="w-full"
-                          />
-                        </td>
-                      </tr>
+                    {diamond?.isLoading && (
+                      <td colSpan={100} className="p-4">
+                        <Skeleton
+                          active
+                          paragraph={{
+                            rows: 20,
+                          }}
+                          className="w-full"
+                        />
+                      </td>
                     )}
                     {diamondsData?.length > 0 ? (
                       diamondsData?.map(renderDiamondRow)
                     ) : (
-                      <tr>
-                        <td className="text-center items-center">
-                          There is no diamond
-                        </td>
-                      </tr>
+                      <td colSpan={12} className="py-20 w-full">
+                        <Empty description="There is no diamond" />
+                      </td>
                     )}
+                    {diamondsData?.length > 0 &&
+                      diamondsData?.map(renderDiamondRow)}
                   </tbody>
                 </table>
 
                 <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
-                  <Pagination
-                    showTotal={(total, range) =>
-                      `${range[0]}-${range[1]} of ${total} items`
-                    }
-                    current={Number(params.get("PageNumber")) || 1}
-                    defaultCurrent={
-                      (diamond?.data && diamond?.data.currentPage.toString()) ||
-                      "1"
-                    }
-                    total={diamond?.data && diamond?.data.totalCount}
-                    pageSize={Number(params.get("PageSize")) || 20}
-                    onChange={(page, _pageSize) => {
-                      params.set("PageNumber", page.toString());
-                      params.set("PageSize", pageSize.toString());
-                      navigate(url.pathname + "?" + params.toString());
-                      setQueryUrl("/api/Diamonds?" + params.toString());
-                      setSearchTerm("");
-                    }}
-                    showSizeChanger={true}
-                    onShowSizeChange={(current, size) => {
-                      setPageSize(size);
-                      params.set("PageSize", size.toString());
-                      navigate(url.pathname + "?" + params.toString());
-                      setQueryUrl("/api/Diamonds?" + params.toString());
-                    }}
-                  />
+                  {diamond?.data && diamond?.data?.diamonds?.length > 0 && (
+                    <Pagination
+                      showTotal={(total, range) =>
+                        `${range[0]}-${range[1]} of ${total} items`
+                      }
+                      current={Number(params.get("PageNumber")) || 1}
+                      defaultCurrent={
+                        (diamond?.data &&
+                          diamond?.data.currentPage.toString()) ||
+                        "1"
+                      }
+                      total={diamond?.data && diamond?.data.totalCount}
+                      pageSize={Number(params.get("PageSize")) || 20}
+                      onChange={(page, _pageSize) => {
+                        params.set("PageNumber", page.toString());
+                        params.set("PageSize", pageSize.toString());
+                        navigate(url.pathname + "?" + params.toString());
+                        setQueryUrl("/api/Diamonds?" + params.toString());
+                        setSearchTerm("");
+                      }}
+                      showSizeChanger={true}
+                      onShowSizeChange={(_current, size) => {
+                        setPageSize(size);
+                        params.set("PageSize", size.toString());
+                        navigate(url.pathname + "?" + params.toString());
+                        setQueryUrl("/api/Diamonds?" + params.toString());
+                      }}
+                    />
+                  )}
+                  {/* {!diamondsData?.isLoading && diamondsData?.length == 0 && (
+                    <div className="text-center text-2xl">
+                      There is no diamond
+                    </div>
+                  )} */}
                 </div>
               </div>
             </div>

@@ -11,13 +11,21 @@ namespace backend.Models
         [Column("feedback_id")]
         public long FeedbackId { get; set; }
 
+        [Column("customer_id")]
+        public long? CustomerId { get; set; }
+        public Account? Customer { get; set; }
+
         [Column("order_id")]
-        public string OrderId { get; set; }
-        public Order Order { get; set; } = new Order();
+        public string? OrderId { get; set; }
+        public Order? Order { get; set; }
+
+        [Column("order_detail_id")]
+        public long? OrderDetailId { get; set; }
+        public OrderDetail? OrderDetail { get; set; }
 
         [Column("accessory_id")]
-        public long AccessoryId { get; set; }
-        public Accessory Accessory { get; set; } = new Accessory();
+        public long? AccessoryId { get; set; }
+        public Accessory? Accessory { get; set; } = new Accessory();
 
         [Column("score")]
         public int Score { get; set; }
@@ -26,6 +34,6 @@ namespace backend.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         [Column("content")]
-        public string Content { get; set; } = String.Empty;
+        public string? Content { get; set; }
     }
 }

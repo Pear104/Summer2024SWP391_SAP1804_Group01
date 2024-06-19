@@ -24,13 +24,13 @@ import OrderDetail from "../pages/account/OrderDetail";
 import EditAccount from "../pages/account/EditAccount";
 import CompleteProduct from "../pages/product/complete/CompleteProduct";
 import BlogsManage from "../pages/dashboard/blog/BlogsManage";
-import NewBlog from "../pages/dashboard/blog/NewBlog";
+import BlogView from "../pages/dashboard/blog/BlogView";
 import AccessoriesManage from "../pages/dashboard/accessory/AccessoriesManage";
 import AccessoryView from "../pages/dashboard/accessory/AccessoryView";
-import DiamondPriceManage from "../pages/dashboard/diamondprice/DiamondPriceManage";
-import AccessoryPriceManage from "../pages/dashboard/accessoryprice/AccessoryPriceManage";
+import DiamondPriceManage from "../pages/dashboard/diamondPrice/DiamondPriceManage";
+import AccessoryPriceManage from "../pages/dashboard/accessoryPrice/AccessoryPriceManage";
 import CustomerManage from "../pages/dashboard/customer/CustomerManage";
-import TransactionManage from "../pages/dashboard/transacction/TransactionManage";
+import TransactionManage from "../pages/dashboard/transaction/TransactionManage";
 import OrderManage from "../pages/dashboard/order/OrderManage";
 import DiamondView from "../pages/dashboard/diamond/DiamondView";
 import CheckoutLayout from "../layouts/CheckoutLayout";
@@ -42,6 +42,12 @@ import CreateWarrantyRequest from "../pages/account/CreateWarrantyRequest";
 import SaleStaffsManagement from "../pages/dashboard/sale_staffs/SaleStaffsManagement";
 import DeliveryStaffsManagement from "../pages/dashboard/delivery_staffs/DeliveryStaffsManagement";
 import WarrantyRequest from "../pages/dashboard/warranty_request/WarrantyRequest";
+import DeliveryWarrantyManagement from "../pages/dashboard/delivery_staffs/DeliveryWarrantyManagement";
+import BlogLayout from "../layouts/BlogLayout";
+import BlogList from "../pages/blog/BlogList";
+import BlogDetail from "../pages/blog/BlogDetail";
+import PriceRate from "../pages/dashboard/price_rate/PriceRate";
+import SalesReportManagement from "../pages/dashboard/staffsReport/SalesReportManagement";
 const routes = [
   {
     errorElement: <Error />,
@@ -61,6 +67,7 @@ const routes = [
           },
         ],
       },
+
       {
         element: <DashBoardLayout />,
         path: "/admin",
@@ -103,6 +110,10 @@ const routes = [
             path: "/admin/delivery-staffs",
           },
           {
+            element: <DeliveryWarrantyManagement />,
+            path: "/admin/delivery-staffs-warranty",
+          },
+          {
             element: <AccessoryPriceManage />,
             path: "/admin/accessory-price",
           },
@@ -119,39 +130,50 @@ const routes = [
             path: "/admin/transactions",
           },
           {
-            element: <BlogsManage />,
-            path: "/admin/blogs",
+            element: <SalesReportManagement />,
+            path: "/admin/sales-report",
+          },
+          {
+            path: "blogs",
             children: [
               {
                 index: true,
                 element: <BlogsManage />,
               },
               {
-                element: <NewBlog />,
-                path: "/admin/blogs/new",
+                element: <BlogView />,
+                path: "new",
+              },
+              {
+                element: <BlogView />,
+                path: "detail/:blogId",
               },
             ],
           },
-          { 
-            element:<WarrantyRequest/>,
-            path : "/admin/warranty-request"
+          {
+            element: <PriceRate />,
+            path: "/admin/price-rate",
           },
           {
-            path: "/admin/accessories",
+            element: <WarrantyRequest />,
+            path: "/admin/warranty-request",
+          },
+          {
+            path: "accessories",
             children: [
               {
                 index: true,
                 element: <AccessoriesManage />,
               },
               {
-                path: "/admin/accessories/detail",
+                path: "detail",
                 children: [
                   {
                     index: true,
                     element: <AccessoryView />,
                   },
                   {
-                    path: "/admin/accessories/detail/:accessoryId",
+                    path: ":accessoryId",
                     element: <AccessoryView />,
                   },
                 ],
@@ -171,6 +193,20 @@ const routes = [
           {
             path: "/about",
             element: <About />,
+          },
+          {
+            path: "blogs",
+            element: <BlogLayout />,
+            children: [
+              {
+                index: true,
+                element: <BlogList />,
+              },
+              {
+                path: ":blogId",
+                element: <BlogDetail />,
+              },
+            ],
           },
           {
             path: "authentication",

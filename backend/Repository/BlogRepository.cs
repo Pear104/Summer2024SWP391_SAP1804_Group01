@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend.Data;
 using backend.DTOs.Blog;
+using backend.Helper;
 using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
@@ -49,15 +50,33 @@ namespace backend.Repository
             return null;
         }
 
-        public async Task<IEnumerable<Blog>> GetAllBlogsAsync()
+        public async Task<BlogResult> GetAllBlogsAsync(BlogQuery query)
         {
-            var existingBlogs = await _context.Blogs.ToListAsync();
-            return existingBlogs;
+            var blogsQuery = _context.Blogs.Include(x => x.Author).AsQueryable();
+
+            var totalCount = await blogsQuery.CountAsync();
+            var totalPages = totalCount / (query.PageSize ?? 10);
+            var blogs = await blogsQuery
+                .Skip(((query.PageNumber ?? 1) - 1) * (query.PageSize ?? 10))
+                .Take(query.PageSize ?? 10)
+                .Select(x => x.ToBlogDTO())
+                .ToListAsync();
+
+            return new BlogResult
+            {
+                Blogs = blogs,
+                TotalPages = totalPages,
+                TotalCount = totalCount,
+                PageSize = query.PageSize ?? 10,
+                CurrentPage = query.PageNumber ?? 1
+            };
         }
 
         public async Task<Blog?> GetBlogByIdAsync(long id)
         {
-            return await _context.Blogs.FindAsync(id);
+            return await _context
+                .Blogs.Include(x => x.Author)
+                .FirstOrDefaultAsync(x => x.BlogId == id);
         }
 
         public async Task<Blog?> UpdateBlogAsync(long id, UpdateBlogDTO blogDto)

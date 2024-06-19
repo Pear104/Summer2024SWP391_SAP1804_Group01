@@ -18,7 +18,11 @@ const OrderUpdateComponent = ({
       orderId: number;
       orderStatus: string;
     }) => PUT(`/api/Order/${orderId}`, { orderStatus: orderStatus }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["orders"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["saleStaffs"] });
+      queryClient.invalidateQueries({ queryKey: ["deliveryStaffs"] });
+    },
     onError: () => queryClient.invalidateQueries({ queryKey: ["orders"] }),
   });
 

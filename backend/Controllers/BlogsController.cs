@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.DTOs.Blog;
+using backend.Helper;
 using backend.Interfaces;
 using backend.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -21,11 +22,10 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetBlogs()
+        public async Task<ActionResult> GetBlogs([FromQuery] BlogQuery query)
         {
-            var blogModels = await _blogRepo.GetAllBlogsAsync();
-            var blogDTOs = blogModels.Select(x => x.ToBlogDTO());
-            return Ok(blogDTOs);
+            var blogResult = await _blogRepo.GetAllBlogsAsync(query);
+            return Ok(blogResult);
         }
 
         [HttpGet("{id}")]
@@ -37,7 +37,7 @@ namespace backend.Controllers
                 return NotFound();
             }
 
-            return Ok(blog.ToBlogDTO());
+            return Ok(blog);
         }
 
         [HttpPost]
