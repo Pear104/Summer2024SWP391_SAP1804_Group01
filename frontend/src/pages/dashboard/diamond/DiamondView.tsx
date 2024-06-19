@@ -8,17 +8,8 @@ import {
   uploadBytes,
   deleteObject,
 } from "firebase/storage";
-import {
-  Avatar,
-  Button,
-  Form,
-  Input,
-  notification,
-  Select,
-  Switch,
-  UploadFile,
-} from "antd";
-import { ArrowLeft, Check, Shapes, X } from "lucide-react";
+import { Button, Form, Input, notification, Select, UploadFile } from "antd";
+import { ArrowLeft, Check, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import * as z from "zod";
 import { useForm } from "react-hook-form";

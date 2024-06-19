@@ -4,13 +4,6 @@ import { GET } from "../../../../utils/request";
 import DeliveryStaffComponent from "./DeliveryStaffComponent";
 import WarrantyUpdateComponent from "./WarrantyUpdateComponent";
 
-const formatDate = (dateString: any) => {
-  const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-};
 export default function WarrantyRow({ warranty }: { warranty: any }) {
   const [saleStaffs, deliveryStaffs] = useQueries({
     queries: [

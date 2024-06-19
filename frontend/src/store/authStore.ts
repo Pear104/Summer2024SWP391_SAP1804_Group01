@@ -12,7 +12,7 @@ export const useAuthStore = create<{
   setGoogleProfile: (profile: GoogleProfile) => void;
 }>()(
   persist(
-    (set, get) => ({
+    (set, _get) => ({
       isLoged: false,
       googleProfile: { email: "", name: "" },
       setGoogleProfile: (profile: GoogleProfile) =>

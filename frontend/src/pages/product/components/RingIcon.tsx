@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function RingIcon() {
   return (
     <svg viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">

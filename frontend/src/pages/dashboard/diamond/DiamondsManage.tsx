@@ -6,13 +6,13 @@ import DiamondRow from "./DiamondRow";
 import { useQueries } from "@tanstack/react-query";
 import { useSearchStore } from "../../../store/searchStore";
 import { getDiamondPrice } from "../../../utils/getPrice";
-import { ProductTypeMenu, StatusMenu } from "./DiamondsManageHeader";
+import { StatusMenu } from "./DiamondsManageHeader";
 import DiamondColumnHeader from "./DiamondColumnHeader";
 
 export default function ProductsManage() {
   const location = useLocation();
   const [statusText, setStatusText] = useState("Status");
-  const [productTypeText, setProductTypeText] = useState("Product Type");
+  const [_productTypeText, setProductTypeText] = useState("Product Type");
   // sort item
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
@@ -93,11 +93,11 @@ export default function ProductsManage() {
     navigate("/admin/diamonds?" + params.toString());
   };
 
-  const handleProductTypeClick = (type: string, typeText: string) => {
-    setProductTypeText(typeText);
-    params.set("IsAvailability", type == "Available" ? "true" : "false");
-    navigate({ search: params.toString() });
-  };
+  // const handleProductTypeClick = (type: string, typeText: string) => {
+  //   setProductTypeText(typeText);
+  //   params.set("IsAvailability", type == "Available" ? "true" : "false");
+  //   navigate({ search: params.toString() });
+  // };
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -356,7 +356,7 @@ export default function ProductsManage() {
                         setSearchTerm("");
                       }}
                       showSizeChanger={true}
-                      onShowSizeChange={(current, size) => {
+                      onShowSizeChange={(_current, size) => {
                         setPageSize(size);
                         params.set("PageSize", size.toString());
                         navigate(url.pathname + "?" + params.toString());

@@ -1,16 +1,6 @@
 import { useEffect, useState } from "react";
 import { GET, POST } from "../../utils/request";
-import {
-  Pagination,
-  Skeleton,
-  Image,
-  Empty,
-  Modal,
-  Rate,
-  Form,
-  Input,
-  App,
-} from "antd";
+import { Pagination, Empty, Modal, Rate, Form, App } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSearchStore } from "../../store/searchStore";
 import { useQueries, useQueryClient, useMutation } from "@tanstack/react-query";

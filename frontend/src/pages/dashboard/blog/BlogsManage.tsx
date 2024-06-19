@@ -25,7 +25,6 @@ export default function BlogsManage() {
   const [productTypeText, setProductTypeText] = useState("Product Type");
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
-  const [pageSize, setPageSize] = useState(10);
   useEffect(() => {
     setQueryUrl("/api/Blogs?");
   }, []);

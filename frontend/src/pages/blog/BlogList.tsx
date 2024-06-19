@@ -4,14 +4,13 @@ import { useEffect } from "react";
 import { useSearchStore } from "../../store/searchStore";
 import { GET } from "../../utils/request";
 import BlogListItem from "./components/BlogListItem";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoadingBlogListItem from "./components/LoadingBlogListItem";
 import BigItem from "./components/BigItem";
 
 export default function BlogList() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
-  const location = useLocation();
   const navigate = useNavigate();
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);

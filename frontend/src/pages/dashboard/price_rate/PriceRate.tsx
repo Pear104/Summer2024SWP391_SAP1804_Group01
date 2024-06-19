@@ -34,7 +34,7 @@ export default function PriceRate() {
   console.log(queryUrl);
   console.log(priceRateList?.data);
   console.log(priceRateList?.data?.priceRate?.length);
-  console.log('ahehe')
+  console.log("ahehe");
 
   const renderPriceRateRow = (priceRate: any) => (
     <PriceRateRow key={priceRate.priceRateId} priceRate={priceRate} />
@@ -56,8 +56,8 @@ export default function PriceRate() {
             <h1 className="text-2xl"> Price Rate List </h1>
           </div>
         </div>
-        <div className="flex justify-end space-x-1 items-center">   
-              <CreatePriceRate />
+        <div className="flex justify-end space-x-1 items-center">
+          <CreatePriceRate />
         </div>
       </div>
 
@@ -140,7 +140,7 @@ export default function PriceRate() {
                       </td>
                     )}
                     {priceRateList?.data &&
-                      priceRateList?.data?.priceRates?.length > 0 ? (
+                    priceRateList?.data?.priceRates?.length > 0 ? (
                       priceRateList?.data?.priceRates?.map(renderPriceRateRow)
                     ) : (
                       <td colSpan={100} className="py-20 w-full">
@@ -162,27 +162,22 @@ export default function PriceRate() {
                         "1"
                       }
                       total={
-                        priceRateList?.data &&
-                        priceRateList?.data.totalCount
+                        priceRateList?.data && priceRateList?.data.totalCount
                       }
                       pageSize={Number(params.get("PageSize")) || 20}
                       onChange={(page, _pageSize) => {
                         params.set("PageNumber", page.toString());
                         params.set("PageSize", pageSize.toString());
                         navigate(url.pathname + "?" + params.toString());
-                        setQueryUrl(
-                          "/api/PriceRate?" + params.toString()
-                        );
+                        setQueryUrl("/api/PriceRate?" + params.toString());
                         setSearchTerm("");
                       }}
                       showSizeChanger={true}
-                      onShowSizeChange={(current, size) => {
+                      onShowSizeChange={(_current, size) => {
                         setPageSize(size);
                         params.set("PageSize", size.toString());
                         navigate(url.pathname + "?" + params.toString());
-                        setQueryUrl(
-                          "/api/PriceRate?" + params.toString()
-                        );
+                        setQueryUrl("/api/PriceRate?" + params.toString());
                       }}
                     />
                   </div>

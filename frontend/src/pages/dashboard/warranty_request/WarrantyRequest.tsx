@@ -214,7 +214,7 @@ export default function WarrantyRequest() {
                         setSearchTerm("");
                       }}
                       showSizeChanger={true}
-                      onShowSizeChange={(current, size) => {
+                      onShowSizeChange={(_current, size) => {
                         setPageSize(size);
                         params.set("PageSize", size.toString());
                         navigate(url.pathname + "?" + params.toString());

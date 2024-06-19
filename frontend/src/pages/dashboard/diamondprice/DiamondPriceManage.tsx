@@ -78,7 +78,7 @@ const DataTable = ({
           </tr>
         </thead>
         <tbody>
-          {color.map((col, index: number) => (
+          {color.map((col) => (
             <tr
               key={col.value}
               className="grid grid-cols-12 transition-all duration-100 hover:bg-slate-200"

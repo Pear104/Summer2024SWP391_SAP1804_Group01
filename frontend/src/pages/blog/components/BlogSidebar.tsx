@@ -37,7 +37,7 @@ export default function BlogSidebar() {
         {blogs?.data?.blogs
           ?.slice(1)
           .map((blog: any, index: number) => (
-            <SidebarBlogItem blog={blog} />
+            <SidebarBlogItem key={index} blog={blog} />
           )) || (
           <>
             <LoadingSidebarItem />

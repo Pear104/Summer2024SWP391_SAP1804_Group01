@@ -1,4 +1,3 @@
-import React from "react";
 import BestSales from "./BestSales";
 
 export default function SalesReportManagement() {

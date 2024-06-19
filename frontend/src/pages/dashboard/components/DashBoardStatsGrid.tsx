@@ -1,4 +1,3 @@
-import React from "react";
 import { IoBagHandle, IoCart, IoPeople, IoPieChart } from "react-icons/io5";
 
 export default function DashBoardStatsGrid() {

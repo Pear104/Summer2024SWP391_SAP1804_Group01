@@ -1,4 +1,4 @@
-import { Pagination, Skeleton } from "antd";
+import { Pagination } from "antd";
 import { useEffect } from "react";
 import { GET } from "../../../utils/request";
 import { useLocation, useNavigate } from "react-router-dom";
