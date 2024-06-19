@@ -259,7 +259,7 @@ export default function OrderHistory() {
           <Skeleton
             active
             paragraph={{
-              rows: 20,
+              rows: 10,
             }}
           />
         )}

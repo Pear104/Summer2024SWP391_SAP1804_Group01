@@ -1,5 +1,6 @@
 using backend.Data;
 using backend.DTOs;
+using backend.DTOs.Accessory;
 using backend.DTOs.Order;
 using backend.Enums;
 using backend.Helper;
@@ -232,12 +233,21 @@ namespace backend.Repository
                 .Select(x => new OrderDTO
                 {
                     OrderId = x.OrderId,
-                    OrderDetails = x.OrderDetails.Select(y => new OrderDetailDTO
+                    OrderDetails = x.OrderDetails
+                    .Select(y => new OrderDetailDTO
                     {
                         OrderDetailId = y.OrderDetailId,
                         Diamond = y.Diamond != null ? y.Diamond.ToDiamondDTO() : null,
                         DiamondPrice = y.DiamondPrice != null ? y.DiamondPrice.ToDiamondPriceDTO() : null,
-                        Accessory = y.Accessory != null ? y.Accessory.ToAccessoryDTO() : null,
+                        Accessory = y.Accessory != null ? new AccessoryDTO {
+                            AccessoryId = y.Accessory.AccessoryId,
+                            Karat = y.Accessory.Karat,
+                            MaterialWeight = y.Accessory.MaterialWeight,
+                            Name = y.Accessory.Name,
+                            AccessoryType = y.Accessory.AccessoryType.ToAccessoryTypeDTO(),
+                            Shape = y.Accessory.Shape.ToShapeDTO(),
+                            AccessoryImages = y.Accessory.AccessoryImages != null ? y.Accessory.AccessoryImages.Select(z => z.ToAccessoryImageDTO()).ToList() : null,
+                        } : null,
                         MaterialPrice = y.MaterialPrice != null ? y.MaterialPrice.ToMaterialPriceDTO() : null,
                         ItemPrice = y.ItemPrice,
                         Size = y.Size,
