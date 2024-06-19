@@ -82,6 +82,22 @@ namespace backend.Repository
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Account>> SearchAccountOnRole(AccountSearchQuery query)
+        {
+            var accountsQuery = _context
+                .Accounts.AsQueryable();
+            if (!string.IsNullOrEmpty(query.GetRole()))
+            {
+                var role = Enum.Parse<Role>(query.GetRole());
+                accountsQuery = accountsQuery.Where(x => x.Role == role);
+            }
+            accountsQuery = accountsQuery.Where(x => x.Name.Contains(query.AccountName) && x.PhoneNumber.Contains(query.AccountPhoneNumber));
+            return await accountsQuery
+                .Skip((query.pageNumber-1) * query.PageSize)
+                .Take(query.PageSize)
+                .ToListAsync();
+        }
+
         public async Task<Account?> GetAccountByEmailAsync(string email)
         {
             return await _context.Accounts.FirstOrDefaultAsync(x => x.Email == email);
