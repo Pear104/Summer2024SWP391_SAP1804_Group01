@@ -12,20 +12,6 @@ import {
 } from "recharts";
 import { GET } from "../../../utils/request";
 
-const data1 = [
-  {
-    name: "april",
-    Income: 4000,
-  },
-  {
-    name: "Page B",
-    Income: 3000,
-  },
-  {
-    name: "Page C",
-    Income: 2000,
-  },
-];
 const TransactionChart: React.FC = () => {
   const [data, setData] = useState([]);
   const [formattedData, setFormattedData] = useState([]);
@@ -48,7 +34,7 @@ const TransactionChart: React.FC = () => {
   };
   useEffect(() => {
     (async () => {
-      const data = await GET("/api/Transactions");
+      const data = await GET("/api/Report/TransactionReport");
       setData(data);
       const formattedData = data.map((item: any) => ({
         name: getMonthName(item.month),

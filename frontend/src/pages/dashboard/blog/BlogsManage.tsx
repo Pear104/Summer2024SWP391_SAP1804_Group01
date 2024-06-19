@@ -1,18 +1,31 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GET } from "../../../utils/request";
-import { Button, Dropdown, Empty, Form, Input, Menu, Skeleton } from "antd";
+import {
+  Button,
+  Dropdown,
+  Empty,
+  Form,
+  Input,
+  Menu,
+  Pagination,
+  Skeleton,
+} from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { useSearchStore } from "../../../store/searchStore";
 import { useQueries } from "@tanstack/react-query";
+import BlogListItem from "./components/BlogListItem";
 
 export default function BlogsManage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.searchParams);
   const [statusText, setStatusText] = useState("Status");
   const [productTypeText, setProductTypeText] = useState("Product Type");
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
+  const [pageSize, setPageSize] = useState(10);
   useEffect(() => {
     setQueryUrl("/api/Blogs?");
   }, []);
@@ -72,8 +85,6 @@ export default function BlogsManage() {
       </Menu.Item>
     </Menu>
   );
-
-  console.log(blogs?.data?.blogs);
 
   return (
     <div className="p-4">
@@ -196,55 +207,40 @@ export default function BlogsManage() {
                         />
                       </td>
                     )}
-                    {blogs?.data?.length == 0 && <Empty />}
-                    {blogs?.data?.blogs?.map((blog: any) => {
-                      return (
-                        <tr
-                          key={blog.blogId}
-                          className="cursor-pointer"
-                          onClick={() => {
-                            navigate(`/admin/blogs/detail/${blog.blogId}`);
-                          }}
-                        >
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                              <label className="flex items-center">
-                                <input
-                                  type="checkbox"
-                                  value="0"
-                                  className="form-checkbox"
-                                />
-                                <span className="checkbox-unchecked"></span>
-                                <span className="pl-2"></span>
-                                <input type="hidden" value="0" />
-                              </label>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {blog.blogId}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {blog.title}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {blog.authorName}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {blog.createdAt}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            Available
-                          </td>
-                        </tr>
-                      );
-                    })}
+                    {blogs?.data?.blogs?.length == 0 && (
+                      <td colSpan={100} className="py-20">
+                        <Empty />
+                      </td>
+                    )}
+                    {blogs?.data?.blogs?.map((blog: any) => (
+                      <BlogListItem blog={blog} />
+                    ))}
                   </tbody>
                 </table>
+                <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
+                  {blogs?.data && blogs?.data?.blogs?.length != 0 && (
+                    <Pagination
+                      showTotal={(total, range) =>
+                        `${range[0]}-${range[1]} of ${total} items`
+                      }
+                      className="text-center"
+                      current={blogs?.data?.currentPage}
+                      total={blogs?.data?.totalCount}
+                      pageSize={blogs?.data?.pageSize}
+                      onChange={(page) => {
+                        params.set("PageNumber", page.toString());
+                        navigate(url.pathname + "?" + params.toString());
+                        setQueryUrl("/api/Blogs?" + params.toString());
+                      }}
+                      showSizeChanger={true}
+                      // onShowSizeChange={(current, size) => setPageSize(size)}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
-        {/* listing end */}
       </div>
     </div>
   );

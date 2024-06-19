@@ -1,9 +1,10 @@
+import { Divider } from "antd";
 import moment from "moment";
 import { Link } from "react-router-dom";
 
 export default function SidebarBigItem({ blog }: { blog: any }) {
   return (
-    <Link className="flex flex-col" to={`/blogs/${blog.blogId}`}>
+    <Link className="flex flex-col mb-4" to={`/blogs/${blog.blogId}`}>
       <div
         className="border w-full aspect-[20/11] bg-no-repeat bg-cover rounded-lg bg-center"
         style={{
@@ -15,11 +16,17 @@ export default function SidebarBigItem({ blog }: { blog: any }) {
         }}
       />
       <div className="">
-        <div className="font-bold text-[#2c2c2c] mt-4 mb-2">{blog?.title}</div>
-        <div className="flex items-center text-sm text-slate-400 cursor-pointer">
-          {moment(blog?.createdAt).format("MMM DD, YYYY")}
+        <div className="font-bold text-[#2c2c2c] mt-4 mb-2 text-2xl">
+          {blog?.title}
         </div>
-        <p className="w-[500px]">{blog?.content}</p>
+        <div className="flex items-center text-sm text-slate-400 cursor-pointer my-4">
+          {moment(blog?.createdAt).format("dddd, MMMM Do, YYYY")}
+          <Divider type="vertical" className="h-4" orientationMargin="0" />
+          <span>
+            by <span className="hover:text-gray-800"> {blog?.authorName}</span>
+          </span>
+        </div>
+        <p className="w-[500px]">{blog?.content}...</p>
       </div>
     </Link>
   );

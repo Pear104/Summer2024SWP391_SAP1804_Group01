@@ -6,6 +6,7 @@ import { GET } from "../../utils/request";
 import BlogListItem from "./components/BlogListItem";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoadingBlogListItem from "./components/LoadingBlogListItem";
+import BigItem from "./components/BigItem";
 
 export default function BlogList() {
   const url = new URL(window.location.href);
@@ -29,9 +30,23 @@ export default function BlogList() {
   return (
     <div className="mt-4">
       <div className="flex flex-col gap-4">
-        {blogs?.data?.blogs?.map((blog: any) => (
-          <BlogListItem blog={blog} />
-        )) || (
+        <div className="font-bold text-4xl uppercase">Diamond Knowledge</div>
+        {!blogs?.isLoading && blogs?.data?.blogs?.length == 0 && (
+          <div className="text-center text-2xl p-40">
+            <Empty description="No blog found" />
+          </div>
+        )}
+        <div className="flex gap-4 mb-6">
+          {blogs?.data?.blogs?.length > 0 && (
+            <BigItem blog={blogs?.data?.blogs[0]} />
+          )}
+          {blogs?.data?.blogs?.length > 1 && (
+            <BigItem blog={blogs?.data?.blogs[1]} />
+          )}
+        </div>
+        {blogs?.data?.blogs
+          ?.slice(2)
+          .map((blog: any) => <BlogListItem blog={blog} />) || (
           <>
             <LoadingBlogListItem />
             <LoadingBlogListItem />
@@ -41,7 +56,7 @@ export default function BlogList() {
         )}
       </div>
       <div className="flex justify-center border-b items-center px-8 py-4 mt-4">
-        {blogs?.data && blogs?.data?.accessories?.length != 0 && (
+        {blogs?.data && blogs?.data?.blogs?.length != 0 && (
           <Pagination
             showTotal={(total, range) =>
               `${range[0]}-${range[1]} of ${total} items`
@@ -53,16 +68,11 @@ export default function BlogList() {
             onChange={(page) => {
               params.set("PageNumber", page.toString());
               navigate(url.pathname + "?" + params.toString());
-              setQueryUrl("/api/Accessories?" + params.toString());
+              setQueryUrl("/api/Blogs?" + params.toString());
             }}
             showSizeChanger={true}
             // onShowSizeChange={(current, size) => setPageSize(size)}
           />
-        )}
-        {!blogs?.isLoading && blogs?.data?.blogs?.length == 0 && (
-          <div className="text-center text-2xl">
-            <Empty />
-          </div>
         )}
       </div>
     </div>

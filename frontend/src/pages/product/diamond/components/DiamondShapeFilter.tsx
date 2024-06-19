@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useSearchStore } from "../../../../store/searchStore";
-
+import scrollTo from "../../../../utils/scroll";
 const DiamondShapeFilter = ({
   children,
   title,
@@ -27,6 +27,7 @@ const DiamondShapeFilter = ({
         params.set("IsAvailability", "true");
         navigate("/product/diamond?" + params.toString());
         setQueryUrl(`/api/Diamonds?${params.toString()}`);
+        scrollTo("table-header", "center");
       }}
     >
       <div className="">{children}</div>

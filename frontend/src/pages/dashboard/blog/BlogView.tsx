@@ -1,5 +1,5 @@
 import { App, Button, Form, Input } from "antd";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ScrollText } from "lucide-react";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import TextEditor from "./components/TextEditor";
 import * as z from "zod";
@@ -54,7 +54,7 @@ export default function BlogView() {
       message.success("Blog added successfully");
       queryClient.invalidateQueries({ queryKey: ["blogs"] });
       queryClient.invalidateQueries({ queryKey: ["blog"] });
-      navigate(`/blogs/${data.blogId}`);
+      navigate(`/admin/blogs/detail/${data.blogId}`);
     },
   });
   const mutatePut = useMutation({
@@ -71,15 +71,28 @@ export default function BlogView() {
   console.log(blog?.data);
   return (
     <div>
-      {blog.isLoading && <Loading />}
-      <div className="flex self-center items-center gap-2">
-        <Link
-          to="/admin/blogs"
-          className="rounded-full inline-block px-4 border bg-black text-white p-1"
-        >
-          <ArrowLeft />
-        </Link>
-        <div className="ml-2 text-2xl">Blogs</div>
+      {(blog.isLoading || isLoading) && <Loading />}
+      <div className="flex justify-between">
+        <div className="flex self-center items-center gap-2">
+          <Link
+            to="/admin/blogs"
+            className="rounded-full inline-block px-4 border bg-black text-white p-1"
+          >
+            <ArrowLeft />
+          </Link>
+          <div className="ml-2 text-2xl">Blogs</div>
+        </div>
+        <div className="flex self-center items-center gap-2">
+          <a
+            href={`/blogs/${blogId}`}
+            target="_blank"
+            className="flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-black text-white p-1"
+            // className="rounded-full inline-block px-4 border bg-black text-white p-1"
+          >
+            <ScrollText />
+            <div className="ml-2 text-lg">View</div>
+          </a>
+        </div>
       </div>
       <div className="bg-white rounded-lg my-4 p-4">
         <Form

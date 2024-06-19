@@ -55,10 +55,10 @@ namespace backend.Repository
             var blogsQuery = _context.Blogs.Include(x => x.Author).AsQueryable();
 
             var totalCount = await blogsQuery.CountAsync();
-            var totalPages = totalCount / (query.PageSize ?? 20);
+            var totalPages = totalCount / (query.PageSize ?? 10);
             var blogs = await blogsQuery
-                .Skip(((query.PageNumber ?? 1) - 1) * (query.PageSize ?? 20))
-                .Take(query.PageSize ?? 20)
+                .Skip(((query.PageNumber ?? 1) - 1) * (query.PageSize ?? 10))
+                .Take(query.PageSize ?? 10)
                 .Select(x => x.ToBlogDTO())
                 .ToListAsync();
 
@@ -67,7 +67,7 @@ namespace backend.Repository
                 Blogs = blogs,
                 TotalPages = totalPages,
                 TotalCount = totalCount,
-                PageSize = query.PageSize ?? 20,
+                PageSize = query.PageSize ?? 10,
                 CurrentPage = query.PageNumber ?? 1
             };
         }

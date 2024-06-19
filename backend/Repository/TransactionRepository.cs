@@ -46,25 +46,7 @@ namespace backend.Repository
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<GroupedTransactionDTO>> GetAllTransactionsAsync()
-        { var twelveMonthsAgo = DateTime.Now.AddMonths(-12);
-            var transactions = await _context.Transactions
-                .Where(t => t.CreatedAt >= twelveMonthsAgo && t.TransactionStatus == TransactionStatus.Completed)
-                .ToListAsync();
-
-            var groupedTransactions = transactions
-                .GroupBy(t => new { t.CreatedAt.Year, t.CreatedAt.Month })
-                .Select(g => new GroupedTransactionDTO
-                {
-                    Year = g.Key.Year,
-                    Month = g.Key.Month,
-                    Income = g.Sum(t => t.Amount)
-                })
-                .OrderBy(g => new DateTime(g.Year, g.Month, 1))
-                .ToList();
-
-            return groupedTransactions;
-        }
+       
 
         public Task<Transaction?> GetTransactionByIdAsync(long id)
         {

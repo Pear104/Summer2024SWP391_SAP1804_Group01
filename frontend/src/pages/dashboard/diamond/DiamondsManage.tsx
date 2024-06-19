@@ -326,7 +326,7 @@ export default function ProductsManage() {
                       diamondsData?.map(renderDiamondRow)
                     ) : (
                       <td colSpan={12} className="py-20 w-full">
-                        <Empty description="No order to process" />
+                        <Empty description="There is no diamond" />
                       </td>
                     )}
                     {diamondsData?.length > 0 &&

@@ -16,9 +16,21 @@ import { GET } from "../../../utils/request";
 const linkClasses =
   "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline active:bg-neutral-600 round-sm text-base";
 
-type Role = "Manager" | "SaleStaff" | "DeliveryStaff" | "Admin" | "WarrantyStaff";
+type Role = "Manager" | "SaleStaff" | "DeliveryStaff" | "Administrator" | "WarrantyStaff";
 //chia task role
 const ROLE_PERMISSIONS: Record<Role, string[]> = {
+  Administrator: [
+    "dashboard",
+    "orders",
+    "transactions",
+    "warranty-request",
+    "products",
+    "accessories",
+    "customers",
+    "diamond-price",
+    "accessory-price",
+    "blog",
+  ],
   Manager: [
     "dashboard",
     "orders",
@@ -34,20 +46,8 @@ const ROLE_PERMISSIONS: Record<Role, string[]> = {
   ],
   SaleStaff: ["dashboard", "salestaff", "warranty-request"],
   DeliveryStaff: ["dashboard", "deliverystaff", "deliverywarrantystaff"],
-  Admin: [
-    "dashboard",
-    "orders",
-    "transactions",
-    "warranty-request",
-    "products",
-    "accessories",
-    "customers",
-    "diamond-price",
-    "accessory-price",
-    "blog",
-    "price-rate"
-  ],
   WarrantyStaff: ["dashboard", "warranty-request"],
+
 };
 
 export default function Sidebar() {
@@ -61,9 +61,10 @@ export default function Sidebar() {
   if (account?.role == "Customer") {
     navigate("/");
   }
-  if (!account) {
-    navigate("/authentication/login");
-  }
+  // if (!account) {
+  //   console.log(account);
+  //   navigate("/authentication/login");
+  // }
   const userRole: Role = account?.role;
 
   const DASHBOARD_SIDEBAR_LINKS = [

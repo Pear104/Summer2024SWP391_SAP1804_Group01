@@ -24,10 +24,11 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<ActionResult> GetDiamonds([FromQuery] DiamondQuery query)
         {
+            System.Console.WriteLine(query.PageSize);
             var role = User.FindFirst(ClaimTypes.Role)?.Value;
-            if (role == "Manager" || role == "Administrator")
+            if (role == "Customer" || role == null)
             {
-                query.IsAvailability = false;
+                query.IsAvailability = true;
             }
 
             var diamondResult = await _diamondRepo.GetAllDiamondsAsync(query);

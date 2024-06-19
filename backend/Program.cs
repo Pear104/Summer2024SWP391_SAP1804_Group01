@@ -162,7 +162,7 @@ namespace backend
             builder.Services.AddScoped<IAccessoryRepository, AccessoryRepository>();
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
             builder.Services.AddScoped<IPriceRateRepository, PriceRateRepository>();
-
+            builder.Services.AddScoped<IReportRepository, ReportRepository>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

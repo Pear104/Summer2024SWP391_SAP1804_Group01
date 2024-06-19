@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace backend.Models
 {
     [Table("material_price")]
-    public class MaterialPrice
+    public class MaterialPrice  
     {
         [Key]
         [Column("material_price_id")]

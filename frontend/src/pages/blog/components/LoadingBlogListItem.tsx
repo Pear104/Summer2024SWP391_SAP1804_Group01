@@ -1,4 +1,4 @@
-import { Image, Skeleton } from "antd";
+import { Skeleton } from "antd";
 export default function LoadingBlogListItem() {
   return (
     <div className="flex">
