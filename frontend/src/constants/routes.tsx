@@ -27,8 +27,8 @@ import BlogsManage from "../pages/dashboard/blog/BlogsManage";
 import BlogView from "../pages/dashboard/blog/BlogView";
 import AccessoriesManage from "../pages/dashboard/accessory/AccessoriesManage";
 import AccessoryView from "../pages/dashboard/accessory/AccessoryView";
-import DiamondPriceManage from "../pages/dashboard/diamondPrice/DiamondPriceManage";
-import AccessoryPriceManage from "../pages/dashboard/accessoryPrice/AccessoryPriceManage";
+import DiamondPriceManage from "../pages/dashboard/diamondprice/DiamondPriceManage";
+import AccessoryPriceManage from "../pages/dashboard/accessoryprice/AccessoryPriceManage";
 import CustomerManage from "../pages/dashboard/customer/CustomerManage";
 import TransactionManage from "../pages/dashboard/transaction/TransactionManage";
 import OrderManage from "../pages/dashboard/order/OrderManage";
@@ -46,6 +46,7 @@ import DeliveryWarrantyManagement from "../pages/dashboard/delivery_staffs/Deliv
 import BlogLayout from "../layouts/BlogLayout";
 import BlogList from "../pages/blog/BlogList";
 import BlogDetail from "../pages/blog/BlogDetail";
+import PriceRate from "../pages/dashboard/price_rate/PriceRate";
 const routes = [
   {
     errorElement: <Error />,
@@ -143,6 +144,10 @@ const routes = [
                 path: "detail/:blogId",
               },
             ],
+          },
+          {
+            element: <PriceRate />,
+            path: "/admin/price-rate",
           },
           {
             element: <WarrantyRequest />,

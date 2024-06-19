@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using backend.Data;
 using backend.DTOs.Blog;
 using backend.DTOs.PriceRate;
+using backend.Helper;
 using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
@@ -21,15 +22,30 @@ namespace backend.Repository
             _context = context;
         }
 
-        public async Task<IEnumerable<PriceRate>> GetAllPriceRateAsync()
+        public async Task<PriceRateResult> GetAllPriceRateAsync(PriceRateQuery query)
         {
-             var existingPriceRate = await _context.PriceRates.ToListAsync();
-            return existingPriceRate;
+            var priceRateQueries = _context.PriceRates.Include(x => x.Account).OrderByDescending(x => x.CreatedAt).AsQueryable();
+
+            var totalCount = await priceRateQueries.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalCount / query.PageSize);
+
+            var priceRates = await priceRateQueries
+                .Skip((query.PageNumber - 1) * query.PageSize)
+                .Take(query.PageSize)
+                .ToListAsync();
+
+            return new PriceRateResult{
+                PriceRates = priceRates.Select(x => x.ToPriceRateDTO()).ToList(),
+                TotalCount = totalCount,
+                PageSize = query.PageSize,
+                CurrentPage = query.PageNumber,
+                TotalPages = totalPages,
+            };
         }
 
         public async Task<PriceRate?> CreatePriceRateAsync(long authorId, CreatePriceRateDTO priceRateDto)
         {
-           var author = await _context.Accounts.FindAsync(authorId);
+            var author = await _context.Accounts.FindAsync(authorId);
             if (author == null)
             {
                 return null;
@@ -42,14 +58,9 @@ namespace backend.Repository
             return priceRate;
         }
 
-        public Task<PriceRate?> DeleteBlogAsync(long id)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<PriceRate?> GetLatestPriceRateAsync()
         {
-             var existingPriceRate = await _context.PriceRates.OrderByDescending(x => x.CreatedAt).FirstOrDefaultAsync();
+            var existingPriceRate = await _context.PriceRates.OrderByDescending(x => x.CreatedAt).FirstOrDefaultAsync();
             return existingPriceRate;
         }
     }
