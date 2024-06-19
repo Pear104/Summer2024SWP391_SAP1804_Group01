@@ -2,9 +2,15 @@ name: Build Backend
 
 on:
   push:
+    branches:
+      - main
+      - controllers
     paths:
       - 'backend/**'
   pull_request:
+    branches:
+      - main
+      - controllers
     paths:
       - 'backend/**'
 
