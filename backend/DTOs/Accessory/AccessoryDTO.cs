@@ -18,7 +18,7 @@ namespace backend.DTOs.Accessory
         public int Quantity { get; set; }
         public AccessoryTypeDTO AccessoryType { get; set; } = new AccessoryTypeDTO();
         public ShapeDTO Shape { get; set; } = new ShapeDTO();
-        public List<AccessoryImageDTO> AccessoryImages { get; set; } =
+        public List<AccessoryImageDTO>? AccessoryImages { get; set; } =
             new List<AccessoryImageDTO>();
         public List<FeedbackDTO> Feedbacks { get; set; } = new List<FeedbackDTO>();
     }
