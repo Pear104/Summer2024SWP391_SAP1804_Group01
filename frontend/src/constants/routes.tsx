@@ -47,6 +47,7 @@ import BlogLayout from "../layouts/BlogLayout";
 import BlogList from "../pages/blog/BlogList";
 import BlogDetail from "../pages/blog/BlogDetail";
 import PriceRate from "../pages/dashboard/price_rate/PriceRate";
+import SalesReportManagement from "../pages/dashboard/staffsReport/SalesReportManagement";
 const routes = [
   {
     errorElement: <Error />,
@@ -127,6 +128,10 @@ const routes = [
           {
             element: <TransactionManage />,
             path: "/admin/transactions",
+          },
+          {
+            element: <SalesReportManagement />,
+            path: "/admin/sales-report",
           },
           {
             path: "blogs",
