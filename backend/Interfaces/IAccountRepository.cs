@@ -11,6 +11,7 @@ namespace backend.Interfaces
         Task<Account?> GetAccountByEmailAsync(string email);
         Task<Account> CreateAccountAsync(Account account);
         Task<Account?> UpdateAccountAsync(long id, UpdateAccountDTO account);
+        Task<IEnumerable<Account>> SearchAccountOnRole(AccountSearchQuery query);
         // Task<Account?> DeleteAccountAsync(long id);
     }
 }
