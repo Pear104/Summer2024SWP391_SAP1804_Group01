@@ -35,6 +35,7 @@ const ROLE_PERMISSIONS: Record<Role, string[]> = {
     "diamond-price",
     "accessory-price",
     "blog",
+    "sales-report",
   ],
   Manager: [
     "dashboard",
@@ -49,6 +50,7 @@ const ROLE_PERMISSIONS: Record<Role, string[]> = {
     "blog",
     "staffs-report",
     "price-rate",
+    "sales-report",
   ],
   SaleStaff: ["dashboard", "salestaff", "warranty-request"],
   DeliveryStaff: ["dashboard", "deliverystaff", "deliverywarrantystaff"],
