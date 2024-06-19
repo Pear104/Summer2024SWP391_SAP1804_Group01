@@ -274,7 +274,7 @@ namespace backend.Repository
                                         Score = y.Feedback.Score,
                                         CreatedAt = y.Feedback.CreatedAt,
                                         Content = y.Feedback.Content,
-                                        Username = x.Customer.Name,
+                                        Username = x.Customer != null ? x.Customer.Name : null,
                                     }
                                     : null,
                             Size = y.Size,
@@ -289,7 +289,7 @@ namespace backend.Repository
                     CreatedAt = x.CreatedAt,
                     PhoneNumber = x.PhoneNumber,
                     CustomerId = x.CustomerId,
-                    CustomerName = x.Customer.Name,
+                    CustomerName = x.Customer != null ? x.Customer.Name : null,
                     SaleStaffId = x.SaleStaffId ?? 0,
                     SaleStaffName = x.SaleStaff != null ? x.SaleStaff.Name : null,
                     DeliveryStaffId = x.DeliveryStaffId ?? 0,
