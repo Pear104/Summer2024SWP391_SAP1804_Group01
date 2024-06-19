@@ -1,6 +1,7 @@
 using backend.Data;
 using backend.DTOs;
 using backend.DTOs.Accessory;
+using backend.DTOs.Feedback;
 using backend.DTOs.Order;
 using backend.Enums;
 using backend.Helper;
@@ -233,26 +234,53 @@ namespace backend.Repository
                 .Select(x => new OrderDTO
                 {
                     OrderId = x.OrderId,
-                    OrderDetails = x.OrderDetails
-                    .Select(y => new OrderDetailDTO
-                    {
-                        OrderDetailId = y.OrderDetailId,
-                        Diamond = y.Diamond != null ? y.Diamond.ToDiamondDTO() : null,
-                        DiamondPrice = y.DiamondPrice != null ? y.DiamondPrice.ToDiamondPriceDTO() : null,
-                        Accessory = y.Accessory != null ? new AccessoryDTO {
-                            AccessoryId = y.Accessory.AccessoryId,
-                            Karat = y.Accessory.Karat,
-                            MaterialWeight = y.Accessory.MaterialWeight,
-                            Name = y.Accessory.Name,
-                            AccessoryType = y.Accessory.AccessoryType.ToAccessoryTypeDTO(),
-                            Shape = y.Accessory.Shape.ToShapeDTO(),
-                            AccessoryImages = y.Accessory.AccessoryImages != null ? y.Accessory.AccessoryImages.Select(z => z.ToAccessoryImageDTO()).ToList() : null,
-                        } : null,
-                        MaterialPrice = y.MaterialPrice != null ? y.MaterialPrice.ToMaterialPriceDTO() : null,
-                        ItemPrice = y.ItemPrice,
-                        Size = y.Size,
-                        // WarrantyCard = y.WarrantyCard.ToWarrantyCardDTO(),
-                    }).ToList(),
+                    OrderDetails = x
+                        .OrderDetails.Select(y => new OrderDetailDTO
+                        {
+                            OrderDetailId = y.OrderDetailId,
+                            Diamond = y.Diamond != null ? y.Diamond.ToDiamondDTO() : null,
+                            DiamondPrice =
+                                y.DiamondPrice != null ? y.DiamondPrice.ToDiamondPriceDTO() : null,
+                            Accessory =
+                                y.Accessory != null
+                                    ? new AccessoryDTO
+                                    {
+                                        AccessoryId = y.Accessory.AccessoryId,
+                                        Karat = y.Accessory.Karat,
+                                        MaterialWeight = y.Accessory.MaterialWeight,
+                                        Name = y.Accessory.Name,
+                                        AccessoryType =
+                                            y.Accessory.AccessoryType.ToAccessoryTypeDTO(),
+                                        Shape = y.Accessory.Shape.ToShapeDTO(),
+                                        AccessoryImages =
+                                            y.Accessory.AccessoryImages != null
+                                                ? y
+                                                    .Accessory.AccessoryImages.Select(z =>
+                                                        z.ToAccessoryImageDTO()
+                                                    )
+                                                    .ToList()
+                                                : null,
+                                    }
+                                    : null,
+                            MaterialPrice =
+                                y.MaterialPrice != null
+                                    ? y.MaterialPrice.ToMaterialPriceDTO()
+                                    : null,
+                            ItemPrice = y.ItemPrice,
+                            Feedback =
+                                y.Feedback != null
+                                    ? new FeedbackDTO
+                                    {
+                                        Score = y.Feedback.Score,
+                                        CreatedAt = y.Feedback.CreatedAt,
+                                        Content = y.Feedback.Content,
+                                        Username = x.Customer.Name,
+                                    }
+                                    : null,
+                            Size = y.Size,
+                            // WarrantyCard = y.WarrantyCard.ToWarrantyCardDTO(),
+                        })
+                        .ToList(),
                     PriceRate = x.PriceRate != null ? x.PriceRate.ToPriceRateDTO() : null,
                     TotalPrice = x.TotalPrice,
                     TotalDiscountPercent = x.TotalDiscountPercent,
@@ -261,7 +289,7 @@ namespace backend.Repository
                     CreatedAt = x.CreatedAt,
                     PhoneNumber = x.PhoneNumber,
                     CustomerId = x.CustomerId,
-                    CustomerName =x.Customer.Name,
+                    CustomerName = x.Customer.Name,
                     SaleStaffId = x.SaleStaffId ?? 0,
                     SaleStaffName = x.SaleStaff != null ? x.SaleStaff.Name : null,
                     DeliveryStaffId = x.DeliveryStaffId ?? 0,
@@ -269,13 +297,13 @@ namespace backend.Repository
                     Promotion = x.Promotion,
                     // Transactions = x.Transactions.Select(y => y.ToTransactionDTO()).ToList(),
                     // Feedbacks = x.Feedbacks.Select(y => y.ToFeedbackDTO()).ToList(),
-                    })
+                })
                 .ToListAsync();
             Console.WriteLine("Orders Retrieved: " + orderDTOs.Count);
 
             return new OrderResult
             {
-                Orders = orderDTOs, 
+                Orders = orderDTOs,
                 TotalCount = totalCount,
                 PageSize = query.PageSize,
                 CurrentPage = query.PageNumber,

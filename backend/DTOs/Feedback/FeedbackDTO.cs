@@ -11,7 +11,7 @@ namespace backend.DTOs.Feedback
     {
         public int Score { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public string Content { get; set; } = String.Empty;
-        public AccountDTO User { get; set; } = new AccountDTO();
+        public string? Content { get; set; }
+        public string? Username { get; set; }
     }
 }

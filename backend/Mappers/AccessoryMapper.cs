@@ -23,6 +23,7 @@ namespace backend.Mappers
                 AccessoryImages = accessory
                     .AccessoryImages.Select(x => x.ToAccessoryImageDTO())
                     .ToList(),
+                Feedbacks = accessory.Feedbacks.Select(x => x.ToFeedbackDTO()).ToList()
             };
         }
 

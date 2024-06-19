@@ -2,30 +2,10 @@ import { Button, App } from "antd";
 import { useEffect, useState } from "react";
 import { GET } from "../../utils/request";
 import { setCookie } from "../../utils/cookie";
-import {
-  camelCaseToSentenceCase,
-  formatPhoneNumber,
-} from "../../utils/caseConverter";
+import { formatPhoneNumber } from "../../utils/formatter";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { rankImages } from "../../constants/rankImages";
-
-const Field = ({ field, value }: { field: string; value: string }) => {
-  return (
-    <>
-      {/* <div className="flex items-center gap-4"> */}
-      <div className="tracking-wider prompt-light text-base w-[200px] uppercase">
-        {camelCaseToSentenceCase(field)}:
-      </div>
-      <div>
-        {!(field == "birthday" || field == "createdAt")
-          ? value
-          : moment(value).format("MM-DD-YYYY")}
-      </div>
-      {/* </div> */}
-    </>
-  );
-};
 
 export default function AccountDetail() {
   const [userInfo, setUserInfo] = useState<any>();

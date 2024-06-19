@@ -1,10 +1,10 @@
-﻿using backend.Models.Payment.Domain;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using backend.Models.Payment.Domain;
 
 namespace backend.Models.Payment.Domain.Entities
 {
-    [Table("PaymentDestination")]
+    [Table("payment_destination")]
     public class PaymentDestination : BaseAuditableEntity
     {
         [Key]
@@ -33,7 +33,8 @@ namespace backend.Models.Payment.Domain.Entities
         public bool? IsActive { get; set; }
 
         //One parent PaymentDestination can have many PaymentDestinations
-        public List<PaymentDestination> PaymentDestinations { get; set; } = new List<PaymentDestination>();
+        public List<PaymentDestination> PaymentDestinations { get; set; } =
+            new List<PaymentDestination>();
 
         //One payment destination have many payments
         public List<Payment> Payments { get; set; } = new List<Payment>();

@@ -3,13 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backend.Models.Payment.Domain.Entities
 {
-    [Table("paymentTransaction")]
+    [Table("payment_transaction")]
     public class PaymentTransaction
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("Id", TypeName = "nvarchar(50)")]
         public string? Id { get; set; }
+
         [Column("TransMessage", TypeName = "nvarchar(250)")]
         public string? TransMessage { get; set; } = string.Empty;
 
@@ -36,6 +37,5 @@ namespace backend.Models.Payment.Domain.Entities
         [Column("TranRefId", TypeName = "nvarchar(250)")]
         public string? TranRefId { get; set; } = string.Empty;
         public Account? Account { get; set; }
-
     }
 }

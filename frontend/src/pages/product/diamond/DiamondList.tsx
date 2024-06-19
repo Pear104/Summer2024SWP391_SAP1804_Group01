@@ -9,6 +9,7 @@ import { useSearchStore } from "../../../store/searchStore";
 import { useEffect } from "react";
 import scrollTo from "../../../utils/scroll";
 import { getDiamondPrice } from "../../../utils/getPrice";
+import LoadingItem from "./components/LoadingItem";
 
 export default function DiamondList() {
   const url = new URL(window.location.href);
@@ -82,36 +83,33 @@ export default function DiamondList() {
         </div>
         <div>
           {diamond?.isLoading && (
-            <Skeleton
-              active
-              paragraph={{
-                rows: 20,
-              }}
-            />
+            <>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((key) => (
+                <LoadingItem key={key} />
+              ))}
+            </>
           )}
-          {diamond?.data?.diamonds?.map((diamond: any, index: number) => {
-            return (
-              <DiamondItem
-                key={index}
-                diamond={diamond}
-                price={
-                  diamondPrice?.data && priceRate?.data ? (
-                    getDiamondPrice(
-                      diamond,
-                      diamondPrice.data,
-                      priceRate?.data.percent
-                    ).toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                      maximumFractionDigits: 0,
-                    })
-                  ) : (
-                    <Skeleton.Input active={true} size={"small"} />
-                  )
-                }
-              />
-            );
-          })}
+          {diamond?.data?.diamonds?.map((diamond: any, index: number) => (
+            <DiamondItem
+              key={index}
+              diamond={diamond}
+              price={
+                diamondPrice?.data && priceRate?.data ? (
+                  getDiamondPrice(
+                    diamond,
+                    diamondPrice.data,
+                    priceRate?.data.percent
+                  ).toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    maximumFractionDigits: 0,
+                  })
+                ) : (
+                  <Skeleton.Input active={true} size={"small"} />
+                )
+              }
+            />
+          ))}
         </div>
         <div className="mt-10 flex justify-center">
           {diamond?.data && diamond?.data.diamonds?.length == 0 ? (
