@@ -14,7 +14,7 @@ namespace backend.Helper
         public DateTime? ReceiveTime { get; set; }
         public DateTime? ReturnTime { get; set; }
         public WarrantyStatus? WarrantyStatus { get; set; } = null;
-        public int PageSize { get; set; } = 20;
+        public int PageSize { get; set; } = 10;
         public int PageNumber { get; set; } = 1;
     }
 }

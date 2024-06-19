@@ -46,6 +46,7 @@ import DeliveryWarrantyManagement from "../pages/dashboard/delivery_staffs/Deliv
 import BlogLayout from "../layouts/BlogLayout";
 import BlogList from "../pages/blog/BlogList";
 import BlogDetail from "../pages/blog/BlogDetail";
+import PriceRate from "../pages/dashboard/price_rate/PriceRate";
 const routes = [
   {
     errorElement: <Error />,
@@ -143,6 +144,10 @@ const routes = [
                 path: "detail/:blogId",
               },
             ],
+          },
+          {
+            element: <PriceRate />,
+            path: "/admin/price-rate",
           },
           {
             element: <WarrantyRequest />,

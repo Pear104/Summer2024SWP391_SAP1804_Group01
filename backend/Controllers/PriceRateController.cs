@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.DTOs.PriceRate;
+using backend.Helper;
 using backend.Interfaces;
 using backend.Mappers;
+using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
@@ -21,11 +23,12 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetPriceRates()
+        public async Task<ActionResult> GetPriceRates([FromQuery] PriceRateQuery query)
         {
-            var priceRates = await _priceRateRepo.GetAllPriceRateAsync();
-            return Ok(priceRates.Select(x => x.ToPriceRateDTO()));
+            var priceRates = await _priceRateRepo.GetAllPriceRateAsync(query);
+            return Ok(priceRates);
         }
+
         [HttpGet("latest")]
         public async Task<ActionResult> GetLatestPriceRate()
         {
