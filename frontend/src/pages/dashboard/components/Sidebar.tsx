@@ -16,7 +16,12 @@ import { GET } from "../../../utils/request";
 const linkClasses =
   "flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline active:bg-neutral-600 round-sm text-base";
 
-type Role = "Manager" | "SaleStaff" | "DeliveryStaff" | "Administrator" | "WarrantyStaff";
+type Role =
+  | "Manager"
+  | "SaleStaff"
+  | "DeliveryStaff"
+  | "Administrator"
+  | "WarrantyStaff";
 //chia task role
 const ROLE_PERMISSIONS: Record<Role, string[]> = {
   Administrator: [
@@ -42,12 +47,12 @@ const ROLE_PERMISSIONS: Record<Role, string[]> = {
     "diamond-price",
     "accessory-price",
     "blog",
-    "price-rate"
+    "staffs-report",
+    "price-rate",
   ],
   SaleStaff: ["dashboard", "salestaff", "warranty-request"],
   DeliveryStaff: ["dashboard", "deliverystaff", "deliverywarrantystaff"],
   WarrantyStaff: ["dashboard", "warranty-request"],
-
 };
 
 export default function Sidebar() {
@@ -144,12 +149,18 @@ export default function Sidebar() {
       key: "price-rate",
       label: "Price Rate",
       path: "/admin/price-rate",
-      icon:  <SquarePercent />,
+      icon: <SquarePercent />,
     },
     {
       key: "blog",
       label: "Blog",
       path: "/admin/blogs",
+      icon: <BsTextParagraph />,
+    },
+    {
+      key: "sales-report",
+      label: "Sales staffs report",
+      path: "/admin/sales-report",
       icon: <BsTextParagraph />,
     },
   ];

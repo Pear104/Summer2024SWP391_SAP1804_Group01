@@ -24,5 +24,17 @@ namespace backend.Controllers
             var accessories = await _reportService.GetAccessoryReport();
             return Ok(accessories);
         }
+        [HttpGet("SalesReport")]
+        public async Task<ActionResult> GetSalesReport()
+        {
+            var sales = await _reportService.GetSalesReport();
+            return Ok(sales);
+        }
+        // [HttpGet("DeliveryReport")]
+        // public async Task<ActionResult> GetDeliveryReport()
+        // {
+        //     var delivery = await _reportService.GetDeliveryReport();
+        //     return Ok(delivery);
+        // }
     }
 }
