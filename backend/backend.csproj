@@ -6,6 +6,9 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<DocumentationFile>\bin\api\backend.xml</DocumentationFile>
+		<OutputPath>./bin/</OutputPath>
+		<BaseOutputPath>./bin/</BaseOutputPath>
+		<BaseIntermediateOutputPath>./obj/</BaseIntermediateOutputPath>
 		<NoWarn>$(NoWarn);1591</NoWarn>
 	</PropertyGroup>
 
