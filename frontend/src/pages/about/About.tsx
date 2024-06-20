@@ -9,11 +9,11 @@ export default function About() {
       "measure-guide" && scrollTo("measure-guide", "center");
   }, []);
   return (
-    <div className="top-0 grid grid-cols-12 no-scrollbar">
-      <div className="sticky top-0 col-span-2 border-r-2">
+    <div className="grid grid-cols-12 h-[100vh] no-scrollbar overflow-scroll">
+      <div className="sticky top-0 h-[100vh] col-span-2">
         <SideNav />
       </div>
-      <div className="col-span-10 p-4 no-scrollbar">
+      <div className="col-span-10 no-scrollbar border-l-2">
         <DatJContent />
       </div>
     </div>

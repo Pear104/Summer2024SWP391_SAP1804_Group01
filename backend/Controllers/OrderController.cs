@@ -53,12 +53,6 @@ namespace backend.Controllers
             return Ok(order);
         }
 
-        [HttpPost("pay-order/{id}")]
-        public async Task<ActionResult> PayOrder([FromRoute] string id)
-        {
-            return Ok("http://localhost:3000/account/order-history");
-        }
-
         [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] CreateOrderDTO orderDto)
         {

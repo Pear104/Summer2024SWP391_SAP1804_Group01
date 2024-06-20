@@ -1,13 +1,13 @@
-﻿using backend.Models;
+﻿using backend.DTOs.Feedback;
+using backend.Helper;
+using backend.Models;
 
 namespace backend.Interfaces
 {
     public interface IFeedbackRepository
     {
-        // Task<FeedbackResult> GetAllFeedbacksAsync(FeedbackQuery query);
-        // Task<Feedback?> GetFeedbackByIdAsync(long id);
-        // Task<Feedback?> CreateFeedbackAsync(CreateFeedbackDTO FeedbackDTO);
-        // Task<Feedback?> UpdateFeedbackAsync(long id, UpdateFeedbackDTO FeedbackDTO);
-        // Task<Feedback?> DeleteFeedbackAsync(long id);
+        Task<FeedbackResult> GetFeedbacksOfAccessoryAsync(FeedbackQuery query);
+        Task<Feedback?> GetFeedbackByIdAsync(long id);
+        Task<Feedback?> CreateFeedbackAsync(long userId, CreateFeedbackDTO FeedbackDTO);
     }
 }

@@ -7,6 +7,7 @@ using backend.Enums;
 using backend.DTOs.Accessory;
 using backend.Mappers;
 using backend.DTOs;
+using backend.DTOs.Account;
 
 namespace backend.Repository
 {
@@ -66,10 +67,14 @@ namespace backend.Repository
                 }
             }
             accessoryInOrderList.Sort((x, y) => y.inOrderNumber.CompareTo(x.inOrderNumber));
-            List<AccessoryDTO> returnAccessories = new List<AccessoryDTO>();
+            var returnAccessories = new List<AccessoryDTO>();
             foreach(var item in accessoryInOrderList)
             {
-                var accessory = _context.Accessories.Include(x=> x.AccessoryImages).FirstOrDefault(x=>x.AccessoryId == item.id);
+                var accessory = _context.Accessories
+                    .Include(x => x.Shape)
+                    .Include(x => x.AccessoryType)
+                    .Include(x=> x.AccessoryImages)
+                    .FirstOrDefault(x=>x.AccessoryId == item.id);
                 returnAccessories.Add(accessory.ToAccessoryDTO());
             }
             return returnAccessories.Take(5).ToList();
@@ -94,6 +99,38 @@ namespace backend.Repository
                 .ToList();
 
             return groupedTransactions;
+        }
+
+        public async Task<List<AccountDTO>> GetSalesReport()
+        {
+            var role = Enum.Parse<Role>("SaleStaff");
+
+            var accounts = _context.Accounts.Where(x => x.Role == role).AsQueryable();
+            var accountDTOs = await accounts
+            .OrderByDescending(x => x.OrdersOfSaleStaff.Count)
+            .Select(x => new AccountDTO 
+            {
+                AccountId = x.AccountId,
+                Name = x.Name,
+                // Role = x.Role.ToString(),
+                // OrdersOfSaleStaff = x.OrdersOfSaleStaff.Select(y => new OrderDTO
+                // {
+                //     OrderId = y.OrderId,
+                //     OrderDetails = y.OrderDetails.Select(z => new OrderDetailDTO
+                //     {
+                //         OrderDetailId = z.OrderDetailId,
+                //         Diamond = z.Diamond != null ? z.Diamond.ToDiamondDTO() : null,
+                //         DiamondPrice = z.DiamondPrice != null ? z.DiamondPrice.ToDiamondPriceDTO() : null,
+                //         Accessory = z.Accessory != null ? z.Accessory.ToAccessoryDTO() : null,
+                //         MaterialPrice = z.MaterialPrice != null ? z.MaterialPrice.ToMaterialPriceDTO() : null,
+                //         ItemPrice = z.ItemPrice,
+                //         Size = z.Size,
+                //     }
+                //     ).ToList(),
+                // }).ToList(),
+                TotalOrders = x.OrdersOfSaleStaff.Where(x => x.OrderStatus != OrderStatus.Pending && x.OrderStatus != OrderStatus.Processing).ToList().Count,
+            }).ToListAsync();
+            return accountDTOs.Take(5).ToList();
         }
     }
 }

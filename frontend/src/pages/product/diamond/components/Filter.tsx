@@ -41,12 +41,12 @@ const color: { [key: number]: string } = {
   18: "D",
 };
 
-const cut: { [key: number]: string } = {
-  0: "Ideal",
-  1: "Excellent",
-  2: "Very Good",
-  3: "Good",
-};
+// const cut: { [key: number]: string } = {
+//   0: "Ideal",
+//   1: "Excellent",
+//   2: "Very Good",
+//   3: "Good",
+// };
 
 const carat: { [key: number]: string } = {
   0: "0",

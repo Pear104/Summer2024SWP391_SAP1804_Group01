@@ -1,233 +1,58 @@
 import { useEffect, useState } from "react";
 import { GET, POST } from "../../utils/request";
-import { Pagination, Skeleton, Image, Empty } from "antd";
+import { Pagination, Empty, Modal, Rate, Form, App } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSearchStore } from "../../store/searchStore";
-import { useQueries } from "@tanstack/react-query";
-import { ExternalLink } from "lucide-react";
-import Loading from "../../components/Loading";
-
-const formatDate = (dateString: any) => {
-  const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  return `${hours}:${minutes}, ${day}/${month}/${year}`;
-};
-export const OrderStatus = ({ order }: { order: any }) => {
-  return (
-    <div className="items-center justify-between mb-4 text-base">
-      Order status:{" "}
-      <span
-        className={`${
-          order.orderStatus === "Pending"
-            ? "bg-red-200 border-red-300"
-            : order.orderStatus === "Processing"
-            ? "bg-yellow-200 border-yellow-300"
-            : order.orderStatus === "Confirmed"
-            ? "bg-pink-200 border-pink-300"
-            : order.orderStatus === "Delivering"
-            ? "bg-orange-200 border-orange-300"
-            : order.orderStatus === "Completed"
-            ? "bg-green-200 border-green-300"
-            : "bg-red-200 border-red-300"
-        } border-2 p-2 px-4 rounded-md text-base`}
-      >
-        {order.orderStatus}
-      </span>
-    </div>
-  );
-};
-
-const DiamondItem = ({ detail, percent }: { detail: any; percent: any }) => {
-  return (
-    <div className="flex">
-      <div className="w-1/5 flex ">
-        <Image
-          className="h-full object-cover aspect-square"
-          // style={{ objectFit: "contain" }}
-          src={detail.diamond.imageUrl}
-          alt="diamond"
-          // className="w-48 h-48 object-contain"
-        />
-      </div>
-      <div className="text-lg pl-4 flex flex-col gap-2">
-        <div className="text-gray-800 flex gap-2">
-          Certificate Number:{" "}
-          <a
-            className="text-blue-500 flex"
-            target="_blank"
-            href={detail.diamond.certificateUrl}
-          >
-            {detail.diamond.certificateNumber}
-            <ExternalLink size={12} />
-          </a>
-        </div>
-        <div className="grid grid-cols-2 gap-y-2">
-          <div className="text-gray-800">
-            <span className="">Carat:</span> {detail.diamond.carat}
-          </div>
-          <div className="text-gray-800">
-            Diamond Clarity: {detail.diamond.clarity}
-          </div>
-          <div className="text-gray-800">Cut: {detail.diamond.cut}</div>
-          <div className="text-gray-800">
-            Diamond Color: {detail.diamond.color}
-          </div>
-          <div className="text-gray-800 font-bold">
-            <span className="">Price:</span>{" "}
-            {(
-              detail.diamondPrice.unitPrice *
-              detail.diamond.carat *
-              percent *
-              100
-            ).toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-              maximumFractionDigits: 0,
-            })}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const AccessoryItem = ({ detail, percent }: { detail: any; percent: any }) => {
-  return (
-    <div className="flex text-lg">
-      <div className="w-1/5 flex aspect-square">
-        {detail?.accessory != null
-          ? detail.accessory?.accessoryImages[0]?.url && (
-              <Image
-                // style={{ objectFit: "contain" }}
-                // object-cover full hinh bi cat, object-contain full hinh khong bi cat
-                className="h-full object-cover aspect-square"
-                src={detail?.accessory?.accessoryImages[0].url}
-                alt="accessory"
-              />
-            )
-          : ""}
-      </div>
-      <div className="pl-4 flex flex-col gap-2 text-lg">
-        <div className="font-bold">
-          {detail.accessory != null ? detail.accessory?.name : ""}
-        </div>
-        {detail.accessory != null && (
-          <div>Gold Karat: {detail.accessory?.karat}K</div>
-        )}
-        {detail?.accessory != null
-          ? detail?.accessory && (
-              <div className="text-gray-800 font-bold">
-                Price:{" "}
-                {(
-                  (detail?.accessory.materialWeight *
-                    detail.materialPrice.unitPrice +
-                    detail.accessory.accessoryType.processingPrice) *
-                  percent
-                ).toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                  maximumFractionDigits: 0,
-                })}
-              </div>
-            )
-          : ""}
-      </div>
-    </div>
-  );
-};
-
-const OrderDetailList = ({ order }: { order: any }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  return (
-    <div>
-      {isLoading && <Loading />}
-      <div className="p-4">
-        <div>Order ID: {order.orderId}</div>
-        <div>Created at: {formatDate(order.createdAt)}</div>
-      </div>
-      <div className="border-b border-gray-300 p-4 mb-6">
-        {order.orderDetails.map((detail: any) => (
-          <>
-            <div className="border rounded-md p-4 bg-slate-100 grid grid-cols-2 mb-4 gap-x-4 border-spacing-y-4">
-              <DiamondItem
-                detail={detail}
-                percent={order?.priceRate?.percent}
-              />
-              <AccessoryItem
-                detail={detail}
-                percent={order?.priceRate?.percent}
-              />
-            </div>
-          </>
-        ))}
-        <div className="flex justify-end text-xl">
-          <OrderStatus order={order} />
-        </div>
-        <div className="flex justify-between items-center mt-4">
-          <div className="text-xl font-bold text-gray-800">
-            Total:{" "}
-            {order.totalPrice.toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-              maximumFractionDigits: 0,
-            })}
-          </div>
-
-          <div>
-            {order.orderStatus == "Pending" && (
-              <button
-                className="bg-gray-800 text-white px-4 py-2 rounded mr-2"
-                onClick={async () => {
-                  setIsLoading(true);
-                  const transactionResponse = await POST("/api/Transactions", {
-                    orderId: order.orderId,
-                    amount: order.totalPrice,
-                    paymentMethod: "CREDIT_CARD",
-                  });
-                  const paymentResponse = await POST(
-                    "/api/payment/vnpay-sent-request",
-                    {
-                      paymentContent: "Thanh toan don hang " + order?.orderId,
-                      paymentCurrency: "USD",
-                      paymentRefId: transactionResponse?.transactionId,
-                      requiredAmount: (
-                        order?.totalPrice *
-                        (1 - order?.totalDiscountPercent / 100)
-                      ).toFixed(0),
-                      paymentLanguage: "en",
-                      merchantId: "MER0001",
-                      paymentDestinationId: "VNPAY",
-                      signature: "123456789ABC",
-                    }
-                  );
-                  if (paymentResponse?.paymentUrl) {
-                    location.href = paymentResponse.paymentUrl;
-                  }
-                  setIsLoading(true);
-                }}
-              >
-                Checkout
-              </button>
-            )}
-            <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded">
-              Contact Seller
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+import { useQueries, useQueryClient, useMutation } from "@tanstack/react-query";
+import OrderDetailList from "./components/OrderDetailList";
+import TextArea from "antd/es/input/TextArea";
+import LoadingOrderItem from "./components/LoadingOrderItem";
 
 export default function OrderHistory() {
   useEffect(() => {
     setQueryUrl("/api/Order?");
   }, []);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [feedbackInfo, setFeedbackInfo] = useState({
+    accessoryId: "",
+    accessoryName: "",
+    accessoryKarat: "",
+    score: 1,
+    content: "",
+  });
+  const { message } = App.useApp();
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (newFeedback: any) => {
+      return POST("/api/Feedbacks", newFeedback);
+    },
+    onSuccess: () => {
+      message.success("Feedback created successfully");
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+    },
+    onError: () => {
+      message.error("Create feedback failed");
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+    },
+  });
+  const [form] = Form.useForm();
 
+  const handleOk = () => {
+    form
+      .validateFields()
+      .then(() => {
+        mutation.mutate({
+          ...feedbackInfo,
+          content: form.getFieldValue("content"),
+        });
+        form.resetFields();
+        setIsModalOpen(false);
+      })
+      .catch(() => {});
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
   const navigate = useNavigate();
@@ -244,24 +69,98 @@ export default function OrderHistory() {
   });
   return (
     <div className="p-4 w-full">
+      <Modal
+        className="w-[600px]"
+        centered
+        title={`${
+          feedbackInfo.content == "" ? "Enter your" : "Your"
+        } feedback for Accessory#${feedbackInfo.accessoryId}`}
+        open={isModalOpen}
+        onOk={handleOk}
+        okButtonProps={{ disabled: feedbackInfo.content != "" }}
+        onCancel={handleCancel}
+      >
+        <div>
+          <div>
+            <span className="font-bold">Name:</span>{" "}
+            {feedbackInfo.accessoryName}
+          </div>
+          <div>
+            <span className="font-bold">Karat:</span>{" "}
+            {feedbackInfo.accessoryKarat}K
+          </div>
+        </div>
+        <div className="flex gap-2 mt-2">
+          <div className="mb-2 font-bold">Rating</div>
+          <Rate
+            allowClear={false}
+            disabled={feedbackInfo.content != ""}
+            value={feedbackInfo.score}
+            onChange={(e) => {
+              setFeedbackInfo({
+                ...feedbackInfo,
+                score: e,
+              });
+            }}
+          />
+        </div>
+        <Form form={form} layout="vertical">
+          <Form.Item
+            label={<span className="font-bold">Comment</span>}
+            name="content"
+            rules={[
+              {
+                required: true,
+                message: "Please input more than 20 characters",
+              },
+              {
+                min: 20,
+                message: "Please input more than 20 characters",
+              },
+              {
+                max: 256,
+                message: "Please input less than 256 characters",
+              },
+            ]}
+          >
+            <TextArea
+              disabled={feedbackInfo.content != ""}
+              rows={10}
+              className="border text-base py-2 px-2 without-ring w-full rounded-none text-black"
+              placeholder="Write your comment"
+            />
+          </Form.Item>
+        </Form>
+      </Modal>
       <div className="text-2xl font-serif mb-6">ORDER HISTORY</div>
       {orderHistories?.data?.orders?.length != 0 ? (
         <div className="w-full">
-          {orderHistories?.data?.orders?.map((order: any) => (
-            <OrderDetailList key={order.orderId} order={order} />
+          {orderHistories?.data?.orders?.map((order: any, index: number) => (
+            <OrderDetailList
+              form={form}
+              key={index}
+              setFeedbackInfo={setFeedbackInfo}
+              setIsModalOpen={setIsModalOpen}
+              order={order}
+            />
           ))}
         </div>
       ) : (
-        <Empty description="You haven't placed any orders yet" />
+        <div>
+          <Empty
+            description="You haven't placed any orders yet"
+            className="text-xl"
+            imageStyle={{ scale: 2, height: 300 }}
+          />
+        </div>
       )}
       <div>
         {orderHistories?.isLoading && (
-          <Skeleton
-            active
-            paragraph={{
-              rows: 20,
-            }}
-          />
+          <>
+            {[1, 2, 3, 4, 5].map((key) => (
+              <LoadingOrderItem key={key} />
+            ))}
+          </>
         )}
       </div>
       <div className="mt-4 flex justify-center">

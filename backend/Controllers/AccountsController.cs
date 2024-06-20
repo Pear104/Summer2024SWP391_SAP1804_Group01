@@ -1,5 +1,6 @@
 ﻿using backend.Data;
 using backend.DTOs.Account;
+using backend.Enums;
 using backend.Helper;
 using backend.Interfaces;
 using backend.Mappers;
@@ -79,6 +80,54 @@ namespace backend.Controllers
             return Ok(newAccount);
         }
 
+        /// <summary>
+        /// Search for customer's accounts based on name and phone number
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("Customer")]
+        public async Task<ActionResult> GetCustomerAccounts([FromQuery] AccountSearchQuery query)
+        {
+            query.AccountRole = Role.Customer.ToString();
+            var accountsModels = await _accountRepo.SearchAccountOnRole(query);
+            var accountsDTO = accountsModels.Select(x => x.ToAccountDTO()).ToList();
+
+            return Ok(accountsDTO);
+        }
+
+        /// <summary>
+        /// Search for sale staff's accounts based on name and phone number
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("SaleStaff")]
+        public async Task<ActionResult> GetSaleStaffAccounts([FromQuery] AccountSearchQuery query)
+        {
+            query.AccountRole = Role.SaleStaff.ToString();
+            var accountsModels = await _accountRepo.SearchAccountOnRole(query);
+            var accountsDTO = accountsModels.Select(x => x.ToAccountDTO()).ToList();
+
+            return Ok(accountsDTO);
+        }
+
+        /// <summary>
+        /// Search for delivery staff's accounts based on name and phone number
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("DeliveryStaff")]
+        public async Task<ActionResult> GetDeliveryStaffAccounts([FromQuery] AccountSearchQuery query)
+        {
+            query.AccountRole = Role.DeliveryStaff.ToString();
+            var accountsModels = await _accountRepo.SearchAccountOnRole(query);
+            var accountsDTO = accountsModels.Select(x => x.ToAccountDTO()).ToList();
+
+            return Ok(accountsDTO);
+        }
+        
         // [HttpDelete("{id}")]
         // public async Task<IActionResult> DeleteAccount(long id)
         // {

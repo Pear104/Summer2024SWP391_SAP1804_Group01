@@ -1,5 +1,3 @@
-import Logo from "../../../components/logo/Logo";
-
 const FirstContentSection = () => {
   return (
     <div className="w-full px-8 flex flex-col justify-start">

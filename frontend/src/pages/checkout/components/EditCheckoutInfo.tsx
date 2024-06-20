@@ -6,16 +6,16 @@ export default function EditCheckoutInfo() {
   return (
     <div className="px-4 py-2 border mt-6 text-slate-500 text-sm">
       <div className="flex gap-8 border-b pb-2 mb-2">
-        <div className="w-[100px]">Name</div>
+        <div className="w-[160px]">Name</div>
         <div className="flex-grow">{useCheckoutStore.getState().name}</div>
       </div>
 
       <div className="flex gap-8 border-b pb-2 mb-2">
-        <div className="w-[100px]">Email</div>
+        <div className="w-[160px]">Email</div>
         <div className="flex-grow">{useCheckoutStore.getState().email}</div>
       </div>
       <div className="flex gap-8 border-b pb-2 mb-2">
-        <div className="w-[100px]">Phone number</div>
+        <div className="w-[160px]">Phone number</div>
         <div className="flex-grow">
           {useCheckoutStore.getState().phoneNumber}
         </div>
@@ -29,7 +29,7 @@ export default function EditCheckoutInfo() {
         </div>
       </div>
       <div className="flex gap-8">
-        <div className="w-[100px]">Address</div>
+        <div className="w-[160px]">Address</div>
         <div className="flex-grow">
           {useCheckoutStore.getState().shippingAddress}
         </div>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend.DTOs.Accessory;
 using backend.DTOs.DiamondPrice;
+using backend.DTOs.Feedback;
 using backend.DTOs.WarrantyCard;
 using backend.Models;
 
@@ -17,10 +18,11 @@ namespace backend.DTOs
         public string? OrderId { get; set; }
         public DiamondDTO? Diamond { get; set; }
         public AccessoryDTO? Accessory { get; set; }
-        public double? ItemPrice { get; set; } 
+        public double? ItemPrice { get; set; }
         public long WarrantyCardId { get; set; }
         public WarrantyCardDTO? WarrantyCard { get; set; }
         public DiamondPriceDTO? DiamondPrice { get; set; }
         public MaterialPriceDTO? MaterialPrice { get; set; }
+        public FeedbackDTO? Feedback { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 import { useQueries } from "@tanstack/react-query";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { GET } from "../../utils/request";
-import { formatPhoneNumber } from "../../utils/caseConverter";
+import { formatPhoneNumber } from "../../utils/formatter";
 import moment from "moment";
 import { Empty } from "antd";
 const WarrantyRequestItem = ({ warrantyRequest }: { warrantyRequest: any }) => {
@@ -70,7 +70,6 @@ const WarrantyRequestItem = ({ warrantyRequest }: { warrantyRequest: any }) => {
 };
 
 export default function WarrantyRequestList() {
-  const navigate = useNavigate();
   // const [messageApi, contextHolder] = message.useMessage();
   const [warrantyRequests] = useQueries({
     queries: [

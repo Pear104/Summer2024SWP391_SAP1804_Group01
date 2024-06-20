@@ -23,5 +23,8 @@ namespace backend.Models
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        [Column("is_hidden")]
+        public bool IsHidden { get; set; } = false;
     }
 }

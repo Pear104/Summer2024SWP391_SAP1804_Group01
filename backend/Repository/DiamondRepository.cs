@@ -148,7 +148,6 @@ namespace backend.Repository
 
             if (!string.IsNullOrEmpty(query.Shape))
             {
-                System.Console.WriteLine(query.Shape);
                 diamondsQuery = diamondsQuery.Where(x => x.Shape.Name == query.Shape);
             }
 

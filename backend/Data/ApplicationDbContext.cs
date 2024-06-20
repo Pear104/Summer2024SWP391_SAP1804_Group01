@@ -44,8 +44,10 @@ namespace backend.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder
-                .UseSqlServer("server=localhost;database=DATJ;uid=sa;pwd=12345;TrustServerCertificate=true", options => options.CommandTimeout(180)); // Timeout in seconds
+            optionsBuilder.UseSqlServer(
+                "server=localhost;database=DATJ;uid=sa;pwd=12345;TrustServerCertificate=true",
+                options => options.CommandTimeout(180)
+            ); // Timeout in seconds
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -176,8 +178,8 @@ namespace backend.Data
             builder
                 .Entity<OrderDetail>()
                 .HasOne(o => o.Diamond)
-                .WithOne(o => o.OrderDetail)
-                .HasForeignKey<OrderDetail>(w => w.DiamondId)
+                .WithMany(o => o.OrderDetails)
+                .HasForeignKey(o => o.DiamondId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Them khoa ngoai giua Order voi Transaction
@@ -216,14 +218,22 @@ namespace backend.Data
                 .WithMany(o => o.PriceRates)
                 .HasForeignKey(o => o.AccountId);
 
-            //Them khoa ngoai giua Order voi Feedback
+            //Them khoa ngoai giua Account voi Feedback
             builder
                 .Entity<Feedback>()
-                .HasOne(o => o.Order)
+                .HasOne(o => o.Customer)
                 .WithMany(o => o.Feedbacks)
-                .HasForeignKey(o => o.OrderId);
+                .HasForeignKey(o => o.CustomerId);
 
-            //Them khoa ngoai giua Order voi Feedback
+            //Them khoa ngoai giua OrderDetail voi Feedback
+            builder
+                .Entity<Feedback>()
+                .HasOne(o => o.OrderDetail)
+                .WithOne(o => o.Feedback)
+                .HasForeignKey<Feedback>(o => o.OrderDetailId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //Them khoa ngoai giua Accessory voi Feedback
             builder
                 .Entity<Feedback>()
                 .HasOne(o => o.Accessory)

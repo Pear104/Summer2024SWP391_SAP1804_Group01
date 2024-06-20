@@ -1,5 +1,7 @@
 using backend.Data;
 using backend.DTOs;
+using backend.DTOs.Accessory;
+using backend.DTOs.Feedback;
 using backend.DTOs.Order;
 using backend.Enums;
 using backend.Helper;
@@ -232,17 +234,53 @@ namespace backend.Repository
                 .Select(x => new OrderDTO
                 {
                     OrderId = x.OrderId,
-                    OrderDetails = x.OrderDetails.Select(y => new OrderDetailDTO
-                    {
-                        OrderDetailId = y.OrderDetailId,
-                        Diamond = y.Diamond != null ? y.Diamond.ToDiamondDTO() : null,
-                        DiamondPrice = y.DiamondPrice != null ? y.DiamondPrice.ToDiamondPriceDTO() : null,
-                        Accessory = y.Accessory != null ? y.Accessory.ToAccessoryDTO() : null,
-                        MaterialPrice = y.MaterialPrice != null ? y.MaterialPrice.ToMaterialPriceDTO() : null,
-                        ItemPrice = y.ItemPrice,
-                        Size = y.Size,
-                        // WarrantyCard = y.WarrantyCard.ToWarrantyCardDTO(),
-                    }).ToList(),
+                    OrderDetails = x
+                        .OrderDetails.Select(y => new OrderDetailDTO
+                        {
+                            OrderDetailId = y.OrderDetailId,
+                            Diamond = y.Diamond != null ? y.Diamond.ToDiamondDTO() : null,
+                            DiamondPrice =
+                                y.DiamondPrice != null ? y.DiamondPrice.ToDiamondPriceDTO() : null,
+                            Accessory =
+                                y.Accessory != null
+                                    ? new AccessoryDTO
+                                    {
+                                        AccessoryId = y.Accessory.AccessoryId,
+                                        Karat = y.Accessory.Karat,
+                                        MaterialWeight = y.Accessory.MaterialWeight,
+                                        Name = y.Accessory.Name,
+                                        AccessoryType =
+                                            y.Accessory.AccessoryType.ToAccessoryTypeDTO(),
+                                        Shape = y.Accessory.Shape.ToShapeDTO(),
+                                        AccessoryImages =
+                                            y.Accessory.AccessoryImages != null
+                                                ? y
+                                                    .Accessory.AccessoryImages.Select(z =>
+                                                        z.ToAccessoryImageDTO()
+                                                    )
+                                                    .ToList()
+                                                : null,
+                                    }
+                                    : null,
+                            MaterialPrice =
+                                y.MaterialPrice != null
+                                    ? y.MaterialPrice.ToMaterialPriceDTO()
+                                    : null,
+                            ItemPrice = y.ItemPrice,
+                            Feedback =
+                                y.Feedback != null
+                                    ? new FeedbackDTO
+                                    {
+                                        Score = y.Feedback.Score,
+                                        CreatedAt = y.Feedback.CreatedAt,
+                                        Content = y.Feedback.Content,
+                                        Username = x.Customer != null ? x.Customer.Name : null,
+                                    }
+                                    : null,
+                            Size = y.Size,
+                            // WarrantyCard = y.WarrantyCard.ToWarrantyCardDTO(),
+                        })
+                        .ToList(),
                     PriceRate = x.PriceRate != null ? x.PriceRate.ToPriceRateDTO() : null,
                     TotalPrice = x.TotalPrice,
                     TotalDiscountPercent = x.TotalDiscountPercent,
@@ -251,7 +289,7 @@ namespace backend.Repository
                     CreatedAt = x.CreatedAt,
                     PhoneNumber = x.PhoneNumber,
                     CustomerId = x.CustomerId,
-                    CustomerName =x.Customer.Name,
+                    CustomerName = x.Customer != null ? x.Customer.Name : null,
                     SaleStaffId = x.SaleStaffId ?? 0,
                     SaleStaffName = x.SaleStaff != null ? x.SaleStaff.Name : null,
                     DeliveryStaffId = x.DeliveryStaffId ?? 0,
@@ -259,13 +297,13 @@ namespace backend.Repository
                     Promotion = x.Promotion,
                     // Transactions = x.Transactions.Select(y => y.ToTransactionDTO()).ToList(),
                     // Feedbacks = x.Feedbacks.Select(y => y.ToFeedbackDTO()).ToList(),
-                    })
+                })
                 .ToListAsync();
             Console.WriteLine("Orders Retrieved: " + orderDTOs.Count);
 
             return new OrderResult
             {
-                Orders = orderDTOs, 
+                Orders = orderDTOs,
                 TotalCount = totalCount,
                 PageSize = query.PageSize,
                 CurrentPage = query.PageNumber,
@@ -309,7 +347,13 @@ namespace backend.Repository
 
         public async Task<Order?> UpdateOrderAsync(string id, UpdateOrderDTO order)
         {
-            var existedOrder = _context.Orders.FirstOrDefault(x => x.OrderId.Equals(id));
+            var existedOrder = _context
+                .Orders.Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Diamond)
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Accessory)
+                .FirstOrDefault(x => x.OrderId.Equals(id));
+
             if (existedOrder == null)
             {
                 return null;
@@ -317,6 +361,17 @@ namespace backend.Repository
             if (order.OrderStatus != null)
             {
                 existedOrder.OrderStatus = Enum.Parse<OrderStatus>(order.OrderStatus);
+                if (order.OrderStatus == "Failed")
+                {
+                    foreach (var orderDetail in existedOrder.OrderDetails)
+                    {
+                        orderDetail.Diamond.Availability = true;
+                        if (orderDetail.Accessory != null)
+                        {
+                            orderDetail.Accessory.Quantity++;
+                        }
+                    }
+                }
             }
             if (order.SaleStaffId != 0)
             {

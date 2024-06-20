@@ -6,7 +6,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GET, POST, PUT } from "../../../utils/request";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FormItem } from "react-hook-form-antd";
 import Loading from "../../../components/Loading";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";

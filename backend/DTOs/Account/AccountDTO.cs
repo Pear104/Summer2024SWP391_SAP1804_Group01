@@ -19,5 +19,6 @@ namespace backend.DTOs.Account
         public List<OrderDTO> OrdersOfCustomer { get; set; } = new List<OrderDTO>();
         public List<OrderDTO> OrdersOfSaleStaff { get; set; } = new List<OrderDTO>();
         public List<OrderDTO> OrdersOfDeliveryStaff { get; set; } = new List<OrderDTO>();
+        public int TotalOrders { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace backend.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Column("order_id")]
-        public string OrderId { get; set; } =  (DateTime.Now.Ticks).ToString();
+        public string OrderId { get; set; } = DateTime.Now.Ticks.ToString();
 
         [Column("total_price")]
         [Range(0.01, double.MaxValue)]
@@ -42,7 +42,7 @@ namespace backend.Models
 
         [Column("customer_id")]
         public long CustomerId { get; set; }
-        public Account Customer { get; set; } = new Account();
+        public Account? Customer { get; set; } = new Account();
 
         [Column("sale_staff_id")]
         public long? SaleStaffId { get; set; }
@@ -57,6 +57,5 @@ namespace backend.Models
         public Promotion? Promotion { get; set; } = null;
         public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
         public List<Transaction> Transactions { get; set; } = new List<Transaction>();
-        public List<Feedback> Feedbacks { get; set; } = new List<Feedback>();
     }
 }

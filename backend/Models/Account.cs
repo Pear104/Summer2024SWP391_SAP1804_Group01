@@ -48,10 +48,14 @@ namespace backend.Models
         public List<Order> OrdersOfCustomer { get; set; } = new List<Order>();
         public List<Order> OrdersOfSaleStaff { get; set; } = new List<Order>();
         public List<Order> OrdersOfDeliveryStaff { get; set; } = new List<Order>();
-        public List<WarrantyRequest> WarrantyRequestsOfCustomer { get; set; } = new List<WarrantyRequest>();
-        public List<WarrantyRequest> WarrantyRequestsOfSaleStaff { get; set; } = new List<WarrantyRequest>();
-        public List<WarrantyRequest> WarrantyRequestsOfDeliveryStaff { get; set; } = new List<WarrantyRequest>();
+        public List<WarrantyRequest> WarrantyRequestsOfCustomer { get; set; } =
+            new List<WarrantyRequest>();
+        public List<WarrantyRequest> WarrantyRequestsOfSaleStaff { get; set; } =
+            new List<WarrantyRequest>();
+        public List<WarrantyRequest> WarrantyRequestsOfDeliveryStaff { get; set; } =
+            new List<WarrantyRequest>();
         public List<Blog>? Blogs { get; set; }
+        public List<Feedback>? Feedbacks { get; set; }
         public List<PriceRate>? PriceRates { get; set; }
     }
 }
