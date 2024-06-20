@@ -1,0 +1,37 @@
+name: Build Backend
+
+on:
+  push:
+    branches:
+      - main
+      - controllers
+    paths:
+      - 'backend/**'
+  pull_request:
+    branches:
+      - main
+      - controllers
+    paths:
+      - 'backend/**'
+
+jobs:
+  build:
+    runs-on: self-hosted
+    name: Build Backend
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'  # Use the .NET version you're working with
+
+    - name: Restore dependencies
+      run: dotnet restore backend
+
+    - name: Build
+      run: dotnet build backend --configuration Release
+
+    - name: Run tests
+      run: dotnet test backend --configuration Release
