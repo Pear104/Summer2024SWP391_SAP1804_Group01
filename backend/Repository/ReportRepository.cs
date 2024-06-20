@@ -67,10 +67,14 @@ namespace backend.Repository
                 }
             }
             accessoryInOrderList.Sort((x, y) => y.inOrderNumber.CompareTo(x.inOrderNumber));
-            List<AccessoryDTO> returnAccessories = new List<AccessoryDTO>();
+            var returnAccessories = new List<AccessoryDTO>();
             foreach(var item in accessoryInOrderList)
             {
-                var accessory = _context.Accessories.Include(x=> x.AccessoryImages).FirstOrDefault(x=>x.AccessoryId == item.id);
+                var accessory = _context.Accessories
+                    .Include(x => x.Shape)
+                    .Include(x => x.AccessoryType)
+                    .Include(x=> x.AccessoryImages)
+                    .FirstOrDefault(x=>x.AccessoryId == item.id);
                 returnAccessories.Add(accessory.ToAccessoryDTO());
             }
             return returnAccessories.Take(5).ToList();

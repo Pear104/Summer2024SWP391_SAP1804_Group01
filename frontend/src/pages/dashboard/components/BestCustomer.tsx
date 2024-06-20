@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { GET } from "../../../utils/request";
+import { Link } from "react-router-dom";
 
 export default function RecentOrders() {
   const [data, setData] = useState<
@@ -17,10 +18,16 @@ export default function RecentOrders() {
       const customerData = fetchedData
         .filter((account: any) => account?.role === "Customer")
         .map((account: any) => {
-          const totalSpend = account?.ordersOfCustomer.reduce(
-            (sum: number, order: any) => sum + (order?.totalPrice || 0),
-            0
-          );
+          // const totalSpend = account?.ordersOfCustomer.reduce(
+          //   (sum: number, order: any) => sum + (order?.totalPrice || 0),
+          //   0
+          // );
+          const totalSpend = account?.ordersOfCustomer
+            .filter((order: any) => order?.orderStatus === "Completed")
+            .reduce(
+              (sum: number, order: any) => sum + (order?.totalPrice || 0),
+              0
+            );
           return {
             customerID: account?.accountId,
             customerName: account?.name,
@@ -67,10 +74,12 @@ export default function RecentOrders() {
                     #{customer.customerID}
                   </td>
                   <td className="px-4 py-2">
-                    {/* <Link to={`/product/${customer.product_id}`}>
-                    #{customer.product_id}
-                  </Link> */}
-                    {customer.customerName}
+                    <Link
+                      to={`/admin/customers/detail/${customer.customerID}`}
+                      className="hover:underline"
+                    >
+                      {customer.customerName}
+                    </Link>
                   </td>
                   <td className="px-4 py-2">
                     {/* <Link to={`/customer/${customer.customer_id}`}>
