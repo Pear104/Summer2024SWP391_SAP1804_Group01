@@ -32,6 +32,8 @@ const App: React.FC = () => {
                         percent: percent
                     });
                     console.log('API response:', response);
+                    message.success('Create price rate success');
+                    window.location.reload();  
                     setOpen(false);
                 } catch (error) {
                     console.error('API error:', error);
@@ -42,6 +44,7 @@ const App: React.FC = () => {
             },
             onCancel: () => {
                 console.log('Action canceled');
+                setOpen(false);
             },
         });
     };

@@ -33,8 +33,6 @@ export default function PriceRate() {
   });
   console.log(queryUrl);
   console.log(priceRateList?.data);
-  console.log(priceRateList?.data?.priceRate?.length);
-  console.log('ahehe')
 
   const renderPriceRateRow = (priceRate: any) => (
     <PriceRateRow key={priceRate.priceRateId} priceRate={priceRate} />
