@@ -1,13 +1,12 @@
 ﻿using backend.DTOs.Transaction;
+using backend.Helper;
 using backend.Models;
 
 namespace backend.Interfaces
 {
     public interface ITransactionRepository
     {
-        Task<Transaction?> GetTransactionByIdAsync(long id);
+        Task<TransactionResult?> GetAllTransactionsAsync(TransactionQuery query);
         Task<Transaction?> CreateTransactionAsync(CreateTransactionDTO transactionDto);
-        Task<Transaction?> UpdateTransactionAsync(long id, UpdateTransactionDTO transactionDto);
-        Task<Transaction?> DeleteTransactionAsync(long id);
     }
 }

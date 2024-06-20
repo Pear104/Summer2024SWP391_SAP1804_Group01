@@ -97,9 +97,9 @@ namespace backend.Repository
 
                     if (orderDetailDto.AccessoryId != null)
                     {
-                        var accessory = _context.Accessories.FirstOrDefault(x =>
-                            x.AccessoryId == orderDetailDto.AccessoryId
-                        );
+                        var accessory = _context
+                            .Accessories.Include(x => x.AccessoryType)
+                            .FirstOrDefault(x => x.AccessoryId == orderDetailDto.AccessoryId);
                         if (accessory == null)
                         {
                             return null;
@@ -107,15 +107,15 @@ namespace backend.Repository
                         accessory.Quantity--;
                         _context.Entry(accessory).State = EntityState.Modified;
                         var materialPrice = _context
-                            .MaterialPrices.Where(x => x.Karat == accessory.Karat)
-                            .OrderBy(x => x.EffTime)
+                            .MaterialPrices.OrderByDescending(x => x.EffTime)
+                            .Where(x => x.Karat == accessory.Karat)
                             .FirstOrDefault();
                         orderDetail.Accessory = accessory;
                         orderDetail.MaterialPrice = materialPrice;
                         orderDetail.ItemPrice =
                             (
                                 diamond.Carat * diamondPrice.UnitPrice * 100
-                                + (accessory?.MaterialWeight + (orderDetailDto.Size - 3))
+                                + (accessory?.MaterialWeight + orderDetailDto.Size - 3)
                                     * materialPrice?.UnitPrice
                                 + accessory?.AccessoryType.ProcessingPrice
                             ) * priceRate?.Percent;
@@ -370,6 +370,28 @@ namespace backend.Repository
                         {
                             orderDetail.Accessory.Quantity++;
                         }
+                    }
+                }
+                if (order.OrderStatus == "Completed")
+                {
+                    var completedCODTransaction = await _context.Transactions.FirstOrDefaultAsync(
+                        x =>
+                            x.OrderId == existedOrder.OrderId
+                            && x.TransactionStatus == TransactionStatus.Completed
+                            && x.PaymentMethod == "SHIP_COD"
+                    );
+                    if (completedCODTransaction != null)
+                    {
+                        var shipperMadeTransaction = new Transaction()
+                        {
+                            TransactionId =
+                                $"ORD{existedOrder.OrderId}-TRS{DateTime.Now.Ticks.ToString()}",
+                            Order = existedOrder,
+                            PaymentMethod = "SHIP_COD",
+                            Amount = existedOrder.TotalPrice - completedCODTransaction.Amount,
+                            TransactionStatus = TransactionStatus.Completed
+                        };
+                        await _context.Transactions.AddAsync(shipperMadeTransaction);
                     }
                 }
             }
