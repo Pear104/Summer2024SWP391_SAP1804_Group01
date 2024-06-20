@@ -46,6 +46,14 @@ namespace backend.Repository
                 .FirstOrDefaultAsync(x => x.AccountId == id);
         }
 
+        public async Task<Account?> GetCustomerByIdAsync(long id)
+        {
+            var customersModel = _context.Accounts.Where(c => c.Role == Role.Customer);
+            return await customersModel
+                .Include(x => x.Rank)
+                .FirstOrDefaultAsync(x => x.AccountId == id);
+        }
+
         public async Task<Account?> UpdateAccountAsync(long id, UpdateAccountDTO accountDto)
         {
             var existedAccount = await _context.Accounts.FindAsync(id);
@@ -82,8 +90,9 @@ namespace backend.Repository
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Account>> SearchAccountOnRole(AccountSearchQuery query)
+        public async Task<ListWithPagingDTO<Account>> SearchAccountOnRole(AccountSearchQuery query)
         {
+            ListWithPagingDTO<Account> result;
             var accountsQuery = _context
                 .Accounts.AsQueryable();
             if (!string.IsNullOrEmpty(query.GetRole()))
@@ -92,10 +101,20 @@ namespace backend.Repository
                 accountsQuery = accountsQuery.Where(x => x.Role == role);
             }
             accountsQuery = accountsQuery.Where(x => x.Name.Contains(query.AccountName) && x.PhoneNumber.Contains(query.AccountPhoneNumber));
-            return await accountsQuery
-                .Skip((query.pageNumber-1) * query.PageSize)
-                .Take(query.PageSize)
-                .ToListAsync();
+
+            var accountsModel = await accountsQuery
+                 .Skip((query.pageNumber - 1) * query.PageSize)
+                 .Take(query.PageSize)
+                 .ToListAsync();
+            result = new()
+            {
+                Content = accountsModel,
+                CurrentPage = query.pageNumber,
+                PageSize = query.PageSize,
+                TotalCount = accountsModel.Count(),
+                TotalPages = (int)Math.Ceiling((accountsModel.Count()) / (double)query.PageSize)
+            };
+            return result;
         }
 
         public async Task<Account?> GetAccountByEmailAsync(string email)
