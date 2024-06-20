@@ -15,6 +15,7 @@ import AccessoryRow from "./AccessoryRow";
 import { useQueries } from "@tanstack/react-query";
 import { useSearchStore } from "../../../store/searchStore";
 import { getAccessoryPrice } from "../../../utils/getPrice";
+import LoadingItem from "./components/LoadingItem";
 
 export default function AccessoriesManage() {
   const url = new URL(window.location.href);
@@ -307,33 +308,28 @@ export default function AccessoriesManage() {
                       </tr>
                     )}
                     {accessories.isLoading && (
-                      <div className="p-4">
-                        <Skeleton
-                          active
-                          paragraph={{
-                            rows: 20,
-                          }}
-                        />
-                      </div>
+                      <>
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((key) => (
+                          <LoadingItem key={key} />
+                        ))}
+                      </>
                     )}
-                    {accessories?.data &&
-                      materialPrices?.data &&
-                      accessories?.data.accessories?.map(
-                        (accessory: any, index: number) => (
-                          <AccessoryRow
-                            key={index}
-                            accessory={accessory}
-                            price={getAccessoryPrice(
-                              accessory,
-                              materialPrices?.data,
-                              3,
-                              priceRate?.data?.percent
-                            )}
-                            selectedAccessories={selectedAccessories}
-                            setSelectedAccessories={setSelectedAccessories}
-                          />
-                        )
-                      )}
+                    {accessories?.data?.accessories?.map(
+                      (accessory: any, index: number) => (
+                        <AccessoryRow
+                          key={index}
+                          accessory={accessory}
+                          price={getAccessoryPrice(
+                            accessory,
+                            materialPrices?.data,
+                            3,
+                            priceRate?.data?.percent
+                          )}
+                          selectedAccessories={selectedAccessories}
+                          setSelectedAccessories={setSelectedAccessories}
+                        />
+                      )
+                    )}
                   </tbody>
                 </table>
                 <div className="flex justify-center items-center px-8 py-4 bg-gray-100">

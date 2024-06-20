@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.DTOs.Transaction;
+using backend.Helper;
 using backend.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,10 +35,11 @@ namespace backend.Controllers
             return Ok(newTransaction);
         }
 
-        // [HttpGet]
-        // public async Task<IActionResult> GetTransactions()
-        // {
-        //     
-        // }
+        [HttpGet]
+        public async Task<IActionResult> GetTransactions([FromQuery] TransactionQuery query)
+        {
+            var transactionResult = await _transactionRepo.GetAllTransactionsAsync(query);
+            return Ok(transactionResult);
+        }
     }
 }

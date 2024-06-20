@@ -24,7 +24,7 @@ const schema = z.object({
 export default function AccessoryDetail() {
   const { accessoryId } = useParams();
   const queryUrl = useSearchStore((state) => state.queryUrl);
-  const [size, setSize] = useState(0);
+  const [size, setSize] = useState(3);
   const { control, handleSubmit } = useForm({
     defaultValues: {
       size: "",
@@ -32,8 +32,8 @@ export default function AccessoryDetail() {
     resolver: zodResolver(schema),
   });
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
-  scrollTo("choose-item");
   useEffect(() => {
+    scrollTo("choose-item");
     setQueryUrl(`/api/Accessories/${accessoryId}`);
   }, []);
   console.log(queryUrl);
@@ -99,7 +99,7 @@ export default function AccessoryDetail() {
               )}
             </div>
             <div className="text-3xl">
-              {priceRate?.data && materialPrices?.data ? (
+              {priceRate?.data && materialPrices?.data && accessory?.data ? (
                 getAccessoryPrice(
                   accessory?.data,
                   materialPrices?.data,
