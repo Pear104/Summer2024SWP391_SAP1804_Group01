@@ -48,6 +48,7 @@ import BlogList from "../pages/blog/BlogList";
 import BlogDetail from "../pages/blog/BlogDetail";
 import PriceRate from "../pages/dashboard/price_rate/PriceRate";
 import SalesReportManagement from "../pages/dashboard/staffsReport/SalesReportManagement";
+import ChangePassword from "../pages/account/ChangePassword";
 const routes = [
   {
     errorElement: <Error />,
@@ -252,6 +253,10 @@ const routes = [
               {
                 path: "edit",
                 element: <EditAccount />,
+              },
+              {
+                path: "change-password",
+                element: <ChangePassword />,
               },
               {
                 element: <OrderHistory />,

@@ -12,13 +12,15 @@ import {
 import Logo from "../logo/Logo";
 import { message } from "antd";
 import SearchBar from "../SearchBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import JewelryItem from "./components/JewelryItem";
 import DiamondItem from "./components/DiamondItem";
 import { Link, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
 import { GET } from "../../utils/request";
 import { useQueries } from "@tanstack/react-query";
+import { jwtDecode } from "jwt-decode";
+import { getCookie } from "../../utils/cookie";
 
 const TopNavItem = ({
   children,
@@ -41,6 +43,20 @@ export default function TopNav() {
   // const isLoged = useSelector((state: any) => state.auth.isLoged);
   const cart = useCartStore((state) => state.cart);
   const cartItemCount = cart.length;
+  const token = getCookie("accessToken") || "";
+  let decode;
+  if (!token) {
+    console.error("Token is empty or cookie does not exist.");
+  } else if (token.split(".").length !== 3) {
+    console.error("Invalid token format: ", token);
+  } else {
+    try {
+      decode = jwtDecode(token) as any;
+      console.log("Decoded token: ", decode);
+    } catch (error: any) {
+      console.error("Error decoding token: ", error.message);
+    }
+  }
   const [jewelryDrop, setJewelryDrop] = useState(false);
   const [diamondDrop, setDiamondDrop] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
@@ -60,6 +76,7 @@ export default function TopNav() {
       },
     ],
   });
+  console.log(decode);
   return (
     <>
       {contextHolder}
@@ -86,13 +103,26 @@ export default function TopNav() {
             </div>
           </div>
           <div className="flex justify-end gap-4 items-center">
-            <SearchBar />
+            <div className="cursor-pointer">
+              <SearchBar />
+            </div>
             <Link to="/test">
               <FlaskConical size={20} strokeWidth={2} absoluteStrokeWidth />
             </Link>
-            <Link to="/admin">
-              <LineChart size={20} strokeWidth={2} absoluteStrokeWidth />
-            </Link>
+            {decode && decode?.role != "Customer" && (
+              <div
+                className="cursor-pointer"
+                onClick={async () => {
+                  const response = await GET("/api/Accounts/me");
+                  console.log(response);
+                  if (response.role != "Customer") {
+                    navigate("/admin");
+                  }
+                }}
+              >
+                <LineChart size={20} strokeWidth={2} absoluteStrokeWidth />
+              </div>
+            )}
             <Heart size={20} strokeWidth={2} absoluteStrokeWidth />
             <div className="relative">
               <Link to="/cart">
