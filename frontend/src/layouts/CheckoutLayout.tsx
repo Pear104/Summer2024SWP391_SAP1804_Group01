@@ -127,7 +127,7 @@ export default function CheckoutLayout() {
           </div>
           <Divider />
           <div className="text-base">
-            <div className="flex justify-between">
+            <div className="flex justify-between mb-2">
               <div>Subtotal</div>
               <div className="font-semibold">
                 {totalPrice != 0 && totalPrice ? (
@@ -137,7 +137,11 @@ export default function CheckoutLayout() {
                     maximumFractionDigits: 0,
                   })
                 ) : (
-                  <Skeleton.Button active={true} size="small" />
+                  <Skeleton.Button
+                    active={true}
+                    className="w-[100px]"
+                    size="small"
+                  />
                 )}
               </div>
             </div>
@@ -151,7 +155,11 @@ export default function CheckoutLayout() {
                     maximumFractionDigits: 0,
                   })
                 ) : (
-                  <Skeleton.Button active={true} size="small" />
+                  <Skeleton.Button
+                    active={true}
+                    className="w-[100px]"
+                    size="small"
+                  />
                 )}
               </div>
             </div>
@@ -169,7 +177,11 @@ export default function CheckoutLayout() {
                     maximumFractionDigits: 0,
                   })
                 ) : (
-                  <Skeleton.Button active={true} size="small" />
+                  <Skeleton.Button
+                    active={true}
+                    className="w-[60px]"
+                    size="small"
+                  />
                 )}
               </div>
             </div>

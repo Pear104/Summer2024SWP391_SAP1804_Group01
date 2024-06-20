@@ -12,7 +12,7 @@ namespace backend.DTOs.Transaction
         public string? OrderId { get; set; }
         public string PaymentMethod { get; set; } = string.Empty;
         public double Amount { get; set; }
-        public TransactionStatus TransactionStatus { get; set; }
+        public string? TransactionStatus { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

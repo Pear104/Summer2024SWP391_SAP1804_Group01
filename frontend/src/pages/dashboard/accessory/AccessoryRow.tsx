@@ -1,3 +1,4 @@
+import { Skeleton } from "antd";
 import { Link } from "react-router-dom";
 
 export default function AccessoryRow({
@@ -12,7 +13,7 @@ export default function AccessoryRow({
   price: any;
 }) {
   return (
-    <tr className="grid grid-cols-12 items-center" key={accessory.accessoryId}>
+    <tr className="grid grid-cols-12 items-center">
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center">
           <label className="flex items-center">
@@ -61,11 +62,15 @@ export default function AccessoryRow({
         {accessory.materialWeight.toFixed(2)} g
       </td>
       <td className="flex justify-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 col-span-2">
-        {price.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-          maximumFractionDigits: 0,
-        })}
+        {isNaN(parseFloat(price)) ? (
+          <Skeleton.Button active />
+        ) : (
+          price.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            maximumFractionDigits: 0,
+          })
+        )}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
         {accessory.shape.name}

@@ -23,7 +23,7 @@ const AccessoryItem = ({
     <div className="flex text-lg">
       <Link
         className="w-1/5 flex aspect-square"
-        to={`/product/accessory/detail/${detail?.accessory.accessoryId}`}
+        to={`/product/accessory/detail/${detail?.accessory?.accessoryId}`}
       >
         {detail?.accessory != null
           ? detail.accessory?.accessoryImages[0]?.url && (
@@ -42,6 +42,9 @@ const AccessoryItem = ({
           {detail.accessory != null ? detail.accessory?.name : ""}
         </div>
         {detail.accessory != null && (
+          <div>Material weight: {detail.accessory?.materialWeight} g</div>
+        )}
+        {detail.accessory != null && (
           <div>Gold Karat: {detail.accessory?.karat}K</div>
         )}
         {detail?.accessory && (
@@ -49,9 +52,9 @@ const AccessoryItem = ({
             <div className="text-gray-800 font-bold">
               Price:{" "}
               {(
-                (detail?.accessory.materialWeight *
-                  detail.materialPrice.unitPrice +
-                  detail.accessory.accessoryType.processingPrice) *
+                ((detail?.accessory?.materialWeight + detail?.size - 3) *
+                  detail?.materialPrice?.unitPrice +
+                  detail?.accessory?.accessoryType?.processingPrice) *
                 percent
               ).toLocaleString("en-US", {
                 style: "currency",

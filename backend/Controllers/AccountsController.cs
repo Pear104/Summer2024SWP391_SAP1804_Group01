@@ -99,10 +99,35 @@ namespace backend.Controllers
         public async Task<ActionResult> GetCustomerAccounts([FromQuery] AccountSearchQuery query)
         {
             query.AccountRole = Role.Customer.ToString();
-            var accountsModels = await _accountRepo.SearchAccountOnRole(query);
-            var accountsDTO = accountsModels.Select(x => x.ToAccountDTO()).ToList();
+            var accountsListModels = await _accountRepo.SearchAccountOnRole(query);
+            ListWithPagingDTO<AccountDTO> accountsDTO = new()
+            {
+                Content = accountsListModels.Content!.Select(x => x.ToAccountDTO()).ToList(),
+                PageSize = accountsListModels.PageSize,
+                CurrentPage = accountsListModels.CurrentPage,
+                TotalCount = accountsListModels.TotalCount,
+                TotalPages = accountsListModels.TotalPages
+            };
 
             return Ok(accountsDTO);
+        }
+
+        /// <summary>
+        /// Get customer by Id, order not included.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("Customer/{id}")]
+        public ActionResult GetCustomerById([FromRoute] long id)
+        {
+            ActionResult result = BadRequest();
+            var customerModel = _accountRepo.GetCustomerByIdAsync(id);
+            if (customerModel != null)
+            {
+                result = Ok(customerModel);
+            }
+            return result;
         }
 
         /// <summary>
@@ -115,8 +140,15 @@ namespace backend.Controllers
         public async Task<ActionResult> GetSaleStaffAccounts([FromQuery] AccountSearchQuery query)
         {
             query.AccountRole = Role.SaleStaff.ToString();
-            var accountsModels = await _accountRepo.SearchAccountOnRole(query);
-            var accountsDTO = accountsModels.Select(x => x.ToAccountDTO()).ToList();
+            var accountsListModels = await _accountRepo.SearchAccountOnRole(query);
+            ListWithPagingDTO<AccountDTO> accountsDTO = new()
+            {
+                Content = accountsListModels.Content!.Select(x => x.ToAccountDTO()).ToList(),
+                PageSize = accountsListModels.PageSize,
+                CurrentPage = accountsListModels.CurrentPage,
+                TotalCount = accountsListModels.TotalCount,
+                TotalPages = accountsListModels.TotalPages
+            };
 
             return Ok(accountsDTO);
         }
@@ -131,12 +163,19 @@ namespace backend.Controllers
         public async Task<ActionResult> GetDeliveryStaffAccounts([FromQuery] AccountSearchQuery query)
         {
             query.AccountRole = Role.DeliveryStaff.ToString();
-            var accountsModels = await _accountRepo.SearchAccountOnRole(query);
-            var accountsDTO = accountsModels.Select(x => x.ToAccountDTO()).ToList();
+            var accountsListModels = await _accountRepo.SearchAccountOnRole(query);
+            ListWithPagingDTO<AccountDTO> accountsDTO = new()
+            {
+                Content = accountsListModels.Content!.Select(x => x.ToAccountDTO()).ToList(),
+                PageSize = accountsListModels.PageSize,
+                CurrentPage = accountsListModels.CurrentPage,
+                TotalCount = accountsListModels.TotalCount,
+                TotalPages = accountsListModels.TotalPages
+            };
 
             return Ok(accountsDTO);
         }
-        
+
         // [HttpDelete("{id}")]
         // public async Task<IActionResult> DeleteAccount(long id)
         // {
