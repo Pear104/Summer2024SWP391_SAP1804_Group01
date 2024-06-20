@@ -19,7 +19,7 @@ namespace backend.DTOs
         public string ShippingAddress { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public long CustomerId { get; set; }
-        public string CustomerName { get; set; } = string.Empty;
+        public string? CustomerName { get; set; } = string.Empty;
         public long? SaleStaffId { get; set; }
         public string? SaleStaffName { get; set; } = string.Empty;
         public long? DeliveryStaffId { get; set; }

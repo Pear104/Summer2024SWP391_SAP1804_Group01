@@ -7,7 +7,6 @@ namespace backend.DTOs.Feedback
 {
     public class CreateFeedbackDTO
     {
-        public string? OrderId { get; set; }
         public long? OrderDetailId { get; set; }
         public long? AccessoryId { get; set; }
         public int Score { get; set; }

@@ -37,7 +37,6 @@ namespace backend.Repository
 
         public async Task<AccessoryResult> GetAllAccessoriesAsync(AccessoryQuery query)
         {
-            System.Console.WriteLine(query.Shape);
             var accessoriesQuery = _context
                 .Accessories.Include(x => x.Shape)
                 .Include(x => x.AccessoryType)

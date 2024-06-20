@@ -15,7 +15,7 @@ namespace backend.Mappers
             {
                 Content = Feedback.Content,
                 Score = Feedback.Score,
-                Username = Feedback?.Order?.Customer?.Name,
+                Username = Feedback?.OrderDetail?.Order?.Customer?.Name,
                 CreatedAt = Feedback.CreatedAt
             };
         }

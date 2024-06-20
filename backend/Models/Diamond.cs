@@ -53,9 +53,6 @@ namespace backend.Models
         public long ShapeId { get; set; }
         public Shape Shape { get; set; } = new Shape();
 
-        public OrderDetail OrderDetail { get; set; }
-        // Để nó warning cũng được, ông nào thêm
-        // public OrderDetail OrderDetail { get; set; } = new List<OrderDetail>();
-        // Là cook đó :v
+        public List<OrderDetail> OrderDetails { get; set; }
     }
 }

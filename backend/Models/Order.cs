@@ -57,6 +57,5 @@ namespace backend.Models
         public Promotion? Promotion { get; set; } = null;
         public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
         public List<Transaction> Transactions { get; set; } = new List<Transaction>();
-        public List<Feedback> Feedbacks { get; set; } = new List<Feedback>();
     }
 }

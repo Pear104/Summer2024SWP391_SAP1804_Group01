@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Security.Claims;
+using System.Text;
 using backend.Data;
 using backend.DTOs.Accessory;
 using backend.Helper;
@@ -30,6 +31,11 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<ActionResult> GetAccessories([FromQuery] AccessoryQuery query)
         {
+            // var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            // if (role == "Customer" || role == null)
+            // {
+            //     query.IsAvailability = true;
+            // }
             var accessoryDTOs = await _accessoryRepo.GetAllAccessoriesAsync(query);
             return Ok(accessoryDTOs);
         }

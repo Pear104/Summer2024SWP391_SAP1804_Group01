@@ -4,24 +4,52 @@ import scrollTo from "../../../utils/scroll";
 export default function SideNav() {
   const items = [
     {
-      key: "why-datj",
-      // icon: <UserRound size={20} />,
-      label: "Why DatJ",
+      key: "about",
+      label: "About",
+      children: [
+        {
+          key: "why-datj",
+          // icon: <UserRound size={20} />,
+          label: "Why DatJ",
+        },
+        {
+          key: "our-team",
+          // icon: <LockKeyhole size={20} />,
+          label: "About us",
+        },
+        {
+          key: "how-to-buy",
+          // icon: <LockKeyhole size={20} />,
+          label: "How to buy",
+        },
+        {
+          key: "measure-guide",
+          // icon: <UserRoundCog size={20} />,
+          label: "How to measure finger size",
+        },
+      ],
     },
     {
-      key: "our-team",
-      // icon: <LockKeyhole size={20} />,
-      label: "About us",
+      key: "policies",
+      label: "Policies",
+      children: [
+        {
+          key: "return-policy",
+          label: "Return Policy",
+        },
+        {
+          key: "payment-policy",
+          label: "Payment Policy",
+        },
+        {
+          key: "privacy-policy",
+          label: "Privacy Policy",
+        },
+      ],
     },
     {
-      key: "how-to-buy",
-      // icon: <LockKeyhole size={20} />,
-      label: "How to buy",
-    },
-    {
-      key: "measure-guide",
-      // icon: <UserRoundCog size={20} />,
-      label: "How to measure finger size",
+      key: "contact",
+      label: "Contact",
     },
   ];
   return (

@@ -178,8 +178,8 @@ namespace backend.Data
             builder
                 .Entity<OrderDetail>()
                 .HasOne(o => o.Diamond)
-                .WithOne(o => o.OrderDetail)
-                .HasForeignKey<OrderDetail>(o => o.DiamondId)
+                .WithMany(o => o.OrderDetails)
+                .HasForeignKey(o => o.DiamondId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Them khoa ngoai giua Order voi Transaction
@@ -224,13 +224,6 @@ namespace backend.Data
                 .HasOne(o => o.Customer)
                 .WithMany(o => o.Feedbacks)
                 .HasForeignKey(o => o.CustomerId);
-
-            //Them khoa ngoai giua Order voi Feedback
-            builder
-                .Entity<Feedback>()
-                .HasOne(o => o.Order)
-                .WithMany(o => o.Feedbacks)
-                .HasForeignKey(o => o.OrderId);
 
             //Them khoa ngoai giua OrderDetail voi Feedback
             builder
