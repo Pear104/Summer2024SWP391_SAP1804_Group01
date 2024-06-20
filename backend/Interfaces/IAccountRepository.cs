@@ -8,10 +8,11 @@ namespace backend.Interfaces
     {
         Task<IEnumerable<Account>> GetAllAccountsAsync(AccountQuery query);
         Task<Account?> GetAccountByIdAsync(long id);
+        Task<Account?> GetCustomerByIdAsync(long customerId);
         Task<Account?> GetAccountByEmailAsync(string email);
         Task<Account> CreateAccountAsync(Account account);
         Task<Account?> UpdateAccountAsync(long id, UpdateAccountDTO account);
-        Task<IEnumerable<Account>> SearchAccountOnRole(AccountSearchQuery query);
+        Task<ListWithPagingDTO<Account>> SearchAccountOnRole(AccountSearchQuery query);
         // Task<Account?> DeleteAccountAsync(long id);
     }
 }
