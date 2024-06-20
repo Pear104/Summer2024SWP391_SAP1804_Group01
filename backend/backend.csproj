@@ -10,6 +10,9 @@
 		<BaseOutputPath>.\bin\</BaseOutputPath>
 		<BaseIntermediateOutputPath>.\obj\</BaseIntermediateOutputPath>
 		<NoWarn>$(NoWarn);1591</NoWarn>
+		<UserSecretsId>03ff59af-83f5-4bd0-9fb0-543b194c6228</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileContext>.</DockerfileContext>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -27,6 +30,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Selenium.WebDriver" Version="4.21.0" />

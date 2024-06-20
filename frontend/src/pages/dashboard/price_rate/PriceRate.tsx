@@ -32,9 +32,7 @@ export default function PriceRate() {
     ],
   });
   console.log(queryUrl);
-  console.log(priceRateList?.data);
-  console.log(priceRateList?.data?.priceRate?.length);
-  console.log("ahehe");
+
 
   const renderPriceRateRow = (priceRate: any) => (
     <PriceRateRow key={priceRate.priceRateId} priceRate={priceRate} />
@@ -56,8 +54,8 @@ export default function PriceRate() {
             <h1 className="text-2xl"> Price Rate List </h1>
           </div>
         </div>
-        <div className="flex justify-end space-x-1 items-center">
-          <CreatePriceRate />
+        <div className="flex justify-end space-x-1 items-center">   
+              <CreatePriceRate />
         </div>
       </div>
 
@@ -140,7 +138,7 @@ export default function PriceRate() {
                       </td>
                     )}
                     {priceRateList?.data &&
-                    priceRateList?.data?.priceRates?.length > 0 ? (
+                      priceRateList?.data?.priceRates?.length > 0 ? (
                       priceRateList?.data?.priceRates?.map(renderPriceRateRow)
                     ) : (
                       <td colSpan={100} className="py-20 w-full">
