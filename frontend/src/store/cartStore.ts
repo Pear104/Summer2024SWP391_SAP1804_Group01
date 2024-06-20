@@ -20,6 +20,7 @@ export const useCartStore = create<{
     size: number | null
   ) => void;
   setCart: (diamondId: number, accessoryId?: number, size?: number) => void;
+  clearCart: () => void;
 }>()(
   persist(
     (set, get) => ({

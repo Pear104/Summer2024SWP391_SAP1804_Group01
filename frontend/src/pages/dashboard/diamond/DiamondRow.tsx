@@ -1,3 +1,4 @@
+import { Skeleton } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -12,6 +13,7 @@ export default function DiamondRow({
   setSelectedDiamonds: React.Dispatch<React.SetStateAction<number[]>>;
   price: any;
 }) {
+  console.log(price);
   if (!diamond) {
     return (
       <>
@@ -80,7 +82,9 @@ export default function DiamondRow({
           </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          <div className="text-sm text-gray-500">{price}</div>
+          <div className="text-sm text-gray-500">
+            {isNaN(parseFloat(price)) ? <Skeleton.Button active /> : price}
+          </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
           {diamond.shape}
