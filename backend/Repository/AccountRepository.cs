@@ -101,7 +101,7 @@ namespace backend.Repository
                 accountsQuery = accountsQuery.Where(x => x.Role == role);
             }
             accountsQuery = accountsQuery.Where(x => x.Name.Contains(query.AccountName) && x.PhoneNumber.Contains(query.AccountPhoneNumber));
-
+            var totalCount = accountsQuery.Count();
             var accountsModel = await accountsQuery
                  .Skip((query.pageNumber - 1) * query.PageSize)
                  .Take(query.PageSize)
@@ -111,8 +111,8 @@ namespace backend.Repository
                 Content = accountsModel,
                 CurrentPage = query.pageNumber,
                 PageSize = query.PageSize,
-                TotalCount = accountsModel.Count(),
-                TotalPages = (int)Math.Ceiling((accountsModel.Count()) / (double)query.PageSize)
+                TotalCount = totalCount,
+                TotalPages = (int)Math.Ceiling((totalCount) / (double)query.PageSize)
             };
             return result;
         }

@@ -23,18 +23,18 @@ const AccessoryItem = ({
     <div className="flex text-lg">
       <Link
         className="w-1/5 flex aspect-square"
-        to={`/product/accessory/detail/${detail?.accessory.accessoryId}`}
+        to={`/product/accessory/detail/${detail?.accessory?.accessoryId}`}
       >
         {detail?.accessory != null
           ? detail.accessory?.accessoryImages[0]?.url && (
-              <Image
-                // style={{ objectFit: "contain" }}
-                // object-cover full hinh bi cat, object-contain full hinh khong bi cat
-                className="h-full object-cover aspect-square"
-                src={detail?.accessory?.accessoryImages[0].url}
-                alt="accessory"
-              />
-            )
+            <Image
+              // style={{ objectFit: "contain" }}
+              // object-cover full hinh bi cat, object-contain full hinh khong bi cat
+              className="h-full object-cover aspect-square"
+              src={detail?.accessory?.accessoryImages[0].url}
+              alt="accessory"
+            />
+          )
           : ""}
       </Link>
       <div className="pl-4 flex flex-col gap-2 text-lg">
