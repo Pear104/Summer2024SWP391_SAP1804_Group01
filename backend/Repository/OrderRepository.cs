@@ -347,7 +347,13 @@ namespace backend.Repository
 
         public async Task<Order?> UpdateOrderAsync(string id, UpdateOrderDTO order)
         {
-            var existedOrder = _context.Orders.FirstOrDefault(x => x.OrderId.Equals(id));
+            var existedOrder = _context
+                .Orders.Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Diamond)
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Accessory)
+                .FirstOrDefault(x => x.OrderId.Equals(id));
+
             if (existedOrder == null)
             {
                 return null;
@@ -355,6 +361,17 @@ namespace backend.Repository
             if (order.OrderStatus != null)
             {
                 existedOrder.OrderStatus = Enum.Parse<OrderStatus>(order.OrderStatus);
+                if (order.OrderStatus == "Failed")
+                {
+                    foreach (var orderDetail in existedOrder.OrderDetails)
+                    {
+                        orderDetail.Diamond.Availability = true;
+                        if (orderDetail.Accessory != null)
+                        {
+                            orderDetail.Accessory.Quantity++;
+                        }
+                    }
+                }
             }
             if (order.SaleStaffId != 0)
             {

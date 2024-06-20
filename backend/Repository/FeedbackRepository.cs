@@ -25,7 +25,6 @@ namespace backend.Repository
         {
             var existedFeedback = await _context.Feedbacks.FirstOrDefaultAsync(x =>
                 x.AccessoryId == FeedbackDTO.AccessoryId
-                && x.OrderId == FeedbackDTO.OrderId
                 && x.OrderDetailId == FeedbackDTO.OrderDetailId
             );
             if (existedFeedback != null)
@@ -39,18 +38,16 @@ namespace backend.Repository
             }
             var feedback = FeedbackDTO.ToFeedbackFromCreate();
             feedback.Customer = customer;
-            var order = await _context.Orders.FindAsync(FeedbackDTO.OrderId);
-            if (order == null)
-            {
-                return null;
-            }
             var orderDetail = await _context.OrderDetails.FindAsync(FeedbackDTO.OrderDetailId);
             if (orderDetail == null)
             {
                 return null;
             }
             var accessory = await _context.Accessories.FindAsync(FeedbackDTO.AccessoryId);
-            feedback.Order = order;
+            if (accessory == null)
+            {
+                return null;
+            }
             feedback.OrderDetail = orderDetail;
             feedback.Accessory = accessory;
 
@@ -67,7 +64,7 @@ namespace backend.Repository
         public async Task<FeedbackResult> GetFeedbacksOfAccessoryAsync(FeedbackQuery query)
         {
             var feedbacksQuery = _context
-                .Feedbacks.Include(x => x.Order.Customer)
+                .Feedbacks.Include(x => x.OrderDetail.Order.Customer)
                 .OrderBy(x => x.CreatedAt)
                 .AsQueryable();
 

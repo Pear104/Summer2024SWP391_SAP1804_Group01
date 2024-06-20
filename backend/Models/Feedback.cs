@@ -15,10 +15,6 @@ namespace backend.Models
         public long? CustomerId { get; set; }
         public Account? Customer { get; set; }
 
-        [Column("order_id")]
-        public string? OrderId { get; set; }
-        public Order? Order { get; set; }
-
         [Column("order_detail_id")]
         public long? OrderDetailId { get; set; }
         public OrderDetail? OrderDetail { get; set; }

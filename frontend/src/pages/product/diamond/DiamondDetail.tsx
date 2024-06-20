@@ -207,7 +207,9 @@ export default function DiamondDetail() {
             <Skeleton.Image active className="w-full h-[800px]" />
           )}
           <iframe
-            className="aspect-video w-full"
+            className={`${
+              loadingCertificate ? "hidden" : "aspect-video w-full"
+            }`}
             onLoad={() => {
               setLoadingCertificate(false);
             }}

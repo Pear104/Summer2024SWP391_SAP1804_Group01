@@ -8,7 +8,6 @@ type CartItem = {
 };
 
 export const useCartStore = create<{
-  [x: string]: any;
   currentDiamond?: number | null;
   currentShape?: string | null;
   currentAccessory?: number | null;
