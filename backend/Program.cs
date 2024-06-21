@@ -56,7 +56,6 @@ namespace backend
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
             builder.Services.AddSwaggerGen(option =>
             {
                 option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
@@ -145,6 +144,7 @@ namespace backend
             builder.Services.AddScoped<IDiamondPriceRepository, DiamondPriceRepository>();
             builder.Services.AddScoped<IBlogRepository, BlogRepository>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<ISearchRepository, SearchRepository>();
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IDiamondRepository, DiamondRepository>();

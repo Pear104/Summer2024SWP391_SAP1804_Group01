@@ -27,8 +27,8 @@ import BlogsManage from "../pages/dashboard/blog/BlogsManage";
 import BlogView from "../pages/dashboard/blog/BlogView";
 import AccessoriesManage from "../pages/dashboard/accessory/AccessoriesManage";
 import AccessoryView from "../pages/dashboard/accessory/AccessoryView";
-import DiamondPriceManage from "../pages/dashboard/diamondprice/DiamondPriceManage";
-import AccessoryPriceManage from "../pages/dashboard/accessoryprice/AccessoryPriceManage";
+import DiamondPriceManage from "../pages/dashboard/diamondPrice/DiamondPriceManage";
+import AccessoryPriceManage from "../pages/dashboard/accessoryPrice/AccessoryPriceManage";
 import CustomerManage from "../pages/dashboard/customer/CustomerManage";
 import TransactionManage from "../pages/dashboard/transaction/TransactionManage";
 import OrderManage from "../pages/dashboard/order/OrderManage";
@@ -49,6 +49,7 @@ import BlogDetail from "../pages/blog/BlogDetail";
 import PriceRate from "../pages/dashboard/price_rate/PriceRate";
 import SalesReportManagement from "../pages/dashboard/staffsReport/SalesReportManagement";
 import ChangePassword from "../pages/account/ChangePassword";
+import SearchManagement from "../pages/search/SearchManagement";
 const routes = [
   {
     errorElement: <Error />,
@@ -190,6 +191,10 @@ const routes = [
           {
             path: "/",
             element: <Home />,
+          },
+          {
+            path: "/search",
+            element: <SearchManagement />,
           },
           {
             path: "/about",
