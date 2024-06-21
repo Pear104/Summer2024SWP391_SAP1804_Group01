@@ -8,6 +8,7 @@ using backend.DTOs.Accessory;
 using backend.Mappers;
 using backend.DTOs;
 using backend.DTOs.Account;
+using backend.DTOs.Report;
 
 namespace backend.Repository
 {
@@ -99,6 +100,26 @@ namespace backend.Repository
                 .ToList();
 
             return groupedTransactions;
+        }
+
+        public async Task<ReportDTO> GetReport()
+        {
+            double TotalSale = 0;
+            var CompletedOrder = await _context.Orders.Where(o=>o.OrderStatus == OrderStatus.Completed).ToListAsync();
+            foreach (var order in CompletedOrder)
+            {
+                TotalSale += order.TotalPrice;
+            }
+            
+            int TotalCustomer = await _context.Accounts.CountAsync(c=> c.Role == Role.Customer);    
+            int TotalOrder = await _context.Orders.CountAsync();
+            var report = new ReportDTO{
+                TotalCustomer = TotalCustomer,
+                TotalSale = TotalSale,
+                TotalOrder = TotalOrder
+            };
+            
+            return report;
         }
 
         public async Task<List<AccountDTO>> GetSalesReport()

@@ -30,6 +30,12 @@ namespace backend.Controllers
             var sales = await _reportService.GetSalesReport();
             return Ok(sales);
         }
+        [HttpGet("BasicReport")]
+        public async Task<ActionResult> GetReport()
+        {
+            var report = await _reportService.GetReport();
+            return Ok(report);
+        }
         // [HttpGet("DeliveryReport")]
         // public async Task<ActionResult> GetDeliveryReport()
         // {
