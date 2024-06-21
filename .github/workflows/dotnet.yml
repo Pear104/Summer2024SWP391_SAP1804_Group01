@@ -29,10 +29,14 @@ jobs:
         run: dotnet restore ./backend # Restore project dependencies
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore ./backend --output bin/DatJ-Backend # Build the project
+        run: dotnet build --configuration Release --no-restore ./backend --output ./backend/bin/DatJ-Backend # Build the project
+
+      - name: List output directory
+        run: ls -la ./backend/bin/DatJ-Backend # List contents of the output directory to verify the build output
 
       - name: Test
         run: dotnet test --no-restore --verbosity normal ./backend # Run tests
+
       - name: Deploy to server
         run: |
           # Example deployment steps
