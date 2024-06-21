@@ -23,7 +23,7 @@ const AccessoryItem = ({
     <div className="flex text-lg">
       <Link
         className="w-1/5 flex aspect-square"
-        to={`/product/accessory/detail/${detail?.accessory.accessoryId}`}
+        to={`/product/accessory/detail/${detail?.accessory?.accessoryId}`}
       >
         {detail?.accessory != null
           ? detail.accessory?.accessoryImages[0]?.url && (
