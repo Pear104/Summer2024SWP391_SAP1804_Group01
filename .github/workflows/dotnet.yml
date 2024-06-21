@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout repository
@@ -33,3 +33,12 @@ jobs:
 
       - name: Test
         run: dotnet test --no-restore --verbosity normal ./backend # Run tests
+      - name: Deploy to server
+        run: |
+          # Example deployment steps
+          # Copy files to the deployment directory
+          cp -r ./backend/bin/Release/net8.0/* /home/datnt/datj-backend
+
+          # Restart the application service (modify as needed)
+          sudo systemctl restart datj-backend.service
+        shell: bash
