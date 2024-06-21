@@ -79,8 +79,8 @@ namespace backend.Controllers
             }
             return Ok(newAccount);
         }
-        [HttpPost("ChangePassword")]
-        public async Task<IActionResult> ChangePassword(long id,UpdatePasswordAccountDTO account)
+        [HttpPut("ChangePassword/{id}")]
+        public async Task<IActionResult> ChangePassword([FromRoute]long id,[FromBody]UpdatePasswordAccountDTO account)
         {
             var newAccount = await _accountRepo.UpdatePasswordAsync(id,account);
             if (newAccount == null)
