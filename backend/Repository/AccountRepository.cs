@@ -12,12 +12,10 @@ namespace backend.Repository
     public class AccountRepository : IAccountRepository
     {
         private readonly ApplicationDbContext _context;
-
         public AccountRepository(ApplicationDbContext context)
         {
             _context = context;
         }
-
         public bool AccountExisted(long id)
         {
             return _context.Accounts.Any(e => e.AccountId == id);
@@ -66,7 +64,21 @@ namespace backend.Repository
             existedAccount.Birthday = accountDto.Birthday;
             existedAccount.Gender = (Gender)Enum.Parse(typeof(Gender), accountDto.Gender);
             existedAccount.PhoneNumber = accountDto.PhoneNumber;
-
+            _context.Entry(existedAccount).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return existedAccount;
+        }
+        public async Task<Account?> UpdatePasswordAsync(long id, UpdatePasswordAccountDTO accountDto){
+            var existedAccount = await _context.Accounts.FindAsync(id);
+            if (existedAccount == null)
+            {
+                return null;
+            }
+            bool checkPass = PasswordHasher.VerifyPassword(accountDto.CurPassword, existedAccount.Password);
+            if (!checkPass){
+                return null;
+            }
+            existedAccount.Password = PasswordHasher.HashPassword(accountDto.Password);
             _context.Entry(existedAccount).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return existedAccount;

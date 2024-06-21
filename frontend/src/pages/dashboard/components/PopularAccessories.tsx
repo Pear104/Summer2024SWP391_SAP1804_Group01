@@ -90,11 +90,10 @@ function PopularAccessories() {
               </span>
             </div>
             <div className="text-xs text-gray-400 pl-1.5">
-              {product?.accessory_price.toLocaleString("en-US", {
-                style: "currency",
-                currency: "USD",
-                maximumFractionDigits: 0,
-              })}
+              $
+              {product?.accessory_price
+                ? parseFloat(product.accessory_price).toFixed(2)
+                : ""}
             </div>
           </Link>
         ))}

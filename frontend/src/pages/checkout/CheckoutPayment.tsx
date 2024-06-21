@@ -44,7 +44,7 @@ export default function CheckoutPayment() {
                         orderDetails: cart,
                       });
                       console.log("orderResponse: ", orderResponse);
-                      if (orderResponse.orderId) {
+                      if (orderResponse?.orderId) {
                         const transactionResponse = await POST(
                           "/api/Transactions",
                           {
