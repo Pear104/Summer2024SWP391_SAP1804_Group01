@@ -29,7 +29,7 @@ jobs:
         run: dotnet restore ./backend # Restore project dependencies
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore ./backend # Build the project
+        run: dotnet build --configuration Release --no-restore ./backend --output bin/DatJ-Backend # Build the project
 
       - name: Test
         run: dotnet test --no-restore --verbosity normal ./backend # Run tests
@@ -37,7 +37,7 @@ jobs:
         run: |
           # Example deployment steps
           # Copy files to the deployment directory
-          cp -r ./backend/bin/Release/net8.0/* /home/datnt/datj-backend
+          cp -r ./backend/bin/DatJ-Backend /home/datnt/DatJ-Backend
 
           # Restart the application service (modify as needed)
           sudo systemctl restart datj-backend.service
