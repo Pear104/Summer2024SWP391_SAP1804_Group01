@@ -15,7 +15,7 @@ const phoneRegex = new RegExp(
 );
 
 const schema = z.object({
-  warrantyCardId: z.coerce.number().min(1, "Please choose your product!"),
+  warrantyCardId: z.coerce.number().min(0, "Please choose your product!"),
   phoneNumber: z
     .string()
     .regex(phoneRegex, "Invalid phone number!")
@@ -37,6 +37,7 @@ const schema = z.object({
 type Option = {
   value: string;
   label: string;
+  key: number;
 };
 
 export default function CreateWarrantyRequest() {
@@ -55,6 +56,7 @@ export default function CreateWarrantyRequest() {
   const options: Option[] = order?.data?.orders
     ?.map((order: any) =>
       order.orderDetails.map((orderDetail: any) => ({
+        key: orderDetail.warrantyCardId,
         value: orderDetail.warrantyCardId,
         label: `${orderDetail?.diamond.carat} ct ${
           orderDetail?.diamond.shape
@@ -67,9 +69,11 @@ export default function CreateWarrantyRequest() {
     )
     .flat();
 
+  console.log(options);
+
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
-      warrantyCardId: "",
+      warrantyCardId: "-1",
       warrantyReason: "",
       phoneNumber: "",
       shippingAddress: "",
