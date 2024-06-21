@@ -48,6 +48,8 @@ import BlogList from "../pages/blog/BlogList";
 import BlogDetail from "../pages/blog/BlogDetail";
 import PriceRate from "../pages/dashboard/price_rate/PriceRate";
 import SalesReportManagement from "../pages/dashboard/staffsReport/SalesReportManagement";
+import ChangePassword from "../pages/account/ChangePassword";
+import SearchManagement from "../pages/search/SearchManagement";
 const routes = [
   {
     errorElement: <Error />,
@@ -191,6 +193,10 @@ const routes = [
             element: <Home />,
           },
           {
+            path: "/search",
+            element: <SearchManagement />,
+          },
+          {
             path: "/about",
             element: <About />,
           },
@@ -252,6 +258,10 @@ const routes = [
               {
                 path: "edit",
                 element: <EditAccount />,
+              },
+              {
+                path: "change-password",
+                element: <ChangePassword />,
               },
               {
                 element: <OrderHistory />,

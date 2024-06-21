@@ -38,6 +38,7 @@ export default function AccountLayout() {
           key: "/account/change-password",
           icon: <LockKeyhole size={20} />,
           label: "Change password",
+          path: "/account/change-password",
           disabled: true,
         },
       ],

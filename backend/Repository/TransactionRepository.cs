@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend.Data;
 using backend.DTOs.Transaction;
+using backend.Enums;
+using backend.Helper;
 using backend.Interfaces;
+using backend.Mappers;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
-using backend.Enums;
+
 namespace backend.Repository
 {
     public class TransactionRepository : ITransactionRepository
@@ -41,24 +44,26 @@ namespace backend.Repository
             return newTransaction;
         }
 
-        public Task<Transaction?> DeleteTransactionAsync(long id)
+        public async Task<TransactionResult?> GetAllTransactionsAsync(TransactionQuery query)
         {
-            throw new NotImplementedException();
-        }
+            var transactionsQuery = _context.Transactions.AsQueryable();
 
-       
+            var totalCount = await transactionsQuery.CountAsync();
+            var totalPages = totalCount / (query.PageSize ?? 10);
+            var Transactions = await transactionsQuery
+                .Skip(((query.PageNumber ?? 1) - 1) * (query.PageSize ?? 10))
+                .Take(query.PageSize ?? 10)
+                .Select(x => x.ToTransactionDTO())
+                .ToListAsync();
 
-        public Task<Transaction?> GetTransactionByIdAsync(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Transaction?> UpdateTransactionAsync(
-            long id,
-            UpdateTransactionDTO transactionDto
-        )
-        {
-            throw new NotImplementedException();
+            return new TransactionResult
+            {
+                Transactions = Transactions,
+                TotalPages = totalPages,
+                TotalCount = totalCount,
+                PageSize = query.PageSize ?? 10,
+                CurrentPage = query.PageNumber ?? 1
+            };
         }
     }
 }

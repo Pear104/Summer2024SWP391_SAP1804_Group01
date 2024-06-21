@@ -44,7 +44,7 @@ export default function CheckoutPayment() {
                         orderDetails: cart,
                       });
                       console.log("orderResponse: ", orderResponse);
-                      if (orderResponse.orderId) {
+                      if (orderResponse?.orderId) {
                         const transactionResponse = await POST(
                           "/api/Transactions",
                           {
@@ -80,7 +80,6 @@ export default function CheckoutPayment() {
                         }
                       }
                       setIsLoading(false);
-                      navigate("/account/order-history");
                     }}
                   >
                     <div className="flex gap-4 w-150">
@@ -92,9 +91,55 @@ export default function CheckoutPayment() {
                     </div>
                   </Button>
 
-                  <Button className="gap-4 px-8 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center">
+                  <Button
+                    className="gap-4 px-8 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
+                    onClick={async () => {
+                      setIsLoading(true);
+                      const orderResponse = await POST("/api/Order", {
+                        orderDetails: cart,
+                      });
+                      console.log("orderResponse: ", orderResponse);
+                      if (orderResponse.orderId) {
+                        const transactionResponse = await POST(
+                          "/api/Transactions",
+                          {
+                            orderId: orderResponse.orderId,
+                            amount: orderResponse.totalPrice * 0.4,
+                            paymentMethod: "SHIP_COD",
+                          }
+                        );
+                        console.log(
+                          "transactionResponse: ",
+                          transactionResponse
+                        );
+                        const paymentResponse = await POST(
+                          "/api/payment/vnpay-sent-request",
+                          {
+                            paymentContent:
+                              "Dat coc don hang " + orderResponse?.orderId,
+                            paymentCurrency: "USD",
+                            paymentRefId: transactionResponse?.transactionId,
+                            requiredAmount: (
+                              orderResponse?.totalPrice *
+                              0.4 *
+                              (1 - orderResponse?.totalDiscountPercent / 100)
+                            ).toFixed(0),
+                            paymentLanguage: "en",
+                            merchantId: "MER0001",
+                            paymentDestinationId: "VNPAY",
+                            signature: "123456789ABC",
+                          }
+                        );
+                        if (paymentResponse?.paymentUrl) {
+                          clearCart();
+                          location.href = paymentResponse.paymentUrl;
+                        }
+                      }
+                      setIsLoading(false);
+                    }}
+                  >
                     <Truck />
-                    Ship COD (Coming soon)
+                    Ship COD (Deposit 40%)
                   </Button>
 
                   <Button

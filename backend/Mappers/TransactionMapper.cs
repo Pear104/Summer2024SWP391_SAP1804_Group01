@@ -18,7 +18,7 @@ namespace backend.Mappers
                 Amount = Transaction.Amount,
                 OrderId = Transaction.OrderId,
                 PaymentMethod = Transaction.PaymentMethod,
-                TransactionStatus = Transaction.TransactionStatus,
+                TransactionStatus = Transaction.TransactionStatus.ToString(),
             };
         }
 

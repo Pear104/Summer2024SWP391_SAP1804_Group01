@@ -79,7 +79,16 @@ namespace backend.Controllers
             }
             return Ok(newAccount);
         }
-
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(long id,UpdatePasswordAccountDTO account)
+        {
+            var newAccount = await _accountRepo.UpdatePasswordAsync(id,account);
+            if (newAccount == null)
+            {
+                return BadRequest("The current password is incorrect.");
+            }
+            return Ok(newAccount);
+        }
         /// <summary>
         /// Search for customer's accounts based on name and phone number
         /// </summary>

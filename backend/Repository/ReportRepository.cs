@@ -104,7 +104,6 @@ namespace backend.Repository
         public async Task<List<AccountDTO>> GetSalesReport()
         {
             var role = Enum.Parse<Role>("SaleStaff");
-
             var accounts = _context.Accounts.Where(x => x.Role == role).AsQueryable();
             var accountDTOs = await accounts
             .OrderByDescending(x => x.OrdersOfSaleStaff.Count)

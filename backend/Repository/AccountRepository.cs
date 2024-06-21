@@ -12,12 +12,10 @@ namespace backend.Repository
     public class AccountRepository : IAccountRepository
     {
         private readonly ApplicationDbContext _context;
-
         public AccountRepository(ApplicationDbContext context)
         {
             _context = context;
         }
-
         public bool AccountExisted(long id)
         {
             return _context.Accounts.Any(e => e.AccountId == id);
@@ -66,7 +64,21 @@ namespace backend.Repository
             existedAccount.Birthday = accountDto.Birthday;
             existedAccount.Gender = (Gender)Enum.Parse(typeof(Gender), accountDto.Gender);
             existedAccount.PhoneNumber = accountDto.PhoneNumber;
-
+            _context.Entry(existedAccount).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return existedAccount;
+        }
+        public async Task<Account?> UpdatePasswordAsync(long id, UpdatePasswordAccountDTO accountDto){
+            var existedAccount = await _context.Accounts.FindAsync(id);
+            if (existedAccount == null)
+            {
+                return null;
+            }
+            bool checkPass = PasswordHasher.VerifyPassword(accountDto.CurPassword, existedAccount.Password);
+            if (!checkPass){
+                return null;
+            }
+            existedAccount.Password = PasswordHasher.HashPassword(accountDto.Password);
             _context.Entry(existedAccount).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return existedAccount;
@@ -101,7 +113,7 @@ namespace backend.Repository
                 accountsQuery = accountsQuery.Where(x => x.Role == role);
             }
             accountsQuery = accountsQuery.Where(x => x.Name.Contains(query.AccountName) && x.PhoneNumber.Contains(query.AccountPhoneNumber));
-
+            var totalCount = accountsQuery.Count();
             var accountsModel = await accountsQuery
                  .Skip((query.pageNumber - 1) * query.PageSize)
                  .Take(query.PageSize)
@@ -111,8 +123,8 @@ namespace backend.Repository
                 Content = accountsModel,
                 CurrentPage = query.pageNumber,
                 PageSize = query.PageSize,
-                TotalCount = accountsModel.Count(),
-                TotalPages = (int)Math.Ceiling((accountsModel.Count()) / (double)query.PageSize)
+                TotalCount = totalCount,
+                TotalPages = (int)Math.Ceiling((totalCount) / (double)query.PageSize)
             };
             return result;
         }
