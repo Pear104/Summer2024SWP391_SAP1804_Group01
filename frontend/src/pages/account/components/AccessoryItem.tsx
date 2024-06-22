@@ -62,7 +62,7 @@ const AccessoryItem = ({
                 maximumFractionDigits: 0,
               })}
             </div>
-            {orderStatus != "Pending" && (
+            {orderStatus == "Completed" && (
               <button
                 className="bg-gray-200 text-gray-800 px-4 py-2 rounded mr-4 text-sm border border-black"
                 onClick={() => {

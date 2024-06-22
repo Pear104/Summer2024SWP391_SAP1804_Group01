@@ -1,5 +1,6 @@
 using backend.DTOs.Accessory;
 using backend.DTOs.Account;
+using backend.DTOs.Report;
 using backend.DTOs.Transaction;
 
 namespace backend.Interfaces

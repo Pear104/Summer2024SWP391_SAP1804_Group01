@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using backend.Data;
 using backend.DTOs;
 using backend.DTOs.Accessory;
@@ -278,7 +281,7 @@ namespace backend.Repository
                                     }
                                     : null,
                             Size = y.Size,
-                            // WarrantyCard = y.WarrantyCard.ToWarrantyCardDTO(),
+                            WarrantyCardId = y.WarrantyCard.WarrantyCardId,
                         })
                         .ToList(),
                     PriceRate = x.PriceRate != null ? x.PriceRate.ToPriceRateDTO() : null,
@@ -299,7 +302,7 @@ namespace backend.Repository
                     // Feedbacks = x.Feedbacks.Select(y => y.ToFeedbackDTO()).ToList(),
                 })
                 .ToListAsync();
-            Console.WriteLine("Orders Retrieved: " + orderDTOs.Count);
+            Console.WriteLine("Orders Retrieved: " + orderDTOs.Count());
 
             return new OrderResult
             {

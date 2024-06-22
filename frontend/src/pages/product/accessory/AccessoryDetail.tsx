@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GET } from "../../../utils/request";
-import { Button, Form, Image, Input, Skeleton } from "antd";
+import { Button, Empty, Form, Image, Input, Pagination, Skeleton } from "antd";
 import { FormItem } from "react-hook-form-antd";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -13,6 +13,7 @@ import { getAccessoryPrice } from "../../../utils/getPrice";
 import scrollTo from "../../../utils/scroll";
 import { zodResolver } from "@hookform/resolvers/zod";
 import AccessoryFeedback from "./components/AccessoryFeedback";
+import LoadingFeedbackItem from "./components/LoadingFeedbackItem";
 
 const schema = z.object({
   size: z.coerce
@@ -22,6 +23,8 @@ const schema = z.object({
 });
 
 export default function AccessoryDetail() {
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.searchParams);
   const { accessoryId } = useParams();
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const [size, setSize] = useState(3);
@@ -225,7 +228,29 @@ export default function AccessoryDetail() {
         </div>
       </div>
       <div className="w-full bg-[#fcf9f5] flex flex-col items-center mb-20">
-        {feedbacks?.data && <AccessoryFeedback data={feedbacks?.data} />}
+        {/* {feedbacks?.data && <AccessoryFeedback data={feedbacks?.data} />} */}
+        <div className="w-[1200px]">
+          <div className="w-full text-2xl font-bold mt-4 pb-4 border-b border-black">
+            Accessory Review
+          </div>
+          {feedbacks?.data?.feedbacks?.length == 0 && (
+            <Empty
+              description="This product doesn't have any feedback yet"
+              className="text-xl py-10"
+              imageStyle={{ height: 200 }}
+            />
+          )}
+          {feedbacks.isLoading && (
+            <>
+              <LoadingFeedbackItem />
+              <LoadingFeedbackItem />
+              <LoadingFeedbackItem />
+            </>
+          )}
+          {feedbacks?.data?.feedbacks && (
+            <AccessoryFeedback data={feedbacks?.data} />
+          )}
+        </div>
       </div>
     </div>
   );

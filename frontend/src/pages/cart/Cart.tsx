@@ -11,6 +11,7 @@ import { useQueries } from "@tanstack/react-query";
 import { getAccessoryPrice, getDiamondPrice } from "../../utils/getPrice";
 
 const Cart: React.FC = () => {
+  
   const [isLoading] = useState(false);
   const [totalPriceCart, setTotalPriceCart] = useState(0);
   const navigate = useNavigate();
@@ -84,8 +85,9 @@ const Cart: React.FC = () => {
               type="default"
               href="/product/diamond"
             >
-              Continue shopping
+              Continue shopping 
             </a>
+            
           </div>
         </div>
       ) : (
