@@ -9,6 +9,7 @@ namespace backend.Interfaces
     {
         Task<IEnumerable<GroupedTransactionDTO>> GetAllTransactionsAsync();
         Task<List<AccessoryDTO>> GetAccessoryReport();
+        Task<ReportDTO> GetReport();
         Task<List<AccountDTO>> GetSalesReport();
         Task<List<AccountDTO>> GetDeliveryReport();
         Task<List<AccountDTO>> GetCustomerReport();
