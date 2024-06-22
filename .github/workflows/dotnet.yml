@@ -29,7 +29,7 @@ jobs:
         run: dotnet restore ./backend # Restore project dependencies
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore ./backend # Build the project
+        run: dotnet build --configuration Release ./backend # Build the project
 
       - name: Test
         run: dotnet test --no-restore --verbosity normal ./backend # Run tests
