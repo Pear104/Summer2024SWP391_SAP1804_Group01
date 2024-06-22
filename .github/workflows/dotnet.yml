@@ -1,3 +1,4 @@
+Bùi Gia Bảo
 name: .NET
 
 on:
@@ -8,6 +9,8 @@ on:
 
 jobs:
   build:
+    env:
+      ASPNETCORE_ENVIRONMENT: "Development"
     runs-on: self-hosted
 
     steps:
@@ -19,30 +22,15 @@ jobs:
         with:
           dotnet-version: 8.0.x # Specify the exact .NET SDK version
 
-      - name: List backend directory
-        run: ls -la ./backend # List contents of the backend directory to verify the structure
-
-      - name: Create bin and obj directories
-        run: mkdir -p ./backend/bin ./backend/obj # Ensure necessary directories are created
-
-      - name: Restore dependencies
-        run: dotnet restore ./backend # Restore project dependencies
-
-      - name: Build
-        run: dotnet build --configuration Release --no-restore ./backend --runtime ubuntu.22.04-x64 --output ./backend/bin/datj-backend # Build the project
-
-      - name: List output directory
-        run: ls -la ./backend/bin/datj-backend # List contents of the output directory to verify the build output
-
       - name: Test
         run: dotnet test --no-restore --verbosity normal ./backend # Run tests
 
+      - name: Build
+        run: dotnet build --configuration Release --no-restore ./backend --runtime linux-x64 # Build the project
+
       - name: Deploy to server
         run: |
-          # Example deployment steps
-          # Copy files to the deployment directory
-          cp -r ./backend/bin/datj-backend /home/datnt/datj-backend
-
-          # Restart the application service (modify as needed)
+          rm -r /home/datnt/datj-backend 
+          cp -r ./backend/bin/net8.0/linux-x64/* /home/datnt/datj-backend
           sudo systemctl restart datj-backend.service
         shell: bash
