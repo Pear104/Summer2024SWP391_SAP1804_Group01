@@ -68,14 +68,16 @@ namespace backend.Repository
             await _context.SaveChangesAsync();
             return existedAccount;
         }
-        public async Task<Account?> UpdatePasswordAsync(long id, UpdatePasswordAccountDTO accountDto){
+        public async Task<Account?> UpdatePasswordAsync(long id, UpdatePasswordAccountDTO accountDto)
+        {
             var existedAccount = await _context.Accounts.FindAsync(id);
             if (existedAccount == null)
             {
                 return null;
             }
             bool checkPass = PasswordHasher.VerifyPassword(accountDto.CurPassword, existedAccount.Password);
-            if (!checkPass){
+            if (!checkPass)
+            {
                 return null;
             }
             existedAccount.Password = PasswordHasher.HashPassword(accountDto.Password);
@@ -102,29 +104,31 @@ namespace backend.Repository
                 .ToListAsync();
         }
 
-        public async Task<ListWithPagingDTO<Account>> SearchAccountOnRole(AccountSearchQuery query)
+        public async Task<ListWithPagingDTO<Account>> SearchAccountOnRole(AccountSearchQuery accountQuery)
         {
             ListWithPagingDTO<Account> result;
             var accountsQuery = _context
                 .Accounts.AsQueryable();
-            if (!string.IsNullOrEmpty(query.GetRole()))
+            if (!string.IsNullOrEmpty(accountQuery.GetRole()))
             {
-                var role = Enum.Parse<Role>(query.GetRole());
+                var role = Enum.Parse<Role>(accountQuery.GetRole());
                 accountsQuery = accountsQuery.Where(x => x.Role == role);
             }
-            accountsQuery = accountsQuery.Where(x => x.Name.Contains(query.AccountName) && x.PhoneNumber.Contains(query.AccountPhoneNumber));
+            accountsQuery = accountsQuery.Where(x => x.Name.Contains(accountQuery.AccountName)
+                                                  && x.PhoneNumber.Contains(accountQuery.AccountPhoneNumber)
+                                                  );
             var totalCount = accountsQuery.Count();
             var accountsModel = await accountsQuery
-                 .Skip((query.pageNumber - 1) * query.PageSize)
-                 .Take(query.PageSize)
+                 .Skip((accountQuery.pageNumber - 1) * accountQuery.PageSize)
+                 .Take(accountQuery.PageSize)
                  .ToListAsync();
             result = new()
             {
                 Content = accountsModel,
-                CurrentPage = query.pageNumber,
-                PageSize = query.PageSize,
+                CurrentPage = accountQuery.pageNumber,
+                PageSize = accountQuery.PageSize,
                 TotalCount = totalCount,
-                TotalPages = (int)Math.Ceiling((totalCount) / (double)query.PageSize)
+                TotalPages = (int)Math.Ceiling((totalCount) / (double)accountQuery.PageSize)
             };
             return result;
         }

@@ -66,9 +66,7 @@ export default function ProductsManage() {
   });
 
   const diamondsData = diamond?.data?.diamonds || [];
-
   console.log(diamondsData);
-
   const renderDiamondRow = (diamond: any) => (
     <DiamondRow
       key={diamond.diamondId}
@@ -354,7 +352,7 @@ export default function ProductsManage() {
                         params.set("PageNumber", page.toString());
                         params.set("PageSize", pageSize.toString());
                         navigate(url.pathname + "?" + params.toString());
-                        setQueryUrl("/api/Accounts/Customer?" + params.toString());
+                        setQueryUrl("/api/Diamonds?" + params.toString());
                         setSearchTerm("");
                       }}
                       showSizeChanger={true}
@@ -362,7 +360,7 @@ export default function ProductsManage() {
                         setPageSize(size);
                         params.set("PageSize", size.toString());
                         navigate(url.pathname + "?" + params.toString());
-                        setQueryUrl("/api/Accounts/Customer?" + params.toString());
+                        setQueryUrl("/api/Diamonds?" + params.toString());
                       }}
                     />
                   )}

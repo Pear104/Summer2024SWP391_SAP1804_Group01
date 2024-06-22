@@ -46,10 +46,13 @@ namespace backend.Mappers
                 OrderDetailId = orderDetail.OrderDetailId,
                 OrderId = orderDetail.OrderId,
                 Size = orderDetail.Size,
-                Diamond = orderDetail.Diamond.ToDiamondDTO(),
-                Accessory = orderDetail.Accessory?.ToAccessoryDTO(),
-                DiamondPrice = orderDetail.DiamondPrice.ToDiamondPriceDTO(),
-                MaterialPrice = orderDetail.MaterialPrice?.ToMaterialPriceDTO(),
+                Diamond = orderDetail.Diamond != null ?
+                    orderDetail.Diamond.ToDiamondDTO() : null,
+                Accessory = orderDetail.Accessory != null ?
+                    orderDetail.Accessory.ToAccessoryDTO() : null,
+                DiamondPrice = orderDetail.DiamondPrice != null ?
+                    orderDetail.DiamondPrice.ToDiamondPriceDTO() : null,
+                MaterialPrice = orderDetail.MaterialPrice != null ?                         orderDetail.MaterialPrice.ToMaterialPriceDTO() : null,
                 WarrantyCardId = orderDetail.WarrantyCard.WarrantyCardId
             };
         }
