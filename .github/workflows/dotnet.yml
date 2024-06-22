@@ -32,5 +32,5 @@ jobs:
 
       - name: Deploy to server
         run: |
-          yes | cp -rf ./backend/bin/net8.0/linux-x64/* /home/datnt/datj-backend/
+          cp -rf ./backend/bin/net8.0/linux-x64/* /home/datnt/datj-backend/
         shell: bash
