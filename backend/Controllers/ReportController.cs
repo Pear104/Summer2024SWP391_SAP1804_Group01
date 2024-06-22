@@ -30,11 +30,17 @@ namespace backend.Controllers
             var sales = await _reportService.GetSalesReport();
             return Ok(sales);
         }
-        // [HttpGet("DeliveryReport")]
-        // public async Task<ActionResult> GetDeliveryReport()
-        // {
-        //     var delivery = await _reportService.GetDeliveryReport();
-        //     return Ok(delivery);
-        // }
+        [HttpGet("DeliveryReport")]
+        public async Task<ActionResult> GetDeliveryReport()
+        {
+            var delivery = await _reportService.GetDeliveryReport();
+            return Ok(delivery);
+        }
+        [HttpGet("PotentialCustomerReport")]
+        public async Task<ActionResult> GetPotentialCustomerReport()
+        {
+            var customers = await _reportService.GetCustomerReport();
+            return Ok(customers);
+        }
     }
 }

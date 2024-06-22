@@ -6,9 +6,11 @@ namespace backend.Interfaces
 {
     public interface IReportRepository
     {
-         Task<IEnumerable<GroupedTransactionDTO>> GetAllTransactionsAsync();
-         Task<List<AccessoryDTO>> GetAccessoryReport();
-         Task<List<AccountDTO>> GetSalesReport();
-         // Task<List<DeliveryDTO>> GetDeliveryReport();
+        Task<IEnumerable<GroupedTransactionDTO>> GetAllTransactionsAsync();
+        Task<List<AccessoryDTO>> GetAccessoryReport();
+        Task<List<AccountDTO>> GetSalesReport();
+        Task<List<AccountDTO>> GetDeliveryReport();
+        Task<List<AccountDTO>> GetCustomerReport();
+
     }
 }

@@ -22,14 +22,14 @@ jobs:
     - name: List backend directory
       run: ls -la ./backend  # List contents of the backend directory to verify the structure
 
-    - name: Create bin and obj directories
-      run: mkdir -p ./backend/bin ./backend/obj  # Ensure necessary directories are created
+    #- name: Create bin and obj directories
+      #run: mkdir -p ./backend/bin ./backend/obj  # Ensure necessary directories are created
 
     - name: Restore dependencies
       run: dotnet restore ./backend  # Restore project dependencies
 
     - name: Build
-      run: dotnet build --configuration Release --no-restore ./backend  # Build the project
+      run: dotnet build --no-restore ./backend  # Build the project
 
     - name: Test
       run: dotnet test --no-restore --verbosity normal ./backend  # Run tests

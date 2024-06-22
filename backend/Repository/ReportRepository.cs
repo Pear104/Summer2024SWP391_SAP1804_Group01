@@ -11,19 +11,19 @@ using backend.DTOs.Account;
 
 namespace backend.Repository
 {
-    public class ReportRepository :  IReportRepository
+    public class ReportRepository : IReportRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public ReportRepository (ApplicationDbContext context)
+        public ReportRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
         public async Task<List<AccessoryDTO>> GetAccessoryReport()
-        {            
+        {
             var accessoryInOrderList = new List<(long id, int inOrderNumber)>();
-            var orders =  _context.Orders.AsQueryable();
+            var orders = _context.Orders.AsQueryable();
             var orderDTOs = await orders
                 .OrderByDescending(x => x.CreatedAt)
                 .Select(x => new OrderDTO
@@ -38,11 +38,11 @@ namespace backend.Repository
                         MaterialPrice = y.MaterialPrice != null ? y.MaterialPrice.ToMaterialPriceDTO() : null,
                         ItemPrice = y.ItemPrice,
                         Size = y.Size,
-                        
+
                     }).ToList(),
-                    
-                    
-                    })
+
+
+                })
                 .ToListAsync();
 
             foreach (var order in orderDTOs)
@@ -50,7 +50,7 @@ namespace backend.Repository
                 foreach (var orderDetail in order.OrderDetails)
                 {
                     var accessory = orderDetail.Accessory;
-                    if(accessory!=null)
+                    if (accessory != null)
                     {
                         int index = accessoryInOrderList.FindIndex(x => x.id == accessory.AccessoryId);
                         if (index != -1)
@@ -68,13 +68,13 @@ namespace backend.Repository
             }
             accessoryInOrderList.Sort((x, y) => y.inOrderNumber.CompareTo(x.inOrderNumber));
             var returnAccessories = new List<AccessoryDTO>();
-            foreach(var item in accessoryInOrderList)
+            foreach (var item in accessoryInOrderList)
             {
                 var accessory = _context.Accessories
                     .Include(x => x.Shape)
                     .Include(x => x.AccessoryType)
-                    .Include(x=> x.AccessoryImages)
-                    .FirstOrDefault(x=>x.AccessoryId == item.id);
+                    .Include(x => x.AccessoryImages)
+                    .FirstOrDefault(x => x.AccessoryId == item.id);
                 returnAccessories.Add(accessory.ToAccessoryDTO());
             }
             return returnAccessories.Take(5).ToList();
@@ -107,7 +107,7 @@ namespace backend.Repository
             var accounts = _context.Accounts.Where(x => x.Role == role).AsQueryable();
             var accountDTOs = await accounts
             .OrderByDescending(x => x.OrdersOfSaleStaff.Count)
-            .Select(x => new AccountDTO 
+            .Select(x => new AccountDTO
             {
                 AccountId = x.AccountId,
                 Name = x.Name,
@@ -130,6 +130,69 @@ namespace backend.Repository
                 TotalOrders = x.OrdersOfSaleStaff.Where(x => x.OrderStatus != OrderStatus.Pending && x.OrderStatus != OrderStatus.Processing).ToList().Count,
             }).ToListAsync();
             return accountDTOs.Take(5).ToList();
+        }
+
+        public async Task<List<AccountDTO>> GetDeliveryReport()
+        {
+            var role = Role.DeliveryStaff;
+            var accounts = _context.Accounts.Where(x => x.Role == role).AsQueryable();
+            var accountDTOs = await accounts
+            .OrderByDescending(x => x.OrdersOfDeliveryStaff.Count)
+            .Select(x => new AccountDTO
+            {
+                AccountId = x.AccountId,
+                Name = x.Name,
+                // Role = x.Role.ToString(),
+                // OrdersOfSaleStaff = x.OrdersOfSaleStaff.Select(y => new OrderDTO
+                // {
+                //     OrderId = y.OrderId,
+                //     OrderDetails = y.OrderDetails.Select(z => new OrderDetailDTO
+                //     {
+                //         OrderDetailId = z.OrderDetailId,
+                //         Diamond = z.Diamond != null ? z.Diamond.ToDiamondDTO() : null,
+                //         DiamondPrice = z.DiamondPrice != null ? z.DiamondPrice.ToDiamondPriceDTO() : null,
+                //         Accessory = z.Accessory != null ? z.Accessory.ToAccessoryDTO() : null,
+                //         MaterialPrice = z.MaterialPrice != null ? z.MaterialPrice.ToMaterialPriceDTO() : null,
+                //         ItemPrice = z.ItemPrice,
+                //         Size = z.Size,
+                //     }
+                //     ).ToList(),
+                // }).ToList(),
+                TotalOrders = x.OrdersOfDeliveryStaff.Where(x => x.OrderStatus != OrderStatus.Pending && x.OrderStatus != OrderStatus.Processing).ToList().Count,
+            }).ToListAsync();
+            return accountDTOs.Take(5).ToList();
+        }
+
+        public async Task<List<AccountDTO>> GetCustomerReport()
+        {
+            var role = Role.Customer;
+            var accounts = _context.Accounts.Where(x => x.Role == role).AsQueryable();
+            var accountDTOs = await accounts
+            .OrderByDescending(x => x.OrdersOfCustomer.Count)
+            .Select(x => new AccountDTO
+            {
+                AccountId = x.AccountId,
+                Name = x.Name,
+                // Role = x.Role.ToString(),
+                // OrdersOfSaleStaff = x.OrdersOfSaleStaff.Select(y => new OrderDTO
+                // {
+                //     OrderId = y.OrderId,
+                //     OrderDetails = y.OrderDetails.Select(z => new OrderDetailDTO
+                //     {
+                //         OrderDetailId = z.OrderDetailId,
+                //         Diamond = z.Diamond != null ? z.Diamond.ToDiamondDTO() : null,
+                //         DiamondPrice = z.DiamondPrice != null ? z.DiamondPrice.ToDiamondPriceDTO() : null,
+                //         Accessory = z.Accessory != null ? z.Accessory.ToAccessoryDTO() : null,
+                //         MaterialPrice = z.MaterialPrice != null ? z.MaterialPrice.ToMaterialPriceDTO() : null,
+                //         ItemPrice = z.ItemPrice,
+                //         Size = z.Size,
+                //     }
+                //     ).ToList(),
+                // }).ToList(),
+                TotalOrders = x.OrdersOfCustomer.Where(x => x.OrderStatus != OrderStatus.Pending && x.OrderStatus != OrderStatus.Processing).ToList().Count,
+            }).ToListAsync();
+            return accountDTOs.Take(5).ToList();
+
         }
     }
 }

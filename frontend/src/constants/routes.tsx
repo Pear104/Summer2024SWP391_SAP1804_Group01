@@ -27,8 +27,8 @@ import BlogsManage from "../pages/dashboard/blog/BlogsManage";
 import BlogView from "../pages/dashboard/blog/BlogView";
 import AccessoriesManage from "../pages/dashboard/accessory/AccessoriesManage";
 import AccessoryView from "../pages/dashboard/accessory/AccessoryView";
-import DiamondPriceManage from "../pages/dashboard/diamondPrice/DiamondPriceManage";
-import AccessoryPriceManage from "../pages/dashboard/accessoryPrice/AccessoryPriceManage";
+import DiamondPriceManage from "../pages/dashboard/diamondprice/DiamondPriceManage";
+import AccessoryPriceManage from "../pages/dashboard/accessoryprice/AccessoryPriceManage";
 import CustomerManage from "../pages/dashboard/customer/CustomerManage";
 import TransactionManage from "../pages/dashboard/transaction/TransactionManage";
 import OrderManage from "../pages/dashboard/order/OrderManage";
@@ -50,6 +50,8 @@ import PriceRate from "../pages/dashboard/price_rate/PriceRate";
 import SalesReportManagement from "../pages/dashboard/staffsReport/SalesReportManagement";
 import ChangePassword from "../pages/account/ChangePassword";
 import SearchManagement from "../pages/search/SearchManagement";
+import PotentialCustomerReportManagement from "../pages/dashboard/staffsReport/CustomersReportManagement";
+import DeliveryReportManagement from "../pages/dashboard/staffsReport/DeliveryReportManagement";
 const routes = [
   {
     errorElement: <Error />,
@@ -134,6 +136,14 @@ const routes = [
           {
             element: <SalesReportManagement />,
             path: "/admin/sales-report",
+          },
+          {
+            element: <DeliveryReportManagement />,
+            path: "/admin/delivery-report",
+          },
+          {
+            element: <PotentialCustomerReportManagement />,
+            path: "/admin/potential-customer-report",
           },
           {
             path: "blogs",

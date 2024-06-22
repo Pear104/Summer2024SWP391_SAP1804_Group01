@@ -36,6 +36,8 @@ const ROLE_PERMISSIONS: Record<Role, string[]> = {
     "accessory-price",
     "blog",
     "sales-report",
+    "delivery-report",
+    "potential-customer-report"
   ],
   Manager: [
     "dashboard",
@@ -51,6 +53,8 @@ const ROLE_PERMISSIONS: Record<Role, string[]> = {
     "staffs-report",
     "price-rate",
     "sales-report",
+    "delivery-report",
+    "potential-customer-report"
   ],
   SaleStaff: ["dashboard", "salestaff", "warranty-request"],
   DeliveryStaff: ["dashboard", "deliverystaff", "deliverywarrantystaff"],
@@ -165,6 +169,19 @@ export default function Sidebar() {
       path: "/admin/sales-report",
       icon: <BsTextParagraph />,
     },
+    {
+      key: "delivery-report",
+      label: "Delivery staffs report",
+      path: "/admin/delivery-report",
+      icon: <BsTextParagraph />,
+    },
+    {
+      key: "potential-customer-report",
+      label: "Potential customer",
+      path: "/admin/potential-customer-report",
+      icon: <BsTextParagraph />,
+    },
+
   ];
 
   const filteredLinks = DASHBOARD_SIDEBAR_LINKS.filter((link) =>
