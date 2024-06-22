@@ -32,7 +32,7 @@ jobs:
 
       - name: Deploy to server
         run: |
-          rm -r /home/datnt/datj-backend 
+          rm -r /home/datnt/DatJ-Backend 
           cp -r ./backend/bin/net8.0/linux-x64/* /home/datnt/datj-backend
           sudo systemctl restart datj-backend.service
         shell: bash
