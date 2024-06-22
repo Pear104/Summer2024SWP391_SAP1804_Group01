@@ -21,6 +21,9 @@ jobs:
         with:
           dotnet-version: 8.0.x # Specify the exact .NET SDK version
 
+      - name: Restore dependencies
+        run: dotnet restore ./backend # Restore project dependencies
+
       - name: Test
         run: dotnet test --no-restore --verbosity normal ./backend # Run tests
 
