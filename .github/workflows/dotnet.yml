@@ -28,11 +28,11 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore ./backend # Restore project dependencies
 
-    - name: Build
-      run: dotnet build --no-restore ./backend  # Build the project
+      - name: Build
+        run: dotnet build --configuration Release --no-restore ./backend --runtime ubuntu.22.04-x64 --output ./backend/bin/datj-backend # Build the project
 
       - name: List output directory
-        run: ls -la ./backend/bin/DatJ-Backend # List contents of the output directory to verify the build output
+        run: ls -la ./backend/bin/datj-backend # List contents of the output directory to verify the build output
 
       - name: Test
         run: dotnet test --no-restore --verbosity normal ./backend # Run tests
@@ -41,7 +41,7 @@ jobs:
         run: |
           # Example deployment steps
           # Copy files to the deployment directory
-          cp -r ./backend/bin/DatJ-Backend /home/datnt/DatJ-Backend
+          cp -r ./backend/bin/datj-backend /home/datnt/datj-backend
 
           # Restart the application service (modify as needed)
           sudo systemctl restart datj-backend.service
