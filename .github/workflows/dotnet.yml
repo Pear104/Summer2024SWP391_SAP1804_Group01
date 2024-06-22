@@ -8,7 +8,9 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    env:
+      ASPNETCORE_ENVIRONMENT: "Development"
+    runs-on: self-hosted
 
     steps:
       - name: Checkout repository
@@ -19,20 +21,14 @@ jobs:
         with:
           dotnet-version: 8.0.x # Specify the exact .NET SDK version
 
-      - name: List backend directory
-        run: ls -la ./backend # List contents of the backend directory to verify the structure
-
-      - name: Create bin and obj directories
-        run: mkdir -p ./backend/bin ./backend/obj # Ensure necessary directories are created
-
       - name: Restore dependencies
         run: dotnet restore ./backend # Restore project dependencies
 
-      - name: Build
-        run: dotnet build --configuration Release ./backend # Build the project
-
       - name: Test
-        run: dotnet test --no-restore --verbosity normal ./backend # Run tests
+        run: dotnet test --verbosity normal ./backend # Run tests
+
+      - name: Build
+        run: dotnet build --configuration Release ./backend --runtime linux-x64 # Build the project
 
       - name: Deploy to server
         run: |
