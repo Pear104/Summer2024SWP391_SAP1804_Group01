@@ -15,6 +15,7 @@
 		<UserSecretsId>03ff59af-83f5-4bd0-9fb0-543b194c6228</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerfileContext>.</DockerfileContext>
+		<Platforms>AnyCPU</Platforms>
 	</PropertyGroup>
 	<!-- <PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
