@@ -1,8 +1,6 @@
-import { useQueries } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { IoBagHandle, IoCart, IoPeople, IoPieChart } from "react-icons/io5";
+import { IoBagHandle, IoCart, IoPeople } from "react-icons/io5";
 import { GET } from "../../../utils/request";
-import { useSearchStore } from "../../../store/searchStore";
 
 export default function DashBoardStatsGrid() {
   const [data, setData] = useState<any>();

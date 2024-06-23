@@ -1,21 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 //set up interface
 //set up default value
 function calculateRank(reward_point: number): string {
   if (reward_point < 500) {
-    return 'Bronze';
+    return "Bronze";
   } else if (reward_point < 1000) {
-    return 'Silver';
+    return "Silver";
   } else if (reward_point < 1500) {
-    return 'Gold';
+    return "Gold";
   } else if (reward_point < 2000) {
-    return 'Platinum';
+    return "Platinum";
   } else if (reward_point < 2500) {
-    return 'Emerald';
+    return "Emerald";
   } else {
-    return 'Diamond';
+    return "Diamond";
   }
 }
 
@@ -23,12 +22,10 @@ function CustomerRow({
   account,
   selectedAccount,
   setSelectedAccount,
-  price,
 }: {
   account: any;
   selectedAccount: number[];
   setSelectedAccount: React.Dispatch<React.SetStateAction<number[]>>;
-  price: any;
 }) {
   if (!account) {
     return (
@@ -46,9 +43,10 @@ function CustomerRow({
   return (
     <>
       <tr key={account.accountId}>
-        <td className="px-6 py-4 whitespace-nowrap">  {/* start select checkbox */}
+        <td className="px-6 py-4 whitespace-nowrap">
+          {" "}
+          {/* start select checkbox */}
           <div className="flex items-center">
-
             <label className="flex items-center">
               <input
                 type="checkbox"
@@ -57,10 +55,7 @@ function CustomerRow({
                 checked={selectedAccount.includes(account.accountId)}
                 onChange={(e) => {
                   if (e.target.checked) {
-                    setSelectedAccount([
-                      ...selectedAccount,
-                      account.accountId,
-                    ]);
+                    setSelectedAccount([...selectedAccount, account.accountId]);
                   } else {
                     setSelectedAccount(
                       selectedAccount.filter((id) => id !== account.accountId)
@@ -73,48 +68,76 @@ function CustomerRow({
               <input type="hidden" value="0" />
             </label>
           </div>
-        </td> {/* end select checkbox */}
+        </td>{" "}
+        {/* end select checkbox */}
         {/* map diamond */}
         <td className="px-6 py-4 whitespace-nowrap">
           {/*start account id*/}
           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             {account.accountId}
           </td>
-        </td> {/*end account id*/}
-
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">  {/*start account nam*/}
+        </td>{" "}
+        {/*end account id*/}
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          {" "}
+          {/*start account nam*/}
           {account.name}
-        </td> {/*end account name*/}
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">  {/*start account birthday*/}
+        </td>{" "}
+        {/*end account name*/}
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          {" "}
+          {/*start account birthday*/}
           {account.birthday}
-        </td> {/*end account birthday*/}
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">  {/*start account gender*/}
+        </td>{" "}
+        {/*end account birthday*/}
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          {" "}
+          {/*start account gender*/}
           {account.gender}
-        </td> {/*end account gender*/}
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">  {/*start account emai*/}
+        </td>{" "}
+        {/*end account gender*/}
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          {" "}
+          {/*start account emai*/}
           {account.email}
-        </td> {/*end account email*/}
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">  {/*start account phone number*/}
+        </td>{" "}
+        {/*end account email*/}
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          {" "}
+          {/*start account phone number*/}
           {account.phoneNumber}
-        </td> {/*end account phone number*/}
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">  {/*start account address*/}
+        </td>{" "}
+        {/*end account phone number*/}
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          {" "}
+          {/*start account address*/}
           {account.address}
-        </td> {/*end account address*/}
-        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">  {/*start account total order*/}
+        </td>{" "}
+        {/*end account address*/}
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          {" "}
+          {/*start account total order*/}
           {account.totalOrders}
-        </td> {/*end account total order*/}
-        <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">  {/*start account reward point*/}
+        </td>{" "}
+        {/*end account total order*/}
+        <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+          {" "}
+          {/*start account reward point*/}
           <div className="text-indigo-600 hover:text-indigo-900">
             {account.rewardPoint}
           </div>
-        </td> {/*end account reward point*/}
-        <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">  {/*start account rank*/}
+        </td>{" "}
+        {/*end account reward point*/}
+        <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+          {" "}
+          {/*start account rank*/}
           <div className="text-indigo-600 hover:text-indigo-900">
             {calculateRank(account.rewardPoint)}
           </div>
-        </td> {/*end account rank*/}
+        </td>{" "}
+        {/*end account rank*/}
       </tr>
     </>
   );
 }
-export default CustomerRow
+export default CustomerRow;

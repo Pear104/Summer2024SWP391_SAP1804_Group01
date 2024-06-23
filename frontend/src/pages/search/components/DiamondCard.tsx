@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function DiamondCard({ diamond }: { diamond: any }) {
   return (
     <div className="border border-gray-300 p-4 rounded">

@@ -12,7 +12,7 @@ import {
 import Logo from "../logo/Logo";
 import { message } from "antd";
 import SearchBar from "../SearchBar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import JewelryItem from "./components/JewelryItem";
 import DiamondItem from "./components/DiamondItem";
 import { Link, useNavigate } from "react-router-dom";

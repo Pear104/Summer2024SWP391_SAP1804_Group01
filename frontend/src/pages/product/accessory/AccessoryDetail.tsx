@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GET } from "../../../utils/request";
-import { Button, Empty, Form, Image, Input, Pagination, Skeleton } from "antd";
+import { Button, Empty, Form, Image, Input, Skeleton } from "antd";
 import { FormItem } from "react-hook-form-antd";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -23,8 +23,6 @@ const schema = z.object({
 });
 
 export default function AccessoryDetail() {
-  const url = new URL(window.location.href);
-  const params = new URLSearchParams(url.searchParams);
   const { accessoryId } = useParams();
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const [size, setSize] = useState(3);

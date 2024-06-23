@@ -1,19 +1,18 @@
-import React, { StrictMode, useState, useEffect } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSearchStore } from "../../../store/searchStore";
 import { useQueries } from "@tanstack/react-query";
 import { GET } from "../../../utils/request";
 import CustomerRow from "./CustomerRow";
 import { Empty, Form, Input, Pagination, Skeleton } from "antd";
-import CustomerColumnHeader from "./componenets/CustomerColumnHeader"
-
+import CustomerColumnHeader from "./componenets/CustomerColumnHeader";
 
 function CustomerManage() {
-  const [selectedCustomers, setSelectedCustomers] = useState<number[]>([]);
+  const [_selectedCustomers, setSelectedCustomers] = useState<number[]>([]);
   const getAllCustomerAPI: string = "/api/Accounts/Customer?";
   const location = useLocation();
-  const [statusText, setStatusText] = useState("Status");
-  const [productTypeText, setProductTypeText] = useState("Product Type");
+  const [_statusText, setStatusText] = useState("Status");
+  // const [productTypeText, setProductTypeText] = useState("Product Type");
   // sort item
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
@@ -28,7 +27,7 @@ function CustomerManage() {
     "Address",
     "Total order",
     "Reward point",
-    "Rank"
+    "Rank",
   ];
 
   const navigate = useNavigate();
@@ -60,8 +59,8 @@ function CustomerManage() {
         queryKey: ["customer", queryUrl],
         queryFn: () => GET(queryUrl),
         staleTime: Infinity,
-      }
-    ]
+      },
+    ],
   });
 
   //check if {query return any data}? {get customers json from body} : {[]}
@@ -73,7 +72,6 @@ function CustomerManage() {
       account={customer}
       selectedAccount={selectedCustomer}
       setSelectedAccount={setSelectedCustomer}
-      price={0}
     />
   );
   const [selectAll, setSelectAll] = useState(false);
@@ -83,7 +81,6 @@ function CustomerManage() {
     params.set("PageSize", pageSize.toString());
     navigate(url.pathname + "?" + params.toString());
     setQueryUrl(getAllCustomerAPI + params.toString());
-
   }, [pageSize]);
 
   const handleAction = (action: string) => {
@@ -98,16 +95,21 @@ function CustomerManage() {
     <>
       <div className="p-4">
         <div className="flex justify-between items-center mt-6 mx-auto mb-8">
-          <div className="flex justify-start space-x-1 items-center"> {/* start header */}
+          <div className="flex justify-start space-x-1 items-center">
+            {" "}
+            {/* start header */}
             <div className="self-center">
               <h1 className="text-2xl">Customer List</h1>
             </div>
           </div>
         </div>
         <div className="shadow bg-slate-50-200 border border-r-white">
-
-          <div className="border-b-gray-200 p-[1rem] box-border"> {/* start filter bar */}
-            <div className="flex justify-between mb-1 items-center">  {/* start filter */}
+          <div className="border-b-gray-200 p-[1rem] box-border">
+            {" "}
+            {/* start filter bar */}
+            <div className="flex justify-between mb-1 items-center">
+              {" "}
+              {/* start filter */}
               <h3>
                 <Form
                   name="search_form"
@@ -162,9 +164,11 @@ function CustomerManage() {
                   </a>
                 </div>
               </div>
-            </div>  {/* end filter */}
+            </div>{" "}
+            {/* end filter */}
             <div className="pt-lg"></div>
-          </div>  {/* end filter bar */}
+          </div>{" "}
+          {/* end filter bar */}
           {/* listing items */}
           <div className="flex flex-col">
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
