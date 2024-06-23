@@ -1,14 +1,26 @@
+import { Link } from "react-router-dom";
+
 export default function AccessoryCard({ accessory }: { accessory: any }) {
   return (
-    <div className="border border-gray-300 p-4 rounded">
-      <img
-        src={accessory.accessoryImages[0].url}
-        alt={accessory.name}
-        className="w-full h-48 object-cover mb-2"
-      />
-      <h2 className="text-lg font-semibold">{accessory.name}</h2>
-      <p className="text-gray-700">{`Karat: ${accessory.karat}`}</p>
-      <p className="text-gray-700">{`Weight: ${accessory.materialWeight}g`}</p>
-    </div>
+    <Link
+      className="items-center w-full justify-around hover:shadow-xl py-2 px-4 m-2 duration-150"
+      to={`/product/accessory/detail/${accessory.accessoryId}`}
+    >
+      <div
+        className="relative my-2 aspect-square bg-cover bg-center bg-no-repeat w-full"
+        style={{
+          backgroundImage: `url(${accessory.accessoryImages[0].url})`,
+        }}
+      >
+        <div className="text-base italic text-red-400">
+          *The images is for illustration purpose.
+        </div>
+      </div>
+      <div>
+        <div className="w-full flex libre-baskerville-regular">
+          {accessory.name}
+        </div>
+      </div>
+    </Link>
   );
 }

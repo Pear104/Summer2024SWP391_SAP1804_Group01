@@ -4,6 +4,7 @@ import { useState } from "react";
 export default function SearchBar() {
   const [focus, setFocus] = useState(false);
   const [keyword, setKeyword] = useState("");
+
   return (
     <div
       className={`flex border-2 py-1 ${

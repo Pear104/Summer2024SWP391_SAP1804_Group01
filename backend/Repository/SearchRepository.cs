@@ -108,7 +108,7 @@ namespace backend.Repository
             return new SearchResult
             {
                 Diamonds = diamondDTOs,
-                Accessorys = accessoryDTOs,
+                Accessories = accessoryDTOs,
                 TotalPages = totalPages,
                 PageSize = query.PageSize,
                 CurrentPage = query.PageNumber,

@@ -2,9 +2,9 @@ name: .NET
 
 on:
   push:
-    branches: ["main", "controllers"]
+    branches: ["main", "controllers", "deploy"]
   pull_request:
-    branches: ["main", "controllers"]
+    branches: ["main", "controllers", "deploy"]
 
 jobs:
   build:
@@ -25,14 +25,12 @@ jobs:
         run: dotnet restore ./backend # Restore project dependencies
 
       - name: Test
-        run: dotnet test --no-restore --verbosity normal ./backend # Run tests
+        run: dotnet test --verbosity normal ./backend # Run tests
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore ./backend --runtime linux-x64 # Build the project
+        run: dotnet build --configuration Release ./backend --runtime linux-x64 # Build the project
 
       - name: Deploy to server
         run: |
-          rm -r /home/datnt/datj-backend 
-          cp -r ./backend/bin/net8.0/linux-x64/* /home/datnt/datj-backend
-          sudo systemctl restart datj-backend.service
+          cp -rf ./backend/bin/net8.0/linux-x64/* /home/datnt/datj-backend/
         shell: bash
