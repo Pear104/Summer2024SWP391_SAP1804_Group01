@@ -1,13 +1,5 @@
 import { DownOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Dropdown,
-  Form,
-  Input,
-  Menu,
-  Pagination,
-  Skeleton,
-} from "antd";
+import { Button, Dropdown, Form, Input, Menu, Pagination } from "antd";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { GET } from "../../../utils/request";

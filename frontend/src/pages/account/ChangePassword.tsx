@@ -5,9 +5,7 @@ import { FormItem } from "react-hook-form-antd";
 import { useForm } from "react-hook-form";
 import { Button, Form, Input, App } from "antd";
 import { zodResolver } from "@hookform/resolvers/zod";
-import jwtDecode from "jwt-decode";
 import * as z from "zod";
-import moment from "moment";
 import { useNavigate } from "react-router-dom";
 const schema = z
   .object({
@@ -64,7 +62,7 @@ export default function ChangePassword() {
           className="w-full grid grid-cols-2 gap-x-4"
           onFinish={handleSubmit(async (formData) => {
             // setIsLoading(true);
-            var response = await PUT(
+            const response = await PUT(
               "/api/Accounts/ChangePassword/" + formData.id,
               {
                 curPassword: formData.curPassword,
