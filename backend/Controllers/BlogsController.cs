@@ -44,6 +44,11 @@ namespace backend.Controllers
         public async Task<IActionResult> PostBlog([FromBody] CreateBlogDTO blogDto)
         {
             var authorId = User.FindFirst("accountId")?.Value;
+            //dat fix null 25.06
+            if (authorId == null)
+            {
+                return BadRequest("You dont have permission to create blog.");
+            }
             var newBlog = await _blogRepo.CreateBlogAsync(long.Parse(authorId), blogDto);
             if (newBlog == null)
             {

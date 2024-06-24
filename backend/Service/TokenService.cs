@@ -18,7 +18,9 @@ namespace backend.Service
         public TokenService(IConfiguration config, ApplicationDbContext context)
         {
             _config = config;
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:SigningKey"]));
+
+            //Dat fix null 25/06
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:SigningKey"] ?? throw new InvalidOperationException()));
         }
 
         public string CreateResetToken(ResetPasswordDTO resetPasswordDto)
@@ -110,16 +112,17 @@ namespace backend.Service
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwt = tokenHandler.ReadJwtToken(verifyGmailToken);
 
-            string name = jwt.Claims.FirstOrDefault(c => c.Type == "name")?.Value;
-            string password = jwt.Claims.FirstOrDefault(c => c.Type == "password")?.Value;
-            string phoneNumber = jwt.Claims.FirstOrDefault(c => c.Type == "phoneNumber")?.Value;
-            string address = jwt.Claims.FirstOrDefault(c => c.Type == "address")?.Value;
-            string email = jwt.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+            //Dat fix null 25/06
+            string name = jwt.Claims.FirstOrDefault(c => c.Type == "name")?.Value ?? "";
+            string password = jwt.Claims.FirstOrDefault(c => c.Type == "password")?.Value ?? "";
+            string phoneNumber = jwt.Claims.FirstOrDefault(c => c.Type == "phoneNumber")?.Value ?? "";
+            string address = jwt.Claims.FirstOrDefault(c => c.Type == "address")?.Value ?? "";
+            string email = jwt.Claims.FirstOrDefault(c => c.Type == "email")?.Value ?? "";
             DateTime birthday = DateTime.Parse(
-                jwt.Claims.FirstOrDefault(c => c.Type == "birthday")?.Value
+                jwt.Claims.FirstOrDefault(c => c.Type == "birthday")?.Value ?? ""
             );
             Gender gender = Enum.Parse<Gender>(
-                jwt.Claims.FirstOrDefault(c => c.Type == "gender")?.Value
+                jwt.Claims.FirstOrDefault(c => c.Type == "gender")?.Value ?? ""
             );
 
             var registerDto = new RegisterDTO()

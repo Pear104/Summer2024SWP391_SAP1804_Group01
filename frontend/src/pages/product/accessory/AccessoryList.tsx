@@ -77,27 +77,45 @@ export default function AccessoryList() {
                 />
               ))}
             </div>
-            <div className="mt-10 flex justify-center">
-              <Pagination
-                showTotal={(total, range) =>
-                  `${range[0]}-${range[1]} of ${total} items`
-                }
-                current={Number(params.get("PageNumber")) || 1}
-                defaultCurrent={
-                  (accessories?.data &&
-                    accessories?.data?.currentPage?.toString()) ||
-                  "1"
-                }
-                total={accessories.data.totalCount}
-                pageSize={Number(params.get("PageSize")) || 20}
-                showSizeChanger={false}
-                onChange={(page, _pageSize) => {
-                  params.set("PageNumber", page.toString());
-                  navigate(url.pathname + "?" + params.toString());
-                  setQueryUrl("/api/Accessories?" + params.toString());
-                }}
-              />
-            </div>
+            {accessories?.data && accessories?.data.accessories?.length == 0 ? (
+              <section className="bg-white dark:bg-gray-900">
+                <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+                  <div className="mx-auto max-w-screen-sm text-center">
+                    <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-primary-600 dark:text-primary-500">
+                      Oops
+                    </h1>
+                    <p className="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white pt-3">
+                      There is no accessories available
+                    </p>
+                    <p className="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">
+                      Sorry for this inconvenience. Please come back later.
+                    </p>
+                  </div>
+                </div>
+              </section>
+            ) : (
+              <div className="mt-10 flex justify-center">
+                <Pagination
+                  showTotal={(total, range) =>
+                    `${range[0]}-${range[1]} of ${total} items`
+                  }
+                  current={Number(params.get("PageNumber")) || 1}
+                  defaultCurrent={
+                    (accessories?.data &&
+                      accessories?.data?.currentPage?.toString()) ||
+                    "1"
+                  }
+                  total={accessories.data.totalCount}
+                  pageSize={Number(params.get("PageSize")) || 20}
+                  showSizeChanger={false}
+                  onChange={(page, _pageSize) => {
+                    params.set("PageNumber", page.toString());
+                    navigate(url.pathname + "?" + params.toString());
+                    setQueryUrl("/api/Accessories?" + params.toString());
+                  }}
+                />
+              </div>
+            )}
           </>
         )}
       </div>

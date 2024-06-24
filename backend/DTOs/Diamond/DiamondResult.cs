@@ -7,7 +7,7 @@ namespace backend.DTOs.Diamond
 {
     public class DiamondResult
     {
-        public List<DiamondDTO> Diamonds { get; set; }
+        public List<DiamondDTO>? Diamonds { get; set; }
         public int TotalPages { get; set; }
         public int PageSize { get; set; }
         public int CurrentPage { get; set; }

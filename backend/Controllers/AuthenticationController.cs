@@ -62,8 +62,7 @@ namespace backend.Controllers
             {
                 if (HttpContext.Request.Headers.TryGetValue("Authorization", out var headerAuth))
                 {
-                    var verifyGmailToken = headerAuth
-                        .First()
+                    var verifyGmailToken = headerAuth.First()
                         .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1];
                     System.Console.WriteLine("token:" + verifyGmailToken);
                     var accessToken = await _authenticationService.VerifyGmail(verifyGmailToken);

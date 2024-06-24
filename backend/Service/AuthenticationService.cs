@@ -72,7 +72,8 @@ namespace backend.Service
                 Password = PasswordHasher.HashPassword(registerDto.Password),
                 Role = Role.Customer,
                 Gender = registerDto.Gender,
-                Rank = rank,
+                // Dat fix null 25/06
+                Rank = rank ?? throw new Exception("Rank not found"),
                 PhoneNumber = registerDto.PhoneNumber,
                 Address = registerDto.Address,
                 Birthday = registerDto.Birthday,
@@ -150,7 +151,8 @@ namespace backend.Service
                 Password = PasswordHasher.HashPassword(registerGoogleDto.Password),
                 Role = Role.Customer,
                 Gender = registerGoogleDto.Gender,
-                Rank = rank,
+                // Dat fix null 25/06
+                Rank = rank ?? throw new Exception("Rank not found"),
                 PhoneNumber = registerGoogleDto.PhoneNumber,
                 Address = registerGoogleDto.Address,
                 Birthday = registerGoogleDto.Birthday,
