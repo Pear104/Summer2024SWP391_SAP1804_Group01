@@ -93,6 +93,7 @@ namespace backend.Repository
             var totalCount = await warrantyRequestQueries.CountAsync();
 
             var totalPages = (int)Math.Ceiling((double)totalCount / query.PageSize);
+            // anh duong oiiiiii
             var orderDTOs = await warrantyRequestQueries
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize)
