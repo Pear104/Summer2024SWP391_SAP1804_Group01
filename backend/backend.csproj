@@ -90,6 +90,9 @@
     <None Update="Crawler\SeedData\500_599.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Crawler\SeedData\600_1099.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Crawler\SeedData\50_69.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

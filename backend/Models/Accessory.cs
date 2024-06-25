@@ -27,6 +27,9 @@ namespace backend.Models
         public long AccessoryTypeId { get; set; }
         public AccessoryType AccessoryType { get; set; } = new AccessoryType();
 
+        [Column("is_hidden")]
+        public bool IsHidden { get; set; } = false;
+
         [Column("shape_id")]
         public long ShapeId { get; set; }
         public Shape Shape { get; set; } = new Shape();

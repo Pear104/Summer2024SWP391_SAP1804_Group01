@@ -21,7 +21,7 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetDiamondPrices()
+        public async Task<ActionResult> GetMaterialPrices()
         {
             var materialPriceModels = await _materialPriceRepo.GetAllMaterialPricesAsync();
             var materialPriceDTOs = materialPriceModels.Select(x => x.ToMaterialPriceDTO());
@@ -29,7 +29,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetDiamondPrice(long id)
+        public async Task<ActionResult> GetMaterialPrice(long id)
         {
             var materialPrice = await _materialPriceRepo.GetMaterialPriceByIdAsync(id);
             if (materialPrice == null)
@@ -41,7 +41,7 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostDiamondPrice(
+        public async Task<IActionResult> PostMaterialPrice(
             [FromBody] CreateMaterialPriceDTO materialPriceDto
         )
         {

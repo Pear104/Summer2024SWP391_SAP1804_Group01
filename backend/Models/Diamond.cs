@@ -46,6 +46,9 @@ namespace backend.Models
         [Column("fluorescence")]
         public string Fluorescence { get; set; } = string.Empty;
 
+        [Column("is_hidden")]
+        public bool IsHidden { get; set; } = false;
+
         [Column("availability")]
         public bool Availability { get; set; } = true;
 

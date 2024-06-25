@@ -45,6 +45,10 @@ namespace backend.Models
 
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        [Column("is_disable")]
+        public bool IsDisable { get; set; } = false;
+
         public List<Order> OrdersOfCustomer { get; set; } = new List<Order>();
         public List<Order> OrdersOfSaleStaff { get; set; } = new List<Order>();
         public List<Order> OrdersOfDeliveryStaff { get; set; } = new List<Order>();
