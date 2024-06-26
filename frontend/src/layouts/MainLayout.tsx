@@ -7,7 +7,6 @@ export default function MainLayout() {
   const [hideFooter, setHideFooter] = useState(false);
   const location = useLocation();
   useEffect(() => {
-    console.log(location.pathname);
     if (location.pathname.includes("about")) {
       setHideFooter(true);
     } else {
@@ -16,9 +15,11 @@ export default function MainLayout() {
   }, [location]);
   return (
     <div className="relative overflow-x-hidden">
-      <TopNav />
+      <span className="sm:hidden">
+        <TopNav />
+      </span>
       <Outlet />
-      {!hideFooter && <Footer />}
+      <span className="sm:hidden">{!hideFooter && <Footer />}</span>
     </div>
   );
 }

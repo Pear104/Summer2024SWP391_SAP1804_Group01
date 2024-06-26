@@ -37,7 +37,7 @@ const ROLE_PERMISSIONS: Record<Role, string[]> = {
     "blog",
     "sales-report",
     "delivery-report",
-    "potential-customer-report"
+    "potential-customer-report",
   ],
   Manager: [
     "dashboard",
@@ -54,7 +54,7 @@ const ROLE_PERMISSIONS: Record<Role, string[]> = {
     "price-rate",
     "sales-report",
     "delivery-report",
-    "potential-customer-report"
+    "potential-customer-report",
   ],
   SaleStaff: ["dashboard", "salestaff", "warranty-request"],
   DeliveryStaff: ["dashboard", "deliverystaff", "deliverywarrantystaff"],
@@ -123,13 +123,13 @@ export default function Sidebar() {
     },
     {
       key: "deliverystaff",
-      label: "Delivery Staffs",
+      label: "Delivery Order",
       path: "/admin/delivery-staffs",
       icon: <HiOutlineUsers />,
     },
     {
       key: "deliverywarrantystaff",
-      label: "Delivery Staffs Warranty",
+      label: "Delivery Warranty",
       path: "/admin/delivery-staffs-warranty",
       icon: <HiOutlineUsers />,
     },
@@ -181,7 +181,6 @@ export default function Sidebar() {
       path: "/admin/potential-customer-report",
       icon: <BsTextParagraph />,
     },
-
   ];
 
   const filteredLinks = DASHBOARD_SIDEBAR_LINKS.filter((link) =>
@@ -189,33 +188,42 @@ export default function Sidebar() {
   );
 
   return (
-    <div className="flex flex-col bg-neutral-900 w-60 p-3 text-white">
-      <Link to={"/"} className="flex items-center gap-2 px-1 py-3">
-        <Gem strokeWidth={1.75} />
-        <div className="text-neutral-100 text-xl">DatJ</div>
-      </Link>
-
-      <div className="flex-1 py-8 flex flex-col gap-0.5">
-        {filteredLinks.map((items) => (
-          <SidebarLink key={items.key} items={items} />
-        ))}
+    <>
+      <div className="hidden sm:block">
+        <div className="flex-1 flex flex-col gap-0.5">
+          {filteredLinks.map((items) => (
+            <SidebarLink key={items.key} items={items} />
+          ))}
+        </div>
       </div>
-      <div className="flex flex-col gap-0.5 pt-2 border-t border-neutral-700">
-        {/* {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((items) => (
+      <div className="sm:hidden flex flex-col bg-neutral-900 w-60 p-3 text-white">
+        <Link to={"/"} className="flex items-center gap-2 px-1 py-3">
+          <Gem strokeWidth={1.75} />
+          <div className="text-neutral-100 text-xl">DatJ</div>
+        </Link>
+
+        <div className="flex-1 py-8 flex flex-col gap-0.5">
+          {filteredLinks.map((items) => (
+            <SidebarLink key={items.key} items={items} />
+          ))}
+        </div>
+        <div className="flex flex-col gap-0.5 pt-2 border-t border-neutral-700">
+          {/* {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((items) => (
           <SidebarLink key={items.key} items={items} />
         ))} */}
 
-        <Link
-          to="/"
-          className={classNames(" text-red-500 cursor-pointer", linkClasses)}
-        >
-          <span className="text-xl">
-            <HiOutlineLogout />
-          </span>
-          Logout
-        </Link>
+          <Link
+            to="/"
+            className={classNames(" text-red-500 cursor-pointer", linkClasses)}
+          >
+            <span className="text-xl">
+              <HiOutlineLogout />
+            </span>
+            Logout
+          </Link>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -227,7 +235,7 @@ function SidebarLink({ items }: { items: any }) {
       className={classNames(
         pathname === items.path
           ? "text-amber-300 bg-neutral-700"
-          : "text-white",
+          : "text-white sm:text-black",
         linkClasses
       )}
     >
