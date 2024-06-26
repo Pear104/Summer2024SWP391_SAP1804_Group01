@@ -4,7 +4,7 @@ import { Pagination, Empty, Modal, Rate, Form, App } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useSearchStore } from "../../store/searchStore";
 import { useQueries, useQueryClient, useMutation } from "@tanstack/react-query";
-import OrderDetailList from "./components/OrderDetailList";
+import OrderItem from "./components/OrderItem";
 import TextArea from "antd/es/input/TextArea";
 import LoadingOrderItem from "./components/LoadingOrderItem";
 
@@ -69,6 +69,7 @@ export default function OrderHistory() {
   });
   return (
     <div className="p-4 w-full">
+      {/* Feedback modal */}
       <Modal
         className="w-[600px]"
         centered
@@ -132,11 +133,22 @@ export default function OrderHistory() {
           </Form.Item>
         </Form>
       </Modal>
+      {/* Feedback modal */}
+      <Modal
+        className="w-[400px]"
+        centered
+        title="Enter new unit price (USD) for: "
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <div className="mb-2 tracking-wider"></div>
+      </Modal>
       <div className="text-2xl font-serif mb-6">ORDER HISTORY</div>
       {orderHistories?.data?.orders?.length != 0 ? (
         <div className="w-full">
           {orderHistories?.data?.orders?.map((order: any, index: number) => (
-            <OrderDetailList
+            <OrderItem
               form={form}
               key={index}
               setFeedbackInfo={setFeedbackInfo}

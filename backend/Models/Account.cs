@@ -43,6 +43,9 @@ namespace backend.Models
         [Column("reward_point")]
         public int RewardPoint { get; set; }
 
+        [Column("is_disable")]
+        public bool IsDisable { get; set; } = false;
+
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public List<Order> OrdersOfCustomer { get; set; } = new List<Order>();

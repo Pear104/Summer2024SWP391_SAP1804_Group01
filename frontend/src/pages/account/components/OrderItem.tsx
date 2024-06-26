@@ -5,8 +5,10 @@ import DiamondItem from "./DiamondItem";
 import AccessoryItem from "./AccessoryItem";
 import { OrderStatus } from "./OrderStatus";
 import { POST } from "../../../utils/request";
+import { Modal } from "antd";
+import InvoiceItem from "./InvoiceItem";
 
-const OrderDetailList = ({
+const OrderItem = ({
   setFeedbackInfo,
   order,
   setIsModalOpen,
@@ -18,8 +20,31 @@ const OrderDetailList = ({
   form: any;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
+  const showModal = () => {
+    setIsInvoiceModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsInvoiceModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsInvoiceModalOpen(false);
+  };
   return (
     <div>
+      <Modal
+        className="w-[800px]"
+        centered
+        title={`Invoice for order: ORD-${order.orderId}`}
+        open={isInvoiceModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <div>
+          <InvoiceItem />
+        </div>
+        <div className="mb-2 tracking-wider"></div>
+      </Modal>
       {isLoading && <Loading />}
       <div className="pb-4">
         <div>Order ID: {order.orderId}</div>
@@ -92,7 +117,14 @@ const OrderDetailList = ({
                 Checkout
               </button>
             )}
-
+            {order.orderStatus == "Completed" && (
+              <button
+                className="bg-primary text-white px-4 py-2 rounded mr-4"
+                onClick={showModal}
+              >
+                Export Invoice
+              </button>
+            )}
             <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded">
               <a href="mailto:datj.company@gmail.com">Contact Seller</a>
             </button>
@@ -103,4 +135,4 @@ const OrderDetailList = ({
   );
 };
 
-export default OrderDetailList;
+export default OrderItem;

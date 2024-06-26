@@ -23,6 +23,9 @@ namespace backend.Models
         [Column("quantity")]
         public int Quantity { get; set; }
 
+        [Column("is_hidden")]
+        public bool IsHidden { get; set; } = false;
+
         [Column("accessory_type_id")]
         public long AccessoryTypeId { get; set; }
         public AccessoryType AccessoryType { get; set; } = new AccessoryType();

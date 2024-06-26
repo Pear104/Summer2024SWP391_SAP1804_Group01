@@ -49,6 +49,9 @@ namespace backend.Models
         [Column("availability")]
         public bool Availability { get; set; } = true;
 
+        [Column("is_hidden")]
+        public bool IsHidden { get; set; } = false;
+
         [Column("shape_id")]
         public long ShapeId { get; set; }
         public Shape Shape { get; set; } = new Shape();
