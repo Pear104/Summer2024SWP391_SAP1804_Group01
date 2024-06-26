@@ -360,3 +360,7 @@ a {
 #blog li::marker {
   font-size: 0.8em;
 }
+
+.filtered {
+  filter: invert(25%) sepia() saturate(1000%) hue-rotate(350deg);
+}

@@ -13,18 +13,23 @@ const AccessoryItem = ({
       className="items-center w-full justify-around hover:shadow-xl py-2 px-4 m-2 duration-150"
       to={`/product/accessory/detail/${accessory.accessoryId}`}
     >
-      <div
-        className="relative my-2 aspect-square bg-cover bg-center bg-no-repeat w-full"
-        style={{
-          backgroundImage: `url(${accessory.accessoryImages[0].url})`,
-        }}
-      >
-        <div className="text-base italic text-red-400">
-          *The images is for illustration purpose.
-        </div>
+      <div className="relative aspect-square w-full">
+        {/* <div
+          className="opacity-5 z-10 absolute filter-red my-2 aspect-square bg-cover bg-center bg-no-repeat w-full"
+          style={{
+            backgroundImage: `url(${accessory.accessoryImages[0].url})`,
+          }}
+        ></div> */}
+        <div
+          className="absolute my-2 aspect-square bg-cover bg-center bg-no-repeat w-full"
+          style={{
+            backgroundImage: `url(${accessory.accessoryImages[0].url})`,
+          }}
+        ></div>
+        <div className="absolute opacity-70 left-1/2 top-1/3 -translate-x-1/2 translate-y-1/3 w-1/3 h-1/3 bg-red-300 rounded-full"></div>
       </div>
       <div>
-        <div className="w-full flex libre-baskerville-regular">
+        <div className="mt-6 w-full flex libre-baskerville-regular">
           {accessory.name}
         </div>
 

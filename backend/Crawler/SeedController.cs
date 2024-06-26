@@ -357,7 +357,7 @@ namespace backend.Controllers
             long shapeId = 0;
             while (diamond == null)
             {
-                var diamondId = rand.Next(1, 2001);
+                var diamondId = rand.Next(1, 13429);
                 diamond = _context.Diamonds.FirstOrDefault(x =>
                     x.DiamondId == diamondId && x.Availability == true
                 );
@@ -369,7 +369,7 @@ namespace backend.Controllers
             Accessory accessory = null;
             while (accessory == null)
             {
-                var accessoryId = rand.Next(1, 1305);
+                var accessoryId = rand.Next(1, 2215);
                 accessory = _context
                     .Accessories.Include(x => x.AccessoryType)
                     .FirstOrDefault(x =>
@@ -456,7 +456,7 @@ namespace backend.Controllers
             for (int i = 0; i < number; i++)
             {
                 Random rand = new Random();
-                long customerId = rand.Next(42, 1001);
+                long customerId = rand.Next(42, 3008);
                 long saleStaffId = rand.Next(7, 16);
                 long deliveryStaffId = rand.Next(16, 27);
                 await CreateFakeOrderAsync(customerId, saleStaffId, deliveryStaffId);
