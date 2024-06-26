@@ -30,7 +30,12 @@ export default function DeliveryDataRow({ order }: { order: any }) {
           <div className="text-sm text-gray-500">{order.shippingAddress}</div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          <div className="text-sm text-gray-500">{order.phoneNumber}</div>
+          <a
+            href={"tel:" + order.phoneNumber}
+            className="text-sm border p-2 bg-blue-500 text-white rounded-lg"
+          >
+            {order.phoneNumber}
+          </a>
         </td>
         <td className="px-6 py-4 whitespace-normal w-[200px]">
           <div className="text-sm text-gray-500">

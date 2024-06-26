@@ -185,8 +185,8 @@ export default function DeliveryWarrantyManagement() {
                         </td>
                       </tr>
                     )}
-                    {warrantyRequestList?.data?.warrantyRequests.length > 0 ? (
-                      warrantyRequestList.data.warrantyRequests.map(
+                    {warrantyRequestList?.data?.warrantyRequests?.length > 0 ? (
+                      warrantyRequestList?.data?.warrantyRequests?.map(
                         renderDeliveryRow
                       )
                     ) : (

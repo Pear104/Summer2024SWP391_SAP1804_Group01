@@ -179,7 +179,7 @@ namespace backend
                 x.AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()
-                    .WithOrigins("http://localhost:44376")
+                    .WithOrigins("https://datj.id.vn")
                     .SetIsOriginAllowed(origin => true)
             );
 

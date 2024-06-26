@@ -9,6 +9,11 @@ import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { useAuthStore } from "../../store/authStore";
 import { setCookie } from "../../utils/cookie";
+import moment from "moment";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+
+dayjs.extend(customParseFormat);
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
@@ -180,7 +185,6 @@ export default function Register() {
                   options={[
                     { value: "Female", label: "Female" },
                     { value: "Male", label: "Male" },
-                    // { value: "Gay", label: "Gay" },
                     { value: "Other", label: "Other" },
                   ]}
                   defaultValue="Other"
@@ -206,7 +210,19 @@ export default function Register() {
               className="w-full"
               required
             >
-              <DatePicker className="border border-primary rounded-none h-[42px] w-full" />
+              <DatePicker
+                maxDate={dayjs(
+                  moment().subtract(18, "years").format("DD-MM-YYYY"),
+                  "DD-MM-YYYY"
+                )}
+                minDate={dayjs(
+                  moment().subtract(100, "years").format("DD-MM-YYYY"),
+                  "DD-MM-YYYY"
+                )}
+                // minDate={dayjs("2019-08-01", "DD-MM-YYYY")}
+                // maxDate={dayjs("2020-10-31", "DD-MM-YYYY")}
+                className="border border-primary rounded-none h-[42px] w-full"
+              />
             </FormItem>
 
             <FormItem

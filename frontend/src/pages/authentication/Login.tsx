@@ -88,9 +88,9 @@ export default function Login() {
   });
 
   return (
-    <div className="grid grid-cols-2 gap-4 py-16 px-32">
+    <div className="sm:w-full sm:p-0 sm:grid-cols-1 grid grid-cols-2 gap-4 py-16 px-32">
       {isLoading && <Loading />}
-      <div className="col-span-1">
+      <div className="col-span-1 sm:hidden">
         <div
           className="aspect-square bg-contain bg-no-repeat w-full"
           style={{
@@ -106,7 +106,7 @@ export default function Login() {
           <Form
             layout="vertical"
             autoComplete="off"
-            className="w-[440px] flex flex-col gap-1"
+            className="w-[440px] flex flex-col gap-1 sm:w-full"
             onFinish={handleSubmit(async (data) => {
               setIsLoading(true);
               const authResponse = await POST(
@@ -134,7 +134,7 @@ export default function Login() {
           >
             <FormItem name="email" control={control} required>
               <Input
-                className="border text-base border-primary py-2 px-4 without-ring w-[440px] rounded-none"
+                className="sm:w-full border text-base border-primary py-2 px-4 without-ring w-[440px] rounded-none"
                 suffix={<UserOutlined className="opacity-50" />}
                 placeholder="Email"
               />
@@ -147,20 +147,22 @@ export default function Login() {
             >
               <Input.Password
                 placeholder="Password"
-                className="border text-base border-primary py-2 px-4 without-ring w-[440px] rounded-none"
+                className="sm:w-full border text-base border-primary py-2 px-4 without-ring w-[440px] rounded-none"
               />
             </FormItem>
-            <div className="mb-4">
-              <a
-                href="/authentication/forget-password"
-                className="pb-1 text-primary border-b transition-all duration-200 border-b-transparent hover:border-b-primary"
-              >
-                Forgot your password?
-              </a>
-            </div>
+            <span className="sm:hidden">
+              <div className="mb-4">
+                <a
+                  href="/authentication/forget-password"
+                  className="pb-1 text-primary border-b transition-all duration-200 border-b-transparent hover:border-b-primary"
+                >
+                  Forgot your password?
+                </a>
+              </div>
+            </span>
             <Form.Item className="mb-0">
               <Button
-                className="w-full hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
+                className="sm:w-[80px] w-full hover:scale-95 font-bold text-white bg-primary sm:py-5 py-6 flex items-center justify-center"
                 type="default"
                 htmlType="submit"
               >
@@ -168,27 +170,29 @@ export default function Login() {
               </Button>
             </Form.Item>
           </Form>
-          <Divider>or</Divider>
-          <Button
-            className="mb-4 gap-3 w-full hover:scale-95 mulish-regular text-base font-bold text-black bg-white py-6 flex items-center justify-center"
-            type="default"
-            onClick={() => login()}
-          >
-            <GoogleIcon />
-            LOGIN WITH GOOGLE
-          </Button>
-          <div className="flex justify-between text-sm">
-            <div>Doesn't have an account?</div>
-            <a
-              href="/authentication/register"
-              className="flex items-center gap-2 group font-semibold"
+          <span className="sm:hidden">
+            <Divider>or</Divider>
+            <Button
+              className="mb-4 gap-3 w-full hover:scale-95 mulish-regular text-base font-bold text-black bg-white py-6 flex items-center justify-center"
+              type="default"
+              onClick={() => login()}
             >
-              <span className="text-primary border-b border-transparent transition-all group-hover:border-primary">
-                Create Account
-              </span>
-              <CircleArrowRight />
-            </a>
-          </div>
+              <GoogleIcon />
+              LOGIN WITH GOOGLE
+            </Button>
+            <div className="flex justify-between text-sm">
+              <div>Doesn't have an account?</div>
+              <a
+                href="/authentication/register"
+                className="flex items-center gap-2 group font-semibold"
+              >
+                <span className="text-primary border-b border-transparent transition-all group-hover:border-primary">
+                  Create Account
+                </span>
+                <CircleArrowRight />
+              </a>
+            </div>
+          </span>
         </div>
       </div>
     </div>

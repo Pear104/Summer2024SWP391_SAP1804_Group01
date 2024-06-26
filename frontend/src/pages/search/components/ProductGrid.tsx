@@ -28,13 +28,15 @@ export default function ProductGrid() {
     ],
   });
   const products = productsQuery.data;
+  console.log(products?.diamonds?.length);
+  console.log(products?.accessories?.length);
   return (
     <div className="container mx-auto p-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {products?.diamonds?.map((diamond: any) => (
           <DiamondCard key={diamond.diamondId} diamond={diamond} />
         ))}
-        {products?.accessorys?.map((accessory: any) => (
+        {products?.accessories?.map((accessory: any) => (
           <AccessoryCard key={accessory.accessoryId} accessory={accessory} />
         ))}
       </div>
@@ -42,7 +44,7 @@ export default function ProductGrid() {
         {products &&
         products.diamonds?.length == 0 &&
         products.accessories?.length == 0 ? (
-          <div className="text-center text-2xl">No Diamonds Found.</div>
+          <div className="text-center text-2xl">No Products Found.</div>
         ) : (
           <Pagination
             showTotal={(total, range) =>
@@ -53,7 +55,7 @@ export default function ProductGrid() {
               (products && products?.currentPage?.toString()) || "1"
             }
             total={products && products.totalCount}
-            pageSize={Number(params.get("PageSize")) || 10}
+            pageSize={Number(params.get("PageSize")) || 16}
             showSizeChanger={false}
             onChange={(page, _pageSize) => {
               params.set("PageNumber", page.toString());

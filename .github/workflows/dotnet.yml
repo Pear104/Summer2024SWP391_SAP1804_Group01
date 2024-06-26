@@ -2,34 +2,35 @@ name: .NET
 
 on:
   push:
-    branches: [ "main", "controllers" ]
+    branches: ["main", "controllers", "deploy"]
   pull_request:
-    branches: [ "main", "controllers" ]
+    branches: ["main", "controllers", "deploy"]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    env:
+      ASPNETCORE_ENVIRONMENT: "Development"
+    runs-on: self-hosted
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4  # Check out the code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4 # Check out the code from the repository
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4  # Set up the .NET SDK
-      with:
-        dotnet-version: 8.0.x  # Specify the exact .NET SDK version
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4 # Set up the .NET SDK
+        with:
+          dotnet-version: 8.0.x # Specify the exact .NET SDK version
 
-    - name: List backend directory
-      run: ls -la ./backend  # List contents of the backend directory to verify the structure
+      - name: Restore dependencies
+        run: dotnet restore ./backend # Restore project dependencies
 
-    - name: Create bin and obj directories
-      run: mkdir -p ./backend/bin ./backend/obj  # Ensure necessary directories are created
+      - name: Test
+        run: dotnet test --verbosity normal ./backend # Run tests
 
-    - name: Restore dependencies
-      run: dotnet restore ./backend  # Restore project dependencies
+      - name: Build
+        run: dotnet build --configuration Release ./backend --runtime linux-x64 # Build the project
 
-    - name: Build
-      run: dotnet build --configuration Release --no-restore ./backend  # Build the project
-
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal ./backend  # Run tests
+      - name: Deploy to server
+        run: |
+          cp -rf ./backend/bin/net8.0/linux-x64/* /home/datnt/datj-backend/
+        shell: bash
