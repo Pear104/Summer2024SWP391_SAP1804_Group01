@@ -19,6 +19,12 @@ namespace backend.Controllers
         {
             _transactionRepo = transactionRepo;
         }
+        [HttpGet]
+        public async Task<IActionResult> GetTransactions([FromQuery] TransactionQuery query)
+        {
+            var transactionResult = await _transactionRepo.GetAllTransactionsAsync(query);
+            return Ok(transactionResult);
+        }
 
         [HttpPost]
         public async Task<IActionResult> PostTransaction(
@@ -35,11 +41,6 @@ namespace backend.Controllers
             return Ok(newTransaction);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetTransactions([FromQuery] TransactionQuery query)
-        {
-            var transactionResult = await _transactionRepo.GetAllTransactionsAsync(query);
-            return Ok(transactionResult);
-        }
+
     }
 }

@@ -13,7 +13,6 @@ namespace backend.Interfaces
         Task<Account> CreateAccountAsync(Account account);
         Task<Account?> UpdateAccountAsync(long id, UpdateAccountDTO account);
         Task<Account?> UpdatePasswordAsync(long id, UpdatePasswordAccountDTO accountDto);
-        Task<IEnumerable<Account>> SearchAccountOnRole(AccountSearchQuery query);
         Task<ListWithPagingDTO<Account>> SearchAccountOnRole(AccountSearchQuery query);
 
         // Task<Account?> DeleteAccountAsync(long id);
