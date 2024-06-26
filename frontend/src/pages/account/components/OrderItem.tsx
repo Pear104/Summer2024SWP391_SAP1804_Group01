@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Loading from "../../../components/Loading";
 import { formatDate } from "../../../utils/formatter";
 import DiamondItem from "./DiamondItem";
 import AccessoryItem from "./AccessoryItem";
 import { OrderStatus } from "./OrderStatus";
 import { POST } from "../../../utils/request";
-import { Modal } from "antd";
+import { Button, Modal } from "antd";
 import InvoiceItem from "./InvoiceItem";
-
+import ReactToPrint from "react-to-print";
 const OrderItem = ({
   setFeedbackInfo,
   order,
@@ -21,6 +21,7 @@ const OrderItem = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
+  const componentRef = useRef(null);
   const showModal = () => {
     setIsInvoiceModalOpen(true);
   };
@@ -30,19 +31,35 @@ const OrderItem = ({
   const handleCancel = () => {
     setIsInvoiceModalOpen(false);
   };
+
+  const handleExport = () => {
+    // <ReactToPrint content={() => componentRef.current} trigger={} />;
+  };
   return (
     <div>
       <Modal
-        className="w-[800px]"
+        className="w-[1200px]"
         centered
-        title={`Invoice for order: ORD-${order.orderId}`}
         open={isInvoiceModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <ReactToPrint
+            content={() => componentRef.current}
+            trigger={() => (
+              <Button key="submit" type="primary" onClick={handleExport}>
+                Export to PDF
+              </Button>
+            )}
+          />,
+        ]}
       >
-        <div>
-          <InvoiceItem />
-        </div>
+        <span ref={componentRef}>
+          <InvoiceItem order={order} />
+        </span>
         <div className="mb-2 tracking-wider"></div>
       </Modal>
       {isLoading && <Loading />}
@@ -117,14 +134,14 @@ const OrderItem = ({
                 Checkout
               </button>
             )}
-            {order.orderStatus == "Completed" && (
-              <button
-                className="bg-primary text-white px-4 py-2 rounded mr-4"
-                onClick={showModal}
-              >
-                Export Invoice
-              </button>
-            )}
+            {/* {order.orderStatus == "Completed" && ( */}
+            <button
+              className="bg-primary text-white px-4 py-2 rounded mx-4"
+              onClick={showModal}
+            >
+              Export Invoice
+            </button>
+            {/* )} */}
             <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded">
               <a href="mailto:datj.company@gmail.com">Contact Seller</a>
             </button>

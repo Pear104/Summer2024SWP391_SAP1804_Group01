@@ -3,7 +3,7 @@ export const OrderStatus = ({ order }: { order: any }) => {
     <div className="items-center justify-between mb-4 text-base">
       Order status:{" "}
       <span
-        className={`${
+        className={`ml-2 ${
           order.orderStatus === "Pending"
             ? "bg-red-200 border-red-300"
             : order.orderStatus === "Processing"
