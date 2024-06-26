@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace backend.DTOs.Diamond
+namespace backend.DTOs.WarrantyCard
 {
-    public class DiamondResult
+    public class WarrantyCardResult
     {
-        public List<DiamondDTO>? Diamonds { get; set; }
+        public List<WarrantyCardDTO> WarrantyCards { get; set; } = new List<WarrantyCardDTO>();
         public int TotalPages { get; set; }
         public int PageSize { get; set; }
         public int CurrentPage { get; set; }

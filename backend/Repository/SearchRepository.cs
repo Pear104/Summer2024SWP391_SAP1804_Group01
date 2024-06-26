@@ -104,7 +104,6 @@ namespace backend.Repository
                 AccessoryImages = a.AccessoryImages.Select(z => z.ToAccessoryImageDTO()).ToList(),
                 // Feedbacks = a.Feedbacks
             }).ToList();
-
             return new SearchResult
             {
                 Diamonds = diamondDTOs,

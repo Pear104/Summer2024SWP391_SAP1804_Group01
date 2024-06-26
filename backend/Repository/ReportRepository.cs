@@ -46,25 +46,33 @@ namespace backend.Repository
                 })
                 .ToListAsync();
 
+            //dat fix null
             foreach (var order in orderDTOs)
             {
-                foreach (var orderDetail in order.OrderDetails)
+                if (order.OrderDetails != null)
                 {
-                    var accessory = orderDetail.Accessory;
-                    if (accessory != null)
+                    foreach (var orderDetail in order.OrderDetails)
                     {
-                        int index = accessoryInOrderList.FindIndex(x => x.id == accessory.AccessoryId);
-                        if (index != -1)
+                        var accessory = orderDetail.Accessory;
+                        if (accessory != null)
                         {
-                            var item = accessoryInOrderList[index];
-                            item.inOrderNumber += 1;
-                            accessoryInOrderList[index] = item; // Update the list with the new value
-                        }
-                        else
-                        {
-                            accessoryInOrderList.Add((accessory.AccessoryId, 1));
+                            int index = accessoryInOrderList.FindIndex(x => x.id == accessory.AccessoryId);
+                            if (index != -1)
+                            {
+                                var item = accessoryInOrderList[index];
+                                item.inOrderNumber += 1;
+                                accessoryInOrderList[index] = item; // Update the list with the new value
+                            }
+                            else
+                            {
+                                accessoryInOrderList.Add((accessory.AccessoryId, 1));
+                            }
                         }
                     }
+                } 
+                else 
+                {
+                    continue;
                 }
             }
             accessoryInOrderList.Sort((x, y) => y.inOrderNumber.CompareTo(x.inOrderNumber));
@@ -76,7 +84,7 @@ namespace backend.Repository
                     .Include(x => x.AccessoryType)
                     .Include(x => x.AccessoryImages)
                     .FirstOrDefault(x => x.AccessoryId == item.id);
-                returnAccessories.Add(accessory.ToAccessoryDTO());
+                if(accessory != null) returnAccessories.Add(accessory.ToAccessoryDTO());
             }
             return returnAccessories.Take(5).ToList();
         }

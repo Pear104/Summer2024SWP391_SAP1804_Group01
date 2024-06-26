@@ -26,11 +26,11 @@ namespace backend.Controllers
             _merchantRepo = merchantRepo;
         }
 
-        /// <summary>
-        /// Get merchants base on criteria
-        /// </summary>
-        /// <param name="criteria"></param>
-        /// <returns></returns>
+        // / <summary>
+        // / Get merchants base on criteria
+        // / </summary>
+        // / <param name="criteria"></param>
+        // / <returns></returns>
         [HttpGet]
         //[ProducesResponseType(typeof(BaseResultWIthData<List<MerchantDtos>>), 200)]
         [ProducesResponseType(typeof(Merchant), 200)]

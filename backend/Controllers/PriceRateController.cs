@@ -44,6 +44,11 @@ namespace backend.Controllers
         public async Task<ActionResult> CreatePriceRate([FromBody] CreatePriceRateDTO priceRateCreateDto)
         {
             var authorId = User.FindFirst("accountId")?.Value;
+            // Dat fix null 25/06
+            if (authorId == null)
+            {
+                return BadRequest("You don't have permission to create price rate.");
+            }
             var newPriceRate = await _priceRateRepo.CreatePriceRateAsync(long.Parse(authorId), priceRateCreateDto);
             if (newPriceRate == null)
             {
