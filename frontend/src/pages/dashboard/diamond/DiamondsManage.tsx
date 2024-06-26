@@ -46,12 +46,12 @@ export default function ProductsManage() {
       {
         queryKey: ["diamond", queryUrl],
         queryFn: () => GET(queryUrl),
-        staleTime: Infinity,
+        staleTime: 0,
       },
       {
         queryKey: ["diamondPrice"],
         queryFn: () => GET("/api/DiamondPrices/"),
-        staleTime: Infinity,
+        staleTime: 0,
       },
       // {
       //   queryKey: ["diamondSearch", searchTerm],
@@ -61,6 +61,7 @@ export default function ProductsManage() {
       {
         queryKey: ["priceRate"],
         queryFn: () => GET("/api/PriceRate/latest"),
+        staleTime: 0,
       },
     ],
   });
@@ -77,11 +78,7 @@ export default function ProductsManage() {
         diamond,
         diamondPrice?.data,
         priceRate?.data?.percent
-      ).toLocaleString("en-US", {
-        style: "currency",
-        currency: "USD",
-        maximumFractionDigits: 0,
-      })}
+      )}
     />
   );
 

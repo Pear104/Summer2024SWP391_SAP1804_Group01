@@ -9,6 +9,7 @@ using backend.Mappers;
 using backend.DTOs;
 using backend.DTOs.Account;
 using backend.DTOs.Report;
+using backend.Helper;
 
 namespace backend.Repository
 {
@@ -89,13 +90,19 @@ namespace backend.Repository
             return returnAccessories.Take(5).ToList();
         }
 
-        public async Task<IEnumerable<GroupedTransactionDTO>> GetAllTransactionsAsync()
+        public async Task<IEnumerable<GroupedTransactionDTO>> GetAllTransactionsAsync(TransactionReportQuery query)
         {
             var twelveMonthsAgo = DateTime.Now.AddMonths(-12);
             var transactions = await _context.Transactions
                 .Where(t => t.CreatedAt >= twelveMonthsAgo && t.TransactionStatus == TransactionStatus.Completed)
                 .ToListAsync();
-
+            if( query.FirstMonth!=null){
+                transactions = transactions.Where(t => t.CreatedAt.Month >= query.FirstMonth).ToList();
+            }
+            if(query.lastMonth!=null){
+                transactions = transactions.Where(t => t.CreatedAt.Month <= query.lastMonth).ToList();
+            }
+            
             var groupedTransactions = transactions
                 .GroupBy(t => new { t.CreatedAt.Year, t.CreatedAt.Month })
                 .Select(g => new GroupedTransactionDTO

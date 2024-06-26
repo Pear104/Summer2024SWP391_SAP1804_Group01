@@ -182,7 +182,7 @@ namespace backend
                     .AllowCredentials()
                     .WithOrigins("https://datj.id.vn")
                     .SetIsOriginAllowed(origin => true)
-            );
+            );  
 
             app.UseRouting();
 

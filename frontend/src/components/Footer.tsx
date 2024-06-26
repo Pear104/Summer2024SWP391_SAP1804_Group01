@@ -80,7 +80,7 @@ export default function Footer() {
               Facebook
             </a>
           </div>
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <Instagram
               size={20}
               color="white"
@@ -106,7 +106,7 @@ export default function Footer() {
               absoluteStrokeWidth
             />
             <a className="hover:opacity-40 cursor-pointer">Youtube</a>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="border-t text-[#151542] p-4 flex items-center justify-between">

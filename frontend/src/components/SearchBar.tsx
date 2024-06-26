@@ -12,7 +12,7 @@ export default function SearchBar() {
       }`}
     >
       <form
-        action="./search"
+        action="/search"
         method="GET"
         className="flex justify-end rounded-md overflow-hidden w-[240px]"
       >

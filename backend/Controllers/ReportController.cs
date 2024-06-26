@@ -1,3 +1,4 @@
+using backend.Helper;
 using backend.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,9 +14,9 @@ namespace backend.Controllers
             _reportService = reportService;
         }
         [HttpGet("TransactionReport")]
-        public async Task<ActionResult> GetTransactionReport()
+        public async Task<ActionResult> GetTransactionReport([FromBody] TransactionReportQuery query)
         {
-            var transactions = await _reportService.GetAllTransactionsAsync();
+            var transactions = await _reportService.GetAllTransactionsAsync(query);
             return Ok(transactions);
         }
         [HttpGet("AccessoryReport")]

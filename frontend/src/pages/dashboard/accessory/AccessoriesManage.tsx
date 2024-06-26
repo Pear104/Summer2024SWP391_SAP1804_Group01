@@ -38,12 +38,12 @@ export default function AccessoriesManage() {
       {
         queryKey: ["materialPrices"],
         queryFn: () => GET("/api/MaterialPrices/"),
-        staleTime: Infinity,
+        staleTime: 0,
       },
       {
         queryKey: ["priceRate"],
         queryFn: () => GET("/api/PriceRate/latest"),
-        staleTime: Infinity,
+        staleTime: 0,
       },
     ],
   });

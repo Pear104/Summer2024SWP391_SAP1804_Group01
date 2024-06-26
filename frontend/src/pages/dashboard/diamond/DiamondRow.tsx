@@ -83,7 +83,15 @@ export default function DiamondRow({
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="text-sm text-gray-500">
-            {isNaN(parseFloat(price)) ? <Skeleton.Button active /> : price}
+            {isNaN(parseFloat(price)) ? (
+              <Skeleton.Button active />
+            ) : (
+              price.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 0,
+              })
+            )}
           </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
