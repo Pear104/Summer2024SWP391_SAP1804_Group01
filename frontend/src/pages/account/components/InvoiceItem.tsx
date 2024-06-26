@@ -1,4 +1,3 @@
-import { Divider } from "antd";
 import Logo from "../../../components/logo/Logo";
 import moment from "moment";
 import React from "react";
@@ -63,7 +62,7 @@ export default function InvoiceItem({ order }: { order: any }) {
             <tr className="border-b bg-slate-300">
               <th className="text-center">No.</th>
               <th className="text-center w-[400px]">Name</th>
-              <th className="text-center">Warranty</th>
+              <th className="text-center">Warranty period</th>
               <th className="text-center">Unit</th>
               <th className="text-center">Unit price</th>
               <th className="text-center">Quantity</th>

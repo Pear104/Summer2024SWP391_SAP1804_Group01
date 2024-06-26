@@ -23,7 +23,7 @@ namespace backend.Models
         public Order Order { get; set; } = new Order();
 
         [Column("diamond_id")]
-        public long DiamondId { get; set; }
+        public long? DiamondId { get; set; }
         public Diamond Diamond { get; set; } = new Diamond();
 
         [Column("accessory_id")]

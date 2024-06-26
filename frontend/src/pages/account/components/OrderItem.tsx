@@ -8,6 +8,8 @@ import { POST } from "../../../utils/request";
 import { Button, Modal } from "antd";
 import InvoiceItem from "./InvoiceItem";
 import ReactToPrint from "react-to-print";
+import WarrantyAccessoryItem from "./WarrantyAccessoryItem";
+import WarrantyDiamondItem from "./WarrantyDiamondItem";
 const OrderItem = ({
   setFeedbackInfo,
   order,
@@ -21,22 +23,33 @@ const OrderItem = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
+  const [isModalDiamondWarranty, setIsModalDiamondWarranty] = useState(false);
+  const [isModalAccessoryWarranty, setIsModalAccessoryWarranty] =
+    useState(false);
   const componentRef = useRef(null);
-  const showModal = () => {
+  const showModalInvoice = () => {
     setIsInvoiceModalOpen(true);
+  };
+  const showModalDiamondWarranty = () => {
+    setIsModalDiamondWarranty(true);
+  };
+  const showModalAccessoryWarranty = () => {
+    setIsModalAccessoryWarranty(true);
   };
   const handleOk = () => {
     setIsInvoiceModalOpen(false);
+    setIsModalDiamondWarranty(false);
+    setIsModalAccessoryWarranty(false);
   };
   const handleCancel = () => {
     setIsInvoiceModalOpen(false);
+    setIsModalDiamondWarranty(false);
+    setIsModalAccessoryWarranty(false);
   };
 
-  const handleExport = () => {
-    // <ReactToPrint content={() => componentRef.current} trigger={} />;
-  };
   return (
     <div>
+      {/* modal invoice */}
       <Modal
         className="w-[1200px]"
         centered
@@ -50,7 +63,7 @@ const OrderItem = ({
           <ReactToPrint
             content={() => componentRef.current}
             trigger={() => (
-              <Button key="submit" type="primary" onClick={handleExport}>
+              <Button key="submit" type="primary">
                 Export to PDF
               </Button>
             )}
@@ -62,6 +75,61 @@ const OrderItem = ({
         </span>
         <div className="mb-2 tracking-wider"></div>
       </Modal>
+
+      {/* modal diamond */}
+      <Modal
+        className="w-[1200px]"
+        centered
+        open={isModalDiamondWarranty}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <ReactToPrint
+            content={() => componentRef.current}
+            trigger={() => (
+              <Button key="submit" type="primary">
+                Export to PDF
+              </Button>
+            )}
+          />,
+        ]}
+      >
+        <span ref={componentRef}>
+          <WarrantyDiamondItem order={order} />
+        </span>
+        <div className="mb-2 tracking-wider"></div>
+      </Modal>
+
+      {/* modal accessory */}
+      <Modal
+        className="w-[1200px]"
+        centered
+        open={isModalAccessoryWarranty}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <ReactToPrint
+            content={() => componentRef.current}
+            trigger={() => (
+              <Button key="submit" type="primary">
+                Export to PDF
+              </Button>
+            )}
+          />,
+        ]}
+      >
+        <span ref={componentRef}>
+          <WarrantyAccessoryItem order={order} />
+        </span>
+        <div className="mb-2 tracking-wider"></div>
+      </Modal>
+
       {isLoading && <Loading />}
       <div className="pb-4">
         <div>Order ID: {order.orderId}</div>
@@ -137,11 +205,23 @@ const OrderItem = ({
             {/* {order.orderStatus == "Completed" && ( */}
             <button
               className="bg-primary text-white px-4 py-2 rounded mx-4"
-              onClick={showModal}
+              onClick={showModalInvoice}
             >
               Export Invoice
             </button>
             {/* )} */}
+            <button
+              className="bg-primary text-white px-4 py-2 rounded mx-4"
+              onClick={showModalDiamondWarranty}
+            >
+              Export Diamond Warranty
+            </button>
+            <button
+              className="bg-primary text-white px-4 py-2 rounded mx-4"
+              onClick={showModalAccessoryWarranty}
+            >
+              Export Accessory Warranty
+            </button>
             <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded">
               <a href="mailto:datj.company@gmail.com">Contact Seller</a>
             </button>
