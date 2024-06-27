@@ -69,9 +69,7 @@ namespace backend.Repository
             double totalPrice = 0;
             foreach (var orderDetailDto in orderDto.OrderDetails)
             {
-                var diamond = _context.Diamonds.FirstOrDefault(x =>
-                    x.DiamondId == orderDetailDto.DiamondId
-                );
+                var diamond = _context.Diamonds.FirstOrDefault(x => x.DiamondId == orderDetailDto.DiamondId);
                 if (diamond == null)
                 {
                     return null;
@@ -129,9 +127,24 @@ namespace backend.Repository
                         orderDetail.ItemPrice =
                             diamond.Carat * diamondPrice.UnitPrice * 100 * priceRate?.Percent;
                     }
-                    var warrantyCard = new WarrantyCard() { OrderDetail = orderDetail };
+                    Console.WriteLine(orderDetailDto.DiamondId);
+                    var warrantyCardDiamond = new WarrantyCard 
+                    { 
+                        AccessoryId = null,
+                        DiamondId = orderDetailDto.DiamondId,
+                        OrderDetail = orderDetail,
+                        EndTime = DateTime.Now.AddMonths(24)
+                    };
+                    await _context.WarrantyCards.AddAsync(warrantyCardDiamond);
+                    var warrantyCardAccessory = new WarrantyCard 
+                    { 
+                        AccessoryId = orderDetailDto.AccessoryId,
+                        DiamondId = null,
+                        OrderDetail = orderDetail,
+                        EndTime = DateTime.Now.AddMonths(12) 
+                    };
+                    await _context.WarrantyCards.AddAsync(warrantyCardAccessory);
                     totalPrice += orderDetail.ItemPrice ?? 0;
-                    await _context.WarrantyCards.AddAsync(warrantyCard);
                     await _context.OrderDetails.AddAsync(orderDetail);
                     diamond.Availability = false;
                     _context.Entry(diamond).State = EntityState.Modified;
