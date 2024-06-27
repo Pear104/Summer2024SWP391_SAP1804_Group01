@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using backend.Models;
 using backend.DTOs.Account;
 using backend.DTOs.PriceRate;
+using backend.DTOs.Promotion;
 
 namespace backend.DTOs
 {
@@ -25,7 +26,7 @@ namespace backend.DTOs
         public long? DeliveryStaffId { get; set; }
         public string PhoneNumber { get; set; } = string.Empty;
         public string? DeliveryStaffName { get; set; } = string.Empty;
-        public Promotion? Promotion { get; set; }
+        public PromotionDTO? Promotion { get; set; }
         // public List<TransactionDTO> Transactions { get; set; }
         // public List<FeedbackDTO> Feedbacks { get; set; }
     }

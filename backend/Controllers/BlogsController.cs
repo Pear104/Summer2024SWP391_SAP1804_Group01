@@ -64,12 +64,12 @@ namespace backend.Controllers
             [FromBody] UpdateBlogDTO blogDto
         )
         {
-            var account = await _blogRepo.UpdateBlogAsync(id, blogDto);
-            if (account == null)
+            var blog = await _blogRepo.UpdateBlogAsync(id, blogDto);
+            if (blog == null)
             {
-                return NotFound("Account not found.");
+                return NotFound("Blog not found.");
             }
-            return Ok(account);
+            return Ok(blog);
         }
 
         [HttpDelete("{id}")]

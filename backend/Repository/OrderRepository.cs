@@ -297,7 +297,7 @@ namespace backend.Repository
                     SaleStaffName = x.SaleStaff != null ? x.SaleStaff.Name : null,
                     DeliveryStaffId = x.DeliveryStaffId ?? 0,
                     DeliveryStaffName = x.DeliveryStaff != null ? x.DeliveryStaff.Name : null,
-                    Promotion = x.Promotion,
+                    Promotion = x.Promotion != null ? x.Promotion.ToPromotionDTO() : null,
                     // Transactions = x.Transactions.Select(y => y.ToTransactionDTO()).ToList(),
                     // Feedbacks = x.Feedbacks.Select(y => y.ToFeedbackDTO()).ToList(),
                 })

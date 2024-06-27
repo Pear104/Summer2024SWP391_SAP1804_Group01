@@ -58,7 +58,7 @@ namespace backend.Mappers
                 DeliveryStaffId = order.DeliveryStaffId,
                 DeliveryStaffName = order.DeliveryStaff?.Name,
                 PhoneNumber = order.PhoneNumber,
-                Promotion = order.Promotion,
+                Promotion = order.Promotion.ToPromotionDTO(),
                 OrderDetails = order.OrderDetails.Select(o => o.ToOrderDetailDTO()).ToList()
             };
         }

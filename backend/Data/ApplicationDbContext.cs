@@ -69,6 +69,12 @@ namespace backend.Data
                 .Property(d => d.WarrantyStatus)
                 .HasConversion<string>();
 
+            // Set unique
+            builder
+                .Entity<Promotion>()
+                .HasIndex(p => p.PromotionCode)
+                .IsUnique();
+
             // Set Id auto increment
             builder.Entity<Shape>().Property(o => o.ShapeId).ValueGeneratedOnAdd();
             builder.Entity<Diamond>().Property(o => o.DiamondId).ValueGeneratedOnAdd();

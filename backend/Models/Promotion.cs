@@ -1,5 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+
+
 
 namespace backend.Models
 {
@@ -10,6 +13,15 @@ namespace backend.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("promotion_id")]
         public long PromotionId { get; set; }
+
+ 
+        [Column("promotion_name")]
+        public required  string PromotionName { get; set; }
+
+        [Column("promotion_code")]
+        [MaxLength(10), MinLength(6)]
+        public required string PromotionCode { get; set; } 
+
         [Column("discount_percent")]
         public float DiscountPercent { get; set; }
         [Column("start_time")]

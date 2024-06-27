@@ -13,7 +13,5 @@ namespace backend.Interfaces
         Task<PriceRateResult> GetAllPriceRateAsync(PriceRateQuery query);
         Task<PriceRate?> GetLatestPriceRateAsync();
         Task<PriceRate?> CreatePriceRateAsync(long authorId, CreatePriceRateDTO priceRateDto);
-        
-
     }
 }
