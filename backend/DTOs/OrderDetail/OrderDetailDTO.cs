@@ -19,8 +19,7 @@ namespace backend.DTOs
         public DiamondDTO? Diamond { get; set; }
         public AccessoryDTO? Accessory { get; set; }
         public double? ItemPrice { get; set; }
-        public long WarrantyCardId { get; set; }
-        public WarrantyCardDTO? WarrantyCard { get; set; }
+        public List<WarrantyCardDTO>? WarrantyCards { get; set; }
         public DiamondPriceDTO? DiamondPrice { get; set; }
         public MaterialPriceDTO? MaterialPrice { get; set; }
         public FeedbackDTO? Feedback { get; set; }

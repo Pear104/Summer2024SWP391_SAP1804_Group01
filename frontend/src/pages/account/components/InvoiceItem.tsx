@@ -7,7 +7,6 @@ import {
 } from "../../../utils/getPrice";
 
 export default function InvoiceItem({ order }: { order: any }) {
-  console.log(order);
   return (
     <div className="px-4 py-2 w-full pb-8" id="invoice">
       <div className="flex justify-between mt-4 border-b border-black pb-2">
