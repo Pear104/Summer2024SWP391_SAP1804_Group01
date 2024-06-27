@@ -7,6 +7,24 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { useQueries } from "@tanstack/react-query";
 
+function AccountDetailHeader({ header }: { header: string }) {
+  const headerMap: { [header: string]: string } = {
+    name: "Customer Name",
+    email: "Email",
+    phoneNumber: "Phone Number",
+    address: "Address",
+    birthday: "Date of birth",
+    gender: "Gender",
+    createdAt: "Creation Date",
+  };
+  const displayHeader = headerMap[header] || header;
+  return (
+    <div className="uppercase text-base font-semibold border-b border-black mb-2">
+      {displayHeader}
+    </div>
+  );
+}
+
 export default function AccountDetail() {
   const [userInfo, setUserInfo] = useState<any>();
   const [nextRank, setNextRank] = useState<number>(0);
@@ -109,10 +127,7 @@ export default function AccountDetail() {
                 {field.map((key) => {
                   return (
                     <div>
-                      <div className="uppercase text-base font-semibold border-b border-black mb-2">
-                        {key}
-                      </div>
-
+                      <AccountDetailHeader header={key} />
                       <div>
                         {key == "birthday" || key == "createdAt"
                           ? moment(userInfo[key]).format("MM/DD/YYYY")

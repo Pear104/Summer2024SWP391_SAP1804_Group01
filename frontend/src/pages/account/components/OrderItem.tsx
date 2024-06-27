@@ -48,7 +48,9 @@ const OrderItem = ({
     setIsModalDiamondWarranty(false);
     setIsModalAccessoryWarranty(false);
   };
-
+  const hasAccessory = order.orderDetails.some(
+    (detail: any) => detail.accessory != null
+  );
   return (
     <div>
       {/* modal invoice */}
@@ -219,14 +221,16 @@ const OrderItem = ({
               className="bg-primary text-white px-4 py-2 rounded mx-4"
               onClick={showModalDiamondWarranty}
             >
-              Export Diamond Warranty
+              View Diamond Warranty Card
             </button>
-            <button
-              className="bg-primary text-white px-4 py-2 rounded mx-4"
-              onClick={showModalAccessoryWarranty}
-            >
-              Export Accessory Warranty
-            </button>
+            {hasAccessory && (
+              <button
+                className="bg-primary text-white px-4 py-2 rounded mx-4"
+                onClick={showModalAccessoryWarranty}
+              >
+                View Accessory Warranty
+              </button>
+            )}
             <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded">
               <a href="mailto:datj.company@gmail.com">Contact Seller</a>
             </button>
