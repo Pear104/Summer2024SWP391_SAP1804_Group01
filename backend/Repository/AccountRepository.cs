@@ -98,8 +98,10 @@ namespace backend.Repository
         public async Task<IEnumerable<Account>> GetAllAccountsAsync(AccountQuery query)
         {
             var accountsQuery = _context
-                .Accounts.Include(x => x.OrdersOfSaleStaff)
-                .Include(x => x.OrdersOfDeliveryStaff)
+                .Accounts
+                // .Include(x => x.Rank)
+                // .Include(x => x.OrdersOfSaleStaff)
+                // .Include(x => x.OrdersOfDeliveryStaff)
                 // .Include(x => x.OrdersOfCustomer)
                 .AsQueryable();
             if (!string.IsNullOrEmpty(query.Role))
@@ -107,6 +109,11 @@ namespace backend.Repository
                 var role = Enum.Parse<Role>(query.Role);
                 accountsQuery = accountsQuery.Where(x => x.Role == role);
             }
+            accountsQuery = accountsQuery
+                .Include(x => x.Rank)
+                .Include(x => x.OrdersOfSaleStaff)
+                .Include(x => x.OrdersOfDeliveryStaff)
+                .Include(x => x.OrdersOfCustomer);
             return await accountsQuery
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize)

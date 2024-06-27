@@ -52,13 +52,13 @@ namespace backend.Mappers
                 PriceRate = order.PriceRate.ToPriceRateDTO(),
                 CreatedAt = order.CreatedAt,
                 CustomerId = order.CustomerId,
-                CustomerName = order.Customer.Name,
+                CustomerName = order.Customer?.Name,
                 SaleStaffId = order.SaleStaffId,
                 SaleStaffName = order.SaleStaff?.Name,
                 DeliveryStaffId = order.DeliveryStaffId,
                 DeliveryStaffName = order.DeliveryStaff?.Name,
                 PhoneNumber = order.PhoneNumber,
-                Promotion = order.Promotion.ToPromotionDTO(),
+                Promotion = order.Promotion?.ToPromotionDTO(),
                 OrderDetails = order.OrderDetails.Select(o => o.ToOrderDetailDTO()).ToList()
             };
         }

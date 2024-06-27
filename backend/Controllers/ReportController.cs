@@ -14,9 +14,9 @@ namespace backend.Controllers
             _reportService = reportService;
         }
         [HttpGet("TransactionReport")]
-        public async Task<ActionResult> GetTransactionReport([FromBody] TransactionReportQuery query)
+        public async Task<ActionResult> GetTransactionReport()
         {
-            var transactions = await _reportService.GetAllTransactionsAsync(query);
+            var transactions = await _reportService.GetAllTransactionsAsync();
             return Ok(transactions);
         }
         [HttpGet("AccessoryReport")]

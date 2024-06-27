@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { GET } from "../../../utils/request";
 import { getAccessoryPrice } from "../../../utils/getPrice";
 import { useQueries } from "@tanstack/react-query";
+import { Skeleton } from "antd";
 
 function PopularAccessories() {
   const [data, setData] = useState<
@@ -90,10 +91,11 @@ function PopularAccessories() {
               </span>
             </div>
             <div className="text-xs text-gray-400 pl-1.5">
-              $
-              {product?.accessory_price
-                ? parseFloat(product.accessory_price).toFixed(2)
-                : ""}
+              {product?.accessory_price ? (
+                "$" + parseFloat(product.accessory_price).toFixed(2)
+              ) : (
+                <Skeleton.Button active />
+              )}
             </div>
           </Link>
         ))}

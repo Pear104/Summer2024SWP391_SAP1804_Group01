@@ -49,7 +49,7 @@ export default function BuyerProfilePieChart() {
       // Female
       //   Male
       //   Other
-      fetchedData.forEach((account: any) => {
+      fetchedData?.forEach((account: any) => {
         if (account?.role == "Customer") {
           switch (account?.gender) {
             case "Male":

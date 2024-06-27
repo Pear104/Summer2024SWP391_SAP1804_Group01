@@ -11,6 +11,7 @@ namespace backend.Mappers
     {
         public static PromotionDTO ToPromotionDTO(this Promotion promotion)
         {
+            
             return new PromotionDTO
             {
                 PromotionId = promotion.PromotionId,
@@ -24,7 +25,7 @@ namespace backend.Mappers
 
         public static Promotion ToPromotionFromCreate(this CreatePromotionDTO promotionDTO)
         {
-            return new Promotion()
+            return new Promotion
             {
                 PromotionName = promotionDTO.PromotionName,
                 PromotionCode = promotionDTO.PromotionCode,
@@ -33,6 +34,5 @@ namespace backend.Mappers
                 EndTime = promotionDTO.EndTime
             };
         }
-
     }
 }
