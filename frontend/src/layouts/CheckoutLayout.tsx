@@ -25,7 +25,7 @@ const item = [
 ];
 
 export default function CheckoutLayout() {
-  const [diamondPrices, materialPrices, priceRate] = useQueries({
+  const [diamondPrices, materialPrices, priceRate, userInfo] = useQueries({
     queries: [
       {
         queryKey: ["diamondPrices"],
@@ -41,6 +41,10 @@ export default function CheckoutLayout() {
         queryKey: ["priceRate"],
         queryFn: () => GET("/api/PriceRate/latest"),
         staleTime: Infinity,
+      },
+      {
+        queryKey: ["userInfo"],
+        queryFn: () => GET("/api/Accounts/me"),
       },
     ],
   });
@@ -148,19 +152,7 @@ export default function CheckoutLayout() {
             <div className="flex justify-between">
               <div>Discount</div>
               <div className="font-semibold">
-                {totalPrice != 0 && totalPrice ? (
-                  (0).toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                    maximumFractionDigits: 0,
-                  })
-                ) : (
-                  <Skeleton.Button
-                    active={true}
-                    className="w-[100px]"
-                    size="small"
-                  />
-                )}
+                {userInfo?.data?.rank?.discount * 100 + "%"}
               </div>
             </div>
           </div>
@@ -171,7 +163,10 @@ export default function CheckoutLayout() {
               <div className="text-xs">USD</div>
               <div className="font-semibold text-3xl">
                 {totalPrice != 0 && totalPrice ? (
-                  totalPrice.toLocaleString("en-US", {
+                  (
+                    totalPrice *
+                    (1 - userInfo?.data?.rank?.discount)
+                  ).toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
                     maximumFractionDigits: 0,

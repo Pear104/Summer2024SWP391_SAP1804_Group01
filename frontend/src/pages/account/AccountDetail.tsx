@@ -86,10 +86,11 @@ export default function AccountDetail() {
             </div>
             <Progress
               percent={
-                (userInfo?.rewardPoint - userInfo?.rank?.rewardPoint) /
-                (ranks?.data?.find((r: any) => r.rankId == nextRank)
-                  ?.rewardPoint -
-                  userInfo?.rank?.rewardPoint)
+                ((userInfo?.rewardPoint - userInfo?.rank?.rewardPoint) /
+                  (ranks?.data?.find((r: any) => r.rankId == nextRank)
+                    ?.rewardPoint -
+                    userInfo?.rank?.rewardPoint)) *
+                100
               }
               size="small"
             />

@@ -66,7 +66,7 @@ export default function CheckoutPayment() {
                             paymentRefId: transactionResponse?.transactionId,
                             requiredAmount: (
                               orderResponse?.totalPrice *
-                              (1 - orderResponse?.totalDiscountPercent / 100)
+                              (1 - orderResponse?.totalDiscountPercent)
                             ).toFixed(0),
                             paymentLanguage: "en",
                             merchantId: "MER0001",

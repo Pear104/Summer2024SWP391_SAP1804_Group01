@@ -26,7 +26,9 @@ const OrderItem = ({
   const [isModalDiamondWarranty, setIsModalDiamondWarranty] = useState(false);
   const [isModalAccessoryWarranty, setIsModalAccessoryWarranty] =
     useState(false);
-  const componentRef = useRef(null);
+  const invoiceRef = useRef(null);
+  const accessoryRef = useRef(null);
+  const diamondRef = useRef(null);
   const showModalInvoice = () => {
     setIsInvoiceModalOpen(true);
   };
@@ -61,7 +63,7 @@ const OrderItem = ({
             Cancel
           </Button>,
           <ReactToPrint
-            content={() => componentRef.current}
+            content={() => invoiceRef.current}
             trigger={() => (
               <Button key="submit" type="primary">
                 Export to PDF
@@ -70,7 +72,7 @@ const OrderItem = ({
           />,
         ]}
       >
-        <span ref={componentRef}>
+        <span ref={invoiceRef}>
           <InvoiceItem order={order} />
         </span>
         <div className="mb-2 tracking-wider"></div>
@@ -88,7 +90,7 @@ const OrderItem = ({
             Cancel
           </Button>,
           <ReactToPrint
-            content={() => componentRef.current}
+            content={() => diamondRef.current}
             trigger={() => (
               <Button key="submit" type="primary">
                 Export to PDF
@@ -97,7 +99,7 @@ const OrderItem = ({
           />,
         ]}
       >
-        <span ref={componentRef}>
+        <span ref={diamondRef}>
           <WarrantyDiamondItem order={order} />
         </span>
         <div className="mb-2 tracking-wider"></div>
@@ -115,7 +117,7 @@ const OrderItem = ({
             Cancel
           </Button>,
           <ReactToPrint
-            content={() => componentRef.current}
+            content={() => accessoryRef.current}
             trigger={() => (
               <Button key="submit" type="primary">
                 Export to PDF
@@ -124,7 +126,7 @@ const OrderItem = ({
           />,
         ]}
       >
-        <span ref={componentRef}>
+        <span ref={accessoryRef}>
           <WarrantyAccessoryItem order={order} />
         </span>
         <div className="mb-2 tracking-wider"></div>
@@ -159,7 +161,10 @@ const OrderItem = ({
         <div className="flex justify-between items-center mt-4">
           <div className="text-xl font-bold text-gray-800">
             Total:{" "}
-            {order.totalPrice.toLocaleString("en-US", {
+            {(
+              order.totalPrice *
+              (1 - order.totalDiscountPercent)
+            ).toLocaleString("en-US", {
               style: "currency",
               currency: "USD",
               maximumFractionDigits: 0,

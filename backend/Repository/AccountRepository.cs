@@ -12,10 +12,12 @@ namespace backend.Repository
     public class AccountRepository : IAccountRepository
     {
         private readonly ApplicationDbContext _context;
+
         public AccountRepository(ApplicationDbContext context)
         {
             _context = context;
         }
+
         public bool AccountExisted(long id)
         {
             return _context.Accounts.Any(e => e.AccountId == id);
@@ -38,7 +40,7 @@ namespace backend.Repository
         {
             return await _context
                 .Accounts.Include(x => x.Rank)
-                .Include(x => x.OrdersOfCustomer)
+                // .Include(x => x.OrdersOfCustomer)
                 .Include(x => x.OrdersOfSaleStaff)
                 .Include(x => x.OrdersOfDeliveryStaff)
                 .FirstOrDefaultAsync(x => x.AccountId == id);
@@ -68,14 +70,21 @@ namespace backend.Repository
             await _context.SaveChangesAsync();
             return existedAccount;
         }
-        public async Task<Account?> UpdatePasswordAsync(long id, UpdatePasswordAccountDTO accountDto)
+
+        public async Task<Account?> UpdatePasswordAsync(
+            long id,
+            UpdatePasswordAccountDTO accountDto
+        )
         {
             var existedAccount = await _context.Accounts.FindAsync(id);
             if (existedAccount == null)
             {
                 return null;
             }
-            bool checkPass = PasswordHasher.VerifyPassword(accountDto.CurPassword, existedAccount.Password);
+            bool checkPass = PasswordHasher.VerifyPassword(
+                accountDto.CurPassword,
+                existedAccount.Password
+            );
             if (!checkPass)
             {
                 return null;
@@ -89,9 +98,9 @@ namespace backend.Repository
         public async Task<IEnumerable<Account>> GetAllAccountsAsync(AccountQuery query)
         {
             var accountsQuery = _context
-                .Accounts.Include(x => x.OrdersOfCustomer)
-                .Include(x => x.OrdersOfSaleStaff)
+                .Accounts.Include(x => x.OrdersOfSaleStaff)
                 .Include(x => x.OrdersOfDeliveryStaff)
+                // .Include(x => x.OrdersOfCustomer)
                 .AsQueryable();
             if (!string.IsNullOrEmpty(query.Role))
             {
@@ -104,24 +113,26 @@ namespace backend.Repository
                 .ToListAsync();
         }
 
-        public async Task<ListWithPagingDTO<Account>> SearchAccountOnRole(AccountSearchQuery accountQuery)
+        public async Task<ListWithPagingDTO<Account>> SearchAccountOnRole(
+            AccountSearchQuery accountQuery
+        )
         {
             ListWithPagingDTO<Account> result;
-            var accountsQuery = _context
-                .Accounts.AsQueryable();
+            var accountsQuery = _context.Accounts.AsQueryable();
             if (!string.IsNullOrEmpty(accountQuery.GetRole()))
             {
                 var role = Enum.Parse<Role>(accountQuery.GetRole());
                 accountsQuery = accountsQuery.Where(x => x.Role == role);
             }
-            accountsQuery = accountsQuery.Where(x => x.Name.Contains(accountQuery.AccountName)
-                                                  && x.PhoneNumber.Contains(accountQuery.AccountPhoneNumber)
-                                                  );
+            accountsQuery = accountsQuery.Where(x =>
+                x.Name.Contains(accountQuery.AccountName)
+                && x.PhoneNumber.Contains(accountQuery.AccountPhoneNumber)
+            );
             var totalCount = accountsQuery.Count();
             var accountsModel = await accountsQuery
-                 .Skip((accountQuery.pageNumber - 1) * accountQuery.PageSize)
-                 .Take(accountQuery.PageSize)
-                 .ToListAsync();
+                .Skip((accountQuery.pageNumber - 1) * accountQuery.PageSize)
+                .Take(accountQuery.PageSize)
+                .ToListAsync();
             result = new()
             {
                 Content = accountsModel,

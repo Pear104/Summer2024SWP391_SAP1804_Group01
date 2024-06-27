@@ -105,7 +105,6 @@ namespace backend.Repository
                         OrderDetail = orderDetail,
                         EndTime = DateTime.Now.AddMonths(24)
                     };
-                    System.Console.WriteLine(orderDetailDto.DiamondId);
                     await _context.WarrantyCards.AddAsync(warrantyCardDiamond);
 
                     if (orderDetailDto.AccessoryId != null)
@@ -118,7 +117,6 @@ namespace backend.Repository
                             return null;
                         }
 
-                        System.Console.WriteLine(orderDetailDto.AccessoryId);
                         var warrantyCardAccessory = new WarrantyCard
                         {
                             AccessoryId = orderDetailDto.AccessoryId,
@@ -161,6 +159,17 @@ namespace backend.Repository
             System.Console.WriteLine("totalPrice: " + totalPrice);
             newOrder.TotalPrice = totalPrice;
             customer.RewardPoint = customer.RewardPoint + (int)(totalPrice / 1000);
+            var nextRank = await _context
+                .Ranks.OrderBy(x => x.RewardPoint)
+                .FirstOrDefaultAsync(x => x.RewardPoint > customer.RewardPoint);
+            var newRank = await _context.Ranks.FirstOrDefaultAsync(x =>
+                x.RankId == (nextRank != null ? nextRank.RankId - 1 : 6)
+            );
+            if (newRank == null)
+            {
+                return null;
+            }
+            customer.Rank = newRank;
             _context.Entry(customer).State = EntityState.Modified;
             await _context.Orders.AddAsync(newOrder);
             await _context.SaveChangesAsync();
