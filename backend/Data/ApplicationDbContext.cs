@@ -199,8 +199,8 @@ namespace backend.Data
             builder
                 .Entity<WarrantyCard>()
                 .HasOne(o => o.OrderDetail)
-                .WithOne(o => o.WarrantyCard)
-                .HasForeignKey<WarrantyCard>(w => w.OrderDetailId)
+                .WithMany(o => o.WarrantyCards)
+                .HasForeignKey(w => w.OrderDetailId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             //Them khoa ngoai giua WarrantyCard voi WarrantyRequest

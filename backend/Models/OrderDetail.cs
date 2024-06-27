@@ -38,7 +38,7 @@ namespace backend.Models
         public long? MaterialPriceId { get; set; }
         public MaterialPrice? MaterialPrice { get; set; }
 
-        public WarrantyCard WarrantyCard { get; set; } = new WarrantyCard();
+        public List<WarrantyCard> WarrantyCards { get; set; }
 
         [Column("feedback_id")]
         public long? FeedbackId { get; set; }

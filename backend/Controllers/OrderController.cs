@@ -70,20 +70,8 @@ namespace backend.Controllers
             }
             System.Console.WriteLine(createdOrder.OrderId);
             return Ok(createdOrder);
-            // System.Console.WriteLine("diamondId: " + orderDto.OrderDetails[0].DiamondId);
-            // return Ok(orderDto);
         }
 
-        // [HttpPost]
-        // public async Task<ActionResult> CreateOrder([FromBody] CreateOrderDTO order)
-        // {
-        //     var createdOrder = await _orderRepo.CreateOrderAsync(order);
-        //     if(createdOrder == null)
-        //     {
-        //         return BadRequest("The order could not be created.");
-        //     }
-        //     return Ok(createdOrder);
-        // }
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateOrder(
             [FromRoute] string id,

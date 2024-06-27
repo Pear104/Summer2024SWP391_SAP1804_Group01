@@ -1,15 +1,17 @@
-import { Button, App } from "antd";
+import { Button, App, Progress } from "antd";
 import { useEffect, useState } from "react";
 import { GET } from "../../utils/request";
 import { setCookie } from "../../utils/cookie";
 import { formatPhoneNumber } from "../../utils/formatter";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import { rankImages } from "../../constants/rankImages";
+import { useQueries } from "@tanstack/react-query";
 
 export default function AccountDetail() {
   const [userInfo, setUserInfo] = useState<any>();
+  const [nextRank, setNextRank] = useState<number>(0);
   const { message } = App.useApp();
+  console.log("nextRank: ", nextRank);
 
   const field = [
     "name",
@@ -20,6 +22,7 @@ export default function AccountDetail() {
     "gender",
     "createdAt",
   ];
+
   const navigate = useNavigate();
   useEffect(() => {
     (async () => {
@@ -27,6 +30,11 @@ export default function AccountDetail() {
       console.log(data);
       if (data) {
         setUserInfo(data);
+        if (data?.rank?.rankId != 6) {
+          setNextRank(data?.rank?.rankId + 1);
+        } else {
+          setNextRank(0);
+        }
       } else {
         setCookie("accessToken", "", 0);
         navigate("/authentication/login");
@@ -35,6 +43,20 @@ export default function AccountDetail() {
     })();
   }, []);
 
+  const [ranks] = useQueries({
+    queries: [
+      {
+        queryKey: ["ranks"],
+        queryFn: () => GET("/api/Ranks/"),
+      },
+    ],
+  });
+  console.log(userInfo);
+  console.log(ranks?.data);
+  console.log(
+    "rewardPoint: " +
+      ranks?.data?.find((r: any) => r.rankId == nextRank)?.rewardPoint
+  );
   return (
     <div className="ml-4 mt-4 mb-8">
       <div className="font-bold mulish-regular text-xl mb-4">
@@ -54,13 +76,29 @@ export default function AccountDetail() {
               title={userInfo?.rank?.rankName}
               className="aspect-square w-[50px] rounded-full bg-cover bg-center bg-no-repeat"
               style={{
-                backgroundImage: `url(${
-                  rankImages.find(
-                    (rank) => rank.rankName == userInfo?.rank?.rankName
-                  )?.image
-                })`,
+                backgroundImage: `url("/images/rank/${userInfo?.rank?.rankName?.toLowerCase()}.png")`,
               }}
             ></div>
+          </div>
+          <div className="w-full">
+            <div className="text-center">
+              Current reward: -{userInfo?.rank?.discount * 100}% all order
+            </div>
+            <Progress
+              percent={
+                (userInfo?.rewardPoint - userInfo?.rank?.rewardPoint) /
+                (ranks?.data?.find((r: any) => r.rankId == nextRank)
+                  ?.rewardPoint -
+                  userInfo?.rank?.rewardPoint)
+              }
+              size="small"
+            />
+            <div>
+              You need{" "}
+              {ranks?.data?.find((r: any) => r.rankId == nextRank)
+                ?.rewardPoint - userInfo?.rewardPoint}{" "}
+              point more to reach next rank
+            </div>
           </div>
         </div>
         <div>
