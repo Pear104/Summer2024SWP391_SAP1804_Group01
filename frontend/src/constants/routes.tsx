@@ -52,6 +52,7 @@ import ChangePassword from "../pages/account/ChangePassword";
 import SearchManagement from "../pages/search/SearchManagement";
 import PotentialCustomerReportManagement from "../pages/dashboard/staffsReport/CustomersReportManagement";
 import DeliveryReportManagement from "../pages/dashboard/staffsReport/DeliveryReportManagement";
+import PromotionManage from "../pages/dashboard/promotion/PromotionManage";
 const routes = [
   {
     errorElement: <Error />,
@@ -132,6 +133,10 @@ const routes = [
           {
             element: <TransactionManage />,
             path: "/admin/transactions",
+          },
+          {
+            element: <PromotionManage />,
+            path: "/admin/promotion",
           },
           {
             element: <SalesReportManagement />,

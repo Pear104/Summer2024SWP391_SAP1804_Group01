@@ -1,4 +1,4 @@
-import { Gem, Sparkles, SquarePercent, Wrench } from "lucide-react";
+import { Gem, HandCoins, Sparkles, TicketPercent, Wrench } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import {
@@ -33,6 +33,7 @@ const ROLE_PERMISSIONS: Record<Role, string[]> = {
     "accessories",
     "customers",
     "diamond-price",
+    "promotion",
     "accessory-price",
     "blog",
     "sales-report",
@@ -52,6 +53,7 @@ const ROLE_PERMISSIONS: Record<Role, string[]> = {
     "blog",
     "staffs-report",
     "price-rate",
+    "promotion",
     "sales-report",
     "delivery-report",
     "potential-customer-report",
@@ -155,7 +157,13 @@ export default function Sidebar() {
       key: "price-rate",
       label: "Price Rate",
       path: "/admin/price-rate",
-      icon: <SquarePercent />,
+      icon: <HandCoins />,
+    },
+    {
+      key: "promotion",
+      label: "Promotion",
+      path: "/admin/promotion",
+      icon: <TicketPercent  />,
     },
     {
       key: "blog",

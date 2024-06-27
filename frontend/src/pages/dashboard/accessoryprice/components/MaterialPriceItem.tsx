@@ -88,7 +88,7 @@ const MaterialPriceItem = ({ materialItem }: { materialItem: any }) => {
   return (
     <>
       <Card
-        className="flex flex-col justify-between w-full h-full"
+        className="flex flex-col justify-between w-2/5 md:w-1/2 lg:w-1/3 h-full"
         cover={
           <img
             alt={`Image about ${materialItem.karat} karat gold`}
