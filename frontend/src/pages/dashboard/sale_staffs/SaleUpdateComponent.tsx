@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PUT } from "../../../utils/request";
 import { SaleStatusMenu } from "./SaleStatusMenu";
+import Loading from "../../../components/Loading";
 
 const OrderUpdateComponent = ({
   orderId,
@@ -32,7 +33,7 @@ const OrderUpdateComponent = ({
         handleStatusClick={handleStatusClick}
         statusText={currentStatus}
       />
-      {mutation.isPending && <p>Updating...</p>}
+      {mutation.isPending && <Loading />}
       {mutation.error && <p>Error: {(mutation.error as Error).message}</p>}
     </div>
   );

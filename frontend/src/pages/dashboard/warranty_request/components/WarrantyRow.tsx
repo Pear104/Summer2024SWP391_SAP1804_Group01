@@ -54,6 +54,7 @@ export default function WarrantyRow({ warranty }: { warranty: any }) {
             warrantyRequestId={warranty.warrantyRequestId}
             staffs={deliveryStaffs?.data || []}
             currentStaff={warranty?.deliveryStaffName}
+            statusText={warranty?.warrantyStatus}
           />
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
@@ -61,6 +62,7 @@ export default function WarrantyRow({ warranty }: { warranty: any }) {
             warrantyRequestId={warranty.warrantyRequestId}
             staffs={saleStaffs?.data || []}
             currentStaff={warranty?.warrantyStaffName}
+            statusText={warranty?.warrantyStatus}
           />
         </td>
         <td className="px-6 py-4 whitespace-nowrap">

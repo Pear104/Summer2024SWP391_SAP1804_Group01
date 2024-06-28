@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PUT } from "../../../utils/request";
 import { DeliveryStaffMenu } from "./DeliveryStaffMenu";
+import Loading from "../../../components/Loading";
 
 const DeliveryStaffComponent = ({
   orderId,
@@ -41,7 +42,7 @@ const DeliveryStaffComponent = ({
         staffText={currentStaff}
         statusText={statusText}
       />
-      {mutation.isPending && <p>Updating...</p>}
+      {mutation.isPending && <Loading />}
       {mutation.error && <p>Error: {(mutation.error as Error).message}</p>}
     </div>
   );

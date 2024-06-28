@@ -21,11 +21,11 @@ const AccessoryItem = ({
           }}
         ></div>
         {/* Add red filter for diamond */}
-        <div className="bg-opacity-60 border border-red-500 text-red-500 text-sm absolute left-1/2 top-1/3 -translate-x-1/2 translate-y-1/3 w-1/3 h-1/3 bg-white rounded-full flex justify-center">
+        {/* <div className="bg-opacity-60 border border-red-500 text-red-500 text-sm absolute left-1/2 top-1/3 -translate-x-1/2 translate-y-1/3 w-1/3 h-1/3 bg-white rounded-full flex justify-center">
           <span className="my-auto text-center">
             Your diamond will be placed here
           </span>
-        </div>
+        </div> */}
       </div>
       <div>
         <div className="mt-6 w-full flex libre-baskerville-regular">

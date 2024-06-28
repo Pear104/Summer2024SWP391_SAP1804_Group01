@@ -1,15 +1,18 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PUT } from "../../../../utils/request";
 import { WarrantyStaffMenu } from "./WarrantyStaffMenu";
+import Loading from "../../../../components/Loading";
 
 const WarrantyStaffComponent = ({
   warrantyRequestId,
   staffs,
   currentStaff,
+  statusText,
 }: {
   warrantyRequestId: number;
   staffs: any[];
   currentStaff: string;
+  statusText: any;
 }) => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
@@ -39,8 +42,9 @@ const WarrantyStaffComponent = ({
         handleStaffClick={handleStaffClick}
         staffText={currentStaff}
         staffs={staffs}
+        statusText={statusText}
       />
-      {mutation.isPending && <p>Updating...</p>}
+      {mutation.isPending && <Loading />}
       {mutation.error && <p>Error: {(mutation.error as Error).message}</p>}
     </div>
   );

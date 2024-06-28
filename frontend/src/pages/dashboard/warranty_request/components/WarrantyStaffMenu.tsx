@@ -7,10 +7,12 @@ export const WarrantyStaffMenu = ({
   handleStaffClick,
   staffText,
   staffs,
+  statusText,
 }: {
   handleStaffClick: any;
   staffText: any;
   staffs: any[];
+  statusText: any;
 }) => {
   return (
     <Dropdown
@@ -18,7 +20,8 @@ export const WarrantyStaffMenu = ({
         (jwtDecode(getCookie("accessToken") || "") as any)?.role ==
           "WarrantyStaff" ||
         (jwtDecode(getCookie("accessToken") || "") as any)?.role ==
-          "DeliveryStaff"
+          "DeliveryStaff" ||
+        statusText != "Getting"
       }
       overlay={
         <Menu className="w-40" defaultValue={staffText}>

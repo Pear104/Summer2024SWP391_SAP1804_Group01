@@ -74,9 +74,9 @@ namespace backend.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBlog(long id)
+        public async Task<IActionResult> DeleteBlog(long id, bool isHidden)
         {
-            var deletedBlog = await _blogRepo.DeleteBlogAsync(id);
+            var deletedBlog = await _blogRepo.DeleteBlogAsync(id, isHidden);
             if (deletedBlog == null)
             {
                 return BadRequest("You dont have permission to delete blog.");

@@ -71,7 +71,7 @@ namespace backend.Controllers
             {
                 return BadRequest("The order could not be created.");
             }
-            _emailSender.SendOrderEmail(createdOrder, OrderStatus.Delivering.ToString());
+            _emailSender.SendOrderEmail(createdOrder, OrderStatus.Processing.ToString());
             return Ok(createdOrder);
         }
 
@@ -81,20 +81,22 @@ namespace backend.Controllers
             [FromBody] UpdateOrderDTO order
         )
         {
+            var currentOrder = await _orderRepo.GetOrderByIdAsync(id);
+            if (currentOrder == null)
+            {
+                return BadRequest("The order could not be updated.");
+            }
+            var status = currentOrder.OrderStatus;
             var updatedOrder = await _orderRepo.UpdateOrderAsync(id, order);
             if (updatedOrder == null)
             {
                 return BadRequest("The order could not be updated.");
             }
-            var currentOrder = await _orderRepo.GetOrderByIdAsync(updatedOrder.OrderId);
-            if (currentOrder == null)
+            if (status != updatedOrder.OrderStatus)
             {
-                return BadRequest("The order could not be updated.");
+                System.Console.WriteLine("Send email");
+                _emailSender.SendOrderEmail(currentOrder, updatedOrder.OrderStatus.ToString());
             }
-            System.Console.WriteLine(currentOrder.OrderId);
-            System.Console.WriteLine(currentOrder.OrderStatus.ToString());
-            _emailSender.SendOrderEmail(currentOrder, currentOrder.OrderStatus.ToString());
-            System.Console.WriteLine("Send emaill");
             return Ok(updatedOrder);
         }
     }

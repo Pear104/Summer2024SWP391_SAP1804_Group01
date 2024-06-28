@@ -36,16 +36,17 @@ namespace backend.Repository
             return blog;
         }
 
-        public async Task<Blog?> DeleteBlogAsync(long id)
+        public async Task<Blog?> DeleteBlogAsync(long id, bool isHidden)
         {
-            var deletedModel = await _context
+            var blog = await _context
                 .Blogs.Include(x => x.Author)
                 .FirstOrDefaultAsync(x => x.BlogId == id);
-            if (deletedModel != null)
+            if (blog != null)
             {
-                _context.Blogs.Remove(deletedModel);
+                blog.IsHidden = isHidden;
+                _context.Entry(blog).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-                return deletedModel;
+                return blog;
             }
             return null;
         }

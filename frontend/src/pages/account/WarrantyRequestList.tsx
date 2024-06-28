@@ -51,14 +51,8 @@ const WarrantyRequestItem = ({ warrantyRequest }: { warrantyRequest: any }) => {
         </div>
         <div className="grid grid-cols-3 gap-y-2">
           <div className="text-sm">
-            <strong>Received Time:</strong>{" "}
+            <strong>Receive Date:</strong>{" "}
             {moment(warrantyRequest.receiveTime).format("MM-DD-YYYY")}
-          </div>
-          <div className="text-sm">
-            <strong>Return Time:</strong>{" "}
-            {warrantyRequest.returnTime
-              ? moment(warrantyRequest.returnTime).format("MM-DD-YYYY")
-              : "Scheduling"}
           </div>
           <div className="text-sm">
             <strong>Warranty Status:</strong> {warrantyRequest.warrantyStatus}

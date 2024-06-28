@@ -133,20 +133,27 @@ namespace backend.Repository
                         orderDetail.Accessory = accessory;
                         orderDetail.MaterialPrice = materialPrice;
                         orderDetail.ItemPrice =
-                            (
-                                diamond.Carat * diamondPrice.UnitPrice * 100
-                                + (accessory?.MaterialWeight + orderDetailDto.Size - 3)
-                                    * materialPrice?.UnitPrice
-                                + accessory?.AccessoryType.ProcessingPrice
-                            ) * priceRate?.Percent;
+                            PriceHelper.GetDiamondPrice(
+                                diamond.Carat,
+                                diamondPrice.UnitPrice,
+                                priceRate.Percent
+                            )
+                            + PriceHelper.GetAccessoryPrice(
+                                accessory.MaterialWeight,
+                                orderDetailDto.Size - 3,
+                                materialPrice.UnitPrice,
+                                accessory.AccessoryType.ProcessingPrice,
+                                priceRate.Percent
+                            );
                     }
                     else
                     {
-                        System.Console.WriteLine("No accessory: ");
-                        orderDetail.ItemPrice =
-                            diamond.Carat * diamondPrice.UnitPrice * 100 * priceRate?.Percent;
+                        orderDetail.ItemPrice = PriceHelper.GetDiamondPrice(
+                            diamond.Carat,
+                            diamondPrice.UnitPrice,
+                            priceRate.Percent
+                        );
                     }
-                    Console.WriteLine(orderDetailDto.DiamondId);
 
                     totalPrice += orderDetail.ItemPrice ?? 0;
                     await _context.OrderDetails.AddAsync(orderDetail);

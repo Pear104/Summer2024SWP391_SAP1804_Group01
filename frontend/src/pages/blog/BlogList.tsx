@@ -7,7 +7,7 @@ import BlogListItem from "./components/BlogListItem";
 import { useNavigate } from "react-router-dom";
 import LoadingBlogListItem from "./components/LoadingBlogListItem";
 import BigItem from "./components/BigItem";
-
+import scrollTo from "../../utils/scroll";
 export default function BlogList() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
@@ -29,7 +29,9 @@ export default function BlogList() {
   return (
     <div className="mt-4">
       <div className="flex flex-col gap-4">
-        <div className="font-bold text-4xl uppercase">Diamond Knowledge</div>
+        <div id="blog-list" className="font-bold text-4xl uppercase">
+          Diamond Knowledge
+        </div>
         {!blogs?.isLoading && blogs?.data?.blogs?.length == 0 && (
           <div className="text-center text-2xl p-40">
             <Empty description="No blog found" />
@@ -68,8 +70,9 @@ export default function BlogList() {
               params.set("PageNumber", page.toString());
               navigate(url.pathname + "?" + params.toString());
               setQueryUrl("/api/Blogs?" + params.toString());
+              scrollTo("blog-list");
             }}
-            showSizeChanger={true}
+            // showSizeChanger={true}
             // onShowSizeChange={(current, size) => setPageSize(size)}
           />
         )}
