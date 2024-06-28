@@ -60,20 +60,34 @@ const App: React.FC = () => {
         Create Promotion
       </Button>
       <Modal
-        title="Create Price Rate"
+        title="Create New Promotion"
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
       >
-        <p>Enter new price rate: </p>
-        <Input
-          type="number"
-          value={percent}
-          onChange={(e) => setPercent(Number(e.target.value))}
-          placeholder="Enter percent"
-          step="0.01"
-        />
+        <div>
+          <div>
+            Promotion Name:
+            <Input
+              type="string"
+              value={percent}
+              onChange={(e) => setPercent(Number(e.target.value))}
+              placeholder="Enter percent"
+              step="0.01"
+            />
+          </div>
+          <div>
+            Enter new price rate:
+            <Input
+              type="number"
+              value={percent}
+              onChange={(e) => setPercent(Number(e.target.value))}
+              placeholder="Enter percent"
+              step="0.01"
+            />
+          </div>
+        </div>
       </Modal>
     </>
   );

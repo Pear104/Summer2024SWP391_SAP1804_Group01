@@ -1,3 +1,5 @@
+import { CountdownComponent } from "./CountDownComponent";
+
 function formatDateTime(dateString: string): string {
   const date = new Date(dateString);
   const day = String(date.getDate()).padStart(2, "0");
@@ -10,6 +12,8 @@ function formatDateTime(dateString: string): string {
 }
 
 export default function PromotionRow({ promotion }: { promotion: any }) {
+
+
   const startDate = new Date(promotion.startTime);
   const endDate = new Date(promotion.endTime);
   const durationMs = endDate.getTime() - startDate.getTime();
@@ -29,6 +33,8 @@ export default function PromotionRow({ promotion }: { promotion: any }) {
     (durationMs % millisecondsInMinute) / millisecondsInSecond
   );
   const duration = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+
   return (
     <>
       <tr key={promotion.promotionId} className="">
@@ -61,6 +67,9 @@ export default function PromotionRow({ promotion }: { promotion: any }) {
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="text-sm text-gray-500">{duration}</div>
+        </td>
+        <td className="px-4 py-0 whitespace-nowrap mb-2">
+          <CountdownComponent startTime={promotion.startTime} endTime={promotion.endTime} />
         </td>
       </tr>
     </>

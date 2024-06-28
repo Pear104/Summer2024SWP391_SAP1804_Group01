@@ -10,7 +10,7 @@ import CreatePromotion from "./components/CreatePromotion";
 
 export default function PriceRate() {
   const location = useLocation();
-  const columnHeaders = ["Promotion ID", "Promotion Name", "Promotion Code" ,"Discount Rate", "Start Date", "End Date", "Duration"];
+  const columnHeaders = ["Promotion ID", "Promotion Name", "Promotion Code" ,"Discount Rate", "Start Date", "End Date", "Duration", "Status"];
   const searchTerm = useSearchStore((state) => state.searchTerm);
   const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
   const url = new URL(window.location.href);
