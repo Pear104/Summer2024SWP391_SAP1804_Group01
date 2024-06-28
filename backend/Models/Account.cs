@@ -53,7 +53,7 @@ namespace backend.Models
         public List<Order> OrdersOfDeliveryStaff { get; set; } = new List<Order>();
         public List<WarrantyRequest> WarrantyRequestsOfCustomer { get; set; } =
             new List<WarrantyRequest>();
-        public List<WarrantyRequest> WarrantyRequestsOfSaleStaff { get; set; } =
+        public List<WarrantyRequest> WarrantyRequestsOfWarrantyStaff { get; set; } =
             new List<WarrantyRequest>();
         public List<WarrantyRequest> WarrantyRequestsOfDeliveryStaff { get; set; } =
             new List<WarrantyRequest>();

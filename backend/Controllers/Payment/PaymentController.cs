@@ -25,15 +25,29 @@ namespace backend.Controllers
         private readonly ICurrentUserService _currentUserService;
 
         private readonly VnpayConfig _vnpayConfig;
-        private readonly MomoConfig _momoConfig;
 
-        public PaymentController(IPaymentRepository paymentRepo, IPaymentSignatureRepository paymentSignitureRepo, ICurrentUserService currentUserService, IOptions<VnpayConfig> vnpayConfig, IOptions<MomoConfig> momoConfig)
+        private readonly MomoConfig _momoConfig;
+        private readonly IOrderRepository _orderRepo;
+
+        private readonly IEmailSender _emailSender;
+
+        public PaymentController(
+            IPaymentRepository paymentRepo,
+            IPaymentSignatureRepository paymentSignitureRepo,
+            ICurrentUserService currentUserService,
+            IOptions<VnpayConfig> vnpayConfig,
+            IOptions<MomoConfig> momoConfig,
+            IOrderRepository orderRepo,
+            IEmailSender emailSender
+        )
         {
             _paymentRepo = paymentRepo;
             _paymentSignitureRepo = paymentSignitureRepo;
             _currentUserService = currentUserService;
             _vnpayConfig = vnpayConfig.Value;
             _momoConfig = momoConfig.Value;
+            _orderRepo = orderRepo;
+            _emailSender = emailSender;
         }
 
         [HttpGet]
@@ -75,7 +89,7 @@ namespace backend.Controllers
         /// <param name="createPayment"></param>
         /// <returns></returns>
         /// <remarks>
-        ///     
+        ///
         ///     POST
         ///     {
         ///     "paymentContent": "Thanh toan don hang 0001",
@@ -94,11 +108,12 @@ namespace backend.Controllers
         public async Task<IActionResult> CreateMomoPayment([FromBody] CreatePayment createPayment)
         {
             PaymentLinkDtos result = new();
-            Payment paymentModel = await _paymentRepo.CreatePayment(createPayment.FromCreatePaymentToPayment())!;
+            Payment paymentModel = await _paymentRepo.CreatePayment(
+                createPayment.FromCreatePaymentToPayment()
+            )!;
 
-            if (paymentModel != null)   //send one time payment request to Momo
+            if (paymentModel != null) //send one time payment request to Momo
             {
-
                 var momoOneTimePayRequest = new MomoOneTimePaymentRequest()
                 {
                     partnerCode = _momoConfig.PartnerCode,
@@ -116,7 +131,9 @@ namespace backend.Controllers
 
                 momoOneTimePayRequest.MakeSignature(_momoConfig.AccessKey, _momoConfig.SecretKey);
 
-                (bool createMomoLinkResult, string? createMessage) = momoOneTimePayRequest.GetLink(_momoConfig.PaymentUrl);
+                (bool createMomoLinkResult, string? createMessage) = momoOneTimePayRequest.GetLink(
+                    _momoConfig.PaymentUrl
+                );
                 if (createMomoLinkResult)
                 {
                     result.PaymentId = paymentModel.Id;
@@ -127,7 +144,7 @@ namespace backend.Controllers
                     result.PaymentId = paymentModel.Id;
                     result.Message = createMessage!;
                 }
-            }//end payment is NOT null
+            } //end payment is NOT null
 
             return Ok(result);
         }
@@ -138,7 +155,7 @@ namespace backend.Controllers
         /// <param name="createPayment"></param>
         /// <returns></returns>
         /// <remarks>
-        ///     
+        ///
         ///     POST
         ///     {
         ///     "paymentContent": "Thanh toan don hang 0001",
@@ -158,18 +175,21 @@ namespace backend.Controllers
         public async Task<IActionResult> CreateVnpayPayment([FromBody] CreatePayment createPayment)
         {
             PaymentLinkDtos result = new();
-            Payment paymentModel = await _paymentRepo.CreatePayment(createPayment.FromCreatePaymentToPayment())!;
+            Payment paymentModel = await _paymentRepo.CreatePayment(
+                createPayment.FromCreatePaymentToPayment()
+            )!;
 
-            if (paymentModel != null)   //send one time payment request to Vnpay
+            if (paymentModel != null) //send one time payment request to Vnpay
             {
                 //each payment go along with a signiture, dunno why :vv
-                PaymentSignature paySigModel = new()
-                {
-                    PaymentId = paymentModel.Id,
-                    SignValue = createPayment.Signature,
-                    SignOwn = paymentModel.MerchantId,
-                    SignDate = paymentModel.PaymentDate
-                };
+                PaymentSignature paySigModel =
+                    new()
+                    {
+                        PaymentId = paymentModel.Id,
+                        SignValue = createPayment.Signature,
+                        SignOwn = paymentModel.MerchantId,
+                        SignDate = paymentModel.PaymentDate
+                    };
 
                 paySigModel = await _paymentSignitureRepo.CreateSigniture(paySigModel)!;
 
@@ -190,19 +210,22 @@ namespace backend.Controllers
                         vnp_TxnRef = paymentModel.PaymentRefId
                     };
 
-                    paymentUrl = vnpayPayRequest.GetLink(_vnpayConfig.PaymentUrl, _vnpayConfig.HashSecret);
+                    paymentUrl = vnpayPayRequest.GetLink(
+                        _vnpayConfig.PaymentUrl,
+                        _vnpayConfig.HashSecret
+                    );
                     result.PaymentId = paymentModel.Id;
                     result.PaymentUrl = paymentUrl;
-                }//end paySigModel is NOT null
-
-            }//end paymentModel is null
+                } //end paySigModel is NOT null
+            } //end paymentModel is null
             return Ok(result);
         }
 
-
         [HttpGet]
         [Route("momo-return")]
-        public async Task<IActionResult> MomoReturn([FromQuery] MomoOneTimePaymentResultRequest resultRequest)
+        public async Task<IActionResult> MomoReturn(
+            [FromQuery] MomoOneTimePaymentResultRequest resultRequest
+        )
         {
             string returnUrl = string.Empty;
             var returnModel = new PaymentReturnDtos();
@@ -225,7 +248,6 @@ namespace backend.Controllers
             return Redirect($"{returnUrl}?{returnModel.ToQueryString()}");
         }
 
-
         [HttpGet]
         [Route("vnpay-return")]
         public async Task<IActionResult> HandleVnpayReturn([FromQuery] VnpayPayResponse response)
@@ -237,6 +259,7 @@ namespace backend.Controllers
             if (processResult.Success)
             {
                 returnModel = processResult.Data.Item1 as PaymentReturnDtos;
+                // returnModel.
                 returnUrl = processResult.Data.Item2 as string;
             }
             //dunnot what this does
@@ -276,8 +299,5 @@ namespace backend.Controllers
             //redirect back to Merchant's page after a successful transaction
             return Content(returnModel.ToQueryString());
         }
-
-
-
     }
 }

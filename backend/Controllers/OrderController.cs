@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Transactions;
 using backend.DTOs;
 using backend.DTOs.Order;
+using backend.Enums;
 using backend.Helper;
 using backend.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -16,14 +17,16 @@ namespace backend.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderRepository _orderRepo;
+        private readonly IEmailSender _emailSender;
 
-        public OrderController(IOrderRepository orderRepo)
+        public OrderController(IOrderRepository orderRepo, IEmailSender emailSender)
         {
             _orderRepo = orderRepo;
+            _emailSender = emailSender;
         }
 
         [HttpGet]
-        [Authorize(Roles = ("Customer, Manager, Administrator, SaleStaff, DeliveryStaff"))]
+        [Authorize(Roles = "Customer, Manager, Administrator, SaleStaff, DeliveryStaff")]
         public async Task<ActionResult> GetOrders([FromQuery] OrderQuery query)
         {
             var accountId = User.FindFirst("accountId")?.Value;
@@ -68,7 +71,7 @@ namespace backend.Controllers
             {
                 return BadRequest("The order could not be created.");
             }
-            System.Console.WriteLine(createdOrder.OrderId);
+            _emailSender.SendOrderEmail(createdOrder, OrderStatus.Delivering.ToString());
             return Ok(createdOrder);
         }
 
@@ -83,6 +86,15 @@ namespace backend.Controllers
             {
                 return BadRequest("The order could not be updated.");
             }
+            var currentOrder = await _orderRepo.GetOrderByIdAsync(updatedOrder.OrderId);
+            if (currentOrder == null)
+            {
+                return BadRequest("The order could not be updated.");
+            }
+            System.Console.WriteLine(currentOrder.OrderId);
+            System.Console.WriteLine(currentOrder.OrderStatus.ToString());
+            _emailSender.SendOrderEmail(currentOrder, currentOrder.OrderStatus.ToString());
+            System.Console.WriteLine("Send emaill");
             return Ok(updatedOrder);
         }
     }

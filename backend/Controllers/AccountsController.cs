@@ -32,7 +32,7 @@ namespace backend.Controllers
         }
 
         [HttpGet("me")]
-        [Authorize(Roles = ("Customer, Manager, Administrator, SaleStaff, DeliveryStaff"))]
+        [Authorize]
         public async Task<ActionResult> GetCurrentAccount()
         {
             var accountId = User.FindFirst("accountId")?.Value;
@@ -79,16 +79,21 @@ namespace backend.Controllers
             }
             return Ok(newAccount);
         }
+
         [HttpPut("ChangePassword/{id}")]
-        public async Task<IActionResult> ChangePassword([FromRoute]long id,[FromBody]UpdatePasswordAccountDTO account)
+        public async Task<IActionResult> ChangePassword(
+            [FromRoute] long id,
+            [FromBody] UpdatePasswordAccountDTO account
+        )
         {
-            var newAccount = await _accountRepo.UpdatePasswordAsync(id,account);
+            var newAccount = await _accountRepo.UpdatePasswordAsync(id, account);
             if (newAccount == null)
             {
                 return BadRequest("The current password is incorrect.");
             }
             return Ok(newAccount);
         }
+
         /// <summary>
         /// Search for customer's accounts based on name and phone number
         /// </summary>
@@ -100,14 +105,15 @@ namespace backend.Controllers
         {
             query.AccountRole = Role.Customer.ToString();
             var accountsListModels = await _accountRepo.SearchAccountOnRole(query);
-            ListWithPagingDTO<AccountDTO> accountsDTO = new()
-            {
-                Content = accountsListModels.Content!.Select(x => x.ToAccountDTO()).ToList(),
-                PageSize = accountsListModels.PageSize,
-                CurrentPage = accountsListModels.CurrentPage,
-                TotalCount = accountsListModels.TotalCount,
-                TotalPages = accountsListModels.TotalPages
-            };
+            ListWithPagingDTO<AccountDTO> accountsDTO =
+                new()
+                {
+                    Content = accountsListModels.Content!.Select(x => x.ToAccountDTO()).ToList(),
+                    PageSize = accountsListModels.PageSize,
+                    CurrentPage = accountsListModels.CurrentPage,
+                    TotalCount = accountsListModels.TotalCount,
+                    TotalPages = accountsListModels.TotalPages
+                };
 
             return Ok(accountsDTO);
         }
@@ -141,14 +147,15 @@ namespace backend.Controllers
         {
             query.AccountRole = Role.SaleStaff.ToString();
             var accountsListModels = await _accountRepo.SearchAccountOnRole(query);
-            ListWithPagingDTO<AccountDTO> accountsDTO = new()
-            {
-                Content = accountsListModels.Content!.Select(x => x.ToAccountDTO()).ToList(),
-                PageSize = accountsListModels.PageSize,
-                CurrentPage = accountsListModels.CurrentPage,
-                TotalCount = accountsListModels.TotalCount,
-                TotalPages = accountsListModels.TotalPages
-            };
+            ListWithPagingDTO<AccountDTO> accountsDTO =
+                new()
+                {
+                    Content = accountsListModels.Content!.Select(x => x.ToAccountDTO()).ToList(),
+                    PageSize = accountsListModels.PageSize,
+                    CurrentPage = accountsListModels.CurrentPage,
+                    TotalCount = accountsListModels.TotalCount,
+                    TotalPages = accountsListModels.TotalPages
+                };
 
             return Ok(accountsDTO);
         }
@@ -160,18 +167,21 @@ namespace backend.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("DeliveryStaff")]
-        public async Task<ActionResult> GetDeliveryStaffAccounts([FromQuery] AccountSearchQuery query)
+        public async Task<ActionResult> GetDeliveryStaffAccounts(
+            [FromQuery] AccountSearchQuery query
+        )
         {
             query.AccountRole = Role.DeliveryStaff.ToString();
             var accountsListModels = await _accountRepo.SearchAccountOnRole(query);
-            ListWithPagingDTO<AccountDTO> accountsDTO = new()
-            {
-                Content = accountsListModels.Content!.Select(x => x.ToAccountDTO()).ToList(),
-                PageSize = accountsListModels.PageSize,
-                CurrentPage = accountsListModels.CurrentPage,
-                TotalCount = accountsListModels.TotalCount,
-                TotalPages = accountsListModels.TotalPages
-            };
+            ListWithPagingDTO<AccountDTO> accountsDTO =
+                new()
+                {
+                    Content = accountsListModels.Content!.Select(x => x.ToAccountDTO()).ToList(),
+                    PageSize = accountsListModels.PageSize,
+                    CurrentPage = accountsListModels.CurrentPage,
+                    TotalCount = accountsListModels.TotalCount,
+                    TotalPages = accountsListModels.TotalPages
+                };
 
             return Ok(accountsDTO);
         }

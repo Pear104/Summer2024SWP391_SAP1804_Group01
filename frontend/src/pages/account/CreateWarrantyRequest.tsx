@@ -9,6 +9,8 @@ import { GET, POST } from "../../utils/request";
 import { useNavigate } from "react-router-dom";
 import { useQueries } from "@tanstack/react-query";
 import Loading from "../../components/Loading";
+import moment from "moment";
+import dayjs from "dayjs";
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
@@ -44,36 +46,43 @@ export default function CreateWarrantyRequest() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
-  const [order] = useQueries({
+  const [warrantyCards] = useQueries({
     queries: [
       {
-        queryKey: ["orders"],
-        queryFn: () => GET("/api/Order?OrderStatus=Completed"),
+        queryKey: ["warrantyCards"],
+        queryFn: () => GET("/api/WarrantyCards/me"),
         staleTime: 0,
       },
     ],
   });
-  const options: Option[] = order?.data?.orders
-    ?.map((order: any) =>
-      order.orderDetails.map((orderDetail: any) => ({
-        key: orderDetail.warrantyCardId,
-        value: orderDetail.warrantyCardId,
-        label: `${orderDetail?.diamond.carat} ct ${
-          orderDetail?.diamond.shape
-        } Shape Diamond #${orderDetail?.diamond.certificateNumber} ${
-          orderDetail?.accessory?.name
-            ? "+ " + orderDetail?.accessory?.name
-            : ""
-        }`,
-      }))
-    )
-    .flat();
+  const options: Option[] = warrantyCards?.data?.map((warrantyCard: any) => ({
+    key: warrantyCard.warrantyCardId,
+    value: warrantyCard.warrantyCardId,
+    label: warrantyCard.diamondId
+      ? `${warrantyCard?.diamond?.carat} ct ${warrantyCard?.diamond?.shape?.name} Shape Diamond #${warrantyCard?.diamond.certificateNumber}`
+      : warrantyCard?.accessory?.name,
+  }));
+  // const options: Option[] = warrantyCards?.data?.orders
+  //   ?.map((order: any) =>
+  //     order.orderDetails.map((orderDetail: any) => ({
+  //       key: orderDetail.warrantyCardId,
+  //       value: orderDetail.warrantyCardId,
+  //       label: `${orderDetail?.diamond.carat} ct ${
+  //         orderDetail?.diamond.shape
+  //       } Shape Diamond #${orderDetail?.diamond.certificateNumber} ${
+  //         orderDetail?.accessory?.name
+  //           ? "+ " + orderDetail?.accessory?.name
+  //           : ""
+  //       }`,
+  //     }))
+  //   )
+  //   .flat();
 
-  console.log(options);
+  console.log(warrantyCards?.data);
 
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
-      warrantyCardId: "-1",
+      warrantyCardId: "",
       warrantyReason: "",
       phoneNumber: "",
       shippingAddress: "",
@@ -137,7 +146,7 @@ export default function CreateWarrantyRequest() {
                 required
               >
                 <Select
-                  loading={order?.isFetching}
+                  loading={warrantyCards?.isFetching}
                   showSearch
                   className="text-sm border h-9"
                   placeholder="Choose a product"
@@ -173,7 +182,10 @@ export default function CreateWarrantyRequest() {
                 className="w-full"
                 required
               >
-                <DatePicker className="border rounded-none h-10 w-full" />
+                <DatePicker
+                  minDate={dayjs(moment().format("DD-MM-YYYY"), "DD-MM-YYYY")}
+                  className="border rounded-none h-10 w-full"
+                />
               </FormItem>
 
               <FormItem

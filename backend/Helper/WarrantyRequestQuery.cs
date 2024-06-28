@@ -9,7 +9,7 @@ namespace backend.Helper
     public class WarrantyRequestQuery
     {
         public long? CustomerId { get; set; }
-        public long? SaleStaffId { get; set; }
+        public long? WarrantyStaffId { get; set; }
         public long? DeliveryStaffId { get; set; }
         public DateTime? ReceiveTime { get; set; }
         public DateTime? ReturnTime { get; set; }

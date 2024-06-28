@@ -11,7 +11,7 @@ namespace backend.DTOs.WarrantyRequest
         public long? WarrantyRequestId { get; set; }
         public string? WarrantyReason { get; set; } = string.Empty;
         public long? CustomerId { get; set; }
-        public long? SaleStaffId { get; set; }
+        public long? WarrantyStaffId { get; set; }
         public long? DeliveryStaffId { get; set; }
         public long? WarrantyCardId { get; set; }
         public DateTime? ReceiveTime { get; set; }

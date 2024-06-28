@@ -54,6 +54,11 @@ namespace backend.Repository
         {
             var blogsQuery = _context.Blogs.Include(x => x.Author).AsQueryable();
 
+            if (!string.IsNullOrEmpty(query.SortBy))
+            {
+                blogsQuery = blogsQuery.OrderByDescending(x => x.CreatedAt);
+            }
+
             var totalCount = await blogsQuery.CountAsync();
             var totalPages = totalCount / (query.PageSize ?? 10);
             var blogs = await blogsQuery

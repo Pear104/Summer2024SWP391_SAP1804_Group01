@@ -13,13 +13,15 @@ namespace backend.Models
 
         [Column("order_detail_id")]
         public long OrderDetailId { get; set; }
-        public OrderDetail OrderDetail { get; set; }
+        public OrderDetail? OrderDetail { get; set; }
 
         [Column("diamond_id")]
         public long? DiamondId { get; set; }
+        public Diamond? Diamond { get; set; }
 
         [Column("accessory_id")]
         public long? AccessoryId { get; set; }
+        public Accessory? Accessory { get; set; }
 
         [Column("start_time")]
         public DateTime StartTime { get; set; } = DateTime.Now;

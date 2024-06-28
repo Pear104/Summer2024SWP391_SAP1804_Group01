@@ -1,5 +1,5 @@
 import { useQueries } from "@tanstack/react-query";
-import SaleStaffComponent from "./SaleStaffComponent";
+import WarrantyStaffComponent from "./WarrantyStaffComponent";
 import { GET } from "../../../../utils/request";
 import DeliveryStaffComponent from "./DeliveryStaffComponent";
 import WarrantyUpdateComponent from "./WarrantyUpdateComponent";
@@ -8,8 +8,8 @@ export default function WarrantyRow({ warranty }: { warranty: any }) {
   const [saleStaffs, deliveryStaffs] = useQueries({
     queries: [
       {
-        queryKey: ["saleStaffs"],
-        queryFn: () => GET("/api/Accounts?Role=SaleStaff"),
+        queryKey: ["warrantyStaff"],
+        queryFn: () => GET("/api/Accounts?Role=WarrantyStaff"),
         staleTime: 0,
       },
       {
@@ -50,17 +50,17 @@ export default function WarrantyRow({ warranty }: { warranty: any }) {
           <div className="text-sm text-gray-500">{warranty.phoneNumber}</div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          <SaleStaffComponent
-            warrantyRequestId={warranty.warrantyRequestId}
-            staffs={saleStaffs?.data || []}
-            currentStaff={warranty?.saleStaffName}
-          />
-        </td>
-        <td className="px-6 py-4 whitespace-nowrap">
           <DeliveryStaffComponent
             warrantyRequestId={warranty.warrantyRequestId}
             staffs={deliveryStaffs?.data || []}
             currentStaff={warranty?.deliveryStaffName}
+          />
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <WarrantyStaffComponent
+            warrantyRequestId={warranty.warrantyRequestId}
+            staffs={saleStaffs?.data || []}
+            currentStaff={warranty?.warrantyStaffName}
           />
         </td>
         <td className="px-6 py-4 whitespace-nowrap">

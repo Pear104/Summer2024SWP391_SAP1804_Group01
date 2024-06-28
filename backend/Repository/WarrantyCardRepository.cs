@@ -6,6 +6,7 @@ using backend.Data;
 using backend.DTOs.WarrantyCard;
 using backend.Helper;
 using backend.Interfaces;
+using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repository
@@ -13,38 +14,62 @@ namespace backend.Repository
     public class WarrantyCardRepository : IWarrantyCardRepository
     {
         private readonly ApplicationDbContext _context;
+
         public WarrantyCardRepository(ApplicationDbContext context)
         {
             _context = context;
         }
+
+        public async Task<List<WarrantyCard>?> getUserWarrantyCards(long userId)
+        {
+            var user = await _context.Accounts.FindAsync(userId);
+            if (user == null)
+            {
+                return null;
+            }
+            var warrantyCardQueries = await _context
+                .WarrantyCards.Include(x => x.Diamond)
+                .ThenInclude(x => x.Shape)
+                .Include(x => x.Accessory)
+                .Where(x => x.OrderDetail.Order.CustomerId == userId)
+                .ToListAsync();
+            return warrantyCardQueries;
+        }
+
         public async Task<WarrantyCardResult?> getWarrantyCards(WarrantyCardQuery query)
         {
             var warrantyCardQueries = _context.WarrantyCards.AsQueryable();
 
             if (query.WarrantyCardId.HasValue)
             {
-                warrantyCardQueries = warrantyCardQueries.Where(x => x.WarrantyCardId == query.WarrantyCardId);
+                warrantyCardQueries = warrantyCardQueries.Where(x =>
+                    x.WarrantyCardId == query.WarrantyCardId
+                );
             }
             if (query.DiamondId.HasValue)
             {
-                warrantyCardQueries = warrantyCardQueries.Where(x => x.DiamondId == query.DiamondId);
+                warrantyCardQueries = warrantyCardQueries.Where(x =>
+                    x.DiamondId == query.DiamondId
+                );
             }
             if (query.AccessoryId.HasValue)
             {
-                warrantyCardQueries = warrantyCardQueries.Where(x => x.DiamondId == query.DiamondId);
+                warrantyCardQueries = warrantyCardQueries.Where(x =>
+                    x.DiamondId == query.DiamondId
+                );
             }
-            if(query.MinDate.HasValue)
+            if (query.MinDate.HasValue)
             {
                 warrantyCardQueries = warrantyCardQueries.Where(x => x.StartTime >= query.MinDate);
             }
-            if(query.MaxDate.HasValue)
+            if (query.MaxDate.HasValue)
             {
                 warrantyCardQueries = warrantyCardQueries.Where(x => x.StartTime <= query.MaxDate);
             }
 
             var totalCount = await warrantyCardQueries.CountAsync();
 
-            var totalPages = (int) Math.Ceiling(totalCount / (double) query.PageSize);
+            var totalPages = (int)Math.Ceiling(totalCount / (double)query.PageSize);
 
             var warrantyCards = await warrantyCardQueries
                 .OrderByDescending(x => x.StartTime)
@@ -60,7 +85,8 @@ namespace backend.Repository
                 })
                 .ToListAsync();
 
-            return new WarrantyCardResult {
+            return new WarrantyCardResult
+            {
                 WarrantyCards = warrantyCards,
                 TotalPages = totalPages,
                 PageSize = query.PageSize,

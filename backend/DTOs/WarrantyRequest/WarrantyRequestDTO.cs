@@ -12,10 +12,11 @@ namespace backend.DTOs.WarrantyRequest
         public string WarrantyReason { get; set; } = string.Empty;
         public string Product { get; set; } = string.Empty;
         public long CustomerId { get; set; }
+
         // Dat fix null 25/06
         public string CustomerName { get; set; } = string.Empty;
-        public long? SaleStaffId { get; set; }
-        public string? SaleStaffName { get; set; }
+        public long? WarrantyStaffId { get; set; }
+        public string? WarrantyStaffName { get; set; }
         public long? DeliveryStaffId { get; set; }
         public string? DeliveryStaffName { get; set; }
         public long WarrantyCardId { get; set; }

@@ -100,8 +100,7 @@ namespace backend.Repository
 
                     var warrantyCardDiamond = new WarrantyCard
                     {
-                        AccessoryId = null,
-                        DiamondId = orderDetailDto.DiamondId,
+                        Diamond = diamond,
                         OrderDetail = orderDetail,
                         EndTime = DateTime.Now.AddMonths(24)
                     };
@@ -119,8 +118,7 @@ namespace backend.Repository
 
                         var warrantyCardAccessory = new WarrantyCard
                         {
-                            AccessoryId = orderDetailDto.AccessoryId,
-                            DiamondId = null,
+                            Accessory = accessory,
                             OrderDetail = orderDetail,
                             EndTime = DateTime.Now.AddMonths(12)
                         };
@@ -175,31 +173,6 @@ namespace backend.Repository
             await _context.SaveChangesAsync();
             return newOrder;
         }
-
-        //public async Task<OrderDetail?> CreateOrderDetailAsync(CreateOrderDetailDTO order)
-        //{
-        //    var diamond = _context.Diamonds.FirstOrDefault(x => x.DiamondId == order.DiamondId);
-        //    var accessory = _context.Accessories.FirstOrDefault(x =>
-        //        x.AccessoryId == order.AccessoryId
-        //    );
-        //    var materialPrice = _context.MaterialPrices.FirstOrDefault(x =>
-        //        x.MaterialPriceId == order.MaterialPriceId
-        //    );
-        //    var diamondPrice = _context.DiamondPrices.FirstOrDefault(x =>
-        //        x.DiamondPriceId == order.DiamondPriceId
-        //    );
-        //    if (diamond != null && materialPrice != null && diamondPrice != null)
-        //    {
-        //        var orderDetail = order.ToOrderDetailFromCreate();
-        //        orderDetail.Accessory = accessory;
-        //        orderDetail.Diamond = diamond;
-        //        orderDetail.MaterialPrice = materialPrice;
-        //        orderDetail.DiamondPrice = diamondPrice;
-        //        await _context.OrderDetails.AddAsync(orderDetail);
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    return null;
-        //}
 
         public async Task<OrderResult?> GetAllOrdersAsync(OrderQuery query)
         {
@@ -344,7 +317,7 @@ namespace backend.Repository
             };
         }
 
-        public async Task<OrderDTO?> GetOrderByIdAsync(string id)
+        public async Task<Order?> GetOrderByIdAsync(string id)
         {
             var order = await _context
                 .Orders.Include(x => x.OrderDetails)
@@ -363,19 +336,20 @@ namespace backend.Repository
                 .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.DiamondPrice)
                 .Include(x => x.SaleStaff)
+                .Include(x => x.PriceRate)
                 .Include(x => x.DeliveryStaff)
                 .Include(x => x.Customer)
                 .Include(x => x.Promotion)
                 .FirstOrDefaultAsync(x => x.OrderId.Equals(id));
 
-            var orderDTO = order?.ToOrderDTO();
+            // var orderDTO = order?.ToOrderDTO();
 
-            if (orderDTO == null)
-            {
-                return null;
-            }
+            // if (orderDTO == null)
+            // {
+            //     return null;
+            // }
 
-            return orderDTO;
+            return order;
         }
 
         public async Task<Order?> UpdateOrderAsync(string id, UpdateOrderDTO order)

@@ -1,5 +1,7 @@
 import { Dropdown, Menu, Button } from "antd";
 import { DownOutlined } from "@ant-design/icons";
+import { jwtDecode } from "jwt-decode";
+import { getCookie } from "../../../../utils/cookie";
 
 export const StatusMenu = ({
   handleStatusClick,
@@ -31,36 +33,30 @@ export const StatusMenu = ({
   }
   return (
     <Dropdown
+      disabled={
+        (jwtDecode(getCookie("accessToken") || "") as any)?.role == "Manager"
+      }
       overlay={
         <Menu>
-
-          <Menu.Item key="2"  
-          disabled={statusText != "Pending"}
-          >
+          <Menu.Item key="2" disabled={statusText != "Pending"}>
             <a onClick={() => handleStatusClick("Getting")}>Getting</a>
           </Menu.Item>
 
-          <Menu.Item
-            key="3" 
-            disabled={statusText != "Getting"}
-          >
+          <Menu.Item key="3" disabled={statusText != "Getting"}>
             <a onClick={() => handleStatusClick("Processing")}>Processing</a>
           </Menu.Item>
-          <Menu.Item
-            key="4" 
-             disabled={statusText != "Processing"}
-          >
+          <Menu.Item key="4" disabled={statusText != "Processing"}>
             <a onClick={() => handleStatusClick("Returning")}>Returning</a>
           </Menu.Item>
-          
+
           <Menu.Item
             key="5"
-             disabled={statusText == "Completed" || statusText == "Failed"}
+            disabled={statusText == "Completed" || statusText == "Failed"}
           >
             <a onClick={() => handleStatusClick("Failed")}>Failed</a>
           </Menu.Item>
           <Menu.Item
-             disabled={statusText != "Returning" || statusText == "Completed"}
+            disabled={statusText != "Returning" || statusText == "Completed"}
             key="6"
           >
             <a onClick={() => handleStatusClick("Completed")}>Completed</a>

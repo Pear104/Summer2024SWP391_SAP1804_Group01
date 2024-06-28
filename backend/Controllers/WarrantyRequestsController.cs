@@ -32,16 +32,18 @@ namespace backend.Controllers
             {
                 query.CustomerId = long.Parse(accountId ?? "0");
             }
-           
-            if (role == "SaleStaff")
+
+            if (role == "WarrantyStaff")
             {
-                query.SaleStaffId = long.Parse(accountId ?? "0");
+                query.WarrantyStaffId = long.Parse(accountId ?? "0");
             }
             if (role == "DeliveryStaff")
             {
                 query.DeliveryStaffId = long.Parse(accountId ?? "0");
             }
-            var warrantyRequestResult = await _warrantyRequestRepo.GetAllWarrantyRequestsAsync(query);
+            var warrantyRequestResult = await _warrantyRequestRepo.GetAllWarrantyRequestsAsync(
+                query
+            );
             return Ok(warrantyRequestResult);
         }
 

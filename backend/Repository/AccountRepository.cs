@@ -103,6 +103,8 @@ namespace backend.Repository
                 // .Include(x => x.OrdersOfSaleStaff)
                 // .Include(x => x.OrdersOfDeliveryStaff)
                 // .Include(x => x.OrdersOfCustomer)
+                .OrderBy(x => x.AccountId)
+                .AsSplitQuery()
                 .AsQueryable();
             if (!string.IsNullOrEmpty(query.Role))
             {

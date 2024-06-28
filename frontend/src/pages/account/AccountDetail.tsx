@@ -102,22 +102,28 @@ export default function AccountDetail() {
             <div className="text-center">
               Current reward: -{userInfo?.rank?.discount * 100}% all order
             </div>
-            <Progress
-              percent={
-                ((userInfo?.rewardPoint - userInfo?.rank?.rewardPoint) /
-                  (ranks?.data?.find((r: any) => r.rankId == nextRank)
-                    ?.rewardPoint -
-                    userInfo?.rank?.rewardPoint)) *
-                100
-              }
-              size="small"
-            />
-            <div>
-              You need{" "}
-              {ranks?.data?.find((r: any) => r.rankId == nextRank)
-                ?.rewardPoint - userInfo?.rewardPoint}{" "}
-              point more to reach next rank
-            </div>
+            {userInfo?.rank?.rankId != 6 && (
+              <Progress
+                percent={
+                  ((userInfo?.rewardPoint - userInfo?.rank?.rewardPoint) /
+                    (ranks?.data?.find((r: any) => r.rankId == nextRank)
+                      ?.rewardPoint -
+                      userInfo?.rank?.rewardPoint)) *
+                  100
+                }
+                size="small"
+              />
+            )}
+            {userInfo?.rank?.rankId != 6 ? (
+              <div>
+                You need{" "}
+                {ranks?.data?.find((r: any) => r.rankId == nextRank)
+                  ?.rewardPoint - userInfo?.rewardPoint}{" "}
+                point more to reach next rank
+              </div>
+            ) : (
+              <div>You reached the highest rank in the system</div>
+            )}
           </div>
         </div>
         <div>

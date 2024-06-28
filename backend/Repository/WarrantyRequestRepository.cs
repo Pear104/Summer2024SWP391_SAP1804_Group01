@@ -54,41 +54,47 @@ namespace backend.Repository
             throw new NotImplementedException();
         }
 
-        public async Task<WarrantyRequestResult> GetAllWarrantyRequestsAsync(WarrantyRequestQuery query)
+        public async Task<WarrantyRequestResult> GetAllWarrantyRequestsAsync(
+            WarrantyRequestQuery query
+        )
         {
             var warrantyRequestQueries = _context
                 .WarrantyRequests.Include(x => x.WarrantyCard)
-                .ThenInclude(x => x.OrderDetail)
                 .ThenInclude(x => x.Diamond)
                 .ThenInclude(x => x.Shape)
                 .Include(x => x.WarrantyCard)
-                .ThenInclude(x => x.OrderDetail)
                 .ThenInclude(x => x.Accessory)
-                .Include(x => x.SaleStaff)
+                .Include(x => x.WarrantyStaff)
                 .Include(x => x.DeliveryStaff)
                 .Include(x => x.Customer)
                 .AsQueryable();
 
             if (query.WarrantyStatus != null)
             {
-                warrantyRequestQueries = warrantyRequestQueries.Where(x => x.WarrantyStatus == query.WarrantyStatus);
+                warrantyRequestQueries = warrantyRequestQueries.Where(x =>
+                    x.WarrantyStatus == query.WarrantyStatus
+                );
             }
             if (query.CustomerId > 0)
             {
-                warrantyRequestQueries = warrantyRequestQueries.Where(x => x.CustomerId == query.CustomerId);
+                warrantyRequestQueries = warrantyRequestQueries.Where(x =>
+                    x.CustomerId == query.CustomerId
+                );
             }
 
-            if (query.SaleStaffId > 0)
+            if (query.WarrantyStaffId > 0)
             {
-                warrantyRequestQueries = warrantyRequestQueries.Where(x => x.SaleStaffId == query.SaleStaffId);
+                warrantyRequestQueries = warrantyRequestQueries.Where(x =>
+                    x.WarrantyStaffId == query.WarrantyStaffId
+                );
             }
 
             if (query.DeliveryStaffId > 0)
             {
-                warrantyRequestQueries = warrantyRequestQueries.Where(x => x.DeliveryStaffId == query.DeliveryStaffId);
+                warrantyRequestQueries = warrantyRequestQueries.Where(x =>
+                    x.DeliveryStaffId == query.DeliveryStaffId
+                );
             }
-
-            
 
             var totalCount = await warrantyRequestQueries.CountAsync();
 
@@ -120,23 +126,31 @@ namespace backend.Repository
             UpdateWarrantyRequestDTO warrantyRequestDto
         )
         {
-            var existedWarrantyRequest = await _context.WarrantyRequests.FirstOrDefaultAsync(x => x.WarrantyRequestId.Equals(id));
+            var existedWarrantyRequest = await _context.WarrantyRequests.FirstOrDefaultAsync(x =>
+                x.WarrantyRequestId.Equals(id)
+            );
             if (existedWarrantyRequest == null)
             {
                 return null;
             }
             if (warrantyRequestDto.WarrantyStatus != null)
             {
-                existedWarrantyRequest.WarrantyStatus = Enum.Parse<WarrantyStatus>(warrantyRequestDto.WarrantyStatus);
+                existedWarrantyRequest.WarrantyStatus = Enum.Parse<WarrantyStatus>(
+                    warrantyRequestDto.WarrantyStatus
+                );
             }
-            if (warrantyRequestDto.SaleStaffId != 0)
+            if (warrantyRequestDto.WarrantyStaffId != 0)
             {
-                var saleStaff = _context.Accounts.FirstOrDefault(x => x.AccountId == warrantyRequestDto.SaleStaffId);
-                existedWarrantyRequest.SaleStaff = saleStaff;
+                var warrantyStaff = _context.Accounts.FirstOrDefault(x =>
+                    x.AccountId == warrantyRequestDto.WarrantyStaffId
+                );
+                existedWarrantyRequest.WarrantyStaff = warrantyStaff;
             }
             if (warrantyRequestDto.DeliveryStaffId != 0)
             {
-                var deliveryStaff = _context.Accounts.FirstOrDefault(x => x.AccountId == warrantyRequestDto.DeliveryStaffId);
+                var deliveryStaff = _context.Accounts.FirstOrDefault(x =>
+                    x.AccountId == warrantyRequestDto.DeliveryStaffId
+                );
                 existedWarrantyRequest.DeliveryStaff = deliveryStaff;
             }
             if (warrantyRequestDto.ReturnTime != null)

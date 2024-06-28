@@ -20,8 +20,8 @@ export default function WarrantyRequest() {
     "Customer",
     "Shipping Address",
     "Phone Number",
-    "Sale Staff",
     "Delivery Staff",
+    "Warranty Staff",
     "Status",
   ];
 

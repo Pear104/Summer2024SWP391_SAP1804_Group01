@@ -52,7 +52,6 @@ export default function TopNav() {
   } else {
     try {
       decode = jwtDecode(token) as any;
-      console.log("Decoded token: ", decode);
     } catch (error: any) {
       console.error("Error decoding token: ", error.message);
     }
@@ -76,7 +75,6 @@ export default function TopNav() {
       },
     ],
   });
-  console.log(decode);
   return (
     <>
       {contextHolder}

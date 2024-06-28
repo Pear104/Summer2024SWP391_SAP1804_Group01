@@ -19,9 +19,9 @@ namespace backend.Models
         public long CustomerId { get; set; }
         public Account? Customer { get; set; }
 
-        [Column("sale_staff_id")]
-        public long? SaleStaffId { get; set; }
-        public Account? SaleStaff { get; set; }
+        [Column("warranty_staff_id")]
+        public long? WarrantyStaffId { get; set; }
+        public Account? WarrantyStaff { get; set; }
 
         [Column("delivery_staff_id")]
         public long? DeliveryStaffId { get; set; }

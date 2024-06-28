@@ -1,6 +1,6 @@
 import { Divider } from "antd";
-import { useSearchStore } from "../../../store/searchStore";
-import { useEffect } from "react";
+// import { useSearchStore } from "../../../store/searchStore";
+// import { useEffect } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { GET } from "../../../utils/request";
 import SidebarBlogItem from "./SidebarBlogItem";
@@ -10,16 +10,12 @@ import { useParams } from "react-router-dom";
 
 export default function BlogSidebar() {
   const { blogId } = useParams();
-  const queryUrl = useSearchStore((state) => state.queryUrl);
-  const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
-  useEffect(() => {
-    setQueryUrl("/api/Blogs?");
-  }, []);
+  // const queryUrl = useSearchStore((state) => state.queryUrl);
   const [blogs] = useQueries({
     queries: [
       {
-        queryKey: ["blogs", queryUrl, blogId],
-        queryFn: () => GET(queryUrl),
+        queryKey: ["blogs", blogId],
+        queryFn: () => GET("/api/Blogs?SortBy=Date"),
       },
     ],
   });
@@ -35,7 +31,7 @@ export default function BlogSidebar() {
         )}
         {/* child item */}
         {blogs?.data?.blogs
-          ?.slice(1)
+          ?.slice(5)
           .map((blog: any, index: number) => (
             <SidebarBlogItem key={index} blog={blog} />
           )) || (

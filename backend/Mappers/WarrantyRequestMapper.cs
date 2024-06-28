@@ -11,14 +11,11 @@ namespace backend.Mappers
     {
         public static WarrantyRequestDTO ToWarrantyRequestDTO(this WarrantyRequest warrantyRequest)
         {
-            var diamond = warrantyRequest.WarrantyCard.OrderDetail.Diamond;
+            var diamond = warrantyRequest.WarrantyCard.Diamond;
             var productName =
-                $"{diamond.Carat} ct {diamond.Shape.Name} Shape Diamond #{diamond.CertificateNumber}"
-                + (
-                    warrantyRequest.WarrantyCard.OrderDetail?.Accessory?.Name != null
-                        ? ($" + {warrantyRequest.WarrantyCard.OrderDetail.Accessory.Name}")
-                        : ""
-                );
+                diamond != null
+                    ? $"{diamond.Carat} ct {diamond.Shape.Name} Shape Diamond #{diamond.CertificateNumber}"
+                    : warrantyRequest.WarrantyCard.Accessory.Name;
             return new WarrantyRequestDTO
             {
                 WarrantyRequestId = warrantyRequest.WarrantyRequestId,
@@ -26,8 +23,8 @@ namespace backend.Mappers
                 WarrantyReason = warrantyRequest.WarrantyReason,
                 CustomerId = warrantyRequest.CustomerId,
                 CustomerName = warrantyRequest.Customer.Name,
-                SaleStaffId = warrantyRequest.SaleStaffId ?? 0,
-                SaleStaffName = warrantyRequest.SaleStaff?.Name,
+                WarrantyStaffId = warrantyRequest.WarrantyStaffId ?? 0,
+                WarrantyStaffName = warrantyRequest.WarrantyStaff?.Name,
                 DeliveryStaffId = warrantyRequest.DeliveryStaffId ?? 0,
                 DeliveryStaffName = warrantyRequest.DeliveryStaff?.Name,
                 WarrantyCardId = warrantyRequest.WarrantyCardId,

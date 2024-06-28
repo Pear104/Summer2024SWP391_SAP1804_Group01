@@ -56,6 +56,7 @@ namespace backend.Models
         public long ShapeId { get; set; }
         public Shape Shape { get; set; } = new Shape();
 
-        public List<OrderDetail> OrderDetails { get; set; }
+        public List<OrderDetail>? OrderDetails { get; set; }
+        public List<WarrantyCard> WarrantyCards { get; set; }
     }
 }

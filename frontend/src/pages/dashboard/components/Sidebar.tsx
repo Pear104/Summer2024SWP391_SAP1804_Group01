@@ -59,7 +59,8 @@ const ROLE_PERMISSIONS: Record<Role, string[]> = {
     "potential-customer-report",
   ],
   SaleStaff: ["dashboard", "salestaff", "warranty-request"],
-  DeliveryStaff: ["dashboard", "deliverystaff", "deliverywarrantystaff"],
+  // DeliveryStaff: ["dashboard", "deliverystaff", "deliverywarrantystaff"],
+  DeliveryStaff: ["dashboard", "deliverystaff", "warranty-request"],
   WarrantyStaff: ["dashboard", "warranty-request"],
 };
 
@@ -163,7 +164,7 @@ export default function Sidebar() {
       key: "promotion",
       label: "Promotion",
       path: "/admin/promotion",
-      icon: <TicketPercent  />,
+      icon: <TicketPercent />,
     },
     {
       key: "blog",

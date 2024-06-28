@@ -54,7 +54,7 @@ namespace backend.Models
 
         [Column("promotion_id")]
         public long? PromotionId { get; set; }
-        public Promotion? Promotion { get; set; } = null;
+        public Promotion? Promotion { get; set; }
         public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
         public List<Transaction> Transactions { get; set; } = new List<Transaction>();
     }

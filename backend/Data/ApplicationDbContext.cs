@@ -70,10 +70,7 @@ namespace backend.Data
                 .HasConversion<string>();
 
             // Set unique
-            builder
-                .Entity<Promotion>()
-                .HasIndex(p => p.PromotionCode)
-                .IsUnique();
+            builder.Entity<Promotion>().HasIndex(p => p.PromotionCode).IsUnique();
 
             // Set Id auto increment
             builder.Entity<Shape>().Property(o => o.ShapeId).ValueGeneratedOnAdd();
@@ -203,6 +200,22 @@ namespace backend.Data
                 .HasForeignKey(w => w.OrderDetailId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            //Them khoa ngoai giua WarrantyCard voi Diamond
+            builder
+                .Entity<WarrantyCard>()
+                .HasOne(o => o.Diamond)
+                .WithMany(o => o.WarrantyCards)
+                .HasForeignKey(o => o.DiamondId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            //Them khoa ngoai giua WarrantyCard voi Accessory
+            builder
+                .Entity<WarrantyCard>()
+                .HasOne(o => o.Accessory)
+                .WithMany(o => o.WarrantyCards)
+                .HasForeignKey(o => o.AccessoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             //Them khoa ngoai giua WarrantyCard voi WarrantyRequest
             builder
                 .Entity<WarrantyRequest>()
@@ -288,9 +301,9 @@ namespace backend.Data
             //Them khoa ngoai giua SaleStaff voi WarrantyRequest
             builder
                 .Entity<WarrantyRequest>()
-                .HasOne(o => o.SaleStaff)
-                .WithMany(o => o.WarrantyRequestsOfSaleStaff)
-                .HasForeignKey(o => o.SaleStaffId)
+                .HasOne(o => o.WarrantyStaff)
+                .WithMany(o => o.WarrantyRequestsOfWarrantyStaff)
+                .HasForeignKey(o => o.WarrantyStaffId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Them khoa ngoai giua DeliveryStaff voi WarrantyRequest

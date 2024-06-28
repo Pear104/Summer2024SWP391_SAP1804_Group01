@@ -25,6 +25,7 @@ namespace backend.Controllers
         public async Task<ActionResult> GetBlogs([FromQuery] BlogQuery query)
         {
             var blogResult = await _blogRepo.GetAllBlogsAsync(query);
+            System.Console.WriteLine("Sort by:" + query.SortBy);
             return Ok(blogResult);
         }
 
