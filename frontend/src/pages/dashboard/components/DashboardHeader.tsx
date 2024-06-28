@@ -31,7 +31,7 @@ export default function DashboardHeader() {
         />
       </div>
       <div className="flex items-center gap-3 mr-2">
-        <Popover>
+        {/* <Popover>
           <PopoverButton className="text-sm/6 font-semibold text-neutral-950/50 focus:outline-none data-[active]:text-black data-[hover]:text-black data-[focus]:outline-1 data-[focus]:outline-black">
             <HiOutlineBell fontSize={24} />
           </PopoverButton>
@@ -107,17 +107,10 @@ export default function DashboardHeader() {
                   <p className="font-semibold text-white">Reports</p>
                 </a>
               </div>
-              {/* <div className="p-3">
-                <a
-                  className="block rounded-lg py-2 px-3 transition hover:bg-slate-700"
-                  href="#"
-                >
-                  <p className="font-semibold text-white">Documentation</p>
-                </a>
-              </div> */}
+              
             </PopoverPanel>
           </Transition>
-        </Popover>
+        </Popover> */}
 
         <Menu as="div">
           <div>
@@ -126,7 +119,7 @@ export default function DashboardHeader() {
                 className="h-10 w-10 rounded-full bg-sky-500 bg-cover bg-no-repeat bg-center"
                 style={{
                   backgroundImage:
-                    'url("https://source.unsplash.com/80x80?face")',
+                    'url("https://cdn-icons-png.flaticon.com/512/149/149071.png")',
                 }}
               ></div>
             </MenuButton>

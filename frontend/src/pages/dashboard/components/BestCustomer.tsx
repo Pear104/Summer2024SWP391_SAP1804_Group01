@@ -64,13 +64,13 @@ export default function RecentOrders() {
             </tr>
           </thead>
           <tbody>
-            {sortData
+            {/* {sortData
               .filter((customer) => customer.totalSpend > 0)
-              .slice(0, 5)
+              .slice(0, 10)
               .map((customer) => (
                 <tr key={customer.customerID}>
                   <td className="px-4 py-2">
-                    {/* <Link to={`/customer/${customer.id}`}>#{customer.id}</Link> */}
+                    
                     #{customer.customerID}
                   </td>
                   <td className="px-4 py-2">
@@ -82,14 +82,36 @@ export default function RecentOrders() {
                     </Link>
                   </td>
                   <td className="px-4 py-2">
-                    {/* <Link to={`/customer/${customer.customer_id}`}>
-                    {customer.customer_name}
-                  </Link> */}
                     {customer.gender}
                   </td>
                   <td className="px-4 py-2">{customer.totalOrder}</td>
                   <td className="px-4 py-2">
                     ${customer.totalSpend.toFixed(2)}
+                  </td>
+                </tr>
+              ))} */}
+            {sortData
+              .filter((customer) => customer.totalSpend > 0)
+              .slice(0, 10)
+              .map((customer) => (
+                <tr key={customer.customerID}>
+                  <td className="px-4 py-2">#{customer.customerID}</td>
+                  <td className="px-4 py-2">
+                    <Link
+                      to={`/admin/customers/detail/${customer.customerID}`}
+                      className="hover:underline"
+                    >
+                      {customer.customerName}
+                    </Link>
+                  </td>
+                  <td className="px-4 py-2">{customer.gender}</td>
+                  <td className="px-4 py-2">{customer.totalOrder}</td>
+                  <td className="px-4 py-2">
+                    $
+                    {customer.totalSpend.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
                   </td>
                 </tr>
               ))}

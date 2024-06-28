@@ -308,7 +308,7 @@ export default function ProductsManage() {
                         </td>
                       </tr>
                     )}
-                    {diamond?.isLoading && (
+                    {diamond?.isLoading ? (
                       <td colSpan={100} className="p-4">
                         <Skeleton
                           active
@@ -318,9 +318,8 @@ export default function ProductsManage() {
                           className="w-full"
                         />
                       </td>
-                    )}
-                    {diamondsData?.length > 0 ? (
-                      diamondsData?.map(renderDiamondRow)
+                    ) : diamondsData?.length > 0 ? (
+                      diamondsData.map(renderDiamondRow)
                     ) : (
                       <td colSpan={12} className="py-20 w-full">
                         <Empty description="There is no diamond" />
