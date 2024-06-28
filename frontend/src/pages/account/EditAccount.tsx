@@ -7,7 +7,7 @@ import { Button, DatePicker, Form, Input, Select } from "antd";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import moment from "moment";
-
+import dayjs from "dayjs";
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
 );
@@ -114,6 +114,18 @@ export default function EditAccount() {
               control={control}
             >
               <DatePicker
+                format={{
+                  format: "DD-MM-YYYY",
+                  type: "mask",
+                }}
+                maxDate={dayjs(
+                  moment().subtract(18, "years").format("DD-MM-YYYY"),
+                  "DD-MM-YYYY"
+                )}
+                minDate={dayjs(
+                  moment().subtract(100, "years").format("DD-MM-YYYY"),
+                  "DD-MM-YYYY"
+                )}
                 className="w-full h-10"
                 defaultValue={profile ? moment(profile.birthday) : null}
               />

@@ -92,7 +92,11 @@ function PopularAccessories() {
             </div>
             <div className="text-xs text-gray-400 pl-1.5">
               {product?.accessory_price ? (
-                "$" + parseFloat(product.accessory_price).toFixed(2)
+                "$" +
+                parseFloat(product.accessory_price).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })
               ) : (
                 <Skeleton.Button active />
               )}

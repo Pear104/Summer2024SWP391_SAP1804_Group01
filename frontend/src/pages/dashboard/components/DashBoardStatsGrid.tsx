@@ -12,7 +12,13 @@ export default function DashBoardStatsGrid() {
       console.log(data);
     })();
   }, []);
-
+  const totalSale = parseFloat(data?.totalSale).toFixed(2);
+  const formattedTotalSale = parseFloat(totalSale).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  const formattedTotalCustomer = data?.totalCustomer?.toLocaleString("en-US");
+  const formattedTotalOrder = data?.totalOrder?.toLocaleString("en-US");
   return (
     <div className="flex gap-4 w-full">
       <BoxWrapper>
@@ -23,7 +29,8 @@ export default function DashBoardStatsGrid() {
           <span className="text-sm text-gray-500 font-light">Total Sales</span>
           <div className="flex items-center">
             <strong className="text-xl text-gray-700 font-semibold">
-              ${parseFloat(data?.totalSale).toFixed(2)}
+              {/* ${parseFloat(data?.totalSale).toFixed(2)} */}$
+              {formattedTotalSale}
             </strong>
             {/* <span className="text-sm text-green-500 pl-2">+234</span> */}
           </div>
@@ -55,7 +62,7 @@ export default function DashBoardStatsGrid() {
           </span>
           <div className="flex items-center">
             <strong className="text-xl text-gray-700 font-semibold">
-              {data?.totalCustomer}
+              {formattedTotalCustomer}
             </strong>
             {/* <span className="text-sm text-red-500 pl-2">-30</span> */}
           </div>
@@ -69,7 +76,7 @@ export default function DashBoardStatsGrid() {
           <span className="text-sm text-gray-500 font-light">Total Orders</span>
           <div className="flex items-center">
             <strong className="text-xl text-gray-700 font-semibold">
-              {data?.totalOrder}
+              {formattedTotalOrder}
             </strong>
             {/* <span className="text-sm text-red-500 pl-2">-43</span> */}
           </div>

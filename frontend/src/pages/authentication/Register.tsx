@@ -211,6 +211,10 @@ export default function Register() {
               required
             >
               <DatePicker
+                format={{
+                  format: "DD-MM-YYYY",
+                  type: "mask",
+                }}
                 maxDate={dayjs(
                   moment().subtract(18, "years").format("DD-MM-YYYY"),
                   "DD-MM-YYYY"
