@@ -13,8 +13,6 @@ namespace backend.Interfaces
         public Task<Payment>? UpdatePayment(Payment payment);
         public Task<List<Payment>> GetAllPayment();
         public Task<Payment>? GetPaymentById(string id);
-        public Task<BaseResultWithData<(PaymentReturnDtos, string)>> ProcessMomoPaymentReturn(MomoOneTimePaymentResultRequest resultRequest);
-        public Task<BaseResult> ProcessMomoPaymentIpn();
         public Task<BaseResultWithData<(PaymentReturnDtos, string)>> ProcessVnpayPaymentResponse(VnpayPayResponse request);
         public Task<BaseResultWithData<VnpayPayIpnResponse>> ProcessVnpayIpnResponse(VnpayPayResponse request);
 

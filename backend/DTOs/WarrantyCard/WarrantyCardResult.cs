@@ -7,7 +7,7 @@ namespace backend.DTOs.WarrantyCard
 {
     public class WarrantyCardResult
     {
-        public List<WarrantyCardDTO> WarrantyCards { get; set; } = new List<WarrantyCardDTO>();
+        public List<WarrantyCardDTO>? WarrantyCards { get; set; }
         public int TotalPages { get; set; }
         public int PageSize { get; set; }
         public int CurrentPage { get; set; }

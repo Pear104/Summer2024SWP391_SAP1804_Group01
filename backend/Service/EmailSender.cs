@@ -49,14 +49,14 @@ namespace backend.Service
                             ? @"
                 <tr style=""height:50px"">
                           <td style=""padding:0;Margin:0;text-align:center;font-family:manrope, arial, sans-serif;font-size:12px"">"
-                                + x.Accessory.Name
+                                + x?.Accessory?.Name
                                 + @"</td>
                           <td style=""padding:0;Margin:0;text-align:center;font-family:manrope, arial, sans-serif;font-size:12px"">$"
                                 + (
                                     (
-                                        (x.Accessory.MaterialWeight + (x.Size - 3))
-                                            * x.MaterialPrice.UnitPrice
-                                        + x.Accessory.AccessoryType.ProcessingPrice
+                                        (x?.Accessory?.MaterialWeight + (x?.Size - 3))
+                                            * x?.MaterialPrice?.UnitPrice
+                                        + x?.Accessory?.AccessoryType.ProcessingPrice
                                     ) * order.PriceRate.Percent
                                 )?.ToString("N0")
                                 + @"</td>
@@ -176,7 +176,7 @@ a[x-apple-data-detectors] {
                      </tr>
                      <tr>
                       <td align=""center"" style=""padding:0;Margin:0;padding-top:5px;padding-bottom:5px""><p style=""Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Manrope, sans-serif;line-height:21px;color:#44465F;font-size:14px"">"
-                + $"Hello {order.Customer.Name}! {content}"
+                + $"Hello {order?.Customer?.Name}! {content}"
                 + @"</p><p style=""Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Manrope, sans-serif;line-height:21px;color:#44465F;font-size:14px"">Please review your order information below</p></td>
                      </tr>
                    </table></td>
@@ -191,9 +191,9 @@ a[x-apple-data-detectors] {
                    <table cellpadding=""0"" cellspacing=""0"" width=""100%"" style=""mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;border-top:1px solid #040404;border-bottom:1px solid transparent"">
                      <tr>
                       <td align=""center"" style=""padding:0;Margin:0;padding-top:10px""><p style=""Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Manrope, sans-serif;line-height:45px;color:#44465F;font-size:24px""><strong>ORDER # "
-                + order.OrderId
+                + order?.OrderId
                 + @"</strong></p><p style=""Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Manrope, sans-serif;line-height:21px;color:#44465F;font-size:14px"">"
-                + order.CreatedAt.ToString("dd/MM/yyyy")
+                + order?.CreatedAt.ToString("dd/MM/yyyy")
                 + @"</p></td>
                      </tr>
                    </table></td>
@@ -210,16 +210,16 @@ a[x-apple-data-detectors] {
                       <td align=""left"" style=""padding:0;Margin:0"">
                        <ul>
                         <li style=""-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Manrope, sans-serif;line-height:17px;Margin-bottom:15px;margin-left:0;color:#44465F;font-size:17px""><p style=""Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Manrope, sans-serif;line-height:14px;color:#44465F;font-size:14px""><strong>Client Name:</strong> "
-                + order.Customer.Name
+                + order?.Customer?.Name
                 + @"</p></li>
                         <li style=""-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Manrope, sans-serif;line-height:17px;Margin-bottom:15px;margin-left:0;color:#44465F;font-size:17px""><p style=""Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Manrope, sans-serif;line-height:14px;color:#44465F;font-size:14px""><strong>Address:</strong> "
-                + order.ShippingAddress
+                + order?.ShippingAddress
                 + @"</p></li>
                         <li style=""-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Manrope, sans-serif;line-height:17px;Margin-bottom:15px;margin-left:0;color:#44465F;font-size:17px""><p style=""Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Manrope, sans-serif;line-height:14px;color:#44465F;font-size:14px""><strong>Phone number:</strong> "
-                + order.PhoneNumber
+                + order?.PhoneNumber
                 + @"</p></li>
                         <li style=""-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Manrope, sans-serif;line-height:17px;Margin-bottom:15px;margin-left:0;color:#44465F;font-size:17px""><p style=""Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Manrope, sans-serif;line-height:14px;color:#44465F;font-size:14px""><strong>Email:</strong> "
-                + order.Customer.Email
+                + order?.Customer?.Email
                 + @"</p></li>
                        </ul></td>
                      </tr>
@@ -281,7 +281,7 @@ a[x-apple-data-detectors] {
                    <table cellpadding=""0"" cellspacing=""0"" width=""100%"" style=""mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"">
                      <tr>
                       <td align=""right"" style=""padding:0;Margin:0""><p style=""Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Manrope, sans-serif;line-height:27px;color:#44465F;font-size:18px"">$"
-                + order.TotalPrice.ToString("N0")
+                + order?.TotalPrice.ToString("N0")
                 + @"</p><p style=""Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:Manrope, sans-serif;line-height:27px;color:#44465F;font-size:18px"">"
                 + (order.TotalDiscountPercent * 100).ToString("N0")
                 + @"%</p></td>

@@ -6,6 +6,7 @@ import { GET } from "../../../utils/request";
 import { useQueries } from "@tanstack/react-query";
 import WarrantyColumnHeader from "./components/WarrantyColumnHeader";
 import LoadingItem from "./components/LoadingItem";
+import CardRow from "./components/CardRow";
 
 export default function CardManagement() {
   const location = useLocation();
@@ -27,31 +28,31 @@ export default function CardManagement() {
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   useEffect(() => {
-    setQueryUrl("/api/WarrantyCard?");
+    setQueryUrl("/api/WarrantyCards?");
   }, []);
 
-  const [warrantyRequestList] = useQueries({
+  const [warrantyCardList] = useQueries({
     queries: [
       {
-        queryKey: ["warrantyRequests", queryUrl],
+        queryKey: ["warrantyCard", queryUrl],
         queryFn: () => GET(queryUrl),
         staleTime: 0,
       },
     ],
   });
   console.log(queryUrl);
-  console.log(warrantyRequestList?.data);
+  console.log(warrantyCardList?.data);
 
-  //   const renderWarrantyRow = (warranty: any) => (
-  //     <WarrantyRow key={warranty.warrantyRequestId} warranty={warranty} />
-  //   );
+  const renderCardRow = (card: any) => (
+    <CardRow key={card.warrantyCardId} card={card} />
+  );
 
   // pagination, change page size
   const [pageSize, setPageSize] = useState(10);
   useEffect(() => {
     params.set("PageSize", pageSize.toString());
     navigate(url.pathname + "?" + params.toString());
-    setQueryUrl("/api/WarrantyRequests?" + params.toString());
+    setQueryUrl("/api/WarrantyCards?" + params.toString());
   }, [pageSize]);
 
   return (
@@ -105,31 +106,29 @@ export default function CardManagement() {
                             header={header}
                             setQueryUrl={setQueryUrl}
                             params={params}
-                            type="warranty-request"
+                            type="warranty-card"
                           />
                         );
                       })}
                     </tr>
                   </thead>
                   {/* body */}
-                  {/* <tbody className="bg-white divide-y divide-gray-200">
-                    {warrantyRequestList?.isLoading &&
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {warrantyCardList?.isLoading &&
                       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((key) => (
                         <LoadingItem key={key} />
                       ))}
-                    {warrantyRequestList?.data &&
-                    warrantyRequestList?.data?.warrantyRequests?.length > 0 ? (
-                      warrantyRequestList?.data?.warrantyRequests?.map(
-                        renderWarrantyRow
-                      )
+                    {warrantyCardList?.data &&
+                    warrantyCardList?.data?.warrantyCards?.length > 0 ? (
+                      warrantyCardList?.data?.warrantyCards?.map(renderCardRow)
                     ) : (
                       <td colSpan={100} className="py-40 w-full">
                         <Empty description="No warranty request to process" />
                       </td>
                     )}
-                  </tbody> */}
+                  </tbody>
                 </table>
-                {warrantyRequestList?.data?.warrantyRequests?.length > 0 && (
+                {warrantyCardList?.data?.warrantyRequests?.length > 0 && (
                   <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
                     <Pagination
                       showTotal={(total, range) =>
@@ -137,22 +136,20 @@ export default function CardManagement() {
                       }
                       current={Number(params.get("PageNumber")) || 1}
                       defaultCurrent={
-                        (warrantyRequestList?.data &&
-                          warrantyRequestList?.data.currentPage.toString()) ||
+                        (warrantyCardList?.data &&
+                          warrantyCardList?.data.currentPage.toString()) ||
                         "1"
                       }
                       total={
-                        warrantyRequestList?.data &&
-                        warrantyRequestList?.data.totalCount
+                        warrantyCardList?.data &&
+                        warrantyCardList?.data.totalCount
                       }
                       pageSize={Number(params.get("PageSize")) || 20}
                       onChange={(page, _pageSize) => {
                         params.set("PageNumber", page.toString());
                         params.set("PageSize", pageSize.toString());
                         navigate(url.pathname + "?" + params.toString());
-                        setQueryUrl(
-                          "/api/WarrantyRequest?" + params.toString()
-                        );
+                        setQueryUrl("/api/WarrantyCards?" + params.toString());
                         setSearchTerm("");
                       }}
                       showSizeChanger={true}
@@ -160,9 +157,7 @@ export default function CardManagement() {
                         setPageSize(size);
                         params.set("PageSize", size.toString());
                         navigate(url.pathname + "?" + params.toString());
-                        setQueryUrl(
-                          "/api/WarrantyRequest?" + params.toString()
-                        );
+                        setQueryUrl("/api/WarrantyCards?" + params.toString());
                       }}
                     />
                   </div>

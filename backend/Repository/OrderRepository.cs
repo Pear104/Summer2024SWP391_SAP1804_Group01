@@ -132,7 +132,7 @@ namespace backend.Repository
                             .FirstOrDefault();
                         orderDetail.Accessory = accessory;
                         orderDetail.MaterialPrice = materialPrice;
-                        orderDetail.ItemPrice =
+                        if(materialPrice != null) {orderDetail.ItemPrice =
                             PriceHelper.GetDiamondPrice(
                                 diamond.Carat,
                                 diamondPrice.UnitPrice,
@@ -144,7 +144,7 @@ namespace backend.Repository
                                 materialPrice.UnitPrice,
                                 accessory.AccessoryType.ProcessingPrice,
                                 priceRate.Percent
-                            );
+                            );}
                     }
                     else
                     {
