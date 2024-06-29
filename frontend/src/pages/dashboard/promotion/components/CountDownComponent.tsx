@@ -1,18 +1,15 @@
-import React, { useState } from "react";
-import { Statistic, Typography, Input, Button } from "antd";
+import { Statistic, Typography } from "antd";
 const { Countdown } = Statistic;
 const { Text } = Typography;
 
 export const CountdownComponent = ({ startTime, endTime }: any) => {
-  const [isExpired, setIsExpired] = useState(false);
-
   const startTimestamp = new Date(startTime).getTime();
   const endTimestamp = new Date(endTime).getTime();
   const now = Date.now();
 
   // Hàm xử lý khi đếm ngược kết thúc
   const onFinish = () => {
-    setIsExpired(true);
+    console.log("Countdown finished");
   };
 
   let content;
@@ -37,6 +34,5 @@ export const CountdownComponent = ({ startTime, endTime }: any) => {
       </Text>
     );
   }
-
   return <div className=" text-center p-0 m-0">{content}</div>;
 };

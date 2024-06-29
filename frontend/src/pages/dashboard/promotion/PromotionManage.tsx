@@ -20,6 +20,7 @@ export default function PriceRate() {
     "End Date",
     "Duration",
     "Status",
+    "Update",
   ];
   const searchTerm = useSearchStore((state) => state.searchTerm);
   const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
