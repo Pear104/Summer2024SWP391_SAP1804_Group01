@@ -83,24 +83,19 @@ namespace backend.Controllers
             return Ok(newAccessory);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAccessory(long id)
+        [HttpDelete("{id}/{isHidden}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteAccessory(
+            [FromRoute] long id,
+            [FromRoute] bool isHidden
+        )
         {
-            var accessory = await _context.Accessories.FindAsync(id);
-            if (accessory == null)
+            var model = await _accessoryRepo.DeleteAccessoryAsync(id, isHidden);
+            if (model == null)
             {
-                return NotFound();
+                return NotFound("Accessory not found.");
             }
-
-            _context.Accessories.Remove(accessory);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool AccessoryExists(long id)
-        {
-            return _context.Accessories.Any(e => e.AccessoryId == id);
+            return Ok(model);
         }
     }
 }

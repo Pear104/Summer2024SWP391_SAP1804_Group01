@@ -21,14 +21,15 @@ namespace backend.Repository
             _context = context;
         }
 
-        public async Task<Accessory?> DeleteAccessoryAsync(long id)
+        public async Task<Accessory?> DeleteAccessoryAsync(long id, bool isHidden)
         {
             var deletedModel = await _context.Accessories.FirstOrDefaultAsync(x =>
                 x.AccessoryId == id
             );
             if (deletedModel != null)
             {
-                _context.Accessories.Remove(deletedModel);
+                deletedModel.IsHidden = isHidden;
+                _context.Entry(deletedModel).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
                 return deletedModel;
             }
@@ -107,14 +108,15 @@ namespace backend.Repository
             existingAccessory.Name = accessoryDto.Name;
             existingAccessory.Karat = accessoryDto.Karat;
             existingAccessory.MaterialWeight = accessoryDto.MaterialWeight;
+            existingAccessory.Quantity = accessoryDto.Quantity;
             if (accessoryDto.Shape != existingAccessory.Shape.Name)
             {
                 var shape = await _context.Shapes.FirstOrDefaultAsync(x =>
                     x.Name == accessoryDto.Shape
                 );
+                // Shape not found
                 if (shape == null)
                 {
-                    System.Console.WriteLine("Shape not found");
                     return null;
                 }
                 existingAccessory.Shape = shape;
@@ -125,9 +127,9 @@ namespace backend.Repository
                 var accessoryType = await _context.AccessoryTypes.FirstOrDefaultAsync(x =>
                     x.Name == accessoryDto.AccessoryType
                 );
+                // Type not found
                 if (accessoryType == null)
                 {
-                    System.Console.WriteLine("Type not found");
                     return null;
                 }
                 existingAccessory.AccessoryType = accessoryType;

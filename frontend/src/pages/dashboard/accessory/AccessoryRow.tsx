@@ -58,7 +58,7 @@ export default function AccessoryRow({
       <td className="px-6 py-4 whitespace-nowrap col-span-4 text-sm text-gray-500 truncate">
         {accessory.name}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 col-span-1">
+      <td className="flex justify-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 col-span-1">
         {accessory.materialWeight.toFixed(2)} g
       </td>
       <td className="flex justify-center px-6 py-4 whitespace-nowrap text-sm text-gray-500 col-span-2">
@@ -72,13 +72,13 @@ export default function AccessoryRow({
           })
         )}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+      <td className="flex justify-center px-6 py-4 whitespace-nowrap text-sm text-gray-500">
         {accessory.shape.name}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+      <td className="flex justify-center px-6 py-4 whitespace-nowrap text-sm text-gray-500">
         {accessory.quantity}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-left text-gray-500 text-sm">
+      <td className="flex justify-center px-6 py-4 whitespace-nowrap text-left text-gray-500 text-sm">
         {accessory.karat}K
       </td>
     </tr>

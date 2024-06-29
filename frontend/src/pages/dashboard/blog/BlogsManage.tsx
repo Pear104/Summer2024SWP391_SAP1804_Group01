@@ -15,6 +15,7 @@ import { DownOutlined } from "@ant-design/icons";
 import { useSearchStore } from "../../../store/searchStore";
 import { useQueries } from "@tanstack/react-query";
 import BlogListItem from "./components/BlogListItem";
+import LoadingItem from "./components/LoadingItem";
 
 export default function BlogsManage() {
   const location = useLocation();
@@ -196,16 +197,10 @@ export default function BlogsManage() {
                   </thead>
                   {/* body */}
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {blogs.isLoading && (
-                      <td colSpan={100} className="w-full p-4">
-                        <Skeleton
-                          active
-                          paragraph={{
-                            rows: 20,
-                          }}
-                        />
-                      </td>
-                    )}
+                    {blogs.isLoading &&
+                      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((key) => (
+                        <LoadingItem key={key} />
+                      ))}
                     {blogs?.data?.blogs?.length == 0 && (
                       <td colSpan={100} className="py-20">
                         <Empty />

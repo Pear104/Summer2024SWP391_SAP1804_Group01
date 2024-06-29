@@ -1,4 +1,4 @@
-import { Empty, Form, Input, Pagination, Skeleton } from "antd";
+import { Empty, Form, Input, Pagination } from "antd";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { GET } from "../../../utils/request";
@@ -8,6 +8,19 @@ import { useSearchStore } from "../../../store/searchStore";
 import { getDiamondPrice } from "../../../utils/getPrice";
 import { StatusMenu } from "./DiamondsManageHeader";
 import DiamondColumnHeader from "./DiamondColumnHeader";
+import LoadingItem from "./componenets/LoadingItem";
+
+const columnHeaders = [
+  "Thumbnail",
+  "Certificate",
+  "Price",
+  "Shape",
+  "Carat",
+  "Color",
+  "Clarity",
+  "Cut",
+  "Status",
+];
 
 export default function ProductsManage() {
   const location = useLocation();
@@ -17,17 +30,6 @@ export default function ProductsManage() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
 
-  const columnHeaders = [
-    "Thumbnail",
-    "Certificate",
-    "Price",
-    "Shape",
-    "Carat",
-    "Color",
-    "Clarity",
-    "Cut",
-    "Status",
-  ];
   const navigate = useNavigate();
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
@@ -67,7 +69,6 @@ export default function ProductsManage() {
   });
 
   const diamondsData = diamond?.data?.diamonds || [];
-  console.log(diamondsData);
   const renderDiamondRow = (diamond: any) => (
     <DiamondRow
       key={diamond.diamondId}
@@ -222,12 +223,9 @@ export default function ProductsManage() {
               <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                 <table className="min-w-full divide-y divide-gray-200">
                   {/* theader */}
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
+                  <thead className="w-full bg-gray-50">
+                    <tr className="">
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <div className="flex items-center">
                           <label className="flex items-center">
                             <input
@@ -308,25 +306,17 @@ export default function ProductsManage() {
                         </td>
                       </tr>
                     )}
-                    {diamond?.isLoading ? (
-                      <td colSpan={100} className="p-4">
-                        <Skeleton
-                          active
-                          paragraph={{
-                            rows: 20,
-                          }}
-                          className="w-full"
-                        />
-                      </td>
-                    ) : diamondsData?.length > 0 ? (
-                      diamondsData.map(renderDiamondRow)
-                    ) : (
+                    {diamond.isLoading &&
+                      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((key) => (
+                        <LoadingItem key={key} />
+                      ))}
+                    {diamond?.data && diamondsData?.length == 0 && (
                       <td colSpan={12} className="py-20 w-full">
                         <Empty description="There is no diamond" />
                       </td>
                     )}
-                    {/* {diamondsData?.length > 0 &&
-                      diamondsData?.map(renderDiamondRow)} */}
+                    {diamondsData?.length > 0 &&
+                      diamondsData?.map(renderDiamondRow)}
                   </tbody>
                 </table>
 
@@ -360,11 +350,6 @@ export default function ProductsManage() {
                       }}
                     />
                   )}
-                  {/* {!diamondsData?.isLoading && diamondsData?.length == 0 && (
-                    <div className="text-center text-2xl">
-                      There is no diamond
-                    </div>
-                  )} */}
                 </div>
               </div>
             </div>

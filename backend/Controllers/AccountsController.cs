@@ -186,19 +186,18 @@ namespace backend.Controllers
             return Ok(accountsDTO);
         }
 
-        // [HttpDelete("{id}")]
-        // public async Task<IActionResult> DeleteAccount(long id)
-        // {
-        //     var account = await _accountRepo.Fin;
-        //     if (account == null)
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     _context.Accounts.Remove(account);
-        //     await _context.SaveChangesAsync();
-
-        //     return NoContent();
-        // }
+        [HttpDelete("{id}/{isDisable}")]
+        public async Task<IActionResult> DeleteAccount(
+            [FromRoute] long id,
+            [FromRoute] bool isDisable
+        )
+        {
+            var model = await _accountRepo.DeleteAccountAsync(id, isDisable);
+            if (model == null)
+            {
+                return NotFound("Account not found.");
+            }
+            return Ok(model);
+        }
     }
 }

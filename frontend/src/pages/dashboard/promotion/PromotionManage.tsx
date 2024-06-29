@@ -7,10 +7,20 @@ import { useQueries } from "@tanstack/react-query";
 import PromotionRow from "./components/PromotionRow";
 import PriceRateColumnHeader from "./components/PromotionColumnHeader";
 import CreatePromotion from "./components/CreatePromotion";
+import LoadingItem from "./components/LoadingItem";
 
 export default function PriceRate() {
   const location = useLocation();
-  const columnHeaders = ["Promotion ID", "Promotion Name", "Promotion Code" ,"Discount Rate", "Start Date", "End Date", "Duration", "Status"];
+  const columnHeaders = [
+    "Promotion ID",
+    "Promotion Name",
+    "Promotion Code",
+    "Discount Rate",
+    "Start Date",
+    "End Date",
+    "Duration",
+    "Status",
+  ];
   const searchTerm = useSearchStore((state) => state.searchTerm);
   const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
   const url = new URL(window.location.href);
@@ -35,7 +45,6 @@ export default function PriceRate() {
   console.log(promotionList?.data);
   console.log(promotionList?.data?.promotion?.length);
 
-
   const renderPromotionRow = (promotion: any) => (
     <PromotionRow key={promotion.promotionId} promotion={promotion} />
   );
@@ -56,8 +65,8 @@ export default function PriceRate() {
             <h1 className="text-2xl"> Promotion List </h1>
           </div>
         </div>
-        <div className="flex justify-end space-x-1 items-center">   
-              <CreatePromotion />
+        <div className="flex justify-end space-x-1 items-center">
+          <CreatePromotion />
         </div>
       </div>
 
@@ -128,19 +137,12 @@ export default function PriceRate() {
                   </thead>
                   {/* body */}
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {promotionList?.isLoading && (
-                      <td className="p-4" colSpan={100}>
-                        <Skeleton
-                          active
-                          paragraph={{
-                            rows: 20,
-                          }}
-                          className="w-full"
-                        />
-                      </td>
-                    )}
+                    {promotionList.isLoading &&
+                      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((key) => (
+                        <LoadingItem key={key} />
+                      ))}
                     {promotionList?.data &&
-                      promotionList?.data?.promotion?.length > 0 ? (
+                    promotionList?.data?.promotion?.length > 0 ? (
                       promotionList?.data?.promotion?.map(renderPromotionRow)
                     ) : (
                       <td colSpan={100} className="py-20 w-full">

@@ -11,6 +11,7 @@ namespace backend.DTOs.Accessory
         public int Karat { get; set; }
 
         public float MaterialWeight { get; set; }
+        public int Quantity { get; set; }
 
         public string Name { get; set; } = string.Empty;
 

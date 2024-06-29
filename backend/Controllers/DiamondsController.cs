@@ -1,10 +1,12 @@
 ﻿using System.Security.Claims;
 using backend.Data;
 using backend.DTOs.Diamond;
+using backend.Enums;
 using backend.Helper;
 using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -71,15 +73,19 @@ namespace backend.Controllers
             return Ok(diamondModel);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDiamond([FromRoute] long id)
+        [HttpDelete("{id}/{isHidden}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteDiamond(
+            [FromRoute] long id,
+            [FromRoute] bool isHidden
+        )
         {
-            var diamondModel = await _diamondRepo.DeleteDiamondAsync(id);
-            if (diamondModel == null)
+            var model = await _diamondRepo.DeleteDiamondAsync(id, isHidden);
+            if (model == null)
             {
                 return NotFound("Diamond not found.");
             }
-            return Ok(diamondModel);
+            return Ok(model);
         }
     }
 }

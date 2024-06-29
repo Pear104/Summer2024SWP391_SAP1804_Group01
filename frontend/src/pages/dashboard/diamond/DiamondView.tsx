@@ -1,6 +1,6 @@
-import { useParams } from "react-router-dom";
-import { GET, PUT } from "../../../utils/request";
-import { useEffect, useState } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { GET, PUT, DELETE, POST } from "../../../utils/request";
+import { useState } from "react";
 import { v4 } from "uuid";
 import {
   getDownloadURL,
@@ -8,17 +8,16 @@ import {
   uploadBytes,
   deleteObject,
 } from "firebase/storage";
-import { Button, Form, Input, notification, Select, UploadFile } from "antd";
-import { ArrowLeft, Check, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Button, Form, Input, Select, UploadFile, App } from "antd";
+import { ArrowLeft, Eye, EyeOff, ScrollText } from "lucide-react";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { POST } from "../../../utils/request";
 import { FormItem } from "react-hook-form-antd";
 import Loading from "../../../components/Loading";
 import { storage } from "../../../utils/firebase";
 import UploadDiamondImage from "./componenets/UploadDiamondImage";
+import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 
 const Color = {
   D: "D",
@@ -67,6 +66,71 @@ const shapeOptions = [
   { value: 9, label: "Marquise" },
   { value: 10, label: "Asscher" },
 ];
+
+const cutOptions = [
+  { value: "Good", label: "Good" },
+  { value: "Very Good", label: "Very Good" },
+  { value: "Excellent", label: "Excellent" },
+  { value: "Ideal", label: "Ideal" },
+];
+
+const colorOptions = [
+  { value: "D", label: "D" },
+  { value: "E", label: "E" },
+  { value: "F", label: "F" },
+  { value: "G", label: "G" },
+  { value: "H", label: "H" },
+  { value: "I", label: "I" },
+  { value: "J", label: "J" },
+  { value: "K", label: "K" },
+  { value: "L", label: "L" },
+  { value: "M", label: "M" },
+  { value: "N", label: "N" },
+  { value: "O", label: "O" },
+  { value: "P", label: "P" },
+  { value: "Q", label: "Q" },
+  { value: "R", label: "R" },
+  { value: "S", label: "S" },
+  { value: "T", label: "T" },
+  { value: "U", label: "U" },
+  { value: "V", label: "V" },
+];
+
+const clarityOptions = [
+  { value: "FL", label: "FL" },
+  { value: "IF", label: "IF" },
+  { value: "VVS1", label: "VVS1" },
+  { value: "VVS2", label: "VVS2" },
+  { value: "VS1", label: "VS1" },
+  { value: "VS2", label: "VS2" },
+  { value: "SI1", label: "SI1" },
+  { value: "SI2", label: "SI2" },
+  { value: "I1", label: "I1" },
+  { value: "I2", label: "I2" },
+  { value: "I3", label: "I3" },
+];
+
+const polishOptions = [
+  { value: "Fair", label: "Fair" },
+  { value: "Good", label: "Good" },
+  { value: "Very Good", label: "Very Good" },
+  { value: "Excellent", label: "Excellent" },
+];
+
+const symmetryOptions = [
+  { value: "Fair", label: "Fair" },
+  { value: "Good", label: "Good" },
+  { value: "Very Good", label: "Very Good" },
+  { value: "Excellent", label: "Excellent" },
+];
+
+const fluorescenceOptions = [
+  { value: "Strong", label: "Strong" },
+  { value: "Medium", label: "Medium" },
+  { value: "Faint", label: "Faint" },
+  { value: "None", label: "None" },
+];
+
 const schema = z.object({
   lab: z
     .string()
@@ -107,22 +171,8 @@ export default function DiamondView() {
   const [availability, setAvailability] = useState(false);
   const [diamond, setDiamond] = useState<any>();
   const { diamondId } = useParams();
-
-  const openNotification = (isSuccess: boolean) => {
-    if (isSuccess) {
-      api.open({
-        message: "Success",
-        description: "Your action have successfully completed",
-        icon: <Check color="#1fadea" />,
-      });
-    } else {
-      api.open({
-        message: "Error",
-        description: "You dont have permission",
-        icon: <X color="#ff0000" />,
-      });
-    }
-  };
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { control, handleSubmit, reset, setError } = useForm({
     defaultValues: {
@@ -143,56 +193,114 @@ export default function DiamondView() {
     resolver: zodResolver(schema),
   });
   // getdata
-  useEffect(() => {
-    (async () => {
-      const data = await GET(`/api/Diamonds/${diamondId}`);
-      if (data) {
-        if (data?.imageUrl) {
-          setDiamondFile([
-            {
-              uid: "-1",
-              name: "image.png",
-              status: "done",
-              url: data?.imageUrl,
-            },
-          ]);
-        }
-        setAvailability(data?.availability);
-        setDiamond(data);
-        reset({
-          lab: data?.lab || "",
-          certificateNumber: data?.certificateNumber
-            ? data.certificateNumber.toString()
-            : "",
-          certificateUrl: data?.certificateUrl,
-          image: data?.imageUrl,
-          carat: data?.carat || "",
-          cut: data?.cut || "",
-          color: data?.color || Color.D,
-          clarity: data?.clarity || Clarity.FL,
-          polish: data?.polish || "",
-          symmetry: data?.symmetry || "",
-          fluorescence: data?.fluorescence || "",
-          shapeId: data?.shapeId,
-          availability: data?.availability,
-        });
-      }
-    })();
-  }, [reset]);
+  const [_diamond] = useQueries({
+    queries: [
+      {
+        queryKey: ["diamond", diamondId, reset],
+        queryFn: async () => {
+          const data = await GET(`/api/Diamonds/${diamondId}`);
+          if (data) {
+            setDiamondFile([
+              {
+                uid: "-1",
+                name: "image.png",
+                status: "done",
+                url: data?.imageUrl,
+              },
+            ]);
+            console.log(data);
+            setDiamond(data);
+            setAvailability(data?.availability);
+            reset({
+              lab: data?.lab || "",
+              certificateNumber: data?.certificateNumber
+                ? data.certificateNumber.toString()
+                : "",
+              certificateUrl: data?.certificateUrl,
+              image: data?.imageUrl,
+              carat: data?.carat || "",
+              cut: data?.cut || "",
+              color: data?.color || Color.D,
+              clarity: data?.clarity || Clarity.FL,
+              polish: data?.polish || "",
+              symmetry: data?.symmetry || "",
+              fluorescence: data?.fluorescence || "",
+              shapeId: data?.shapeId,
+              availability: data?.availability,
+            });
+          }
+        },
+      },
+    ],
+  });
 
-  const [api, contextHolder] = notification.useNotification();
+  const { message } = App.useApp();
+
+  const mutatePost = useMutation({
+    mutationFn: (diamond: any) => {
+      return POST("/api/Diamonds", diamond);
+    },
+    onSuccess: (data: any) => {
+      message.success("Diamond added successfully");
+      queryClient.invalidateQueries({ queryKey: ["diamond"] });
+      navigate(`/admin/diamonds/detail/${data.diamondId}`);
+    },
+  });
+
+  const mutatePut = useMutation({
+    mutationFn: (diamond: any) => {
+      return PUT(`/api/Diamonds/${diamondId}`, diamond);
+    },
+    onSuccess: () => {
+      message.success("Diamond updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["diamond"] });
+    },
+  });
+
+  const mutateDelete = useMutation({
+    mutationFn: () => {
+      return DELETE(`/api/Diamonds/${diamondId}/${!diamond?.isHidden}`, "");
+    },
+    onSuccess: () => {
+      message.success("Diamond updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["diamond"] });
+    },
+  });
+
   return (
     <div>
       {isLoading && <Loading />}
-      {contextHolder}
-      <div className="flex self-center items-center gap-2">
-        <Link
-          to="/admin/diamonds"
-          className="inline-block border border-black p-1 rounded-full"
-        >
-          <ArrowLeft />
-        </Link>
-        <div className="ml-2 text-2xl">Diamonds</div>
+      <div className="flex justify-between">
+        <div className="flex self-center items-center gap-2 ">
+          <Link
+            to="/admin/diamonds"
+            className="rounded-full inline-block px-4 border bg-black text-white p-1"
+          >
+            <ArrowLeft />
+          </Link>
+          <div className="ml-2 text-2xl">Diamonds</div>
+        </div>
+        <div className="flex self-center items-center gap-2">
+          <div
+            onClick={async () => {
+              mutateDelete.mutate();
+            }}
+            className="cursor-pointer flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-black text-white p-1"
+          >
+            {!diamond?.isHidden ? <EyeOff /> : <Eye />}
+            <div className="ml-2 text-lg">
+              {!diamond?.isHidden ? "Hide" : "Show"}
+            </div>
+          </div>
+          <a
+            href={`/product/diamond/detail/${diamondId}`}
+            target="_blank"
+            className="flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-black text-white p-1"
+          >
+            <ScrollText />
+            <div className="ml-2 text-lg">View</div>
+          </a>
+        </div>
       </div>
       <div className="bg-white rounded-lg my-4 p-4">
         <Form
@@ -215,8 +323,6 @@ export default function DiamondView() {
                 submitForm = { ...submitForm, [key]: value };
               }
             }
-            let response = null;
-
             // Delete old images
             if (
               diamond?.imageUrl &&
@@ -253,21 +359,11 @@ export default function DiamondView() {
             submitForm["availability"] = availability;
 
             if (diamond.diamondId) {
-              response = await PUT(
-                "/api/Diamonds/" + diamond.diamondId,
-                submitForm
-              );
+              mutatePut.mutate(submitForm);
             } else {
-              response = await POST("/api/Diamonds/", submitForm);
+              mutatePost.mutate(submitForm);
             }
-
             setIsLoading(false);
-            if (response) {
-              openNotification(true);
-            } else {
-              openNotification(false);
-            }
-            location.href = "/admin/diamonds/detail/" + response.diamondId;
           })}
         >
           <FormItem label="Lab" name="lab" control={control} required>
@@ -298,82 +394,35 @@ export default function DiamondView() {
             <Select
               size="large"
               className="font-thin border w-full text-sm"
-              options={[
-                { value: "Good", label: "Good" },
-                { value: "Very Good", label: "Very Good" },
-                { value: "Excellent", label: "Excellent" },
-                { value: "Ideal", label: "Ideal" },
-              ]}
+              options={cutOptions}
             />
           </FormItem>
           <FormItem label="Color" name="color" control={control} required>
             <Select
               size="large"
               className="font-thin border w-full text-sm"
-              options={[
-                { value: "D", label: "D" },
-                { value: "E", label: "E" },
-                { value: "F", label: "F" },
-                { value: "G", label: "G" },
-                { value: "H", label: "H" },
-                { value: "I", label: "I" },
-                { value: "J", label: "J" },
-                { value: "K", label: "K" },
-                { value: "L", label: "L" },
-                { value: "M", label: "M" },
-                { value: "N", label: "N" },
-                { value: "O", label: "O" },
-                { value: "P", label: "P" },
-                { value: "Q", label: "Q" },
-                { value: "R", label: "R" },
-                { value: "S", label: "S" },
-                { value: "T", label: "T" },
-                { value: "U", label: "U" },
-                { value: "V", label: "V" },
-              ]}
+              options={colorOptions}
             />
           </FormItem>
           <FormItem label="Clarity" name="clarity" control={control} required>
             <Select
               size="large"
               className="font-thin border w-full text-sm"
-              options={[
-                { value: "FL", label: "FL" },
-                { value: "IF", label: "IF" },
-                { value: "VVS1", label: "VVS1" },
-                { value: "VVS2", label: "VVS2" },
-                { value: "VS1", label: "VS1" },
-                { value: "VS2", label: "VS2" },
-                { value: "SI1", label: "SI1" },
-                { value: "SI2", label: "SI2" },
-                { value: "I1", label: "I1" },
-                { value: "I2", label: "I2" },
-                { value: "I3", label: "I3" },
-              ]}
+              options={clarityOptions}
             />
           </FormItem>
           <FormItem label="Polish" name="polish" control={control} required>
             <Select
               size="large"
               className="font-thin border w-full text-sm"
-              options={[
-                { value: "Fair", label: "Fair" },
-                { value: "Good", label: "Good" },
-                { value: "Very Good", label: "Very Good" },
-                { value: "Excellent", label: "Excellent" },
-              ]}
+              options={polishOptions}
             />
           </FormItem>
           <FormItem label="Symmetry" name="symmetry" control={control} required>
             <Select
               size="large"
               className="font-thin border w-full text-sm"
-              options={[
-                { value: "Fair", label: "Fair" },
-                { value: "Good", label: "Good" },
-                { value: "Very Good", label: "Very Good" },
-                { value: "Excellent", label: "Excellent" },
-              ]}
+              options={symmetryOptions}
             />
           </FormItem>
           <FormItem
@@ -385,12 +434,7 @@ export default function DiamondView() {
             <Select
               size="large"
               className="font-thin border w-full text-sm"
-              options={[
-                { value: "Strong", label: "Strong" },
-                { value: "Medium", label: "Medium" },
-                { value: "Faint", label: "Faint" },
-                { value: "None", label: "None" },
-              ]}
+              options={fluorescenceOptions}
             />
           </FormItem>
           <FormItem label="Shape" name="shapeId" control={control} required>

@@ -12,6 +12,6 @@ namespace backend.Interfaces
         Task<Accessory?> GetAccessoryByIdAsync(long id);
         Task<Accessory?> CreateAccessoryAsync(CreateAccessoryDTO accessoryDto);
         Task<Accessory?> UpdateAccessoryAsync(long id, UpdateAccessoryDTO accessoryDto);
-        Task<Accessory?> DeleteAccessoryAsync(long id);
+        Task<Accessory?> DeleteAccessoryAsync(long id, bool isHidden);
     }
 }

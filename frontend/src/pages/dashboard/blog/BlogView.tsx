@@ -1,11 +1,11 @@
 import { App, Button, Form, Input } from "antd";
-import { ArrowLeft, ScrollText } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, ScrollText } from "lucide-react";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import TextEditor from "./components/TextEditor";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GET, POST, PUT } from "../../../utils/request";
+import { DELETE, GET, POST, PUT } from "../../../utils/request";
 import { useState } from "react";
 import { FormItem } from "react-hook-form-antd";
 import Loading from "../../../components/Loading";
@@ -22,6 +22,7 @@ export default function BlogView() {
   const navigate = useNavigate();
   const { blogId } = useParams();
   const [isLoading, setIsLoading] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
   const queryClient = useQueryClient();
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
@@ -37,6 +38,7 @@ export default function BlogView() {
         queryFn: async () => {
           const data = await GET(`/api/Blogs/${blogId}`);
           if (data.blogId) {
+            setIsHidden(data.isHidden);
             reset({
               title: data?.title,
               content: data?.content,
@@ -67,8 +69,17 @@ export default function BlogView() {
       queryClient.invalidateQueries({ queryKey: ["blogs"] });
     },
   });
+  const mutateDelete = useMutation({
+    mutationFn: () => {
+      return DELETE(`/api/Blogs/${blogId}/${!isHidden}`, "");
+    },
+    onSuccess: () => {
+      message.success("Blog updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["blog"] });
+      queryClient.invalidateQueries({ queryKey: ["blogs"] });
+    },
+  });
   const { message } = App.useApp();
-  console.log(blog?.data);
   return (
     <div>
       {(blog.isLoading || isLoading) && <Loading />}
@@ -83,11 +94,19 @@ export default function BlogView() {
           <div className="ml-2 text-2xl">Blogs</div>
         </div>
         <div className="flex self-center items-center gap-2">
+          <div
+            onClick={async () => {
+              mutateDelete.mutate();
+            }}
+            className="cursor-pointer flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-black text-white p-1"
+          >
+            {!isHidden ? <EyeOff /> : <Eye />}
+            <div className="ml-2 text-lg">{!isHidden ? "Hide" : "Show"}</div>
+          </div>
           <a
             href={`/blogs/${blogId}`}
             target="_blank"
             className="flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-black text-white p-1"
-            // className="rounded-full inline-block px-4 border bg-black text-white p-1"
           >
             <ScrollText />
             <div className="ml-2 text-lg">View</div>

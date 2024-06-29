@@ -22,6 +22,7 @@ namespace backend.DTOs
         public string Symmetry { get; set; } = string.Empty;
         public string Fluorescence { get; set; } = string.Empty;
         public bool Availability { get; set; } = true;
+        public bool IsHidden { get; set; } = true;
         public string Shape { get; set; } = string.Empty;
         public long ShapeId { get; set; }
     }

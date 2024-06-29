@@ -31,9 +31,17 @@ namespace backend.Repository
         }
 
         //delete account xem xet
-        public async Task DeleteAccountAsync(long id)
+        public async Task<Account?> DeleteAccountAsync(long id, bool isDisable)
         {
-            throw new NotImplementedException();
+            var model = await _context.Accounts.FirstOrDefaultAsync(x => x.AccountId == id);
+            if (model != null)
+            {
+                model.IsDisable = isDisable;
+                _context.Entry(model).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return model;
+            }
+            return null;
         }
 
         public async Task<Account?> GetAccountByIdAsync(long id)

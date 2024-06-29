@@ -9,6 +9,15 @@ import { useSearchStore } from "../../../store/searchStore";
 import { getAccessoryPrice } from "../../../utils/getPrice";
 import LoadingItem from "./components/LoadingItem";
 
+const columnHeaders = [
+  { label: "Thumbnail", colSpan: "col-span-1" },
+  { label: "Name", colSpan: "col-span-4" },
+  { label: "Weight", colSpan: "col-span-1" },
+  { label: "Price", colSpan: "col-span-2" },
+  { label: "Shape", colSpan: "col-span-1" },
+  { label: "Quantity", colSpan: "col-span-1" },
+  { label: "Karat", colSpan: "col-span-1" },
+];
 export default function AccessoriesManage() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
@@ -95,8 +104,6 @@ export default function AccessoriesManage() {
       </Menu.Item>
     </Menu>
   );
-
-  console.log(accessories.data);
 
   return (
     <div className="p-4">
@@ -221,48 +228,13 @@ export default function AccessoriesManage() {
                           </label>
                         </div>
                       </th>
-                      <th
-                        scope="col"
-                        className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider col-span-1`}
-                      >
-                        Thumbnail
-                      </th>
-                      <th
-                        scope="col"
-                        className={`justify-center flex px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider col-span-4`}
-                      >
-                        Name
-                      </th>
-                      <th
-                        scope="col"
-                        className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider col-span-1`}
-                      >
-                        Weight
-                      </th>
-                      <th
-                        scope="col"
-                        className={`flex justify-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider col-span-2`}
-                      >
-                        Price
-                      </th>
-                      <th
-                        scope="col"
-                        className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider`}
-                      >
-                        Shape
-                      </th>
-                      <th
-                        scope="col"
-                        className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider`}
-                      >
-                        Quantity
-                      </th>
-                      <th
-                        scope="col"
-                        className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider col-span-1`}
-                      >
-                        Karat
-                      </th>
+                      {columnHeaders.map((column: any) => (
+                        <th
+                          className={`flex justify-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${column.colSpan}`}
+                        >
+                          {column.label}
+                        </th>
+                      ))}
                     </tr>
                   </thead>
                   {/* body */}
@@ -299,13 +271,10 @@ export default function AccessoriesManage() {
                         </td>
                       </tr>
                     )}
-                    {accessories.isLoading && (
-                      <>
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((key) => (
-                          <LoadingItem key={key} />
-                        ))}
-                      </>
-                    )}
+                    {accessories.isLoading &&
+                      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((key) => (
+                        <LoadingItem key={key} />
+                      ))}
                     {accessories?.data?.accessories?.map(
                       (accessory: any, index: number) => (
                         <AccessoryRow

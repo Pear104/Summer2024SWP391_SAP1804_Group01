@@ -6,6 +6,7 @@ using backend.DTOs.Blog;
 using backend.Helper;
 using backend.Interfaces;
 using backend.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers
@@ -73,8 +74,9 @@ namespace backend.Controllers
             return Ok(blog);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBlog(long id, bool isHidden)
+        [HttpDelete("{id}/{isHidden}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteBlog([FromRoute] long id, [FromRoute] bool isHidden)
         {
             var deletedBlog = await _blogRepo.DeleteBlogAsync(id, isHidden);
             if (deletedBlog == null)

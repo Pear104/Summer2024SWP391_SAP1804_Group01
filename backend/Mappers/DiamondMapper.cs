@@ -23,6 +23,7 @@ namespace backend.Mappers
                 Symmetry = diamond.Symmetry,
                 Fluorescence = diamond.Fluorescence,
                 Availability = diamond.Availability,
+                IsHidden = diamond.IsHidden,
                 Shape = diamond.Shape.Name,
                 ShapeId = diamond.ShapeId
             };

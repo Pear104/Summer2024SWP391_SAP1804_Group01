@@ -45,16 +45,15 @@ namespace backend.Repository
             return null;
         }
 
-        public async Task<Diamond?> DeleteDiamondAsync(long id)
+        public async Task<Diamond?> DeleteDiamondAsync(long id, bool isHidden)
         {
-            var deletedModel = await _context
-                .Diamonds.Include(x => x.Shape)
-                .FirstOrDefaultAsync(x => x.DiamondId == id);
-            if (deletedModel != null)
+            var model = await _context.Diamonds.FirstOrDefaultAsync(x => x.DiamondId == id);
+            if (model != null)
             {
-                _context.Diamonds.Remove(deletedModel);
+                model.IsHidden = isHidden;
+                _context.Entry(model).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-                return deletedModel;
+                return model;
             }
             return null;
         }

@@ -15,6 +15,6 @@ namespace backend.Interfaces
         Task<Account?> UpdatePasswordAsync(long id, UpdatePasswordAccountDTO accountDto);
         Task<ListWithPagingDTO<Account>> SearchAccountOnRole(AccountSearchQuery query);
 
-        // Task<Account?> DeleteAccountAsync(long id);
+        Task<Account?> DeleteAccountAsync(long id, bool isDisable);
     }
 }
