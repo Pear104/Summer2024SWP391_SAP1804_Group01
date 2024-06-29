@@ -25,7 +25,7 @@ namespace backend.Repository
         {
 
             var promotion = promotionDto.ToPromotionFromCreate();
-         
+
 
             await _context.Promotions.AddAsync(promotion);
             await _context.SaveChangesAsync();
@@ -40,11 +40,14 @@ namespace backend.Repository
             var totalPages = (int)Math.Ceiling((double)totalCount / query.PageSize);
 
             var promotions = await promotionQueries
-                .Skip((query.PageNumber - 1) * query.PageSize)
-                .Take(query.PageSize)
-                .ToListAsync();
+                                    .OrderByDescending(p => p.StartTime)
+                                    .ThenByDescending(p => p.EndTime)
+                                    .Skip((query.PageNumber - 1) * query.PageSize)
+                                    .Take(query.PageSize)
+                                    .ToListAsync();
 
-            return new PromotionResult{
+            return new PromotionResult
+            {
                 Promotion = promotions.Select(x => x.ToPromotionDTO()).ToList(),
                 TotalCount = totalCount,
                 PageSize = query.PageSize,
@@ -62,7 +65,7 @@ namespace backend.Repository
 
         public async Task<Promotion?> UpdatePromotionAsync(string code, UpdatePromotionDTO promotionDto)
         {
-            var existingPromotion = await _context.Promotions.FirstOrDefaultAsync( a => a.PromotionCode == code);
+            var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(a => a.PromotionCode == code);
             if (existingPromotion == null)
             {
                 return null;

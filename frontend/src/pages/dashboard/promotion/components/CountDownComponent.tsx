@@ -19,7 +19,7 @@ export const CountdownComponent = ({ startTime, endTime }: any) => {
   if (now < startTimestamp) {
     content = (
       <Text type="warning" className="text-xl font-bold p-0 m-0">
-        Not Start
+        Pending start
       </Text>
     );
   } else if (now >= startTimestamp && now <= endTimestamp) {
