@@ -4,26 +4,19 @@ import { Form, Input, Pagination, Empty } from "antd";
 import { useSearchStore } from "../../../store/searchStore";
 import { GET } from "../../../utils/request";
 import { useQueries } from "@tanstack/react-query";
-import { StatusFilter } from "./components/StatusFilter";
-import WarrantyRow from "./components/WarrantyRow";
 import WarrantyColumnHeader from "./components/WarrantyColumnHeader";
 import LoadingItem from "./components/LoadingItem";
 
-export default function WarrantyRequest() {
+export default function CardManagement() {
   const location = useLocation();
-  const [statusText, setStatusText] = useState("Status");
 
   // sort item
   const columnHeaders = [
-    "Warranty Request ID",
     "Warranty Card ID",
-    "Reason",
     "Customer",
-    "Shipping Address",
-    "Phone Number",
-    "Delivery Staff",
-    "Warranty Staff",
-    "Status",
+    "Product",
+    "Date of purchase",
+    "Warranty period",
   ];
 
   const searchTerm = useSearchStore((state) => state.searchTerm);
@@ -34,7 +27,7 @@ export default function WarrantyRequest() {
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   useEffect(() => {
-    setQueryUrl("/api/WarrantyRequests?");
+    setQueryUrl("/api/WarrantyCard?");
   }, []);
 
   const [warrantyRequestList] = useQueries({
@@ -49,31 +42,9 @@ export default function WarrantyRequest() {
   console.log(queryUrl);
   console.log(warrantyRequestList?.data);
 
-  const renderWarrantyRow = (warranty: any) => (
-    <WarrantyRow key={warranty.warrantyRequestId} warranty={warranty} />
-  );
-
-  // search and filter
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const status = params.get("warrantyStatus");
-
-    if (status) {
-      setStatusText(
-        status === "1"
-          ? "Pending"
-          : status === "2"
-          ? "Processing"
-          : status === "3"
-          ? "Delivering"
-          : status === "4"
-          ? "Returning"
-          : status === "5"
-          ? "Completed"
-          : "Failed"
-      );
-    }
-  }, [location.search]);
+  //   const renderWarrantyRow = (warranty: any) => (
+  //     <WarrantyRow key={warranty.warrantyRequestId} warranty={warranty} />
+  //   );
 
   // pagination, change page size
   const [pageSize, setPageSize] = useState(10);
@@ -89,7 +60,7 @@ export default function WarrantyRequest() {
       <div className="flex justify-between items-center mt-6 mx-auto mb-8">
         <div className="flex justify-start space-x-1 items-center">
           <div className="self-center">
-            <h1 className="text-2xl"> Warranty Request List </h1>
+            <h1 className="text-2xl"> Warranty Card List </h1>
           </div>
         </div>
       </div>
@@ -114,31 +85,8 @@ export default function WarrantyRequest() {
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </Form.Item>
-                <Form.Item>
-                  <StatusFilter statusText={statusText} />
-                </Form.Item>
               </Form>
             </h3>
-            <div className="flex space-x-075">
-              <div className="card-action ">
-                <a
-                  href="/admin/diamonds"
-                  className="text-interactive "
-                  onClick={(event) => {
-                    event.preventDefault();
-                    setStatusText("Status");
-                    setSearchTerm("");
-                    // Clear the URL parameters
-                    const params = new URLSearchParams(location.search);
-                    setQueryUrl(`/api/WarrantyRequests?` + params.toString());
-                    // params.delete("type");
-                    navigate({ search: params.toString() });
-                  }}
-                >
-                  Clear filter
-                </a>
-              </div>
-            </div>
           </div>
           <div className="pt-lg"></div>
         </div>
@@ -164,7 +112,7 @@ export default function WarrantyRequest() {
                     </tr>
                   </thead>
                   {/* body */}
-                  <tbody className="bg-white divide-y divide-gray-200">
+                  {/* <tbody className="bg-white divide-y divide-gray-200">
                     {warrantyRequestList?.isLoading &&
                       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((key) => (
                         <LoadingItem key={key} />
@@ -179,7 +127,7 @@ export default function WarrantyRequest() {
                         <Empty description="No warranty request to process" />
                       </td>
                     )}
-                  </tbody>
+                  </tbody> */}
                 </table>
                 {warrantyRequestList?.data?.warrantyRequests?.length > 0 && (
                   <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
