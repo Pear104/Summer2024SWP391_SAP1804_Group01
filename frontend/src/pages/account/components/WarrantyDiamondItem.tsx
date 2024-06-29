@@ -2,7 +2,13 @@ import Logo from "../../../components/logo/Logo";
 import moment from "moment";
 import React from "react";
 
-export default function WarrantyDiamondItem({ order }: { order: any }) {
+export default function WarrantyDiamondItem({
+  order,
+  diamond,
+}: {
+  order: any;
+  diamond: any;
+}) {
   return (
     <div className="px-4 py-2 w-full pb-8" id="invoice">
       <div className="flex justify-between mt-4 border-b border-black pb-2">
@@ -47,7 +53,6 @@ export default function WarrantyDiamondItem({ order }: { order: any }) {
         <table className="w-full text-lg mt-2">
           <thead className="border">
             <tr className="border-b bg-slate-300">
-              <th className="text-center">No.</th>
               <th className="text-center w-[400px]">Name</th>
               <th className="text-center">Date of purchase</th>
               <th className="text-center">Expired date</th>
@@ -55,27 +60,24 @@ export default function WarrantyDiamondItem({ order }: { order: any }) {
             </tr>
           </thead>
           <tbody className="border">
-            {order.orderDetails.map((detail: any, index: number) => (
-              <React.Fragment key={index}>
-                {detail.diamond && (
-                  <tr className="border-b h-20">
-                    <td className="text-center">{index + 1}</td>
-                    <td className="text-center w-[400px]">
-                      {`${detail.diamond?.carat} Carat, ${detail.diamond?.shape} Diamond`}
-                    </td>
-                    <td className="text-center">
-                      {moment(order.createdAt).format("DD/MM/YYYY")}
-                    </td>
-                    <td className="text-center">
-                      {moment(order.createdAt)
-                        .add(24, "months")
-                        .format("DD/MM/YYYY")}
-                    </td>
-                    <td className="text-center">24 months</td>
-                  </tr>
-                )}
-              </React.Fragment>
-            ))}
+            <React.Fragment>
+              {diamond && (
+                <tr className="border-b h-20">
+                  <td className="text-center w-[400px]">
+                    {`${diamond?.carat} Carat, ${diamond?.shape} Diamond`}
+                  </td>
+                  <td className="text-center">
+                    {moment(order.createdAt).format("DD/MM/YYYY")}
+                  </td>
+                  <td className="text-center">
+                    {moment(order.createdAt)
+                      .add(24, "months")
+                      .format("DD/MM/YYYY")}
+                  </td>
+                  <td className="text-center">24 months</td>
+                </tr>
+              )}
+            </React.Fragment>
           </tbody>
         </table>
       </div>

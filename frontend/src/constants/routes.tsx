@@ -53,6 +53,7 @@ import SearchManagement from "../pages/search/SearchManagement";
 import PotentialCustomerReportManagement from "../pages/dashboard/staffsReport/CustomersReportManagement";
 import DeliveryReportManagement from "../pages/dashboard/staffsReport/DeliveryReportManagement";
 import PromotionManage from "../pages/dashboard/promotion/PromotionManage";
+import CardManagement from "../pages/dashboard/warranty_card/CardManagement";
 const routes = [
   {
     errorElement: <Error />,
@@ -137,6 +138,10 @@ const routes = [
           {
             element: <PromotionManage />,
             path: "/admin/promotion",
+          },
+          {
+            element: <CardManagement />,
+            path: "/admin/warranty-card",
           },
           {
             element: <SalesReportManagement />,

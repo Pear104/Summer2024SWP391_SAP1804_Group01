@@ -1,7 +1,28 @@
 import { ExternalLink } from "lucide-react";
-import { Image } from "antd";
+import { Button, Image, Modal } from "antd";
+import WarrantyDiamondItem from "./WarrantyDiamondItem";
+import { useState } from "react";
 
-const DiamondItem = ({ detail, percent }: { detail: any; percent: any }) => {
+const DiamondItem = ({
+  detail,
+  percent,
+  order,
+}: {
+  detail: any;
+  percent: any;
+  order: any;
+}) => {
+  const [isModalDiamondWarranty, setIsModalDiamondWarranty] = useState(false);
+
+  const showModalDiamondWarranty = () => {
+    setIsModalDiamondWarranty(true);
+  };
+  const handleOk = () => {
+    setIsModalDiamondWarranty(false);
+  };
+  const handleCancel = () => {
+    setIsModalDiamondWarranty(false);
+  };
   return (
     <div className="flex">
       <div className="w-1/5 flex ">
@@ -49,6 +70,30 @@ const DiamondItem = ({ detail, percent }: { detail: any; percent: any }) => {
               maximumFractionDigits: 0,
             })}
           </div>
+          <Modal
+            className="w-[1200px]"
+            centered
+            open={isModalDiamondWarranty}
+            onOk={handleOk}
+            onCancel={handleCancel}
+            footer={[
+              <Button key="back" onClick={handleCancel}>
+                Cancel
+              </Button>,
+            ]}
+          >
+            <span>
+              <WarrantyDiamondItem order={order} diamond={detail?.diamond} />
+            </span>
+            <div className="mb-2 tracking-wider"></div>
+          </Modal>
+          <button
+            className="text-blue-500 flex"
+            onClick={showModalDiamondWarranty}
+          >
+            Warranty
+            <ExternalLink size={12} />
+          </button>
         </div>
       </div>
     </div>
