@@ -23,7 +23,7 @@
 using System.Reflection;
 using backend.Data;
 using backend.Interfaces;
-using backend.Payment_src.core.Payment.Service.Momo.Config;
+// using backend.Payment_src.core.Payment.Service.Momo.Config;
 using backend.Payment_src.core.Payment.Service.Vnpay.Config;
 using backend.Repository;
 using backend.Service;
@@ -100,9 +100,9 @@ namespace backend
             builder.Services.AddHttpContextAccessor();
 
             //Payment cofiguration
-            builder.Services.Configure<MomoConfig>(
-                builder.Configuration.GetSection(MomoConfig.ConfigName)
-            );
+            // builder.Services.Configure<MomoConfig>(
+            //     builder.Configuration.GetSection(MomoConfig.ConfigName)
+            // );
             //Payment cofiguration
             builder.Services.Configure<VnpayConfig>(
                 builder.Configuration.GetSection(VnpayConfig.ConfigName)
