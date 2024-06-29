@@ -27,6 +27,13 @@ namespace backend.Controllers
             return Ok(promotions);
         }
 
+        [HttpGet("active")]
+        public async Task<ActionResult> GetPromotionActive()
+        {
+            var promotions = await _promotionRepo.GetPromotionActive();
+            return Ok(promotions);
+        }
+
         [HttpGet("{code}")]
         public async Task<ActionResult> GetPromotion(string code)
         {

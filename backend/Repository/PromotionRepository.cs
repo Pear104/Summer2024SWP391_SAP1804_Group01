@@ -23,10 +23,7 @@ namespace backend.Repository
 
         public async Task<Promotion?> CreatePromotionAsync(CreatePromotionDTO promotionDto)
         {
-
             var promotion = promotionDto.ToPromotionFromCreate();
-
-
             await _context.Promotions.AddAsync(promotion);
             await _context.SaveChangesAsync();
             return promotion;
@@ -54,6 +51,15 @@ namespace backend.Repository
                 CurrentPage = query.PageNumber,
                 TotalPages = totalPages,
             };
+        }
+        public async Task<List<Promotion>> GetPromotionActive()
+        {
+            return await _context
+             .Promotions
+             .Where(x => x.EndTime > DateTime.Now && x.StartTime < DateTime.Now)
+             .OrderByDescending(x => x.DiscountPercent)
+             .ToListAsync();
+
         }
 
         public async Task<Promotion?> GetPromotionByCodeAsync(string code)

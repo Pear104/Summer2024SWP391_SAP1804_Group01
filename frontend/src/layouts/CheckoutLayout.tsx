@@ -1,13 +1,14 @@
-import { Breadcrumb, Button, Divider, Input, Skeleton } from "antd";
+import { Breadcrumb, Button, Divider, Input, Skeleton, message } from "antd";
 import { Outlet } from "react-router-dom";
 import Logo from "../components/logo/Logo";
 import { useCartStore } from "../store/cartStore";
 import { useQueries } from "@tanstack/react-query";
 import { GET } from "../utils/request";
 import CheckoutCartItem from "../pages/checkout/components/CheckoutCartItem";
-import { Tags } from "lucide-react";
+import { Tags, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getAccessoryPrice, getDiamondPrice } from "../utils/getPrice";
+import { CheckOutlined } from "@ant-design/icons";
 
 const item = [
   {
@@ -25,31 +26,40 @@ const item = [
 ];
 
 export default function CheckoutLayout() {
-  const [diamondPrices, materialPrices, priceRate, userInfo] = useQueries({
-    queries: [
-      {
-        queryKey: ["diamondPrices"],
-        queryFn: () => GET("/api/DiamondPrices/"),
-        staleTime: Infinity,
-      },
-      {
-        queryKey: ["materialPrices"],
-        queryFn: () => GET("/api/MaterialPrices/"),
-        staleTime: Infinity,
-      },
-      {
-        queryKey: ["priceRate"],
-        queryFn: () => GET("/api/PriceRate/latest"),
-        staleTime: Infinity,
-      },
-      {
-        queryKey: ["userInfo"],
-        queryFn: () => GET("/api/Accounts/me"),
-      },
-    ],
-  });
+  const [diamondPrices, materialPrices, priceRate, userInfo, promotion] =
+    useQueries({
+      queries: [
+        {
+          queryKey: ["diamondPrices"],
+          queryFn: () => GET("/api/DiamondPrices/"),
+          staleTime: Infinity,
+        },
+        {
+          queryKey: ["materialPrices"],
+          queryFn: () => GET("/api/MaterialPrices/"),
+          staleTime: Infinity,
+        },
+        {
+          queryKey: ["priceRate"],
+          queryFn: () => GET("/api/PriceRate/latest"),
+          staleTime: Infinity,
+        },
+        {
+          queryKey: ["userInfo"],
+          queryFn: () => GET("/api/Accounts/me"),
+        },
+        {
+          queryKey: ["promotion"],
+          queryFn: () => GET("/api/Promotion/active"),
+        },
+      ],
+    });
+
   const cart = useCartStore((state) => state.cart);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [appliedPromotions, setAppliedPromotions] = useState<string[]>([]);
+  const [discountCode, setDiscountCode] = useState("");
+
   useEffect(() => {
     (async () => {
       const totalPricePromise = Promise.all(
@@ -78,6 +88,70 @@ export default function CheckoutLayout() {
       setTotalPrice(totalPrice);
     })();
   }, [cart, diamondPrices, materialPrices, priceRate]);
+
+  const handleApplyPromotion = (promotion: any) => {
+    if (!isPromotionApplied(promotion.promotionCode)) {
+      setAppliedPromotions((prevPromotions) => [
+        ...prevPromotions,
+        promotion.promotionCode,
+      ]);
+      message.success(`Applied promotion: ${promotion.promotionCode}`);
+    } else {
+      message.warning(
+        `Promotion ${promotion.promotionCode} is already applied.`
+      );
+    }
+  };
+
+  const isPromotionApplied = (promotionCode: string): boolean => {
+    return appliedPromotions.includes(promotionCode);
+  };
+  const removePromotion = (promotionCode: string): void => {
+    setAppliedPromotions((prevPromotions) =>
+      prevPromotions.filter((code) => code !== promotionCode)
+    );
+    message.success(`Removed promotion: ${promotionCode}`);
+  };
+
+  const handleDiscountCodeApply = async () => {
+    try {
+      const promo = await GET(`/api/Promotion/${discountCode}`);
+      if (promo) {
+        const currentTime = new Date();
+        if (promo.startTime && promo.endTime) {
+          const startTime = new Date(promo.startTime);
+          const endTime = new Date(promo.endTime);
+
+          if (currentTime < startTime) {
+            message.error(`Promotion ${discountCode} is not yet active.`);
+          } else if (currentTime > endTime) {
+            message.error(`Promotion ${discountCode} has expired.`);
+          } else {
+            handleApplyPromotion(promo);
+          }
+        } else {
+          message.error(`Promotion ${discountCode} is not valid.`);
+        }
+      }
+    } catch (error) {
+      message.error(`Failed to apply promotion code: ${discountCode}`);
+    }
+  };
+
+  const calculateDiscount = () => {
+    let discount = 0;
+    appliedPromotions.forEach((promotionCode) => {
+      const promo = promotion?.data?.find(
+        (p: any) => p.promotionCode === promotionCode
+      );
+      if (promo) {
+        discount += promo.discountPercent;
+      }
+    });
+    return discount;
+  };
+
+  const totalDiscount = calculateDiscount();
 
   return (
     <div className="top-0 right-0 fixed w-screen h-screen grid grid-cols-2">
@@ -108,26 +182,65 @@ export default function CheckoutLayout() {
         <Divider />
         <div className="flex flex-col gap-2">
           <div className="flex gap-4">
-            <Input className="w-full" placeholder="Discount code" />
+            <Input
+              className="w-full"
+              placeholder="Discount code"
+              onChange={(e) => setDiscountCode(e.target.value)}
+            />
             <Button
               className="px-8 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
               htmlType="submit"
+              onClick={handleDiscountCodeApply}
             >
               Apply
             </Button>
           </div>
           <div>
+            <div className="flex gap-2">
+              {appliedPromotions?.map((promotion: any) => (
+                <div
+                  key={promotion}
+                  className="cursor-pointer text-black font-semibold flex justify-between py-3 px-4 bg-slate-300"
+                >
+                  <div className="flex gap-3 ">
+                    <Tags />
+                    {promotion}
+                    <button
+                      className="m-0 p-0 text-gray-500 hover:text-slate-300 text-bold text-3xl"
+                      onClick={() => removePromotion(promotion)}
+                    >
+                      <X />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
             <div className="font-semibold mb-2">
               Enter the discount code or select from below
             </div>
             {/* Discount code items */}
-            <div className="cursor-pointer text-primary font-semibold flex justify-between py-3 px-4 bg-slate-300 hover:bg-slate-300/40">
-              <div className="flex gap-2">
-                <Tags />
-                GET5 - Get 5% off on your order
+            {promotion?.data?.map((promotion: any) => (
+              <div
+                key={promotion.promotionCode}
+                className="cursor-pointer text-primary font-semibold flex justify-between py-3 px-4 bg-slate-300 hover:bg-slate-300/40"
+              >
+                <div className="flex gap-2 text-blue-900">
+                  <Tags />
+                  {promotion.promotionCode} - {promotion.promotionName}: Get{" "}
+                  {promotion.discountPercent * 100}% off
+                </div>
+                {isPromotionApplied(promotion.promotionCode) ? (
+                  <CheckOutlined />
+                ) : (
+                  <Button
+                    className="px-4 py-4 hover:scale-95 font-bold text-white bg-primary flex items-center justify-center"
+                    onClick={() => handleApplyPromotion(promotion)}
+                  >
+                    Apply
+                  </Button>
+                )}
               </div>
-              <div className="uppercase">Apply</div>
-            </div>
+            ))}
           </div>
           <Divider />
           <div className="text-base">
@@ -152,7 +265,7 @@ export default function CheckoutLayout() {
             <div className="flex justify-between">
               <div>Discount</div>
               <div className="font-semibold">
-                {userInfo?.data?.rank?.discount * 100 + "%"}
+                {userInfo?.data?.rank?.discount + totalDiscount * 100 + "%"}
               </div>
             </div>
           </div>
@@ -165,7 +278,7 @@ export default function CheckoutLayout() {
                 {totalPrice != 0 && totalPrice ? (
                   (
                     totalPrice *
-                    (1 - userInfo?.data?.rank?.discount)
+                    (1 - (userInfo?.data?.rank?.discount + totalDiscount))
                   ).toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
