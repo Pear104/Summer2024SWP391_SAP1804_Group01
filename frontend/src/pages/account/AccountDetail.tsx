@@ -29,7 +29,6 @@ export default function AccountDetail() {
   const [userInfo, setUserInfo] = useState<any>();
   const [nextRank, setNextRank] = useState<number>(0);
   const { message } = App.useApp();
-  console.log("nextRank: ", nextRank);
 
   const field = [
     "name",
@@ -45,7 +44,6 @@ export default function AccountDetail() {
   useEffect(() => {
     (async () => {
       const data = await GET(`/api/Accounts/me`);
-      console.log(data);
       if (data) {
         setUserInfo(data);
         if (data?.rank?.rankId != 6) {
@@ -69,12 +67,6 @@ export default function AccountDetail() {
       },
     ],
   });
-  console.log(userInfo);
-  console.log(ranks?.data);
-  console.log(
-    "rewardPoint: " +
-      ranks?.data?.find((r: any) => r.rankId == nextRank)?.rewardPoint
-  );
   return (
     <div className="ml-4 mt-4 mb-8">
       <div className="font-bold mulish-regular text-xl mb-4">
@@ -98,33 +90,35 @@ export default function AccountDetail() {
               }}
             ></div>
           </div>
-          <div className="w-full">
-            <div className="text-center">
-              Current reward: -{userInfo?.rank?.discount * 100}% all order
-            </div>
-            {userInfo?.rank?.rankId != 6 && (
-              <Progress
-                percent={
-                  ((userInfo?.rewardPoint - userInfo?.rank?.rewardPoint) /
-                    (ranks?.data?.find((r: any) => r.rankId == nextRank)
-                      ?.rewardPoint -
-                      userInfo?.rank?.rewardPoint)) *
-                  100
-                }
-                size="small"
-              />
-            )}
-            {userInfo?.rank?.rankId != 6 ? (
-              <div>
-                You need{" "}
-                {ranks?.data?.find((r: any) => r.rankId == nextRank)
-                  ?.rewardPoint - userInfo?.rewardPoint}{" "}
-                point more to reach next rank
+          {userInfo && (
+            <div className="w-full">
+              <div className="text-center">
+                Current reward: -{userInfo?.rank?.discount * 100}% all order
               </div>
-            ) : (
-              <div>You reached the highest rank in the system</div>
-            )}
-          </div>
+              {userInfo?.rank?.rankId != 6 && (
+                <Progress
+                  percent={
+                    ((userInfo?.rewardPoint - userInfo?.rank?.rewardPoint) /
+                      (ranks?.data?.find((r: any) => r.rankId == nextRank)
+                        ?.rewardPoint -
+                        userInfo?.rank?.rewardPoint)) *
+                    100
+                  }
+                  size="small"
+                />
+              )}
+              {userInfo?.rank?.rankId != 6 ? (
+                <div>
+                  You need{" "}
+                  {ranks?.data?.find((r: any) => r.rankId == nextRank)
+                    ?.rewardPoint - userInfo?.rewardPoint}{" "}
+                  point more to reach next rank
+                </div>
+              ) : (
+                <div>You reached the highest rank in the system</div>
+              )}
+            </div>
+          )}
         </div>
         <div>
           <div className="pl-10 grid grid-cols-2 gap-y-4 gap-x-14">

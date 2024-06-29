@@ -6,11 +6,17 @@ import { Empty, Form, Input, Pagination, Skeleton } from "antd";
 import { GET } from "../../../utils/request";
 import TransactionsRow from "./components/TransactionsRow";
 import TransactionsColumnHeader from "./components/TransactionsColumnHeader";
+import LoadingItem from "./components/LoadingItem";
 
 export default function TransactionManage() {
-
   const location = useLocation();
-  const columnHeaders = ["Order ID", "Payment Method", "Amount", "Status", "Time"];
+  const columnHeaders = [
+    "Order ID",
+    "Payment Method",
+    "Amount",
+    "Status",
+    "Time",
+  ];
   const searchTerm = useSearchStore((state) => state.searchTerm);
   const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
   const url = new URL(window.location.href);
@@ -31,15 +37,12 @@ export default function TransactionManage() {
       },
     ],
   });
-  console.log(queryUrl);
-  console.log('ahihi')
-  console.log(TransactionsList?.data)
-  console.log('ahehe')
-  console.log(TransactionsList?.data?.transactions?.length > 0)
-    
 
   const renderTransactionsRow = (Transactions: any) => (
-    <TransactionsRow key={Transactions.TransactionsId} transaction={Transactions} />
+    <TransactionsRow
+      key={Transactions.TransactionsId}
+      transaction={Transactions}
+    />
   );
 
   // pagination, change page size
@@ -127,19 +130,15 @@ export default function TransactionManage() {
                   </thead>
                   {/* body */}
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {TransactionsList?.isLoading && (
-                      <td className="p-4" colSpan={100}>
-                        <Skeleton
-                          active
-                          paragraph={{
-                            rows: 20,
-                          }}
-                          className="w-full"
-                        />
-                      </td>
-                    )}
-                    {(TransactionsList?.data && TransactionsList?.data?.transactions?.length > 0) ? (
-                      TransactionsList?.data?.transactions?.map(renderTransactionsRow)
+                    {TransactionsList?.isLoading &&
+                      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((key) => (
+                        <LoadingItem key={key} />
+                      ))}
+                    {TransactionsList?.data &&
+                    TransactionsList?.data?.transactions?.length > 0 ? (
+                      TransactionsList?.data?.transactions?.map(
+                        renderTransactionsRow
+                      )
                     ) : (
                       <td colSpan={100} className="py-20 w-full">
                         <Empty description="No Transaction Found" />
@@ -160,7 +159,8 @@ export default function TransactionManage() {
                         "1"
                       }
                       total={
-                        TransactionsList?.data && TransactionsList?.data.totalCount
+                        TransactionsList?.data &&
+                        TransactionsList?.data.totalCount
                       }
                       pageSize={Number(params.get("PageSize")) || 20}
                       onChange={(page, _pageSize) => {
@@ -178,7 +178,6 @@ export default function TransactionManage() {
                         setQueryUrl("/api/Transactions?" + params.toString());
                       }}
                     />
-                 
                   </div>
                 )}
               </div>

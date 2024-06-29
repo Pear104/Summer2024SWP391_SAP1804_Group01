@@ -6,6 +6,7 @@ import { GET } from "../../../utils/request";
 import CustomerRow from "./CustomerRow";
 import { Empty, Form, Input, Pagination, Skeleton } from "antd";
 import CustomerColumnHeader from "./componenets/CustomerColumnHeader";
+import LoadingItem from "./componenets/LoadingItem";
 
 function CustomerManage() {
   const [_selectedCustomers, setSelectedCustomers] = useState<number[]>([]);
@@ -261,18 +262,11 @@ function CustomerManage() {
                           </td>
                         </tr>
                       )}
-                      {customer?.isLoading && (
-                        <td colSpan={100} className="p-4">
-                          <Skeleton
-                            active
-                            paragraph={{
-                              rows: 20,
-                            }}
-                            className="w-full"
-                          />
-                        </td>
-                      )}
-                      {customersData?.length > 0 ? (
+                      {customer?.isLoading &&
+                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((key) => (
+                          <LoadingItem key={key} />
+                        ))}
+                      {customersData && customersData?.length > 0 ? (
                         customersData?.map(renderCustomerRow)
                       ) : (
                         <td colSpan={12} className="py-20 w-full">

@@ -7,6 +7,7 @@ import { useQueries } from "@tanstack/react-query";
 import { useSearchStore } from "../../../store/searchStore";
 import { StatusFilter } from "./StatusFilter";
 import OrderColumnHeader from "./OrderColumnHeader";
+import LoadingItem from "./components/LoadingItem";
 
 export default function OrderManage() {
   const location = useLocation();
@@ -162,20 +163,13 @@ export default function OrderManage() {
                   </thead>
                   {/* body */}
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {orderList?.isLoading && (
-                      <td className="p-4" colSpan={100}>
-                        <Skeleton
-                          active
-                          paragraph={{
-                            rows: 10,
-                          }}
-                          className="w-full"
-                        />
-                      </td>
-                    )}
-                    {orderList?.data?.orders?.length > 0 &&
-                      orderList.data.orders.map(renderOrderRow)}
-                    {orderList?.data?.orders?.length == 0 && (
+                    {orderList?.isLoading &&
+                      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((key) => (
+                        <LoadingItem key={key} />
+                      ))}
+                    {orderList?.data && orderList?.data?.orders?.length > 0 ? (
+                      orderList.data.orders.map(renderOrderRow)
+                    ) : (
                       <td colSpan={12} className="py-20 w-full">
                         <Empty description="No order to process" />
                       </td>

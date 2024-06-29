@@ -173,10 +173,10 @@ const OrderItem = ({
             })}
           </div>
 
-          <div>
+          <div className="flex gap-4">
             {order.orderStatus == "Pending" && (
               <button
-                className="bg-gray-800 text-white px-4 py-2 rounded mr-2"
+                className="bg-gray-800 text-white px-4 py-2 rounded"
                 onClick={async () => {
                   setIsLoading(true);
                   const transactionResponse = await POST("/api/Transactions", {
@@ -211,24 +211,24 @@ const OrderItem = ({
             )}
             {/* {order.orderStatus == "Completed" && ( */}
             <button
-              className="bg-primary text-white px-4 py-2 rounded mx-4"
+              className="bg-primary text-white px-4 py-2 rounded"
               onClick={showModalInvoice}
             >
               Export Invoice
             </button>
             {/* )} */}
             <button
-              className="bg-primary text-white px-4 py-2 rounded mx-4"
+              className="bg-primary text-white px-4 py-2 rounded"
               onClick={showModalDiamondWarranty}
             >
-              View Diamond Warranty Card
+              Diamond Warranty
             </button>
             {hasAccessory && (
               <button
-                className="bg-primary text-white px-4 py-2 rounded mx-4"
+                className="bg-primary text-white px-4 py-2 rounded"
                 onClick={showModalAccessoryWarranty}
               >
-                View Accessory Warranty
+                Accessory Warranty
               </button>
             )}
             <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded">

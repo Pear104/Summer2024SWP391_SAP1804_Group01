@@ -7,6 +7,7 @@ import { useQueries } from "@tanstack/react-query";
 import { StatusFilter } from "./components/StatusFilter";
 import WarrantyRow from "./components/WarrantyRow";
 import WarrantyColumnHeader from "./components/WarrantyColumnHeader";
+import LoadingItem from "./components/LoadingItem";
 
 export default function WarrantyRequest() {
   const location = useLocation();
@@ -164,17 +165,10 @@ export default function WarrantyRequest() {
                   </thead>
                   {/* body */}
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {warrantyRequestList?.isLoading && (
-                      <td className="p-4" colSpan={100}>
-                        <Skeleton
-                          active
-                          paragraph={{
-                            rows: 20,
-                          }}
-                          className="w-full"
-                        />
-                      </td>
-                    )}
+                    {warrantyRequestList?.isLoading &&
+                      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((key) => (
+                        <LoadingItem key={key} />
+                      ))}
                     {warrantyRequestList?.data &&
                     warrantyRequestList?.data?.warrantyRequests?.length > 0 ? (
                       warrantyRequestList?.data?.warrantyRequests?.map(
