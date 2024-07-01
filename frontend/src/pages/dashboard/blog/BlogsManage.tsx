@@ -9,7 +9,7 @@ import {
   Input,
   Menu,
   Pagination,
-  Skeleton,
+  // Skeleton,
 } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { useSearchStore } from "../../../store/searchStore";

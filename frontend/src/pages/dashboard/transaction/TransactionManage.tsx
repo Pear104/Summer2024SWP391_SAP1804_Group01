@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useSearchStore } from "../../../store/searchStore";
 import { useEffect, useState } from "react";
 import { useQueries } from "@tanstack/react-query";
-import { Empty, Form, Input, Pagination, Skeleton } from "antd";
+import { Empty, Form, Input, Pagination } from "antd";
 import { GET } from "../../../utils/request";
 import TransactionsRow from "./components/TransactionsRow";
 import TransactionsColumnHeader from "./components/TransactionsColumnHeader";

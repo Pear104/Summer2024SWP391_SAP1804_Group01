@@ -3,6 +3,7 @@ import { useState } from "react";
 
 export default function SearchBarMainLayout() {
   const [keyword, setKeyword] = useState("");
+  console.log(keyword);
   return (
     <div className="border-2 py-1 border-transparent border-slate-900 rounded-md">
       <form

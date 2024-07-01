@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=tcp:datj.database.windows.net,1433;Initial Catalog=DATJ;Persist Security Info=False;User ID=germanypeach;Password=GerPeach@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://localhost:8080
+      - VITE_SERVER_URL=http://localhost:8080
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./frontend/src:/app/src
+      - /app/node_modules
+
+  # db:
+  #   image: mcr.microsoft.com/mssql/server:2019-latest
+  #   container_name: sql-server-container
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #     - SA_PASSWORD=GerPeach@123
+  #   ports:
+  #     - "1433:1433"

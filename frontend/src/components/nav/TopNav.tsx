@@ -113,7 +113,7 @@ export default function TopNav() {
                 onClick={async () => {
                   const response = await GET("/api/Accounts/me");
                   console.log(response);
-                  if (response.role != "Customer") {
+                  if (response?.role != "Customer") {
                     navigate("/admin");
                   }
                 }}

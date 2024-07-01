@@ -1,10 +1,10 @@
 import {
   Facebook,
-  Instagram,
+  // Instagram,
   Mail,
   Phone,
-  Twitter,
-  Youtube,
+  // Twitter,
+  // Youtube,
 } from "lucide-react";
 import Logo from "./logo/Logo";
 

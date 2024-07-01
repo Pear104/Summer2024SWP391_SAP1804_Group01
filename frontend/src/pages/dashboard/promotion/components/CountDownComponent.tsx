@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Statistic, Typography, Input, Button } from "antd";
+import { useState } from "react";
+import { Statistic, Typography } from "antd";
 const { Countdown } = Statistic;
 const { Text } = Typography;
 
@@ -14,7 +14,7 @@ export const CountdownComponent = ({ startTime, endTime }: any) => {
   const onFinish = () => {
     setIsExpired(true);
   };
-
+  console.log("isExpired", isExpired);
   let content;
   if (now < startTimestamp) {
     content = (
