@@ -1,11 +1,11 @@
 const FirstContentSection = () => {
   return (
     <div className="w-full px-8 flex flex-col justify-start">
-      <div className="great-vibes-regular w-full flex flex-col items-center justify-center text-7xl">
+      <div className="md:text-5xl great-vibes-regular w-full flex flex-col items-center justify-center text-7xl">
         Enhance beauty - Honor value
       </div>
       <div className="grid grid-cols-7 gap-4 mt-8 w-[1000px] self-center">
-        <div className="col-span-2 w-full flex flex-col justify-between">
+        <div className="md:hidden col-span-2 w-full flex flex-col justify-between">
           <div
             className="aspect-[4/3] bg-contain bg-no-repeat w-full"
             style={{
@@ -19,9 +19,9 @@ const FirstContentSection = () => {
             }}
           ></div>
         </div>
-        <div className="col-span-5 w-full">
+        <div className="md:col-span-7 col-span-5 w-full">
           <div
-            className="aspect-[4/3] bg-contain bg-no-repeat w-full"
+            className="md:aspect-video aspect-[4/3] md:bg-cover bg-contain bg-no-repeat w-full"
             style={{
               backgroundImage: "url(/images/model.46226.jpg)",
             }}
@@ -36,7 +36,7 @@ const SecondContentSection = () => {
   return (
     <div className="w-full px-8">
       <div className="grid grid-cols-7 gap-4 mt-8">
-        <div className="col-span-3 w-full bg-slate-300 flex flex-col justify-center px-8">
+        <div className="md:col-span-7 md:py-10 col-span-3 w-full bg-slate-300 flex flex-col justify-center px-8">
           <div className="font-bold text-2xl mulish-regular mb-4">
             Handcrafted In Ho Chi Minh City
           </div>
@@ -54,7 +54,7 @@ const SecondContentSection = () => {
             </a>
           </div>
         </div>
-        <div className="col-span-4 w-full bg-blue-300">
+        <div className="md:hidden col-span-4 w-full bg-blue-300">
           <div
             className="aspect-[5/4] bg-contain bg-no-repeat w-full"
             style={{

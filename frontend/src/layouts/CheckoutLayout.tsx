@@ -224,7 +224,7 @@ export default function CheckoutLayout() {
                 key={promotion.promotionCode}
                 className="cursor-pointer text-primary font-semibold flex justify-between py-3 px-4 bg-slate-300 hover:bg-slate-300/40"
               >
-                <div className="flex gap-2 text-blue-900">
+                <div className="flex gap-2 text-blue-900 items-center">
                   <Tags />
                   {promotion.promotionCode} - {promotion.promotionName}: Get{" "}
                   {promotion.discountPercent * 100}% off

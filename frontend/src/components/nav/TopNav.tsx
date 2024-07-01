@@ -26,14 +26,19 @@ import { getCookie } from "../../utils/cookie";
 const TopNavItem = ({
   children,
   href,
+  setMenuDrop,
 }: {
   children: React.ReactNode;
   href: string;
+  setMenuDrop: any;
 }) => {
   return (
     <Link
       className="mulish-regular flex gap-1 items-center py-1 px-3 border-b-2 border-b-transparent text-base hover:border-b-blue-500 duration-200 transition-all"
       to={href}
+      onClick={() => {
+        setMenuDrop(false);
+      }}
     >
       {children}
     </Link>
@@ -78,7 +83,7 @@ export default function TopNav() {
     ],
   });
   return (
-    <div className="top-0 left-0 relative gap-4 py-3 px-4 bg-white w-full shadow-lg">
+    <div className="top-0 left-0 relative gap-4 py-3 px-4 bg-white w-full shadow-lg h-full">
       <div className="flex justify-between md:hidden">
         <div className="flex justify-end gap-6 items-center">
           <div className="flex items-center gap-2">
@@ -162,8 +167,10 @@ export default function TopNav() {
           </span>
         </div>
         <span className={`flex ${menuDrop ? "md:block" : "md:hidden"}`}>
-          <span className="hidden md:block">
-            <TopNavItem href="/">Home</TopNavItem>
+          <span className="hidden md:block ">
+            <TopNavItem setMenuDrop={setMenuDrop} href="/">
+              Home
+            </TopNavItem>
           </span>
           <Link
             className="relative mulish-regular flex gap-1 items-center py-1 px-3 border-b-2 border-b-transparent text-base hover:border-b-blue-500 duration-200 transition-all"
@@ -174,10 +181,13 @@ export default function TopNav() {
             onMouseLeave={() => {
               setJewelryDrop(false);
             }}
+            onClick={() => {
+              setMenuDrop(false);
+            }}
           >
             Accessory <ChevronDown size={16} />
             {jewelryDrop && (
-              <div className="sm:hidden pb-8 absolute z-50 w-[100vw] mx-auto top-[36px] -left-[190px] right-0 bg-white">
+              <div className="md:hidden pb-8 absolute z-50 w-[100vw] mx-auto top-[36px] -left-[190px] right-0 bg-white">
                 <div className="mt-4"></div>
                 <div className="grid grid-cols-4 px-4 pb-4 gap-y-2">
                   {accessoryTypes?.data?.map((item: any, index: number) => {
@@ -208,10 +218,13 @@ export default function TopNav() {
             onMouseLeave={() => {
               setDiamondDrop(false);
             }}
+            onClick={() => {
+              setMenuDrop(false);
+            }}
           >
             Diamond <ChevronDown size={16} />
             {diamondDrop && (
-              <div className="sm:hidden z-50 w-[100vw] absolute mx-auto top-[36px] -left-[310px] right-0 bg-white">
+              <div className="md:hidden z-50 w-[100vw] absolute mx-auto top-[36px] -left-[310px] right-0 bg-white">
                 <div className="mt-4"></div>
                 <div className="flex gap-4">
                   <DiamondItem shapes={shapes?.data} />
@@ -225,8 +238,17 @@ export default function TopNav() {
               </div>
             )}
           </Link>
-          <TopNavItem href="/blogs">Blogs</TopNavItem>
-          <TopNavItem href="/about">About us</TopNavItem>
+          <TopNavItem setMenuDrop={setMenuDrop} href="/blogs">
+            Blogs
+          </TopNavItem>
+          <TopNavItem setMenuDrop={setMenuDrop} href="/about">
+            About us
+          </TopNavItem>
+          <span className="hidden md:block">
+            <TopNavItem setMenuDrop={setMenuDrop} href="/account">
+              Account
+            </TopNavItem>
+          </span>
         </span>
       </div>
       {(jewelryDrop || diamondDrop) && (

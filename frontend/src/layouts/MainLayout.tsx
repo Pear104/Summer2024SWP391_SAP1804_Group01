@@ -14,9 +14,12 @@ export default function MainLayout() {
     }
   }, [location]);
   return (
-    <div className="relative overflow-x-hidden">
+    <div className="relative overflow-x-hidden min-h-screen">
       <TopNav />
-      <Outlet />
+      <span className="">
+        <Outlet />
+        {/* <div className="min-h-screen"></div> */}
+      </span>
       <span className="">{!hideFooter && <Footer />}</span>
     </div>
   );
