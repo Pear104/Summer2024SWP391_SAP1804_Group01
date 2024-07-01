@@ -70,7 +70,7 @@ export default function AccessoryDetail() {
         );
       }
     }
-  }, [accessory]);
+  }, []);
   const navigate = useNavigate();
   const setCurrentAccessory = useCartStore(
     (state) => state.setCurrentAccessory

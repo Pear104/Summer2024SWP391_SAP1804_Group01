@@ -1,4 +1,4 @@
-import { Form, Input, Pagination, Skeleton, Empty } from "antd";
+import { Form, Input, Pagination, Empty } from "antd";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { GET } from "../../../utils/request";

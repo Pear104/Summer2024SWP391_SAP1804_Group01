@@ -1,16 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GET } from "../../../utils/request";
-import {
-  Button,
-  Dropdown,
-  Empty,
-  Form,
-  Input,
-  Menu,
-  Pagination,
-  Skeleton,
-} from "antd";
+import { Button, Dropdown, Empty, Form, Input, Menu, Pagination } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { useSearchStore } from "../../../store/searchStore";
 import { useQueries } from "@tanstack/react-query";

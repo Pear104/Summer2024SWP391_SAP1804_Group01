@@ -11,7 +11,7 @@ const App: React.FC = () => {
   const [promotionCode, setPromotionCode] = useState("");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
-  const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const [_errorMessages, setErrorMessages] = useState<string[]>([]);
 
   const { RangePicker } = DatePicker;
   type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
@@ -24,8 +24,10 @@ const App: React.FC = () => {
   const showModal = () => {
     setOpen(true);
   };
-  const onOk = (value: DatePickerProps['value'] | RangePickerProps['value']) => {
-    console.log('onOk: ', value);
+  const onOk = (
+    value: DatePickerProps["value"] | RangePickerProps["value"]
+  ) => {
+    console.log("onOk: ", value);
     setErrorMessages([]);
   };
 
@@ -64,8 +66,8 @@ const App: React.FC = () => {
       }
     }
 
-     // Display errors if any
-     if (errors.length > 0) {
+    // Display errors if any
+    if (errors.length > 0) {
       setErrorMessages(errors);
       for (let i = 0; i < errors.length; i++) {
         message.error(errors[i]);

@@ -2,7 +2,7 @@ import { Search } from "lucide-react";
 import { useState } from "react";
 
 export default function SearchBarMainLayout() {
-  const [keyword, setKeyword] = useState("");
+  const [_keyword, setKeyword] = useState("");
   return (
     <div className="border-2 py-1 border-transparent border-slate-900 rounded-md">
       <form

@@ -17,7 +17,7 @@ interface TransactionData {
 }
 
 const TransactionChart: React.FC = () => {
-  const [data, setData] = useState<any[]>([]);
+  const [_data, setData] = useState<any[]>([]);
   const [formattedData, setFormattedData] = useState<TransactionData[]>([]);
   const [firstMonth, setFirstMonth] = useState("");
   const [lastMonth, setLastMonth] = useState("");

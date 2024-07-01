@@ -15,11 +15,9 @@ export default function MainLayout() {
   }, [location]);
   return (
     <div className="relative overflow-x-hidden">
-      <span className="sm:hidden">
-        <TopNav />
-      </span>
+      <TopNav />
       <Outlet />
-      <span className="sm:hidden">{!hideFooter && <Footer />}</span>
+      <span className="">{!hideFooter && <Footer />}</span>
     </div>
   );
 }

@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import {
-  HiOutlineBell,
-  HiOutlineChatAlt,
+  // HiOutlineBell,
+  // HiOutlineChatAlt,
   HiOutlineSearch,
 } from "react-icons/hi";
-import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
+// import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
 import {
   Menu,
   MenuButton,

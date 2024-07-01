@@ -4,7 +4,7 @@ import { useSearchStore } from "../../../store/searchStore";
 import { useQueries } from "@tanstack/react-query";
 import { GET } from "../../../utils/request";
 import CustomerRow from "./CustomerRow";
-import { Empty, Form, Input, Pagination, Skeleton } from "antd";
+import { Empty, Form, Input, Pagination } from "antd";
 import CustomerColumnHeader from "./componenets/CustomerColumnHeader";
 import LoadingItem from "./componenets/LoadingItem";
 
