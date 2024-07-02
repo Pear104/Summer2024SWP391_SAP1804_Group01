@@ -10,9 +10,8 @@ import { useEffect, useState } from "react";
 export default function DiamondDetail() {
   const { diamondId } = useParams();
   const [loadingCertificate, setLoadingCertificate] = useState(false);
-  useEffect(() => {
-    scrollTo("choose-item");
-  }, []);
+  const [certificate, setCertificate] = useState("");
+
   const [diamond, diamondPrice, priceRate] = useQueries({
     queries: [
       {
@@ -38,6 +37,14 @@ export default function DiamondDetail() {
   const setCurrentDiamond = useCartStore((state) => state.setCurrentDiamond);
   const setCurrentShape = useCartStore((state) => state.setCurrentShape);
   const { message } = App.useApp();
+
+  useEffect(() => {
+    scrollTo("choose-item");
+  }, []);
+
+  // console.log(diamond?.data?.certificateNumber);
+  // console.log(diamond?.data?.certificateNumber.slice(0, 2));
+
   return (
     <>
       <div className="flex justify-center mb-4">
@@ -210,14 +217,21 @@ export default function DiamondDetail() {
             className={`${
               loadingCertificate ? "hidden" : "aspect-video w-full"
             }`}
+            // target="_parent"
             onLoad={() => {
               setLoadingCertificate(false);
             }}
             // onLoadedData={() => setLoadingCertificate(false)}
             src={
               diamond.data.lab == "IGI"
-                ? `https://www.igi.org/API-IGI/viewpdf-url.php?r=LG${diamond.data.certificateNumber}`
-                : diamond.data.certificateUrl + "&locale=en_US"
+                ? `https://pdf.igi.org/${
+                    diamond?.data?.certificateNumber > 631500000
+                      ? diamond?.data?.shape == "Round"
+                        ? "FDR"
+                        : "ID"
+                      : "FRD"
+                  }${diamond?.data?.certificateNumber}.pdf`
+                : diamond.data.certificateUrl
             }
             title="Certification of IGI Lab"
           ></iframe>

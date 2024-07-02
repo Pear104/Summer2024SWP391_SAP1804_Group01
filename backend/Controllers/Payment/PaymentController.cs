@@ -4,8 +4,8 @@ using backend.Mappers;
 using backend.Models.Payment.Domain.Entities;
 using backend.Payment_src.core.Payment.Application.Features.Commands;
 using backend.Payment_src.core.Payment.Application.Features.Payment.Dtos;
-using backend.Payment_src.core.Payment.Service.Momo.Config;
-using backend.Payment_src.core.Payment.Service.Momo.Request;
+// using backend.Payment_src.core.Payment.Service.Momo.Config;
+// using backend.Payment_src.core.Payment.Service.Momo.Request;
 using backend.Payment_src.core.Payment.Service.Vnpay.Config;
 using backend.Payment_src.core.Payment.Service.Vnpay.Request;
 using backend.Payment_src.core.Payment.Service.Vnpay.Response;
@@ -26,7 +26,7 @@ namespace backend.Controllers
 
         private readonly VnpayConfig _vnpayConfig;
 
-        private readonly MomoConfig _momoConfig;
+        // private readonly MomoConfig _momoConfig;
         private readonly IOrderRepository _orderRepo;
 
         private readonly IEmailSender _emailSender;
@@ -36,7 +36,7 @@ namespace backend.Controllers
             IPaymentSignatureRepository paymentSignitureRepo,
             ICurrentUserService currentUserService,
             IOptions<VnpayConfig> vnpayConfig,
-            IOptions<MomoConfig> momoConfig,
+            // IOptions<MomoConfig> momoConfig,
             IOrderRepository orderRepo,
             IEmailSender emailSender
         )
@@ -45,7 +45,7 @@ namespace backend.Controllers
             _paymentSignitureRepo = paymentSignitureRepo;
             _currentUserService = currentUserService;
             _vnpayConfig = vnpayConfig.Value;
-            _momoConfig = momoConfig.Value;
+            // _momoConfig = momoConfig.Value;
             _orderRepo = orderRepo;
             _emailSender = emailSender;
         }
@@ -101,53 +101,53 @@ namespace backend.Controllers
         ///     "paymentDestinationId": "MOMO"
         ///     }
         /// </remarks>
-        [HttpPost]
-        [Route("momo-sent-request")]
-        [ProducesResponseType(typeof(PaymentLinkDtos), 200)]
-        [ProducesResponseType(400)]
-        public async Task<IActionResult> CreateMomoPayment([FromBody] CreatePayment createPayment)
-        {
-            PaymentLinkDtos result = new();
-            Payment paymentModel = await _paymentRepo.CreatePayment(
-                createPayment.FromCreatePaymentToPayment()
-            )!;
+        // [HttpPost]
+        // [Route("momo-sent-request")]
+        // [ProducesResponseType(typeof(PaymentLinkDtos), 200)]
+        // [ProducesResponseType(400)]
+        // public async Task<IActionResult> CreateMomoPayment([FromBody] CreatePayment createPayment)
+        // {
+        //     PaymentLinkDtos result = new();
+        //     Payment paymentModel = await _paymentRepo.CreatePayment(
+        //         createPayment.FromCreatePaymentToPayment()
+        //     )!;
 
-            if (paymentModel != null) //send one time payment request to Momo
-            {
-                var momoOneTimePayRequest = new MomoOneTimePaymentRequest()
-                {
-                    partnerCode = _momoConfig.PartnerCode,
-                    partnerName = "Momo",
-                    storeId = paymentModel.MerchantId!,
-                    requestType = "captureWallet",
-                    ipnUrl = _momoConfig.IpnUrl,
-                    redirectUrl = _momoConfig.ReturnUrl,
-                    orderId = paymentModel.PaymentRefId!,
-                    amount = (long)paymentModel.RequiredAmount!,
-                    lang = paymentModel.PaymentLanguage!,
-                    orderInfo = paymentModel.PaymentContent!,
-                    requestId = paymentModel.Id
-                };
+        //     if (paymentModel != null) //send one time payment request to Momo
+        //     {
+        //         var momoOneTimePayRequest = new MomoOneTimePaymentRequest()
+        //         {
+        //             partnerCode = _momoConfig.PartnerCode,
+        //             partnerName = "Momo",
+        //             storeId = paymentModel.MerchantId!,
+        //             requestType = "captureWallet",
+        //             ipnUrl = _momoConfig.IpnUrl,
+        //             redirectUrl = _momoConfig.ReturnUrl,
+        //             orderId = paymentModel.PaymentRefId!,
+        //             amount = (long)paymentModel.RequiredAmount!,
+        //             lang = paymentModel.PaymentLanguage!,
+        //             orderInfo = paymentModel.PaymentContent!,
+        //             requestId = paymentModel.Id
+        //         };
 
-                momoOneTimePayRequest.MakeSignature(_momoConfig.AccessKey, _momoConfig.SecretKey);
+        //         momoOneTimePayRequest.MakeSignature(_momoConfig.AccessKey, _momoConfig.SecretKey);
 
-                (bool createMomoLinkResult, string? createMessage) = momoOneTimePayRequest.GetLink(
-                    _momoConfig.PaymentUrl
-                );
-                if (createMomoLinkResult)
-                {
-                    result.PaymentId = paymentModel.Id;
-                    result.PaymentUrl = createMessage!;
-                }
-                else
-                {
-                    result.PaymentId = paymentModel.Id;
-                    result.Message = createMessage!;
-                }
-            } //end payment is NOT null
+        //         (bool createMomoLinkResult, string? createMessage) = momoOneTimePayRequest.GetLink(
+        //             _momoConfig.PaymentUrl
+        //         );
+        //         if (createMomoLinkResult)
+        //         {
+        //             result.PaymentId = paymentModel.Id;
+        //             result.PaymentUrl = createMessage!;
+        //         }
+        //         else
+        //         {
+        //             result.PaymentId = paymentModel.Id;
+        //             result.Message = createMessage!;
+        //         }
+        //     } //end payment is NOT null
 
-            return Ok(result);
-        }
+        //     return Ok(result);
+        // }
 
         /// <summary>
         /// Create payment via vnpay api
@@ -221,32 +221,32 @@ namespace backend.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
-        [Route("momo-return")]
-        public async Task<IActionResult> MomoReturn(
-            [FromQuery] MomoOneTimePaymentResultRequest resultRequest
-        )
-        {
-            string returnUrl = string.Empty;
-            var returnModel = new PaymentReturnDtos();
+        // [HttpGet]
+        // [Route("momo-return")]
+        // public async Task<IActionResult> MomoReturn(
+        //     [FromQuery] MomoOneTimePaymentResultRequest resultRequest
+        // )
+        // {
+        //     string returnUrl = string.Empty;
+        //     var returnModel = new PaymentReturnDtos();
 
-            //send link
-            var processResult = await _paymentRepo.ProcessMomoPaymentReturn(resultRequest);
-            if (processResult.Success)
-            {
-                returnModel = processResult.Data.Item1 as PaymentReturnDtos;
-                returnUrl = processResult.Data.Item2 as string;
-            }
-            //dunnot what this does
-            if (returnUrl.EndsWith("/"))
-            {
-                returnUrl = returnUrl.Remove(returnUrl.Length - 1, 1);
-            }
-            //dunnot what this does
+        //     //send link
+        //     var processResult = await _paymentRepo.ProcessMomoPaymentReturn(resultRequest);
+        //     if (processResult.Success)
+        //     {
+        //         returnModel = processResult.Data.Item1 as PaymentReturnDtos;
+        //         returnUrl = processResult.Data.Item2 as string;
+        //     }
+        //     //dunnot what this does
+        //     if (returnUrl.EndsWith("/"))
+        //     {
+        //         returnUrl = returnUrl.Remove(returnUrl.Length - 1, 1);
+        //     }
+        //     //dunnot what this does
 
-            //return NotFound();
-            return Redirect($"{returnUrl}?{returnModel.ToQueryString()}");
-        }
+        //     //return NotFound();
+        //     return Redirect($"{returnUrl}?{returnModel.ToQueryString()}");
+        // }
 
         [HttpGet]
         [Route("vnpay-return")]

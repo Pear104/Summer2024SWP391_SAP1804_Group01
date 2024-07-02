@@ -11,7 +11,7 @@ import Logo from "./logo/Logo";
 export default function Footer() {
   return (
     <div id="footer" className="w-screen border-t">
-      <div className="grid grid-cols-2 py-8 bg-black/90 text-white px-8">
+      <div className="md:hidden grid grid-cols-2 py-8 bg-black/90 text-white px-8">
         <div className="flex text-base gap-8">
           <div className="flex flex-col gap-2 mulish-regular text-sm">
             <div className="font-bold">Customer Care</div>
@@ -109,12 +109,12 @@ export default function Footer() {
           </div> */}
         </div>
       </div>
-      <div className="border-t text-[#151542] p-4 flex items-center justify-between">
+      <div className="md:bg-black md:text-white border-t text-[#151542] p-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Logo />
           <div className="text-sm tracking-widest">© 2024 DAT J .Inc</div>
         </div>
-        <div className="flex gap-4 pr-4">
+        <div className="md:hidden flex gap-4 pr-4">
           <a className="hover:opacity-60" href="#">
             Terms & Conditions
           </a>

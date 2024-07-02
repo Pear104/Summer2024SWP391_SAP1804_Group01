@@ -12,6 +12,7 @@ namespace backend.Interfaces
     {
         Task<PromotionResult> GetAllPromotionAsync(PromotionQuery query);
         Task<Promotion?> CreatePromotionAsync( CreatePromotionDTO promotionDto);
+        Task<List<Promotion>> GetPromotionActive();
         Task<Promotion?> GetPromotionByCodeAsync(string code);
         Task<Promotion?> UpdatePromotionAsync(string code, UpdatePromotionDTO promotionDto);
     }

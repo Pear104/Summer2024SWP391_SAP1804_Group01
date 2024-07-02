@@ -38,35 +38,37 @@ namespace backend.Repository
 
         public async Task<WarrantyCardResult?> getWarrantyCards(WarrantyCardQuery query)
         {
-            var warrantyCardQueries = _context.WarrantyCards.AsQueryable();
+            var warrantyCardQueries = _context.WarrantyCards.Include(x => x.OrderDetail)
+                .ThenInclude(x => x.Order)
+                .AsQueryable();
 
-            if (query.WarrantyCardId.HasValue)
-            {
-                warrantyCardQueries = warrantyCardQueries.Where(x =>
-                    x.WarrantyCardId == query.WarrantyCardId
-                );
-            }
-            if (query.DiamondId.HasValue)
-            {
-                warrantyCardQueries = warrantyCardQueries.Where(x =>
-                    x.DiamondId == query.DiamondId
-                );
-            }
-            if (query.AccessoryId.HasValue)
-            {
-                warrantyCardQueries = warrantyCardQueries.Where(x =>
-                    x.DiamondId == query.DiamondId
-                );
-            }
-            if (query.MinDate.HasValue)
-            {
-                warrantyCardQueries = warrantyCardQueries.Where(x => x.StartTime >= query.MinDate);
-            }
-            if (query.MaxDate.HasValue)
-            {
-                warrantyCardQueries = warrantyCardQueries.Where(x => x.StartTime <= query.MaxDate);
-            }
-
+            // if (query.WarrantyCardId.HasValue)
+            // {
+            //     warrantyCardQueries = warrantyCardQueries.Where(x =>
+            //         x.WarrantyCardId == query.WarrantyCardId
+            //     );
+            // }
+            // if (query.DiamondId.HasValue)
+            // {
+            //     warrantyCardQueries = warrantyCardQueries.Where(x =>
+            //         x.DiamondId == query.DiamondId
+            //     );
+            // }
+            // if (query.AccessoryId.HasValue)
+            // {
+            //     warrantyCardQueries = warrantyCardQueries.Where(x =>
+            //         x.AccessoryId == query.AccessoryId
+            //     );
+            // }
+            // if (query.MinDate.HasValue)
+            // {
+            //     warrantyCardQueries = warrantyCardQueries.Where(x => x.StartTime >= query.MinDate);
+            // }
+            // if (query.MaxDate.HasValue)
+            // {
+            //     warrantyCardQueries = warrantyCardQueries.Where(x => x.StartTime <= query.MaxDate);
+            // }
+            
             var totalCount = await warrantyCardQueries.CountAsync();
 
             var totalPages = (int)Math.Ceiling(totalCount / (double)query.PageSize);
@@ -82,9 +84,12 @@ namespace backend.Repository
                     AccessoryId = x.AccessoryId,
                     StartTime = x.StartTime,
                     EndTime = x.EndTime,
+                    CustomerName = x.OrderDetail.Order.Customer != null ? x.OrderDetail.Order.Customer.Name : null,
+                    AccessoryName = x.Accessory != null ? x.Accessory.Name : null,
+                    DiamondName = x.Diamond != null ? x.Diamond.Carat + " Carat, " + x.Diamond.Shape.Name : null
                 })
                 .ToListAsync();
-
+                
             return new WarrantyCardResult
             {
                 WarrantyCards = warrantyCards,
@@ -94,5 +99,6 @@ namespace backend.Repository
                 TotalCount = totalCount
             };
         }
+
     }
 }

@@ -7,9 +7,9 @@ export default {
         primary: "#151542",
       },
       screens: {
-        xl: { max: "1279px" },
+        xl: { max: "1379px" },
         lg: { max: "1023px" },
-        md: { max: "767px" },
+        md: { max: "967px" },
         sm: { max: "639px" },
       },
     },

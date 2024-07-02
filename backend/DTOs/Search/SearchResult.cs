@@ -8,8 +8,8 @@ namespace backend.DTOs.Search
 {
     public class SearchResult
     {
-        public List<DiamondDTO?> Diamonds { get; set; } = new List<DiamondDTO?>();
-        public List<AccessoryDTO?> Accessories { get; set; } = new List<AccessoryDTO?>();
+        public List<DiamondDTO>? Diamonds { get; set; }
+        public List<AccessoryDTO>? Accessories { get; set; }
         public int TotalPages { get; set; }
         public int PageSize { get; set; } = 5;
         public int CurrentPage { get; set; } = 1;

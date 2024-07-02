@@ -2,7 +2,13 @@ import Logo from "../../../components/logo/Logo";
 import moment from "moment";
 import React from "react";
 
-export default function WarrantyAccessoryItem({ order }: { order: any }) {
+export default function WarrantyAccessoryItem({
+  order,
+  accessory,
+}: {
+  order: any;
+  accessory: any;
+}) {
   return (
     <div className="px-4 py-2 w-full pb-8" id="invoice">
       <div className="flex justify-between mt-4 border-b border-black pb-2">
@@ -47,7 +53,6 @@ export default function WarrantyAccessoryItem({ order }: { order: any }) {
         <table className="w-full text-lg mt-2">
           <thead className="border">
             <tr className="border-b bg-slate-300">
-              <th className="text-center">No.</th>
               <th className="text-center w-[400px]">Name</th>
               <th className="text-center">Date of purchase</th>
               <th className="text-center">Expired date</th>
@@ -55,25 +60,22 @@ export default function WarrantyAccessoryItem({ order }: { order: any }) {
             </tr>
           </thead>
           <tbody className="border">
-            {order.orderDetails.map((detail: any, index: number) => (
-              <React.Fragment key={index}>
-                {detail.accessory && (
-                  <tr className="border-b h-20">
-                    <td className="text-center">{index + 1}</td>
-                    <td className="text-center">{detail.accessory.name}</td>
-                    <td className="text-center">
-                      {moment(order.createdAt).format("DD/MM/YYYY")}
-                    </td>
-                    <td className="text-center">
-                      {moment(order.createdAt)
-                        .add(12, "months")
-                        .format("DD/MM/YYYY")}
-                    </td>
-                    <td className="text-center">12 months</td>
-                  </tr>
-                )}
-              </React.Fragment>
-            ))}
+            <React.Fragment>
+              {accessory && (
+                <tr className="border-b h-20">
+                  <td className="text-center">{accessory.name}</td>
+                  <td className="text-center">
+                    {moment(order.createdAt).format("DD/MM/YYYY")}
+                  </td>
+                  <td className="text-center">
+                    {moment(order.createdAt)
+                      .add(12, "months")
+                      .format("DD/MM/YYYY")}
+                  </td>
+                  <td className="text-center">12 months</td>
+                </tr>
+              )}
+            </React.Fragment>
           </tbody>
         </table>
       </div>

@@ -4,24 +4,22 @@ import { Form, Input, Pagination, Empty } from "antd";
 import { useSearchStore } from "../../../store/searchStore";
 import { GET } from "../../../utils/request";
 import { useQueries } from "@tanstack/react-query";
-import PromotionRow from "./components/PromotionRow";
-import PriceRateColumnHeader from "./components/PromotionColumnHeader";
-import CreatePromotion from "./components/CreatePromotion";
+import WarrantyColumnHeader from "./components/WarrantyColumnHeader";
 import LoadingItem from "./components/LoadingItem";
+import CardRow from "./components/CardRow";
 
-export default function PriceRate() {
+export default function CardManagement() {
   const location = useLocation();
+
+  // sort item
   const columnHeaders = [
-    "Promotion ID",
-    "Promotion Name",
-    "Promotion Code",
-    "Discount Rate",
-    "Start Date",
-    "End Date",
-    "Duration",
-    "Status",
-    "Update",
+    "Warranty Card ID",
+    "Customer",
+    "Product",
+    "Date of purchase",
+    "Warranty period",
   ];
+
   const searchTerm = useSearchStore((state) => state.searchTerm);
   const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
   const url = new URL(window.location.href);
@@ -30,24 +28,23 @@ export default function PriceRate() {
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   useEffect(() => {
-    setQueryUrl("/api/Promotion?");
+    setQueryUrl("/api/WarrantyCards?");
   }, []);
 
-  const [promotionList] = useQueries({
+  const [warrantyCardList] = useQueries({
     queries: [
       {
-        queryKey: ["promotion", queryUrl],
+        queryKey: ["warrantyCard", queryUrl],
         queryFn: () => GET(queryUrl),
         staleTime: 0,
       },
     ],
   });
   console.log(queryUrl);
-  console.log(promotionList?.data);
-  console.log(promotionList?.data?.promotion?.length);
+  console.log(warrantyCardList?.data);
 
-  const renderPromotionRow = (promotion: any) => (
-    <PromotionRow key={promotion.promotionId} promotion={promotion} />
+  const renderCardRow = (card: any) => (
+    <CardRow key={card.warrantyCardId} card={card} />
   );
 
   // pagination, change page size
@@ -55,19 +52,17 @@ export default function PriceRate() {
   useEffect(() => {
     params.set("PageSize", pageSize.toString());
     navigate(url.pathname + "?" + params.toString());
-    setQueryUrl("/api/Promotion?" + params.toString());
+    setQueryUrl("/api/WarrantyCards?" + params.toString());
   }, [pageSize]);
+
   return (
     <div className="p-4">
       {/* header */}
       <div className="flex justify-between items-center mt-6 mx-auto mb-8">
         <div className="flex justify-start space-x-1 items-center">
           <div className="self-center">
-            <h1 className="text-2xl"> Promotion List </h1>
+            <h1 className="text-2xl"> Warranty Card List </h1>
           </div>
-        </div>
-        <div className="flex justify-end space-x-1 items-center">
-          <CreatePromotion />
         </div>
       </div>
 
@@ -93,25 +88,6 @@ export default function PriceRate() {
                 </Form.Item>
               </Form>
             </h3>
-            <div className="flex space-x-075">
-              <div className="card-action ">
-                <a
-                  href="/admin/price-rate"
-                  className="text-interactive "
-                  onClick={(event) => {
-                    event.preventDefault();
-                    setSearchTerm("");
-                    // Clear the URL parameters
-                    const params = new URLSearchParams(location.search);
-                    setQueryUrl(`/api/Promotion?` + params.toString());
-                    // params.delete("type");
-                    navigate({ search: params.toString() });
-                  }}
-                >
-                  Clear filter
-                </a>
-              </div>
-            </div>
           </div>
           <div className="pt-lg"></div>
         </div>
@@ -119,18 +95,18 @@ export default function PriceRate() {
         <div className="flex flex-col">
           <div className="my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-              <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+              <div className="shadow overflow-hidden border-gray-200 sm:rounded-lg">
                 <table className="min-w-full divide-y divide-gray-200">
                   {/* theader */}
                   <thead className="bg-gray-50">
                     <tr className="">
                       {columnHeaders.map((header) => {
                         return (
-                          <PriceRateColumnHeader
+                          <WarrantyColumnHeader
                             header={header}
                             setQueryUrl={setQueryUrl}
                             params={params}
-                            type="price-rate"
+                            type="warranty-card"
                           />
                         );
                       })}
@@ -138,21 +114,21 @@ export default function PriceRate() {
                   </thead>
                   {/* body */}
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {promotionList.isLoading &&
+                    {warrantyCardList?.isLoading &&
                       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((key) => (
                         <LoadingItem key={key} />
                       ))}
-                    {promotionList?.data &&
-                    promotionList?.data?.promotion?.length > 0 ? (
-                      promotionList?.data?.promotion?.map(renderPromotionRow)
+                    {warrantyCardList?.data &&
+                    warrantyCardList?.data?.warrantyCards?.length > 0 ? (
+                      warrantyCardList?.data?.warrantyCards?.map(renderCardRow)
                     ) : (
-                      <td colSpan={100} className="py-20 w-full">
-                        <Empty description="No Promotion Found" />
+                      <td colSpan={100} className="py-40 w-full">
+                        <Empty description="No warranty request to process" />
                       </td>
                     )}
                   </tbody>
                 </table>
-                {promotionList?.data?.promotion?.length > 0 && (
+                {warrantyCardList?.data?.warrantyRequests?.length > 0 && (
                   <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
                     <Pagination
                       showTotal={(total, range) =>
@@ -160,19 +136,20 @@ export default function PriceRate() {
                       }
                       current={Number(params.get("PageNumber")) || 1}
                       defaultCurrent={
-                        (promotionList?.data &&
-                          promotionList?.data.currentPage.toString()) ||
+                        (warrantyCardList?.data &&
+                          warrantyCardList?.data.currentPage.toString()) ||
                         "1"
                       }
                       total={
-                        promotionList?.data && promotionList?.data.totalCount
+                        warrantyCardList?.data &&
+                        warrantyCardList?.data.totalCount
                       }
                       pageSize={Number(params.get("PageSize")) || 20}
                       onChange={(page, _pageSize) => {
                         params.set("PageNumber", page.toString());
                         params.set("PageSize", pageSize.toString());
                         navigate(url.pathname + "?" + params.toString());
-                        setQueryUrl("/api/Promotion?" + params.toString());
+                        setQueryUrl("/api/WarrantyCards?" + params.toString());
                         setSearchTerm("");
                       }}
                       showSizeChanger={true}
@@ -180,7 +157,7 @@ export default function PriceRate() {
                         setPageSize(size);
                         params.set("PageSize", size.toString());
                         navigate(url.pathname + "?" + params.toString());
-                        setQueryUrl("/api/Promotion?" + params.toString());
+                        setQueryUrl("/api/WarrantyCards?" + params.toString());
                       }}
                     />
                   </div>

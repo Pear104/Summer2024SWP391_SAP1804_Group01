@@ -29,7 +29,7 @@ export default function Diamond() {
       <div className="w-full flex justify-center great-vibes-regular text-7xl mt-16">
         Diverse gemstones
       </div>
-      <div className="w-full mt-8 gap-4 justify-evenly px-8 overflow-x-hidden grid grid-cols-10">
+      <div className="md:hidden w-full mt-8 gap-4 justify-evenly px-8 overflow-x-hidden grid grid-cols-10">
         {items.map((item: any, index) => {
           return (
             <div className="text-sm" key={index}>

@@ -11,25 +11,16 @@ import Banner7 from "./components/banner/Banner7";
 export default function Home() {
   return (
     <div className="">
-      <div className="hidden sm:flex sm:flex-col justify-center items-center">
-        <div className="mt-10 text-2xl px-6 text-center">
-          Mobile version only support for our staffs
-        </div>
-        <a
-          href="/authentication/login"
-          className="border-2 border-black px-5 py-2 mt-10 text-2xl flex justify-center items-center"
-        >
-          Login
-        </a>
-      </div>
-      <span className="sm:hidden">
+      <span className="">
         <Carousel autoplay autoplaySpeed={3000}>
           <Banner3 />
-          <Banner4 />
-          <Banner1 />
-          <Banner2 />
+          {/* <Banner4 /> */}
+          {/* <Banner1 /> */}
+          {/* <Banner2 /> */}
+          {/* <Banner7 /> */}
+          {/*  */}
+
           {/* <Banner5 /> */}
-          <Banner7 />
           {/* <Banner6 /> */}
         </Carousel>
         <Explore />

@@ -15,24 +15,24 @@ namespace backend.Mappers
             var productName =
                 diamond != null
                     ? $"{diamond.Carat} ct {diamond.Shape.Name} Shape Diamond #{diamond.CertificateNumber}"
-                    : warrantyRequest.WarrantyCard.Accessory.Name;
+                    : warrantyRequest?.WarrantyCard?.Accessory?.Name;
             return new WarrantyRequestDTO
             {
-                WarrantyRequestId = warrantyRequest.WarrantyRequestId,
+                WarrantyRequestId = warrantyRequest?.WarrantyRequestId,
                 Product = productName,
-                WarrantyReason = warrantyRequest.WarrantyReason,
-                CustomerId = warrantyRequest.CustomerId,
-                CustomerName = warrantyRequest.Customer.Name,
-                WarrantyStaffId = warrantyRequest.WarrantyStaffId ?? 0,
-                WarrantyStaffName = warrantyRequest.WarrantyStaff?.Name,
-                DeliveryStaffId = warrantyRequest.DeliveryStaffId ?? 0,
-                DeliveryStaffName = warrantyRequest.DeliveryStaff?.Name,
-                WarrantyCardId = warrantyRequest.WarrantyCardId,
-                ReceiveTime = warrantyRequest.ReceiveTime,
-                ReturnTime = warrantyRequest.ReturnTime ?? null,
-                WarrantyStatus = warrantyRequest.WarrantyStatus.ToString(),
-                ShippingAddress = warrantyRequest.ShippingAddress,
-                PhoneNumber = warrantyRequest.PhoneNumber
+                WarrantyReason = warrantyRequest?.WarrantyReason,
+                CustomerId = warrantyRequest?.CustomerId,
+                CustomerName = warrantyRequest?.Customer?.Name,
+                WarrantyStaffId = warrantyRequest?.WarrantyStaffId ,
+                WarrantyStaffName = warrantyRequest?.WarrantyStaff?.Name,
+                DeliveryStaffId = warrantyRequest?.DeliveryStaffId,
+                DeliveryStaffName =  warrantyRequest?.DeliveryStaff?.Name,
+                WarrantyCardId = warrantyRequest?.WarrantyCardId,
+                ReceiveTime = warrantyRequest?.ReceiveTime,
+                ReturnTime = warrantyRequest?.ReturnTime ,
+                WarrantyStatus = warrantyRequest?.WarrantyStatus.ToString(),
+                ShippingAddress = warrantyRequest?.ShippingAddress,
+                PhoneNumber = warrantyRequest?.PhoneNumber
             };
         }
 

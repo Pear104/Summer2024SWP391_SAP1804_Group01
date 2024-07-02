@@ -5,7 +5,7 @@ export default function Logo() {
   return (
     <Link className="flex gap-2 items-center" to="/">
       <DiamondPlus size={27} strokeWidth={2} />
-      <div className="cinzel-decorative-regular italic font-semibold text-3xl flex">
+      <div className="cinzel-decorative-regular italic font-semibold text-3xl flex sm:text-xl">
         DAT J
       </div>
       <DiamondPlus size={27} strokeWidth={2} />

@@ -88,9 +88,9 @@ export default function Login() {
   });
 
   return (
-    <div className="sm:w-full sm:p-0 sm:grid-cols-1 grid grid-cols-2 gap-4 py-16 px-32">
+    <div className="md:w-full md:p-0 md:grid-cols-1 md:items-center grid grid-cols-2 gap-4 py-16 px-32">
       {isLoading && <Loading />}
-      <div className="col-span-1 sm:hidden">
+      <div className="col-span-1 md:hidden">
         <div
           className="aspect-square bg-contain bg-no-repeat w-full"
           style={{
@@ -98,15 +98,15 @@ export default function Login() {
           }}
         ></div>
       </div>
-      <div className="col-span-1 flex justify-center items-start">
-        <div className="flex flex-col justify-center">
+      <div className="md:min-h-screen col-span-1 flex justify-center items-start">
+        <div className="md:w-3/4 flex flex-col justify-center">
           <div className="mb-10 pt-10 playfair-display-regular text-3xl font-bold text-center">
             DATJ DIAMOND .Inc
           </div>
           <Form
             layout="vertical"
             autoComplete="off"
-            className="w-[440px] flex flex-col gap-1 sm:w-full"
+            className="w-[440px] flex flex-col gap-1 md:w-full"
             onFinish={handleSubmit(async (data) => {
               setIsLoading(true);
               const authResponse = await POST(
@@ -134,7 +134,7 @@ export default function Login() {
           >
             <FormItem name="email" control={control} required>
               <Input
-                className="sm:w-full border text-base border-primary py-2 px-4 without-ring w-[440px] rounded-none"
+                className="md:w-full border text-base border-primary py-2 px-4 without-ring w-[440px] rounded-none"
                 suffix={<UserOutlined className="opacity-50" />}
                 placeholder="Email"
               />
@@ -147,10 +147,10 @@ export default function Login() {
             >
               <Input.Password
                 placeholder="Password"
-                className="sm:w-full border text-base border-primary py-2 px-4 without-ring w-[440px] rounded-none"
+                className="md:w-full border text-base border-primary py-2 px-4 without-ring w-[440px] rounded-none"
               />
             </FormItem>
-            <span className="sm:hidden">
+            <span className="">
               <div className="mb-4">
                 <a
                   href="/authentication/forget-password"
@@ -162,7 +162,7 @@ export default function Login() {
             </span>
             <Form.Item className="mb-0">
               <Button
-                className="sm:w-[80px] w-full hover:scale-95 font-bold text-white bg-primary sm:py-5 py-6 flex items-center justify-center"
+                className="w-full hover:scale-95 font-bold text-white bg-primary md:py-5 py-6 flex items-center justify-center"
                 type="default"
                 htmlType="submit"
               >
@@ -170,7 +170,7 @@ export default function Login() {
               </Button>
             </Form.Item>
           </Form>
-          <span className="sm:hidden">
+          <span className="">
             <Divider>or</Divider>
             <Button
               className="mb-4 gap-3 w-full hover:scale-95 mulish-regular text-base font-bold text-black bg-white py-6 flex items-center justify-center"
