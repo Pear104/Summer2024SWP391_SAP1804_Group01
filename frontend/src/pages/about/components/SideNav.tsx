@@ -29,24 +29,24 @@ export default function SideNav() {
         },
       ],
     },
-    {
-      key: "policies",
-      label: "Policies",
-      children: [
-        {
-          key: "return-policy",
-          label: "Return Policy",
-        },
-        {
-          key: "payment-policy",
-          label: "Payment Policy",
-        },
-        {
-          key: "privacy-policy",
-          label: "Privacy Policy",
-        },
-      ],
-    },
+    // {
+    //   key: "policies",
+    //   label: "Policies",
+    //   children: [
+    //     {
+    //       key: "return-policy",
+    //       label: "Return Policy",
+    //     },
+    //     {
+    //       key: "payment-policy",
+    //       label: "Payment Policy",
+    //     },
+    //     {
+    //       key: "privacy-policy",
+    //       label: "Privacy Policy",
+    //     },
+    //   ],
+    // },
     {
       key: "contact",
       label: "Contact",

@@ -54,6 +54,7 @@ import PotentialCustomerReportManagement from "../pages/dashboard/staffsReport/C
 import DeliveryReportManagement from "../pages/dashboard/staffsReport/DeliveryReportManagement";
 import PromotionManage from "../pages/dashboard/promotion/PromotionManage";
 import CardManagement from "../pages/dashboard/warranty_card/CardManagement";
+import Policies from "../pages/policies/Policies";
 const routes = [
   {
     errorElement: <Error />,
@@ -233,6 +234,10 @@ const routes = [
                 element: <BlogDetail />,
               },
             ],
+          },
+          {
+            path: "/policies",
+            element: <Policies />,
           },
           {
             path: "authentication",

@@ -1,6 +1,6 @@
 import {
   ChevronDown,
-  FlaskConical,
+  //FlaskConical,
   // Heart,
   LineChart,
   Mail,
@@ -109,9 +109,9 @@ export default function TopNav() {
           <div className="cursor-pointer">
             <SearchBar />
           </div>
-          <Link to="/test">
+          {/* <Link to="/test">
             <FlaskConical size={20} strokeWidth={2} absoluteStrokeWidth />
-          </Link>
+          </Link> */}
           {decode && decode?.role != "Customer" && (
             <div
               className="cursor-pointer"
@@ -243,6 +243,9 @@ export default function TopNav() {
           </TopNavItem>
           <TopNavItem setMenuDrop={setMenuDrop} href="/about">
             About us
+          </TopNavItem>
+          <TopNavItem setMenuDrop={setMenuDrop} href="/policies">
+            Privacy Policy
           </TopNavItem>
           <span className="hidden md:block">
             <TopNavItem setMenuDrop={setMenuDrop} href="/account">
