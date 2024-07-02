@@ -53,7 +53,9 @@ export default function CheckoutPayment() {
                           "/api/Transactions",
                           {
                             orderId: orderResponse.orderId,
-                            amount: orderResponse.totalPrice,
+                            amount:
+                              orderResponse.totalPrice *
+                              (1 - orderResponse.totalDiscountPercent),
                             paymentMethod: "CREDIT_CARD",
                           }
                         );

@@ -90,6 +90,12 @@ export default function CheckoutLayout() {
     })();
   }, [cart, diamondPrices, materialPrices, priceRate]);
 
+  useEffect(() => {
+    if (cart.length == 0) {
+      location.href = "/";
+    }
+  }, []);
+
   const handleApplyPromotion = (promotion: any) => {
     if (appliedPromotion !== promotion.promotionCode) {
       setAppliedPromotion(promotion.promotionCode);
