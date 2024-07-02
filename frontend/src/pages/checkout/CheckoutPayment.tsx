@@ -7,6 +7,7 @@ import { POST } from "../../utils/request";
 import { useCartStore } from "../../store/cartStore";
 import { useState } from "react";
 import Loading from "../../components/Loading";
+import { useCheckoutStore } from "../../store/checkoutStore";
 
 export default function CheckoutPayment() {
   const [isLoading, setIsLoading] = useState(false);
@@ -42,6 +43,9 @@ export default function CheckoutPayment() {
                       setIsLoading(true);
                       const orderResponse = await POST("/api/Order", {
                         orderDetails: cart,
+                        shippingAddress: useCheckoutStore.getState().shippingAddress,
+                        phoneNumber: useCheckoutStore.getState().phoneNumber,
+                        promotionCode: useCheckoutStore.getState().promotionCode,
                       });
                       console.log("orderResponse: ", orderResponse);
                       if (orderResponse?.orderId) {

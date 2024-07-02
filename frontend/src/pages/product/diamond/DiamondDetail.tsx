@@ -227,7 +227,7 @@ export default function DiamondDetail() {
                 ? `https://pdf.igi.org/${
                     diamond?.data?.certificateNumber > 631500000
                       ? diamond?.data?.shape == "Round"
-                        ? "FRD"
+                        ? "FDR"
                         : "ID"
                       : "FRD"
                   }${diamond?.data?.certificateNumber}.pdf`

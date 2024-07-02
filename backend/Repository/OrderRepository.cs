@@ -50,17 +50,17 @@ namespace backend.Repository
                 ShippingAddress = orderDto.ShippingAddress ?? customer.Address,
                 PhoneNumber = orderDto.PhoneNumber ?? customer.PhoneNumber,
             };
-            if (orderDto.PromotionId != null)
+            if (orderDto.PromotionCode != null)
             {
                 promotion = await _context.Promotions.FirstOrDefaultAsync(x =>
-                    x.PromotionId == orderDto.PromotionId
+                    x.PromotionCode == orderDto.PromotionCode
                 );
                 newOrder.Promotion = promotion;
                 if (promotion == null)
                 {
                     return null;
                 }
-                newOrder.TotalDiscountPercent = promotion.PromotionId + rank.Discount;
+                newOrder.TotalDiscountPercent = promotion.DiscountPercent + rank.Discount;
             }
             else
             {

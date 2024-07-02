@@ -8,7 +8,8 @@ import CheckoutCartItem from "../pages/checkout/components/CheckoutCartItem";
 import { Tags, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getAccessoryPrice, getDiamondPrice } from "../utils/getPrice";
-import { CheckOutlined } from "@ant-design/icons";
+import { useCheckoutStore } from "../store/checkoutStore";
+// import { CheckOutlined } from "@ant-design/icons";
 
 const item = [
   {
@@ -57,7 +58,7 @@ export default function CheckoutLayout() {
 
   const cart = useCartStore((state) => state.cart);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [appliedPromotions, setAppliedPromotions] = useState<string[]>([]);
+  const [appliedPromotion, setAppliedPromotion] = useState("");
   const [discountCode, setDiscountCode] = useState("");
 
   useEffect(() => {
@@ -90,11 +91,9 @@ export default function CheckoutLayout() {
   }, [cart, diamondPrices, materialPrices, priceRate]);
 
   const handleApplyPromotion = (promotion: any) => {
-    if (!isPromotionApplied(promotion.promotionCode)) {
-      setAppliedPromotions((prevPromotions) => [
-        ...prevPromotions,
-        promotion.promotionCode,
-      ]);
+    if (appliedPromotion !== promotion.promotionCode) {
+      setAppliedPromotion(promotion.promotionCode);
+      useCheckoutStore.getState().setPromotionCode(promotion.promotionCode);
       message.success(`Applied promotion: ${promotion.promotionCode}`);
     } else {
       message.warning(
@@ -103,14 +102,14 @@ export default function CheckoutLayout() {
     }
   };
 
-  const isPromotionApplied = (promotionCode: string): boolean => {
-    return appliedPromotions.includes(promotionCode);
-  };
-  const removePromotion = (promotionCode: string): void => {
-    setAppliedPromotions((prevPromotions) =>
-      prevPromotions.filter((code) => code !== promotionCode)
-    );
-    message.success(`Removed promotion: ${promotionCode}`);
+  // const isPromotionApplied = (promotionCode: string): boolean => {
+  //   return appliedPromotion === promotionCode;
+  // };
+  const removePromotion = (): void => {
+    const removedPromotion = appliedPromotion;
+    setAppliedPromotion("");
+    useCheckoutStore.getState().setPromotionCode("");
+    message.success(`Removed promotion: ${removedPromotion}`);
   };
 
   const handleDiscountCodeApply = async () => {
@@ -140,18 +139,18 @@ export default function CheckoutLayout() {
 
   const calculateDiscount = () => {
     let discount = 0;
-    appliedPromotions.forEach((promotionCode) => {
+    if (appliedPromotion) {
       const promo = promotion?.data?.find(
-        (p: any) => p.promotionCode === promotionCode
+        (p: any) => p.promotionCode === appliedPromotion
       );
       if (promo) {
         discount += promo.discountPercent;
       }
-    });
+    }
     return discount;
   };
 
-  const totalDiscount = calculateDiscount();
+  const totalDiscount = calculateDiscount() + userInfo?.data?.rank?.discount;
 
   return (
     <div className="top-0 right-0 fixed w-screen h-screen grid grid-cols-2">
@@ -197,29 +196,24 @@ export default function CheckoutLayout() {
           </div>
           <div>
             <div className="flex gap-2">
-              {appliedPromotions?.map((promotion: any) => (
-                <div
-                  key={promotion}
-                  className="cursor-pointer text-black font-semibold flex justify-between py-3 px-4 bg-slate-300"
-                >
+              {appliedPromotion && (
+                <div className="cursor-pointer text-black font-semibold flex justify-between py-3 px-4 bg-slate-300">
                   <div className="flex gap-3 ">
                     <Tags />
-                    {promotion}
+                    {appliedPromotion}
                     <button
                       className="m-0 p-0 text-gray-500 hover:text-slate-300 text-bold text-3xl"
-                      onClick={() => removePromotion(promotion)}
+                      onClick={removePromotion}
                     >
                       <X />
                     </button>
                   </div>
                 </div>
-              ))}
+              )}
             </div>
-            <div className="font-semibold mb-2">
-              Enter the discount code or select from below
-            </div>
+            <div className="font-semibold mb-2">Enter the discount code</div>
             {/* Discount code items */}
-            {promotion?.data?.map((promotion: any) => (
+            {/* {promotion?.data?.map((promotion: any) => (
               <div
                 key={promotion.promotionCode}
                 className="cursor-pointer text-primary font-semibold flex justify-between py-3 px-4 bg-slate-300 hover:bg-slate-300/40"
@@ -240,7 +234,7 @@ export default function CheckoutLayout() {
                   </Button>
                 )}
               </div>
-            ))}
+            ))} */}
           </div>
           <Divider />
           <div className="text-base">
@@ -264,9 +258,7 @@ export default function CheckoutLayout() {
             </div>
             <div className="flex justify-between">
               <div>Discount</div>
-              <div className="font-semibold">
-                {userInfo?.data?.rank?.discount + totalDiscount * 100 + "%"}
-              </div>
+              <div className="font-semibold">{totalDiscount * 100 + "%"}</div>
             </div>
           </div>
           <Divider />
@@ -276,10 +268,7 @@ export default function CheckoutLayout() {
               <div className="text-xs">USD</div>
               <div className="font-semibold text-3xl">
                 {totalPrice != 0 && totalPrice ? (
-                  (
-                    totalPrice *
-                    (1 - (userInfo?.data?.rank?.discount + totalDiscount))
-                  ).toLocaleString("en-US", {
+                  (totalPrice * (1 - totalDiscount)).toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
                     maximumFractionDigits: 0,

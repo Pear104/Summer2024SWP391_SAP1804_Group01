@@ -6,10 +6,12 @@ export const useCheckoutStore = create<{
   shippingAddress?: string;
   phoneNumber?: string;
   name?: string;
+  promotionCode?: string;
   setShippingAddress: (address: string) => void;
   setPhoneNumber: (phoneNumber: string) => void;
   setEmail: (email: string) => void;
   setName: (name: string) => void;
+  setPromotionCode: (promotionCode: string) => void;
 }>()(
   persist(
     (set) => ({
@@ -18,12 +20,14 @@ export const useCheckoutStore = create<{
       shippingAddress: "",
       phoneNumber: "",
       name: "",
+      promotion: "",
       setShippingAddress: (address: string) =>
         set({ shippingAddress: address }),
       setPhoneNumber: (phoneNumber: string) =>
         set({ phoneNumber: phoneNumber }),
       setEmail: (email: string) => set({ email: email }),
       setName: (name: string) => set({ name: name }),
+      setPromotionCode: (promotionCode: string) => set({ promotionCode: promotionCode }),
     }),
 
     {

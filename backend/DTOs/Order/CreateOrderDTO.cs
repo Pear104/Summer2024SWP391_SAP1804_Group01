@@ -6,6 +6,6 @@ namespace backend.DTOs.Order
             new List<CreateOrderDetailDTO>();
         public string? ShippingAddress { get; set; }
         public string? PhoneNumber { get; set; }
-        public long? PromotionId { get; set; }
+        public string? PromotionCode { get; set; }
     }
 }
