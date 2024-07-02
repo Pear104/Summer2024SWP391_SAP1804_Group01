@@ -19,7 +19,6 @@ export default function PromotionRow({ promotion }: { promotion: any }) {
   const [discountPercent, setDiscountPercent] = useState(
     promotion.discountPercent
   );
-
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
   const { RangePicker } = DatePicker;
@@ -30,7 +29,6 @@ export default function PromotionRow({ promotion }: { promotion: any }) {
   const isExpired = end < now;
   const isOngoing = start <= now && end >= now;
   const durationMs = end.getTime() - start.getTime();
-
   const millisecondsInSecond = 1000;
   const millisecondsInMinute = millisecondsInSecond * 60;
   const millisecondsInHour = millisecondsInMinute * 60;
@@ -110,6 +108,7 @@ export default function PromotionRow({ promotion }: { promotion: any }) {
       }
     }
 
+
     // Display errors if any
     if (errors.length > 0) {
       setErrorMessages(errors);
@@ -149,6 +148,7 @@ export default function PromotionRow({ promotion }: { promotion: any }) {
     });
 
   };
+
 
   return (
     <>
