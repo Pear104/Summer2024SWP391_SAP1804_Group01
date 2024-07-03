@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Form, Input, Pagination, Empty } from "antd";
 import { useSearchStore } from "../../../store/searchStore";
 import { GET } from "../../../utils/request";
@@ -9,7 +9,7 @@ import LoadingItem from "./components/LoadingItem";
 import CardRow from "./components/CardRow";
 
 export default function CardManagement() {
-  const location = useLocation();
+  // const location = useLocation();
 
   // sort item
   const columnHeaders = [

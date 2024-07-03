@@ -1,6 +1,6 @@
 import { Carousel } from "antd";
 import { featuredProduct } from "./featuredProduct";
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 
 const ProductItem = ({ url, title }: { url: string; title: string }) => {
   return (

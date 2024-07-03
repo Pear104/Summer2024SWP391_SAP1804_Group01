@@ -1,20 +1,32 @@
-import { Phone } from "lucide-react";
+// import { Phone } from "lucide-react";
 
 const Policies = () => {
   return (
     <div className="m-9 p-2 text-xl mx-36 sm:px-1 sm:m-2">
-      <h1 className="text-center text-5xl m-2 font-serif text-blue-950 "> Privacy Policy </h1>
+      <h1 className="text-center text-5xl m-2 font-serif text-blue-950 ">
+        {" "}
+        Privacy Policy{" "}
+      </h1>
       <div className="m-2 text-xl mb-5 font-light">
         Thank you for visiting datj.id.vn. At DATJ Company, we respect your
         privacy and protect your personal information. Please carefully review
-        our privacy policies. By visiting and using datj.id.vn, you agree
-        with the policies described below. By agreeing, you provide DATJ Company
+        our privacy policies. By visiting and using datj.id.vn, you agree with
+        the policies described below. By agreeing, you provide DATJ Company
         consent to collect, use, store and disclose your information. Please
         feel free to contact a service representative for more information
         regarding our Privacy Policy at{" "}
-        <a className="underline" href="mailto:datj.company@gmail.com">datj.company@gmail.com</a> or <a className="underline" href="tel:0123456789">0123456789</a>.
+        <a className="underline" href="mailto:datj.company@gmail.com">
+          datj.company@gmail.com
+        </a>{" "}
+        or{" "}
+        <a className="underline" href="tel:0123456789">
+          0123456789
+        </a>
+        .
       </div>
-      <h2 className="text-2xl font-serif text-blue-950 underline m-2 mb-3">Information Collection and Use of Information</h2>
+      <h2 className="text-2xl font-serif text-blue-950 underline m-2 mb-3">
+        Information Collection and Use of Information
+      </h2>
       <div className="m-2 text-xl mb-5 font-light">
         We collect and securely store any information you submit on any of our
         websites, or to DATJ Company via email, telephone, fax, postal mail,
@@ -68,13 +80,17 @@ const Policies = () => {
         <li className="mb-2">Facilitation of purchases and services</li>
         <li className="mb-2">Order confirmation and tracking</li>
         <li className="mb-2">Inquiries and responses</li>
-        <li className="mb-2">Checking accuracy and verification of information</li>
+        <li className="mb-2">
+          Checking accuracy and verification of information
+        </li>
         <li className="mb-2">Detection and prevention of fraud</li>
         <li className="mb-2">
           Site and service improvements, product offerings, marketing and
           promotional efforts, and overall customer experience
         </li>
-        <li className="mb-2">Understanding products and services preferences</li>
+        <li className="mb-2">
+          Understanding products and services preferences
+        </li>
         <li className="mb-2">
           Understanding our customer demographics, preferences, interests, and
           behaviors
@@ -142,7 +158,9 @@ const Policies = () => {
         communications from DATJ Company, please contact us.
       </div>
 
-      <h2 className="text-2xl font-serif text-blue-950 underline m-2 mb-3">Disclosure of Personal and Other Information</h2>
+      <h2 className="text-2xl font-serif text-blue-950 underline m-2 mb-3">
+        Disclosure of Personal and Other Information
+      </h2>
       <div className="text-xl mb-5 m-2 font-light">
         DATJ Company works with trusted and secure third parties. There may be
         instances where we feel it is appropriate to share personal or other
@@ -189,7 +207,9 @@ const Policies = () => {
         with you.
       </div>
 
-      <h2 className="text-2xl font-serif text-blue-950 underline m-2 mb-3">Choices & Opt-Out</h2>
+      <h2 className="text-2xl font-serif text-blue-950 underline m-2 mb-3">
+        Choices & Opt-Out
+      </h2>
       <div className="text-xl mb-5 m-2 font-light">
         We respect your privacy and understand if you wish to opt-out of
         communications from DATJ Company. To opt-out, you can select
@@ -243,7 +263,9 @@ const Policies = () => {
         .
       </div>
 
-      <h2 className="text-2xl font-serif text-blue-950 underline m-2 mb-3">Security</h2>
+      <h2 className="text-2xl font-serif text-blue-950 underline m-2 mb-3">
+        Security
+      </h2>
       <div className="text-xl mb-5 m-2 font-light">
         DATJ Company takes reasonable steps to protect the Personal Data
         provided via the website from loss, misuse, and unauthorized access,
@@ -251,14 +273,18 @@ const Policies = () => {
         and procedures to maintain and protect customer and visitor information.
       </div>
 
-      <h2 className="text-2xl font-serif text-blue-950 underline m-2 mb-3">Updating Information</h2>
+      <h2 className="text-2xl font-serif text-blue-950 underline m-2 mb-3">
+        Updating Information
+      </h2>
       <div className="text-xl mb-5 m-2 font-light">
         If you would like to update or alter personal information you have
         provided DATJ Company, simply make changes on your My Account page or by
         calling or emailing DATJ Company directly.
       </div>
 
-      <h2 className="text-2xl font-serif text-blue-950 underline m-2 mb-3">Children’s Privacy</h2>
+      <h2 className="text-2xl font-serif text-blue-950 underline m-2 mb-3">
+        Children’s Privacy
+      </h2>
       <div className="text-xl mb-5 m-2 font-light">
         DATJ Company does not knowingly collect information from individuals
         under the age of 16. We request that individuals under the age of 16 not
@@ -269,7 +295,9 @@ const Policies = () => {
         requests to have such personal information removed.
       </div>
 
-      <h2 className="text-2xl font-serif text-blue-950 underline m-2 mb-3">Links</h2>
+      <h2 className="text-2xl font-serif text-blue-950 underline m-2 mb-3">
+        Links
+      </h2>
       <div className="text-xl mb-5 m-2 font-light">
         Our website may provide links to other third-party websites which are
         outside our control and not covered by this privacy policy. We encourage
