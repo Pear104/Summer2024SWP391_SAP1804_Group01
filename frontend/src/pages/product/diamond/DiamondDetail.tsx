@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 export default function DiamondDetail() {
   const { diamondId } = useParams();
   const [loadingCertificate, setLoadingCertificate] = useState(false);
-  const [certificate, setCertificate] = useState("");
+  // const [certificate, setCertificate] = useState("");
 
   const [diamond, diamondPrice, priceRate] = useQueries({
     queries: [

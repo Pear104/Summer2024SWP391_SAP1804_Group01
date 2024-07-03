@@ -45,7 +45,7 @@ namespace backend.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
-                "Server=tcp:datj.database.windows.net,1433;Initial Catalog=DATJ;Persist Security Info=False;User ID=germanypeach;Password=GerPeach@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+                "Server=tcp:datj.database.windows.net,1433;Initial Catalog=DATJ1;Persist Security Info=False;User ID=germanypeach;Password=GerPeach@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
                 options => options.CommandTimeout(180)
             ); // Timeout in seconds
         }

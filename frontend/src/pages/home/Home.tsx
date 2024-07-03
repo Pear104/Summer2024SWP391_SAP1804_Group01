@@ -2,12 +2,12 @@ import Explore from "./components/Explore";
 import Diamond from "./components/Diamond";
 import Content from "./components/Content";
 import { Carousel } from "antd";
-import Banner1 from "./components/banner/Banner1";
-import Banner2 from "./components/banner/Banner2";
+// import Banner1 from "./components/banner/Banner1";
+// import Banner2 from "./components/banner/Banner2";
 import Banner3 from "./components/banner/Banner3";
-import Banner4 from "./components/banner/Banner4";
+// import Banner4 from "./components/banner/Banner4";
 // import Banner5 from "./components/banner/Banner5";
-import Banner7 from "./components/banner/Banner7";
+// import Banner7 from "./components/banner/Banner7";
 export default function Home() {
   return (
     <div className="">

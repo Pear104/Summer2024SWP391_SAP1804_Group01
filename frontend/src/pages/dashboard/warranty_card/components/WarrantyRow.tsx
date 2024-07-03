@@ -1,5 +1,5 @@
-import { useQueries } from "@tanstack/react-query";
-import { GET } from "../../../../utils/request";
+// import { useQueries } from "@tanstack/react-query";
+// import { GET } from "../../../../utils/request";
 
 export default function WarrantyRow({ card }: { card: any }) {
   return (

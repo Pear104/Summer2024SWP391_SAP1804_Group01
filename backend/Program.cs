@@ -52,7 +52,8 @@ namespace backend
                         .ReferenceLoopHandling
                         .Ignore;
                 });
-
+            
+           
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -135,7 +136,7 @@ namespace backend
                         )
                     };
                 });
-
+            
             builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
             builder.Services.AddScoped<IWarrantyRequestRepository, WarrantyRequestRepository>();
             builder.Services.AddScoped<IShapeRepository, ShapeRepository>();
@@ -176,16 +177,16 @@ namespace backend
             }
 
             app.UseHttpsRedirection();
-
-            app.UseCors(x =>
-                x.AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials()
-                    .WithOrigins("https://datj.id.vn")
-                    .SetIsOriginAllowed(origin => true)
-            );  
-
+            
+            
             app.UseRouting();
+            app.UseCors(options =>
+                {
+                    options.AllowAnyOrigin();
+                    options.AllowAnyHeader();
+                    options.AllowAnyMethod();
+                }
+            );
 
             app.UseAuthentication();
             app.UseAuthorization();

@@ -1,6 +1,16 @@
 version: "3.9"
 
 services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - backend
+
   backend:
     build:
       context: ./backend
@@ -20,19 +30,10 @@ services:
     depends_on:
       - backend
     environment:
-      - REACT_APP_API_URL=http://localhost:8080
-      - VITE_SERVER_URL=http://localhost:8080
+      - REACT_APP_API_URL=http://localhost
+      - VITE_SERVER_URL=http://localhost
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
     volumes:
       - ./frontend/src:/app/src
       - /app/node_modules
-
-  # db:
-  #   image: mcr.microsoft.com/mssql/server:2019-latest
-  #   container_name: sql-server-container
-  #   environment:
-  #     - ACCEPT_EULA=Y
-  #     - SA_PASSWORD=GerPeach@123
-  #   ports:
-  #     - "1433:1433"

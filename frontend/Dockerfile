@@ -10,17 +10,14 @@ COPY package.json package-lock.json ./
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the application code
+# Copy the rest of the application code including src folder
 COPY . .
 
 # Build the application
 RUN npm run build
 
-# FROM nginx:alpine
-# COPY --from=builder /app/dist /usr/share/nginx/html
 # Expose the port the app runs on
 EXPOSE 3000
 
-# Start Nginx server
-# CMD ["nginx", "-g", "daemon off;"]
-CMD [ "npm", "run","dev" ]
+# Start the application
+CMD ["npm", "run", "dev"]
