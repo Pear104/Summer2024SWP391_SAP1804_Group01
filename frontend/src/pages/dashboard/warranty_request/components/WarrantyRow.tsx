@@ -3,6 +3,7 @@ import WarrantyStaffComponent from "./WarrantyStaffComponent";
 import { GET } from "../../../../utils/request";
 import DeliveryStaffComponent from "./DeliveryStaffComponent";
 import WarrantyUpdateComponent from "./WarrantyUpdateComponent";
+import OpenGoogleMaps from "./OpenMap";
 
 export default function WarrantyRow({ warranty }: { warranty: any }) {
   const [saleStaffs, deliveryStaffs] = useQueries({
@@ -21,7 +22,7 @@ export default function WarrantyRow({ warranty }: { warranty: any }) {
   });
   return (
     <>
-      <tr key={warranty.warrantyRequestId} className="">
+      <tr key={warranty.warrantyRequestId}>
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="flex items-center">
             {"#"}
@@ -43,11 +44,18 @@ export default function WarrantyRow({ warranty }: { warranty: any }) {
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="text-sm text-gray-500">
-            {warranty.shippingAddress}
+            <OpenGoogleMaps address={warranty.shippingAddress}/>
           </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          <div className="text-sm text-gray-500">{warranty.phoneNumber}</div>
+          <div className="text-sm text-gray-500">
+          <a
+            href={"tel:" + warranty.phoneNumber}
+            className="text-sm border p-2 bg-blue-500 text-white rounded-lg"
+          >
+            {warranty.phoneNumber}
+          </a>
+          </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <DeliveryStaffComponent

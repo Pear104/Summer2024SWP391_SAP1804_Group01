@@ -26,9 +26,25 @@ export const WarrantyStaffMenu = ({
       overlay={
         <Menu className="w-40" defaultValue={staffText}>
           {staffs.map((staff: any) => (
-            <Menu.Item key={staff.accountId}>
+            <Menu.Item 
+            key={staff.accountId}
+            disabled={
+              staff?.warrantyRequestsOfWarrantyStaff?.filter(
+                (warranty: any) => warranty?.warrantyStatus == "Processing" ||
+                warranty?.warrantyStatus == "Getting"
+              ).length >= 5
+                ? true
+                : false
+            }
+            >
               <a onClick={() => handleStaffClick(staff.accountId)}>
-                {staff.name}
+                {staff.name}:{" "}
+                {
+                    staff?.warrantyRequestsOfWarrantyStaff?.filter(
+                      (warranty: any) => warranty?.warrantyStatus == "Processing"||
+                      warranty?.warrantyStatus == "Getting"
+                    ).length
+                  }
               </a>
             </Menu.Item>
           ))}

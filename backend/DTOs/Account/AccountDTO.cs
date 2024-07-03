@@ -1,5 +1,6 @@
 using backend.DTOs.Rank;
 using backend.DTOs.Order;
+using backend.DTOs.WarrantyRequest;
 
 namespace backend.DTOs.Account
 {
@@ -19,6 +20,14 @@ namespace backend.DTOs.Account
         public List<OrderDTO> OrdersOfCustomer { get; set; } = new List<OrderDTO>();
         public List<OrderDTO> OrdersOfSaleStaff { get; set; } = new List<OrderDTO>();
         public List<OrderDTO> OrdersOfDeliveryStaff { get; set; } = new List<OrderDTO>();
+
+        public List<WarrantyRequestDTO> WarrantyRequestsOfCustomer { get; set; } =
+              new List<WarrantyRequestDTO>();
+        public List<WarrantyRequestDTO> WarrantyRequestsOfWarrantyStaff { get; set; } =
+            new List<WarrantyRequestDTO>();
+        public List<WarrantyRequestDTO> WarrantyRequestsOfDeliveryStaff { get; set; } =
+            new List<WarrantyRequestDTO>();
+
         public int TotalOrders { get; set; }
     }
 }

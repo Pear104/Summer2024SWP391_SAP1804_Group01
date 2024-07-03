@@ -22,8 +22,11 @@ const WarrantyUpdateComponent = ({
       PUT(`/api/WarrantyRequests/${warrantyRequestId}`, {
         warrantyStatus: warrantyRequestStatus,
       }),
-    onSuccess: () =>
+    onSuccess: () =>{
       queryClient.invalidateQueries({ queryKey: ["warrantyRequests"] }),
+      queryClient.invalidateQueries({ queryKey: ["saleStaffs"] });
+      queryClient.invalidateQueries({ queryKey: ["deliveryStaffs"] });
+    },
     onError: () =>
       queryClient.invalidateQueries({ queryKey: ["warrantyRequests"] }),
   });

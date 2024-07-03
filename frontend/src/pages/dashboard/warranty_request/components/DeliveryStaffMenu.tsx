@@ -25,13 +25,36 @@ export const DeliveryStaffMenu = ({
       }
       overlay={
         <Menu defaultValue={staffText}>
-          {staffs.map((staff: any) => (
-            <Menu.Item key={staff.name}>
-              <a onClick={() => handleStaffClick(staff.accountId)}>
-                {staff.name}
-              </a>
-            </Menu.Item>
-          ))}
+          {staffs?.length > 0 &&
+            staffs?.map((staff: any) => (
+              <Menu.Item
+                key={staff?.name}
+                disabled={
+                  staff?.warrantyRequestsOfDeliveryStaff?.filter(
+                    (warranty: any) =>
+                      warranty?.warrantyStatus == "Pending" ||
+                      warranty?.warrantyStatus == "Processing" ||
+                      warranty?.warrantyStatus == "Returning" ||
+                      warranty?.warrantyStatus == "Getting"
+                  ).length >= 5
+                    ? true
+                    : false
+                }
+              >
+                <a onClick={() => handleStaffClick(staff.accountId)}>
+                  {staff?.name}:{" "}
+                  {
+                    staff?.warrantyRequestsOfDeliveryStaff?.filter(
+                      (warranty: any) =>
+                        warranty?.warrantyStatus == "Pending" ||
+                        warranty?.warrantyStatus == "Processing" ||
+                        warranty?.warrantyStatus == "Returning" ||
+                        warranty?.warrantyStatus == "Getting"
+                    ).length
+                  }
+                </a>
+              </Menu.Item>
+            ))}
         </Menu>
       }
       placement="bottom"

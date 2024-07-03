@@ -124,7 +124,7 @@ const TransactionChart: React.FC = () => {
       setFormattedData(formattedData);
     })();
   }, [firstMonth, lastMonth]);
-  console.log(data);
+  // console.log(data);
   useEffect(() => {
     const months = getLast12Months();
     setFirstMonth(months[0]);

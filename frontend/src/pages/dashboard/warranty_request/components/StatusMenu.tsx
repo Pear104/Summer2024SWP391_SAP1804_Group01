@@ -1,5 +1,8 @@
-import { Dropdown, Menu, Button } from "antd";
+import { Dropdown, Menu, Button, Modal } from "antd";
 import { DownOutlined } from "@ant-design/icons";
+import { jwtDecode } from "jwt-decode";
+import { getCookie } from "../../../../utils/cookie";
+import { useState } from "react";
 
 export const StatusMenu = ({
   handleStatusClick,
@@ -8,6 +11,11 @@ export const StatusMenu = ({
   handleStatusClick: any;
   statusText: any;
 }) => {
+  const role = (jwtDecode(getCookie("accessToken") || "") as any)?.role;
+  const [modalVisible, setModalVisible] = useState(false);
+  const [targetStatus, setTargetStatus] = useState("");
+  const [thisStatus, setThisStatus] = useState("");
+
   let style = "text-white bg-green-500";
   switch (statusText) {
     case "Pending":
@@ -29,45 +37,113 @@ export const StatusMenu = ({
       style = "text-white bg-green-500";
       break;
   }
+  const handleStatusChange = (newStatus: string) => {
+    setTargetStatus(newStatus);
+    setThisStatus(statusText);
+    setModalVisible(true);
+  };
+  const handleConfirmStatusChange = () => {
+    handleStatusClick(targetStatus);
+    setModalVisible(false);
+  };
+  const handleCancelStatusChange = () => {
+    setModalVisible(false);
+  };
+
+  const isDisabled = (targetStatus: string) => {
+    if (role === "Administrator") return false;
+    if (statusText === "Failed" || statusText === "Completed") {
+      return true;
+    }
+
+    if (role === "Manager") return true;
+
+    switch (role) {
+      case "DeliveryStaff":
+        switch (statusText) {
+          case "Pending":
+            return targetStatus !== "Getting" && targetStatus !== "Failed";
+          case "Getting":
+            return targetStatus !== "Failed";
+          case "Processing":
+            return targetStatus !== "Returning";
+          case "Returning":
+            return (
+              targetStatus === "Returning" ||
+              targetStatus === "Pending" ||
+              targetStatus === "Processing" ||
+              targetStatus === "Getting" ||
+              targetStatus === "Failed"
+            );
+          default:
+            // For any other status, allow all changes except "Failed" and "Completed"
+            return targetStatus !== "Failed" && targetStatus !== "Completed";
+        }
+      case "WarrantyStaff":
+        return statusText !== "Getting" || targetStatus !== "Processing";
+      default:
+        return false;
+    }
+  };
   return (
-    <Dropdown
-      // disabled={
-      //   (jwtDecode(getCookie("accessToken") || "") as any)?.role == "Manager"
-      // }
-      overlay={
-        <Menu>
-          <Menu.Item key="2" disabled={statusText != "Pending"}>
-            <a onClick={() => handleStatusClick("Getting")}>Getting</a>
-          </Menu.Item>
+    <>
+      {role === "Manager" ? (
+        <Button className={`border p-2 rounded-md flex items-center ${style}`}>
+          <span>{statusText}</span>
+        </Button>
+      ) : (
+        <Dropdown
+          // disabled={
+          //   (jwtDecode(getCookie("accessToken") || "") as any)?.role == "Manager"
+          // }
+          overlay={
+            <Menu>
+              <Menu.Item key="2" disabled={isDisabled("Getting")}>
+                <a onClick={() => handleStatusChange("Getting")}>Getting</a>
+              </Menu.Item>
 
-          <Menu.Item key="3" disabled={statusText != "Getting"}>
-            <a onClick={() => handleStatusClick("Processing")}>Processing</a>
-          </Menu.Item>
-          <Menu.Item key="4" disabled={statusText != "Processing"}>
-            <a onClick={() => handleStatusClick("Returning")}>Returning</a>
-          </Menu.Item>
+              <Menu.Item key="3" disabled={isDisabled("Processing")}>
+                <a onClick={() => handleStatusChange("Processing")}>
+                  Processing
+                </a>
+              </Menu.Item>
 
-          <Menu.Item
-            key="5"
-            disabled={statusText == "Completed" || statusText == "Failed"}
+              <Menu.Item key="4" disabled={isDisabled("Returning")}>
+                <a onClick={() => handleStatusChange("Returning")}>Returning</a>
+              </Menu.Item>
+
+              <Menu.Item key="5" disabled={isDisabled("Failed")}>
+                <a onClick={() => handleStatusChange("Failed")}>Failed</a>
+              </Menu.Item>
+
+              <Menu.Item key="6" disabled={isDisabled("Completed")}>
+                <a onClick={() => handleStatusChange("Completed")}>Completed</a>
+              </Menu.Item>
+            </Menu>
+          }
+          placement="bottom"
+          trigger={["click"]}
+        >
+          <Button
+            className={`border p-2 rounded-md flex items-center ${style}`}
           >
-            <a onClick={() => handleStatusClick("Failed")}>Failed</a>
-          </Menu.Item>
-          <Menu.Item
-            disabled={statusText != "Returning" || statusText == "Completed"}
-            key="6"
-          >
-            <a onClick={() => handleStatusClick("Completed")}>Completed</a>
-          </Menu.Item>
-        </Menu>
-      }
-      placement="bottom"
-      trigger={["click"]}
-    >
-      <Button className={`border p-2 rounded-md flex items-center ${style}`}>
-        <span>{statusText}</span>
-        <DownOutlined className="ml-1" />
-      </Button>
-    </Dropdown>
+            <span>{statusText}</span>
+            <DownOutlined className="ml-1" />
+          </Button>
+        </Dropdown>
+      )}
+
+      <Modal
+        title={`Confirm Change from ${thisStatus} to ${targetStatus}`}
+        visible={modalVisible}
+        onOk={handleConfirmStatusChange}
+        onCancel={handleCancelStatusChange}
+      >
+        <p>
+          Are you sure you want to change the status from {thisStatus} to{" "}
+          {targetStatus}?
+        </p>
+      </Modal>
+    </>
   );
 };

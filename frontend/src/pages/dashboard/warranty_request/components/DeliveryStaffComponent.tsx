@@ -26,8 +26,10 @@ const DeliveryStaffComponent = ({
       PUT(`/api/WarrantyRequests/${warrantyRequestId}`, {
         deliveryStaffId: deliveryStaffId,
       }),
-    onSuccess: () =>
+    onSuccess: () =>{
       queryClient.invalidateQueries({ queryKey: ["warrantyRequests"] }),
+      queryClient.invalidateQueries({ queryKey: ["deliveryStaffs"] });
+    },
     onError: () =>
       queryClient.invalidateQueries({ queryKey: ["warrantyRequests"] }),
   });

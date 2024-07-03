@@ -1,4 +1,5 @@
 import DeliveryUpdateComponent from "./DeliveryUpdateComponent";
+import OpenGoogleMaps from "./OpenMap";
 const formatDate = (dateString: any) => {
   const date = new Date(dateString);
   const day = String(date.getDate()).padStart(2, "0");
@@ -27,7 +28,7 @@ export default function DeliveryDataRow({ order }: { order: any }) {
           </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
-          <div className="text-sm text-gray-500">{order.shippingAddress}</div>
+          <div className="text-sm text-gray-500"><OpenGoogleMaps address={order.shippingAddress}/></div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <a

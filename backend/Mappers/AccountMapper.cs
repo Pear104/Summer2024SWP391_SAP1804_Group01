@@ -22,6 +22,9 @@ namespace backend.Mappers
                 OrdersOfCustomer = account.OrdersOfCustomer.Select(order => order.ToOrderDTO()).ToList(),
                 OrdersOfSaleStaff = account.OrdersOfSaleStaff.Select(order => order.ToOrderDTO()).ToList(),
                 OrdersOfDeliveryStaff = account.OrdersOfDeliveryStaff.Select(order => order.ToOrderDTO()).ToList(),
+                WarrantyRequestsOfCustomer = account.WarrantyRequestsOfCustomer.Select(warrantyRequest => warrantyRequest.ToWarrantyRequestDTO()).ToList(),
+                WarrantyRequestsOfWarrantyStaff = account.WarrantyRequestsOfWarrantyStaff.Select(warrantyRequest => warrantyRequest.ToWarrantyRequestDTO()).ToList(),
+                WarrantyRequestsOfDeliveryStaff = account.WarrantyRequestsOfDeliveryStaff.Select(warrantyRequest => warrantyRequest.ToWarrantyRequestDTO()).ToList(),
                 Rank = account.Rank.ToRankDTO(),
                 Role = account.Role.ToString(),
                 RewardPoint = account.RewardPoint

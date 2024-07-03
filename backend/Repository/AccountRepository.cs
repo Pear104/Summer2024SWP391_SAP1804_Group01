@@ -51,6 +51,8 @@ namespace backend.Repository
                 // .Include(x => x.OrdersOfCustomer)
                 .Include(x => x.OrdersOfSaleStaff)
                 .Include(x => x.OrdersOfDeliveryStaff)
+                .Include(x => x.WarrantyRequestsOfDeliveryStaff)
+                .Include(x => x.WarrantyRequestsOfWarrantyStaff)
                 .FirstOrDefaultAsync(x => x.AccountId == id);
         }
 
@@ -123,7 +125,10 @@ namespace backend.Repository
                 .Include(x => x.Rank)
                 .Include(x => x.OrdersOfSaleStaff)
                 .Include(x => x.OrdersOfDeliveryStaff)
-                .Include(x => x.OrdersOfCustomer);
+                .Include(x => x.OrdersOfCustomer)
+                .Include(x => x.WarrantyRequestsOfCustomer)
+                .Include(x => x.WarrantyRequestsOfWarrantyStaff)
+                .Include(x => x.WarrantyRequestsOfDeliveryStaff);
             return await accountsQuery
                 .Skip((query.PageNumber - 1) * query.PageSize)
                 .Take(query.PageSize)

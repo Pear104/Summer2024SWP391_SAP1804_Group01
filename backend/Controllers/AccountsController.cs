@@ -161,6 +161,32 @@ namespace backend.Controllers
         }
 
         /// <summary>
+        /// Search for warranty staff's accounts based on name and phone number
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+
+        [HttpGet]
+        [Route("WarrantyStaff")]
+        public async Task<ActionResult> GetWarrantyAccounts([FromQuery] AccountSearchQuery query)
+        {
+            query.AccountRole = Role.WarrantyStaff.ToString();
+            var accountsListModels = await _accountRepo.SearchAccountOnRole(query);
+            ListWithPagingDTO<AccountDTO> accountsDTO =
+                new()
+                {
+                    Content = accountsListModels.Content!.Select(x => x.ToAccountDTO()).ToList(),
+                    PageSize = accountsListModels.PageSize,
+                    CurrentPage = accountsListModels.CurrentPage,
+                    TotalCount = accountsListModels.TotalCount,
+                    TotalPages = accountsListModels.TotalPages
+                };
+
+            return Ok(accountsDTO);
+        }
+
+
+        /// <summary>
         /// Search for delivery staff's accounts based on name and phone number
         /// </summary>
         /// <param name="query"></param>
