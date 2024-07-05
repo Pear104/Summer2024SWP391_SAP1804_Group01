@@ -120,8 +120,8 @@ namespace backend.Payment_src.core.Payment.Service.Momo.Request
 
         /// <summary>
         /// Signature to confirm information. Secure transaction in Hmac_SHA256 with format: a String sort all key name of data field from a-z:
-        /// accessKey=$accessKey&amount=$amount&extraData=$extraData
-        /// &ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
+        /// accessKey=$accessKey&amp;amount=$amount&amp;extraData=$extraData
+        /// &amp;ipnUrl=$ipnUrl&amp;orderId=$orderId&amp;orderInfo=$orderInfo&amp;partnerCode=$partnerCode&amp;redirectUrl=$redirectUrl&amp;requestId=$requestId&amp;requestType=$requestType
         /// </summary>
         public string signature { get; set; } = string.Empty;
 

@@ -29,19 +29,23 @@ namespace backend.Helper
         private static byte[] GenerateSalt()
         {
             byte[] salt = new byte[16];
+#pragma warning disable SYSLIB0023 // Type or member is obsolete
             using (var rng = new RNGCryptoServiceProvider())
             {
                 rng.GetBytes(salt);
             }
+#pragma warning restore SYSLIB0023 // Type or member is obsolete
             return salt;
         }
 
         private static byte[] GenerateHash(string password, byte[] salt)
         {
+#pragma warning disable IDE0063 // Use simple 'using' statement
             using (var hasher = new Rfc2898DeriveBytes(password, salt, 10000))
             {
                 return hasher.GetBytes(32);
             }
+#pragma warning restore IDE0063 // Use simple 'using' statement
         }
 
         private static bool SlowEquals(byte[] a, byte[] b)

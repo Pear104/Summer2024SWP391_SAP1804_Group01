@@ -10,12 +10,14 @@ namespace backend.Mappers
     {
         public static Order ToOrderFromUpdate(this UpdateOrderDTO order)
         {
+#pragma warning disable CS8604 // Possible null reference argument.
             return new Order
             {
                 OrderStatus = (OrderStatus)Enum.Parse(typeof(OrderStatus), order != null ? order.OrderStatus : ""),
                 SaleStaffId = order?.SaleStaffId,
                 DeliveryStaffId = order?.DeliveryStaffId
             };
+#pragma warning restore CS8604 // Possible null reference argument.
         }
 
         public static OrderDetail ToOrderDetailFromCreate(this CreateOrderDetailDTO order)

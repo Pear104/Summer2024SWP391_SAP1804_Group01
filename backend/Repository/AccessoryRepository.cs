@@ -51,7 +51,9 @@ namespace backend.Repository
             if (!string.IsNullOrEmpty(query.Name))
             {
                 accessoriesQuery = accessoriesQuery.Where(x =>
-                    x.AccessoryType.Name.ToLower() == query.Name.ToLower()
+                    //x.AccessoryType.Name.ToLower() == query.Name.ToLower()  //why??
+                    x.Name.ToLower().Contains(query.Name.ToLower())
+
                 );
             }
 

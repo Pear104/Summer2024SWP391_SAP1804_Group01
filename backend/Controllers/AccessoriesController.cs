@@ -28,6 +28,11 @@ namespace backend.Controllers
             _accessoryRepo = accessoryRepo;
         }
 
+        /// <summary>
+        /// Get all accessory
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult> GetAccessories([FromQuery] AccessoryQuery query)
         {
@@ -40,6 +45,11 @@ namespace backend.Controllers
             return Ok(accessoryDTOs);
         }
 
+        /// <summary>
+        /// Get accessory by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         // [Authorize(Roles = ("Customer"))]
         public async Task<ActionResult> GetAccessory(long id)
@@ -53,6 +63,12 @@ namespace backend.Controllers
             return Ok(accessory);
         }
 
+        /// <summary>
+        /// Update accessory by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="accessoryDto"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccessory(
             [FromRoute] long id,

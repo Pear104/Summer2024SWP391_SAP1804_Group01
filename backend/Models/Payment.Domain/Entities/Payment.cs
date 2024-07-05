@@ -10,7 +10,7 @@ namespace backend.Models.Payment.Domain.Entities
         [Key]
         //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("Id", TypeName = "nvarchar(50)")]
-        public string Id { get; set; }
+        public string Id { get; set; } = string.Empty;
 
         [Column("PaymentContent", TypeName = "nvarchar(250)")]
         public string PaymentContent { get; set; } = string.Empty;

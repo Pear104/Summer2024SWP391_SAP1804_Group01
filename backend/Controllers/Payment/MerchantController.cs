@@ -94,7 +94,7 @@ namespace backend.Controllers
         public async Task<IActionResult> Create([FromBody] CreateMerchantDto request)
         {
             var merchantModel = request.ToMerchantFromCreateMerchant();
-            var merchantDto = await _merchantRepo.Create(merchantModel);
+            var merchantDto = await _merchantRepo.Create(merchantModel)!;
             //var response = new BaseResultWIthData<MerchantDtos>();
 
             return Ok(merchantDto);

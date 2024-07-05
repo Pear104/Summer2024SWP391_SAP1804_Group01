@@ -10,9 +10,9 @@ namespace backend.Mappers
         {
             var payment = new Payment()
             {
-                PaymentContent = createPayment.PaymentContent,
-                PaymentCurrency = createPayment.PaymentCurrency,
-                PaymentRefId = createPayment.PaymentRefId,
+                PaymentContent = createPayment.PaymentContent!,
+                PaymentCurrency = createPayment.PaymentCurrency!,
+                PaymentRefId = createPayment.PaymentRefId!,
                 RequiredAmount = createPayment.RequiredAmount,
                 PaymentDate = createPayment.PaymentDate,
                 ExpireDate = createPayment.ExpireDate,

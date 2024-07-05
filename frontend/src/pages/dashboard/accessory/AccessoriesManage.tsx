@@ -140,7 +140,12 @@ export default function AccessoriesManage() {
                     id="keyword"
                     className="border p-2 rounded-md w-full"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                      params.set("Name", e.target.value);
+                      setQueryUrl(`/api/Accessories?` + params.toString());
+                      navigate({ search: params.toString() });
+                    }}
                   />
                 </Form.Item>
                 <Form.Item>
@@ -311,7 +316,7 @@ export default function AccessoriesManage() {
                           setQueryUrl("/api/Accessories?" + params.toString());
                         }}
                         showSizeChanger={true}
-                        // onShowSizeChange={(current, size) => setPageSize(size)}
+                      // onShowSizeChange={(current, size) => setPageSize(size)}
                       />
                     )}
                   {!accessories?.isLoading &&

@@ -31,7 +31,7 @@ namespace backend.Repository
                 .WarrantyCards.Include(x => x.Diamond)
                 .ThenInclude(x => x.Shape)
                 .Include(x => x.Accessory)
-                .Where(x => x.OrderDetail.Order.CustomerId == userId)
+                .Where(x => x.OrderDetail!.Order.CustomerId == userId)
                 .ToListAsync();
             return warrantyCardQueries;
         }
@@ -84,7 +84,7 @@ namespace backend.Repository
                     AccessoryId = x.AccessoryId,
                     StartTime = x.StartTime,
                     EndTime = x.EndTime,
-                    CustomerName = x.OrderDetail.Order.Customer != null ? x.OrderDetail.Order.Customer.Name : null,
+                    CustomerName = x.OrderDetail!.Order.Customer != null ? x.OrderDetail.Order.Customer.Name : null,
                     AccessoryName = x.Accessory != null ? x.Accessory.Name : null,
                     DiamondName = x.Diamond != null ? x.Diamond.Carat + " Carat, " + x.Diamond.Shape.Name : null
                 })
