@@ -185,6 +185,7 @@ export default function CheckoutLayout() {
           />
         ))}
         <Divider />
+        <div className="font-semibold mb-2">Enter the discount code</div>
         <div className="flex flex-col gap-2">
           <div className="flex gap-4">
             <Input
@@ -199,6 +200,9 @@ export default function CheckoutLayout() {
             >
               Apply
             </Button>
+          </div>
+          <div className="font-light mb-2 italic">
+            * Based on your current rank in our system, you are eligible for a {userInfo?.data?.rank?.discount *100}% discount on this order.
           </div>
           <div>
             <div className="flex gap-2">
@@ -217,7 +221,7 @@ export default function CheckoutLayout() {
                 </div>
               )}
             </div>
-            <div className="font-semibold mb-2">Enter the discount code</div>
+
             {/* Discount code items */}
             {/* {promotion?.data?.map((promotion: any) => (
               <div

@@ -22,6 +22,17 @@ namespace backend.Repository
             _context = context;
         }
 
+        public async Task<Transaction?> CompletePaymentAsync(string id)
+        {
+            var transaction = await _context.Transactions.FirstOrDefaultAsync(o =>
+                       o.TransactionId == id
+                   );
+            transaction!.TransactionStatus = TransactionStatus.Completed;
+            _context.Entry(transaction).State = EntityState.Modified;
+            _context.SaveChanges();
+            return transaction;
+        }
+
         public async Task<Transaction?> CreateTransactionAsync(CreateTransactionDTO transactionDto)
         {
             var order = await _context.Orders.FirstOrDefaultAsync(x =>
@@ -64,6 +75,13 @@ namespace backend.Repository
                 PageSize = query.PageSize ?? 10,
                 CurrentPage = query.PageNumber ?? 1
             };
+        }
+
+        public async Task<Transaction?> GetTransactionByIdAsync(string id)
+        {
+            return await _context
+                .Transactions
+                .FirstOrDefaultAsync(x => x.TransactionId == id);
         }
     }
 }

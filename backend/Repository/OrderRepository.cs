@@ -24,6 +24,17 @@ namespace backend.Repository
             _context = context;
         }
 
+        public async Task<Order?> CompleteOrderAsync(string id)
+        {
+            var order = await _context.Orders.FirstOrDefaultAsync(o =>
+                o.OrderId == id
+            );
+            _context.Entry(order!).State = EntityState.Modified;
+            order!.OrderStatus = OrderStatus.Processing;
+            await _context.SaveChangesAsync();
+            return order;
+        }
+
         public async Task<Order?> CreateOrderAsync(long customerId, CreateOrderDTO orderDto)
         {
             var customer = await _context.Accounts.FindAsync(customerId);
@@ -179,6 +190,11 @@ namespace backend.Repository
             await _context.Orders.AddAsync(newOrder);
             await _context.SaveChangesAsync();
             return newOrder;
+        }
+
+        public Task<Order?> CreateOrderPaypalAsync(long customerId, CreateOrderDTO orderDto)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<OrderResult?> GetAllOrdersAsync(OrderQuery query)

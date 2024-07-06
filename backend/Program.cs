@@ -23,6 +23,8 @@
 using System.Reflection;
 using backend.Data;
 using backend.Interfaces;
+using backend.Payment_src.core.Payment.Service.Paypal.Model;
+
 // using backend.Payment_src.core.Payment.Service.Momo.Config;
 using backend.Payment_src.core.Payment.Service.Vnpay.Config;
 using backend.Repository;
@@ -42,7 +44,7 @@ namespace backend
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            
+
             builder
                 .Services.AddControllers()
                 .AddNewtonsoftJson(options =>
@@ -107,6 +109,12 @@ namespace backend
             builder.Services.Configure<VnpayConfig>(
                 builder.Configuration.GetSection(VnpayConfig.ConfigName)
             );
+
+            builder.Services.AddSingleton(x => new PaypalClient(
+                builder.Configuration["PaypalOptions:Mode"],
+                builder.Configuration["PaypalOptions:ClientId"],
+                builder.Configuration["PaypalOptions:ClientSecret"]
+            ));
 
             builder
                 .Services.AddAuthentication(options =>
@@ -183,7 +191,7 @@ namespace backend
                     .AllowCredentials()
                     .WithOrigins("https://datj.id.vn")
                     .SetIsOriginAllowed(origin => true)
-            );  
+            );
 
             app.UseRouting();
 

@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -7,6 +8,7 @@ using backend.DTOs.Order;
 using backend.Enums;
 using backend.Helper;
 using backend.Interfaces;
+using backend.Payment_src.core.Payment.Service.Paypal.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,11 +20,14 @@ namespace backend.Controllers
     {
         private readonly IOrderRepository _orderRepo;
         private readonly IEmailSender _emailSender;
+        private readonly PaypalClient _paypalClient;
+        private readonly ITransactionRepository _transactionRepo;
 
-        public OrderController(IOrderRepository orderRepo, IEmailSender emailSender)
+        public OrderController(IOrderRepository orderRepo, IEmailSender emailSender, PaypalClient paypalClient)
         {
             _orderRepo = orderRepo;
             _emailSender = emailSender;
+            _paypalClient = paypalClient;
         }
 
         [HttpGet]
@@ -99,5 +104,87 @@ namespace backend.Controllers
             }
             return Ok(updatedOrder);
         }
+
+        #region Paypal        
+        [HttpPost("createPaypalOrder")]
+        public async Task<ActionResult> CreateOrderPaypal(CancellationToken cancellationToken, [FromBody] CreatePaypalOrderRequest createPaypalOrderRequest)
+        {
+            //Thong tin cua don hang gui qua paypal
+            if (createPaypalOrderRequest == null)
+            {
+                return BadRequest(new { Message = "Invalid request" });
+            }
+            if (string.IsNullOrEmpty(createPaypalOrderRequest.OrderId))
+            {
+                return BadRequest(new { Message = "OrderId is required" });
+            }
+             if (string.IsNullOrEmpty(createPaypalOrderRequest.Reference))
+            {
+                return BadRequest(new { Message = "TransactionId is required" });
+            }
+            var order = await _orderRepo.GetOrderByIdAsync(createPaypalOrderRequest.OrderId);
+            var transaction = await _transactionRepo.GetTransactionByIdAsync(createPaypalOrderRequest.Reference);
+            if (order == null)
+            {
+                return NotFound(new { Message = "Order not found" });
+            }
+            if (transaction == null)
+            {
+                return NotFound(new { Message = "Transaction not found" });
+            }
+            var amount = transaction.Amount.ToString("F2", CultureInfo.InvariantCulture);
+            Console.WriteLine("This amount: " + amount);
+            var currency = "USD";
+            try
+            {
+                var response = await _paypalClient.CreateOrder(amount, currency, createPaypalOrderRequest.Reference);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                var error = new { e.GetBaseException().Message };
+                return BadRequest(error);
+            }
+        }
+        public class CreatePaypalOrderRequest
+        {
+            public string Reference { get; set; }
+            public string OrderId { get; set; }
+        }
+        public class Reference
+        {
+            public string OrderId { get; set; }
+        }
+
+        [HttpPost("capturePaypalOrder")]
+        public async Task<ActionResult> CapturePaypalOrder(CancellationToken cancellationToken, [FromBody] Reference Reference)
+        {
+            try
+            {
+                var response = await _paypalClient.CaptureOrder(Reference.OrderId);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                var error = new { e.GetBaseException().Message };
+                return BadRequest(error);
+            }
+        }
+
+        [HttpPut("completePayment")]
+        public async Task<ActionResult> CompletePayment(CancellationToken cancellationToken, [FromBody] string orderId)
+        {
+            try
+            {
+                var response = await _orderRepo.CompleteOrderAsync(orderId);
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                var error = new { e.GetBaseException().Message };
+                return BadRequest(error);
+            }
+        }
+        #endregion
     }
 }
