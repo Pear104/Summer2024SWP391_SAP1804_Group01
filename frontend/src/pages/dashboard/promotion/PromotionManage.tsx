@@ -42,9 +42,10 @@ export default function PriceRate() {
       },
     ],
   });
-  console.log(queryUrl);
-  console.log(promotionList?.data);
-  console.log(promotionList?.data?.promotion?.length);
+
+  useEffect(() => {
+    setQueryUrl("/api/Promotion" + location.search);
+  }, [location.search]);
 
   const renderPromotionRow = (promotion: any) => (
     <PromotionRow key={promotion.promotionId} promotion={promotion} />
@@ -87,8 +88,11 @@ export default function PriceRate() {
                     placeholder="Search"
                     id="keyword"
                     className="border p-2 rounded-md w-full"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    value={params.get("PromotionName") || ""}
+                    onChange={(e) => {
+                      params.set("PromotionName", e.target.value);
+                      navigate({ search: params.toString() });
+                    }}
                   />
                 </Form.Item>
               </Form>
@@ -103,6 +107,7 @@ export default function PriceRate() {
                     setSearchTerm("");
                     // Clear the URL parameters
                     const params = new URLSearchParams(location.search);
+                    params.delete("PromotionName");
                     setQueryUrl(`/api/Promotion?` + params.toString());
                     // params.delete("type");
                     navigate({ search: params.toString() });

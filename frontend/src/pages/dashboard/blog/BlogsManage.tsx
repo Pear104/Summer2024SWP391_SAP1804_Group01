@@ -14,7 +14,6 @@ export default function BlogsManage() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
   const [statusText, setStatusText] = useState("Status");
-  const [productTypeText, setProductTypeText] = useState("Product Type");
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   useEffect(() => {
@@ -29,13 +28,11 @@ export default function BlogsManage() {
     ],
   });
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const status = params.get("status");
-
-    const type = params.get("type");
-    if (status) {
-      setStatusText(status === "1" ? "Enable" : "Disable");
-    }
+    // const status = params.get("status");
+    setQueryUrl("/api/Blogs" + location.search);
+    // if (status) {
+    //   setStatusText(status === "1" ? "Enable" : "Disable");
+    // }
   }, [location.search]);
 
   const handleStatusClick = (status: string, statusText: string) => {
@@ -90,10 +87,15 @@ export default function BlogsManage() {
                     type="text"
                     placeholder="Search"
                     id="keyword"
+                    value={params.get("Title") || ""}
                     className="border p-2 rounded-md w-full"
+                    onChange={(e) => {
+                      params.set("Title", e.target.value);
+                      navigate({ search: params.toString() });
+                    }}
                   />
                 </Form.Item>
-                <Form.Item>
+                {/* <Form.Item>
                   <Dropdown
                     overlay={statusMenu}
                     placement="bottomCenter"
@@ -104,14 +106,27 @@ export default function BlogsManage() {
                       <DownOutlined className="ml-1" />
                     </Button>
                   </Dropdown>
-                </Form.Item>
+                </Form.Item> */}
               </Form>
             </h3>
             <div className="flex space-x-075">
               <div className="card-action ">
-                <a href="/admin/products" className="text-interactive ">
+                <div
+                  className="text-interactive"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setStatusText("Status");
+                    // Clear the URL parameters
+                    const params = new URLSearchParams(location.search);
+                    params.delete("status");
+                    params.delete("type");
+                    params.delete("Title");
+                    setQueryUrl(`/api/Blogs?` + params.toString());
+                    navigate({ search: params.toString() });
+                  }}
+                >
                   Clear filter
-                </a>
+                </div>
               </div>
             </div>
           </div>
@@ -149,12 +164,12 @@ export default function BlogsManage() {
                       </td>
                     )}
                     {blogs?.data?.blogs?.map((blog: any) => (
-                      <BlogListItem blog={blog} />
+                      <BlogListItem key={blog.blogId} blog={blog} />
                     ))}
                   </tbody>
                 </table>
                 <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
-                  {blogs?.data && blogs?.data?.blogs?.length != 0 && (
+                  {blogs?.data && blogs?.data?.totalCount != 0 && (
                     <Pagination
                       showTotal={(total, range) =>
                         `${range[0]}-${range[1]} of ${total} items`
@@ -169,7 +184,9 @@ export default function BlogsManage() {
                         setQueryUrl("/api/Blogs?" + params.toString());
                       }}
                       showSizeChanger={true}
-                      // onShowSizeChange={(current, size) => setPageSize(size)}
+                      onShowSizeChange={(current, size) =>
+                        params.set("PageSize", size.toString())
+                      }
                     />
                   )}
                 </div>

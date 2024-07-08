@@ -23,8 +23,8 @@ export default function BlogListItem({ blog }: { blog: any }) {
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
         {moment(blog?.createdAt).format("MMMM Do, YYYY")}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-        Available
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-indigo-600">
+        {blog?.isHidden ? "Unavailable" : "Available"}
       </td>
     </tr>
   );

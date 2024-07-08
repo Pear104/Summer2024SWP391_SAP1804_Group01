@@ -31,17 +31,27 @@ namespace backend.Repository
 
         public async Task<PromotionResult> GetAllPromotionAsync(PromotionQuery query)
         {
-            var promotionQueries = _context.Promotions;
+            var promotionQueries = _context.Promotions.AsQueryable();
+
+            if (query.PromotionName != null)
+            {
+                // promotionQueries = promotionQueries.Where(x =>
+                //     x.PromotionName.ToLower().Contains(query.PromotionName.ToLower())
+                // );
+                promotionQueries = promotionQueries.Where(x =>
+                    x.PromotionName.ToLower().Contains(query.PromotionName.ToLower())
+                );
+            }
 
             var totalCount = await promotionQueries.CountAsync();
             var totalPages = (int)Math.Ceiling((double)totalCount / query.PageSize);
 
             var promotions = await promotionQueries
-                                    .OrderByDescending(p => p.StartTime)
-                                    .ThenByDescending(p => p.EndTime)
-                                    .Skip((query.PageNumber - 1) * query.PageSize)
-                                    .Take(query.PageSize)
-                                    .ToListAsync();
+                .OrderByDescending(p => p.StartTime)
+                .ThenByDescending(p => p.EndTime)
+                .Skip((query.PageNumber - 1) * query.PageSize)
+                .Take(query.PageSize)
+                .ToListAsync();
 
             return new PromotionResult
             {
@@ -52,26 +62,28 @@ namespace backend.Repository
                 TotalPages = totalPages,
             };
         }
+
         public async Task<List<Promotion>> GetPromotionActive()
         {
             return await _context
-             .Promotions
-             .Where(x => x.EndTime > DateTime.Now && x.StartTime < DateTime.Now)
-             .OrderByDescending(x => x.DiscountPercent)
-             .ToListAsync();
-
+                .Promotions.Where(x => x.EndTime > DateTime.Now && x.StartTime < DateTime.Now)
+                .OrderByDescending(x => x.DiscountPercent)
+                .ToListAsync();
         }
 
         public async Task<Promotion?> GetPromotionByCodeAsync(string code)
         {
-            return await _context
-                .Promotions
-                .FirstOrDefaultAsync(x => x.PromotionCode == code);
+            return await _context.Promotions.FirstOrDefaultAsync(x => x.PromotionCode == code);
         }
 
-        public async Task<Promotion?> UpdatePromotionAsync(string code, UpdatePromotionDTO promotionDto)
+        public async Task<Promotion?> UpdatePromotionAsync(
+            string code,
+            UpdatePromotionDTO promotionDto
+        )
         {
-            var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(a => a.PromotionCode == code);
+            var existingPromotion = await _context.Promotions.FirstOrDefaultAsync(a =>
+                a.PromotionCode == code
+            );
             if (existingPromotion == null)
             {
                 return null;
