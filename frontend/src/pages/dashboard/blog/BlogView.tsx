@@ -73,8 +73,12 @@ export default function BlogView() {
     mutationFn: () => {
       return DELETE(`/api/Blogs/${blogId}/${!isHidden}`, "");
     },
-    onSuccess: () => {
-      message.success("Blog updated successfully");
+    onSuccess: (data: any) => {
+      if (!data) {
+        message.error("You don't have permission");
+      } else {
+        message.success("Blog updated successfully");
+      }
       queryClient.invalidateQueries({ queryKey: ["blog"] });
       queryClient.invalidateQueries({ queryKey: ["blogs"] });
     },
@@ -87,7 +91,7 @@ export default function BlogView() {
         <div className="flex self-center items-center gap-2">
           <Link
             to="/admin/blogs"
-            className="rounded-full inline-block px-4 border bg-black text-white p-1"
+            className="rounded-full inline-block px-4 border bg-blue-500 text-white p-1"
           >
             <ArrowLeft />
           </Link>
@@ -98,7 +102,7 @@ export default function BlogView() {
             onClick={async () => {
               mutateDelete.mutate();
             }}
-            className="cursor-pointer flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-black text-white p-1"
+            className="cursor-pointer flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-blue-500 text-white p-1"
           >
             {!isHidden ? <EyeOff /> : <Eye />}
             <div className="ml-2 text-lg">{!isHidden ? "Hide" : "Show"}</div>
@@ -106,7 +110,7 @@ export default function BlogView() {
           <a
             href={`/blogs/${blogId}`}
             target="_blank"
-            className="flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-black text-white p-1"
+            className="flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-blue-500 text-white p-1"
           >
             <ScrollText />
             <div className="ml-2 text-lg">View</div>

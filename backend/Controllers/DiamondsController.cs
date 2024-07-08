@@ -30,6 +30,7 @@ namespace backend.Controllers
             if (role == "Customer" || role == null)
             {
                 query.IsAvailability = true;
+                query.IsHidden = false;
             }
 
             var diamondResult = await _diamondRepo.GetAllDiamondsAsync(query);
@@ -74,7 +75,7 @@ namespace backend.Controllers
         }
 
         [HttpDelete("{id}/{isHidden}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteDiamond(
             [FromRoute] long id,
             [FromRoute] bool isHidden

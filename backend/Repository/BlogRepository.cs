@@ -60,6 +60,11 @@ namespace backend.Repository
                 blogsQuery = blogsQuery.OrderByDescending(x => x.CreatedAt);
             }
 
+            if (query.IsHidden != null)
+            {
+                blogsQuery = blogsQuery.Where(x => x.IsHidden == query.IsHidden);
+            }
+
             var totalCount = await blogsQuery.CountAsync();
             var totalPages = totalCount / (query.PageSize ?? 10);
             var blogs = await blogsQuery

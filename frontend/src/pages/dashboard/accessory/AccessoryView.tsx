@@ -108,8 +108,13 @@ export default function AccessoryView() {
         ""
       );
     },
-    onSuccess: () => {
-      message.success("Accessory updated successfully");
+    onSuccess: (data: any) => {
+      if (!data) {
+        message.error("Your don't have permission");
+      } else {
+        message.success("Accessory updated successfully");
+      }
+
       queryClient.invalidateQueries({ queryKey: ["accessory"] });
     },
   });
@@ -122,7 +127,7 @@ export default function AccessoryView() {
         <div className="flex self-center items-center gap-2 ">
           <Link
             to="/admin/accessories"
-            className="rounded-full inline-block px-4 border bg-black text-white p-1"
+            className="rounded-full inline-block px-4 border bg-blue-500 text-white p-1"
           >
             <ArrowLeft />
           </Link>
@@ -133,7 +138,7 @@ export default function AccessoryView() {
             onClick={async () => {
               mutateDelete.mutate();
             }}
-            className="cursor-pointer flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-black text-white p-1"
+            className="cursor-pointer flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-blue-500 text-white p-1"
           >
             {!accessory?.isHidden ? <EyeOff /> : <Eye />}
             <div className="ml-2 text-lg">
@@ -143,7 +148,7 @@ export default function AccessoryView() {
           <a
             href={`/product/accessory/detail/${accessoryId}`}
             target="_blank"
-            className="flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-black text-white p-1"
+            className="flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-blue-500 text-white p-1"
           >
             <ScrollText />
             <div className="ml-2 text-lg">View</div>

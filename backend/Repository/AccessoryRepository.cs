@@ -48,12 +48,16 @@ namespace backend.Repository
                 accessoriesQuery = accessoriesQuery.Where(x => x.Karat == query.Karat);
             }
 
+            if (query.IsHidden != null)
+            {
+                accessoriesQuery = accessoriesQuery.Where(x => x.IsHidden == query.IsHidden);
+            }
+
             if (!string.IsNullOrEmpty(query.Name))
             {
                 accessoriesQuery = accessoriesQuery.Where(x =>
                     //x.AccessoryType.Name.ToLower() == query.Name.ToLower()  //why??
                     x.Name.ToLower().Contains(query.Name.ToLower())
-
                 );
             }
 

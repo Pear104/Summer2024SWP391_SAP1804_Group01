@@ -36,9 +36,6 @@ export default function BlogsManage() {
     if (status) {
       setStatusText(status === "1" ? "Enable" : "Disable");
     }
-    if (type) {
-      setProductTypeText(type === "1" ? "Type 1" : "Type 2");
-    }
   }, [location.search]);
 
   const handleStatusClick = (status: string, statusText: string) => {
@@ -48,12 +45,6 @@ export default function BlogsManage() {
     navigate({ search: params.toString() });
   };
 
-  const handleProductTypeClick = (type: string, typeText: string) => {
-    setProductTypeText(typeText);
-    const params = new URLSearchParams(location.search);
-    params.set("type", type);
-    navigate({ search: params.toString() });
-  };
   const columnHeaders = ["Blog Id", "Title", "Author", "Created at", "Status"];
   const statusMenu = (
     <Menu>
@@ -62,17 +53,6 @@ export default function BlogsManage() {
       </Menu.Item>
       <Menu.Item key="2">
         <a onClick={() => handleStatusClick("2", "Disable")}>Disable</a>
-      </Menu.Item>
-    </Menu>
-  );
-
-  const productTypeMenu = (
-    <Menu>
-      <Menu.Item key="1">
-        <a onClick={() => handleProductTypeClick("1", "Type 1")}>Type 1</a>
-      </Menu.Item>
-      <Menu.Item key="2">
-        <a onClick={() => handleProductTypeClick("2", "Type 2")}>Type 2</a>
       </Menu.Item>
     </Menu>
   );
@@ -125,18 +105,6 @@ export default function BlogsManage() {
                     </Button>
                   </Dropdown>
                 </Form.Item>
-                <Form.Item>
-                  <Dropdown
-                    overlay={productTypeMenu}
-                    placement="bottomCenter"
-                    trigger={["click"]}
-                  >
-                    <Button className="border p-2 rounded-md flex items-center">
-                      <span>{productTypeText}</span>
-                      <DownOutlined className="ml-1" />
-                    </Button>
-                  </Dropdown>
-                </Form.Item>
               </Form>
             </h3>
             <div className="flex space-x-075">
@@ -158,23 +126,6 @@ export default function BlogsManage() {
                   {/* theader */}
                   <thead className="bg-gray-50">
                     <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        <div className="flex items-center">
-                          <label className="flex items-center">
-                            <input
-                              type="checkbox"
-                              value="0"
-                              className="form-checkbox"
-                            />
-                            <span className="checkbox-unchecked"></span>
-                            <span className="pl-2"></span>
-                            {/* <input type="hidden" value="0" /> */}
-                          </label>
-                        </div>
-                      </th>
                       {columnHeaders.map((header) => (
                         <th
                           key={header}

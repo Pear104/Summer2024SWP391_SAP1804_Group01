@@ -30,9 +30,9 @@ export default function DiamondRow({
   return (
     <>
       <tr key={diamond.diamondId}>
-        <td className="px-6 py-4 whitespace-nowrap">
+        {/* select checkbox */}
+        {/* <td className="px-6 py-4 whitespace-nowrap">
           <div className="flex items-center">
-            {/* select checkbox */}
             <label className="flex items-center">
               <input
                 type="checkbox"
@@ -57,7 +57,7 @@ export default function DiamondRow({
               <input type="hidden" value="0" />
             </label>
           </div>
-        </td>
+        </td> */}
         {/* map diamond */}
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="flex items-center">

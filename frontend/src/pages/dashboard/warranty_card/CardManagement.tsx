@@ -158,7 +158,7 @@ export default function CardManagement() {
                     )}
                   </tbody>
                 </table>
-                {warrantyCardList?.data?.warrantyRequests?.length > 0 && (
+                {warrantyCardList?.data?.warrantyCards?.length > 0 && (
                   <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
                     <Pagination
                       showTotal={(total, range) =>
