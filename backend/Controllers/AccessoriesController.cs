@@ -36,11 +36,11 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<ActionResult> GetAccessories([FromQuery] AccessoryQuery query)
         {
-            // var role = User.FindFirst(ClaimTypes.Role)?.Value;
-            // if (role == "Customer" || role == null)
-            // {
-            //     query.IsAvailability = true;
-            // }
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (role == "Customer" || role == null)
+            {
+                query.IsHidden = false;
+            }
             var accessoryDTOs = await _accessoryRepo.GetAllAccessoriesAsync(query);
             return Ok(accessoryDTOs);
         }
@@ -76,7 +76,6 @@ namespace backend.Controllers
         )
         {
             var accessory = await _accessoryRepo.UpdateAccessoryAsync(id, accessoryDto);
-            System.Console.WriteLine("ahihi");
             if (accessory == null)
             {
                 return NotFound("Accessory not found.");
@@ -100,7 +99,7 @@ namespace backend.Controllers
         }
 
         [HttpDelete("{id}/{isHidden}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteAccessory(
             [FromRoute] long id,
             [FromRoute] bool isHidden

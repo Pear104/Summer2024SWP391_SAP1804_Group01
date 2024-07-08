@@ -175,68 +175,20 @@ export default function TopNav() {
           <Link
             className="relative mulish-regular flex gap-1 items-center py-1 px-3 border-b-2 border-b-transparent text-base hover:border-b-blue-500 duration-200 transition-all"
             to={"/product/accessory"}
-            onMouseEnter={() => {
-              setJewelryDrop(true);
-            }}
-            onMouseLeave={() => {
-              setJewelryDrop(false);
-            }}
             onClick={() => {
               setMenuDrop(false);
             }}
           >
-            Accessory <ChevronDown size={16} />
-            {jewelryDrop && (
-              <div className="md:hidden pb-8 absolute z-50 w-[100vw] mx-auto top-[36px] -left-[190px] right-0 bg-white">
-                <div className="mt-4"></div>
-                <div className="grid grid-cols-4 px-4 pb-4 gap-y-2">
-                  {accessoryTypes?.data?.map((item: any, index: number) => {
-                    return (
-                      <JewelryItem
-                        key={index}
-                        shapes={shapes?.data}
-                        accessoryType={item.name}
-                      />
-                    );
-                  })}
-                  {/* <div
-                  className="bg-contain bg-no-repeat h-[200px]"
-                  style={{
-                    backgroundImage: "url(/images/Reserve_1000x.webp)",
-                  }}
-                ></div> */}
-                </div>
-              </div>
-            )}
+            Accessory
           </Link>
           <Link
             className="relative mulish-regular flex gap-1 items-center py-1 px-3 border-b-2 border-b-transparent text-base hover:border-b-blue-500 duration-200 transition-all"
             to={"/product/diamond"}
-            onMouseEnter={() => {
-              setDiamondDrop(true);
-            }}
-            onMouseLeave={() => {
-              setDiamondDrop(false);
-            }}
             onClick={() => {
               setMenuDrop(false);
             }}
           >
-            Diamond <ChevronDown size={16} />
-            {diamondDrop && (
-              <div className="md:hidden z-50 w-[100vw] absolute mx-auto top-[36px] -left-[310px] right-0 bg-white">
-                <div className="mt-4"></div>
-                <div className="flex gap-4">
-                  <DiamondItem shapes={shapes?.data} />
-                  <div
-                    className="aspect-[2/1] bg-contain bg-no-repeat h-[240px]"
-                    style={{
-                      backgroundImage: "url(/images/diamond_desktop.jpg)",
-                    }}
-                  ></div>
-                </div>
-              </div>
-            )}
+            Diamond
           </Link>
           <TopNavItem setMenuDrop={setMenuDrop} href="/blogs">
             Blogs

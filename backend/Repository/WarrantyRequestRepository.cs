@@ -11,6 +11,7 @@ using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace backend.Repository
 {
@@ -75,6 +76,14 @@ namespace backend.Repository
                     x.WarrantyStatus == query.WarrantyStatus
                 );
             }
+
+            if (!query.CustomerName.IsNullOrEmpty())
+            {
+                warrantyRequestQueries = warrantyRequestQueries.Where(x =>
+                    x.Customer!.Name.Contains(query.CustomerName)
+                );
+            }
+
             if (query.CustomerId > 0)
             {
                 warrantyRequestQueries = warrantyRequestQueries.Where(x =>

@@ -225,7 +225,7 @@ export default function ProductsManage() {
                   {/* theader */}
                   <thead className="w-full bg-gray-50">
                     <tr className="">
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <div className="flex items-center">
                           <label className="flex items-center">
                             <input
@@ -246,13 +246,11 @@ export default function ProductsManage() {
                                 }
                               }}
                             />
-
                             <span className="checkbox-unchecked"></span>
                             <span className="pl-2"></span>
-                            {/* <input type="hidden" value="0" /> */}
                           </label>
                         </div>
-                      </th>
+                      </th> */}
                       {columnHeaders.map((header) => {
                         return (
                           <DiamondColumnHeader

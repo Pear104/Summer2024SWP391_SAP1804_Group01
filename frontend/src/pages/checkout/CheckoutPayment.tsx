@@ -209,13 +209,15 @@ export default function CheckoutPayment() {
                                 amount:
                                   orderResponse.totalPrice *
                                   (1 - orderResponse.totalDiscountPercent),
-                                paymentMethod: "CREDIT_CARD",
+                                paymentMethod: "Paypal",
                               }
                             );
                             console.log(
                               "transactionResponse: ",
                               transactionResponse
                             );
+                            console.log(transactionResponse?.transactionId);
+                            console.log("Tao xong order trong database");
                             console.log("Tao order trong paypal");
                             //Tao order trong paypal
                             const response = await POST(
@@ -225,7 +227,6 @@ export default function CheckoutPayment() {
                                 reference: transactionResponse?.transactionId,
                               }
                             );
-                            console.log("Tao xong order trong database");
                             console.log("ket qua: ", response);
                             // const orderData = await response.json();
                             if (response.id) {
@@ -263,6 +264,7 @@ export default function CheckoutPayment() {
                           console.log("TransactionId: " + response?.purchase_units[0].reference_id);
                           const reference_id = response?.purchase_units[0].reference_id;
                           const updatePart = reference_id.split("-");
+                          const orderId = updatePart[0].substring(3);
                           const orderData =  response?.data;
                           console.log("orderData: ", orderData);
                           // Three cases to handle:
@@ -288,15 +290,14 @@ export default function CheckoutPayment() {
                               console.log("Ahihi");
                               clearCart();
                               const completePaymentTransactionResponse = await PUT(
-                                "/api/Transactions/completePayment",
+                                "/api/Transactions/completePayment/" + reference_id,
                                 {
-                                  transactionId: reference_id,
-                                }, 
+                                }
                               );
                               const completePaymentOrderResponse = await PUT(
-                                "/api/Order/completePayment",
+                                "/api/Order/completePayment/" + orderId,
                                 {
-                                  orderId: updatePart[0],
+
                                 }, 
                               );
                               console.log("completePaymentTransactionResponse: ", completePaymentTransactionResponse);

@@ -5,25 +5,10 @@ export default function LoadingItem() {
     <tr className="grid grid-cols-12 items-center">
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center">
-          <label className="flex items-center">
-            <input
-              type="checkbox"
-              value="0"
-              className="form-checkbox w-5 h-5"
-            />
-
-            <span className="checkbox-unchecked"></span>
-            <span className="pl-2"></span>
-            <input type="hidden" value="0" />
-          </label>
-        </div>
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="flex items-center">
           <Skeleton.Image active className="w-full h-full aspect-square" />
         </div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap col-span-4 text-sm text-gray-500 truncate">
+      <td className="px-6 py-4 whitespace-nowrap col-span-5 text-sm text-gray-500 truncate">
         <Skeleton.Button active className="w-full" />
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 col-span-1">

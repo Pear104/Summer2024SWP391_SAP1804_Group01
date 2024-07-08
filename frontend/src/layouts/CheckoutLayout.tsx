@@ -1,5 +1,5 @@
 import { Breadcrumb, Button, Divider, Input, Skeleton, message } from "antd";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Logo from "../components/logo/Logo";
 import { useCartStore } from "../store/cartStore";
 import { useQueries } from "@tanstack/react-query";
@@ -60,6 +60,7 @@ export default function CheckoutLayout() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [appliedPromotion, setAppliedPromotion] = useState("");
   const [discountCode, setDiscountCode] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -92,7 +93,7 @@ export default function CheckoutLayout() {
 
   useEffect(() => {
     if (cart.length == 0) {
-      location.href = "/";
+      navigate("/");
     }
   }, []);
 
@@ -202,7 +203,8 @@ export default function CheckoutLayout() {
             </Button>
           </div>
           <div className="font-light mb-2 italic">
-            * Based on your current rank in our system, you are eligible for a {userInfo?.data?.rank?.discount *100}% discount on this order.
+            * Based on your current rank in our system, you are eligible for a{" "}
+            {userInfo?.data?.rank?.discount * 100}% discount on this order.
           </div>
           <div>
             <div className="flex gap-2">

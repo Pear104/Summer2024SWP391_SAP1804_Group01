@@ -10,7 +10,7 @@ namespace backend.Models
         [Key]
         // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("transaction_id")]
-        public string? TransactionId { get; set; }
+        public string TransactionId { get; set; } = string.Empty;
 
         [Column("order_id")]
         public string? OrderId { get; set; }

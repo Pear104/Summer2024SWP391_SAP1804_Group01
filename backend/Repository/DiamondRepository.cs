@@ -108,6 +108,12 @@ namespace backend.Repository
             {
                 diamondsQuery = diamondsQuery.Where(d => d.Availability == IsAvailability.Value);
             }
+
+            if (query.IsHidden != null)
+            {
+                diamondsQuery = diamondsQuery.Where(d => d.IsHidden == query.IsHidden);
+            }
+
             // Filtering
             if (query.MinCarat != null)
             {

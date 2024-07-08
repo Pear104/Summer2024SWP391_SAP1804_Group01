@@ -261,8 +261,12 @@ export default function DiamondView() {
     mutationFn: () => {
       return DELETE(`/api/Diamonds/${diamondId}/${!diamond?.isHidden}`, "");
     },
-    onSuccess: () => {
-      message.success("Diamond updated successfully");
+    onSuccess: (data: any) => {
+      if (!data) {
+        message.error("Your don't have permission");
+      } else {
+        message.success("Diamond updated successfully");
+      }
       queryClient.invalidateQueries({ queryKey: ["diamond"] });
     },
   });
@@ -274,7 +278,7 @@ export default function DiamondView() {
         <div className="flex self-center items-center gap-2 ">
           <Link
             to="/admin/diamonds"
-            className="rounded-full inline-block px-4 border bg-black text-white p-1"
+            className="rounded-full inline-block px-4 border bg-blue-500 text-white p-1"
           >
             <ArrowLeft />
           </Link>
@@ -285,7 +289,7 @@ export default function DiamondView() {
             onClick={async () => {
               mutateDelete.mutate();
             }}
-            className="cursor-pointer flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-black text-white p-1"
+            className="cursor-pointer flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-blue-500 text-white p-1"
           >
             {!diamond?.isHidden ? <EyeOff /> : <Eye />}
             <div className="ml-2 text-lg">
@@ -295,7 +299,7 @@ export default function DiamondView() {
           <a
             href={`/product/diamond/detail/${diamondId}`}
             target="_blank"
-            className="flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-black text-white p-1"
+            className="flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-blue-500 text-white p-1"
           >
             <ScrollText />
             <div className="ml-2 text-lg">View</div>

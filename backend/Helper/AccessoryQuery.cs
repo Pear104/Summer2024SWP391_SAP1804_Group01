@@ -12,6 +12,7 @@ namespace backend.Helper
         public float MaxMaterialWeight { get; set; } = 100;
         public string? Name { get; set; } = null;
         public string? Shape { get; set; } = null;
+        public Boolean? IsHidden { get; set; }
         public int PageSize { get; set; } = 20;
         public int PageNumber { get; set; } = 1;
     }
