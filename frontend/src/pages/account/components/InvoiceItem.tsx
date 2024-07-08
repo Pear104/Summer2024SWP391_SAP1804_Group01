@@ -157,7 +157,9 @@ export default function InvoiceItem({ order }: { order: any }) {
               <td colSpan={6} className="font-bold px-6 py-3">
                 Discount:
               </td>
-              <td className="text-center">{order.totalDiscountPercent}%</td>
+              <td className="text-center">
+                {order.totalDiscountPercent * 100}%
+              </td>
             </tr>
             <tr className="text-xl h-10 border-b bg-black text-white">
               {/* <td colSpan={5}></td> */}
@@ -166,7 +168,8 @@ export default function InvoiceItem({ order }: { order: any }) {
               </td>
               <td className="text-center">
                 {(
-                  (order.totalPrice * (100 - order.totalDiscountPercent)) /
+                  (order.totalPrice *
+                    (100 - order.totalDiscountPercent * 100)) /
                   100
                 ).toLocaleString("en-US", {
                   style: "currency",
