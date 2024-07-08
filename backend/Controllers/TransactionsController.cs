@@ -41,9 +41,9 @@ namespace backend.Controllers
             return Ok(newTransaction);
         }
 
-        [HttpPut("completePayment")]
+        [HttpPut("completePayment/{id}")]
         public async Task<IActionResult> CompletePayment(
-            [FromBody] string id
+            [FromRoute] string id
         )
         {
             var transaction = await _transactionRepo.CompletePaymentAsync(id);
@@ -53,7 +53,5 @@ namespace backend.Controllers
             }
             return Ok(transaction);
         }
-
-
     }
 }

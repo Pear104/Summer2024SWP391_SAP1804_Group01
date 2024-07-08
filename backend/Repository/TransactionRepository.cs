@@ -25,7 +25,7 @@ namespace backend.Repository
         public async Task<Transaction?> CompletePaymentAsync(string id)
         {
             var transaction = await _context.Transactions.FirstOrDefaultAsync(o =>
-                       o.TransactionId == id
+                       o.TransactionId.Equals(id)
                    );
             transaction!.TransactionStatus = TransactionStatus.Completed;
             _context.Entry(transaction).State = EntityState.Modified;
@@ -81,7 +81,7 @@ namespace backend.Repository
         {
             return await _context
                 .Transactions
-                .FirstOrDefaultAsync(x => x.TransactionId == id);
+                .FirstOrDefaultAsync(x => x.TransactionId.Equals(id));
         }
     }
 }
