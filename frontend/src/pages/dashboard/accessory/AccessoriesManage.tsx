@@ -183,10 +183,13 @@ export default function AccessoriesManage() {
                     event.preventDefault();
                     setStatusText("Status");
                     setProductTypeText("Product Type");
+                    setSearchTerm("");
                     // Clear the URL parameters
                     const params = new URLSearchParams(location.search);
                     params.delete("status");
                     params.delete("type");
+                    params.delete("Name");
+                    setQueryUrl(`/api/Accessories?` + params.toString());
                     navigate({ search: params.toString() });
                   }}
                 >
@@ -310,7 +313,7 @@ export default function AccessoriesManage() {
                         total={accessories.data.totalCount}
                         pageSize={accessories.data.pageSize}
                         onChange={(page) => {
-                          setSearchTerm("");
+                          // setSearchTerm("");
                           params.set("PageNumber", page.toString());
                           navigate(url.pathname + "?" + params.toString());
                           setQueryUrl("/api/Accessories?" + params.toString());

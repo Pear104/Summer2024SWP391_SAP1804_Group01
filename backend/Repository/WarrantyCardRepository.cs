@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using backend.Data;
 using backend.DTOs.WarrantyCard;
@@ -8,6 +9,7 @@ using backend.Helper;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace backend.Repository
 {
@@ -68,7 +70,29 @@ namespace backend.Repository
             // {
             //     warrantyCardQueries = warrantyCardQueries.Where(x => x.StartTime <= query.MaxDate);
             // }
-            
+
+            if (!query.CustomerName.IsNullOrEmpty())
+            {
+                warrantyCardQueries = warrantyCardQueries.Where(x =>
+                    x.OrderDetail!.Order.Customer!.Name.Contains(query.CustomerName!)
+                );
+            }
+
+            if (!query.ProductName.IsNullOrEmpty())
+            {
+
+                warrantyCardQueries = warrantyCardQueries.Where((x) =>
+                    x.Accessory != null ? 
+                        (
+                        x.Accessory.Name.Contains(query.ProductName!) 
+                        ):(
+                        (x.Diamond!.Carat + " Carat, " + x.Diamond.Shape.Name).Contains(query.ProductName!)
+                        )
+                );
+            }
+
+
+
             var totalCount = await warrantyCardQueries.CountAsync();
 
             var totalPages = (int)Math.Ceiling(totalCount / (double)query.PageSize);
@@ -89,7 +113,7 @@ namespace backend.Repository
                     DiamondName = x.Diamond != null ? x.Diamond.Carat + " Carat, " + x.Diamond.Shape.Name : null
                 })
                 .ToListAsync();
-                
+
             return new WarrantyCardResult
             {
                 WarrantyCards = warrantyCards,

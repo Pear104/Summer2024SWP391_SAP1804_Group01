@@ -63,14 +63,14 @@ export default function WarrantyRequest() {
         status === "1"
           ? "Pending"
           : status === "2"
-          ? "Processing"
-          : status === "3"
-          ? "Delivering"
-          : status === "4"
-          ? "Returning"
-          : status === "5"
-          ? "Completed"
-          : "Failed"
+            ? "Processing"
+            : status === "3"
+              ? "Delivering"
+              : status === "4"
+                ? "Returning"
+                : status === "5"
+                  ? "Completed"
+                  : "Failed"
       );
     }
   }, [location.search]);
@@ -107,11 +107,16 @@ export default function WarrantyRequest() {
                 <Form.Item className="flex-grow">
                   <Input
                     type="text"
-                    placeholder="Search"
+                    placeholder="Search by customer name"
                     id="keyword"
                     className="border p-2 rounded-md w-full"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value)
+                      params.set("CustomerName", e.target.value);
+                      setQueryUrl(`/api/WarrantyRequests?` + params.toString());
+                      navigate({ search: params.toString() });
+                    }}
                   />
                 </Form.Item>
                 <Form.Item>
@@ -130,8 +135,8 @@ export default function WarrantyRequest() {
                     setSearchTerm("");
                     // Clear the URL parameters
                     const params = new URLSearchParams(location.search);
+                    params.delete("CustomerName");
                     setQueryUrl(`/api/WarrantyRequests?` + params.toString());
-                    // params.delete("type");
                     navigate({ search: params.toString() });
                   }}
                 >
@@ -170,7 +175,7 @@ export default function WarrantyRequest() {
                         <LoadingItem key={key} />
                       ))}
                     {warrantyRequestList?.data &&
-                    warrantyRequestList?.data?.warrantyRequests?.length > 0 ? (
+                      warrantyRequestList?.data?.warrantyRequests?.length > 0 ? (
                       warrantyRequestList?.data?.warrantyRequests?.map(
                         renderWarrantyRow
                       )
