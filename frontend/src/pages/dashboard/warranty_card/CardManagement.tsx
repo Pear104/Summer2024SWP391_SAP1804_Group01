@@ -118,6 +118,28 @@ export default function CardManagement() {
                 </Form.Item>
               </Form>
             </h3>
+
+            <div className="flex space-x-075">
+              <div className="card-action ">
+                <a
+                  href="/admin/diamonds"
+                  className="text-interactive "
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setSearchTerm("");
+                    setSearchProductName("");
+                    // Clear the URL parameters
+                    const params = new URLSearchParams(location.search);
+                    params.delete("CustomerName");
+                    params.delete("ProductName");
+                    setQueryUrl(`/api/WarrantyCards?` + params.toString());
+                    navigate({ search: params.toString() });
+                  }}
+                >
+                  Clear filter
+                </a>
+              </div>
+            </div>
           </div>
           <div className="pt-lg"></div>
         </div>
