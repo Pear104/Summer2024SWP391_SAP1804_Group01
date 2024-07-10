@@ -9,6 +9,7 @@ using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace backend.Repository
 {
@@ -41,6 +42,15 @@ namespace backend.Repository
                 promotionQueries = promotionQueries.Where(x =>
                     x.PromotionName.ToLower().Contains(query.PromotionName.ToLower())
                 );
+            }
+
+            if (!query.SearchPromotion.IsNullOrEmpty())
+            {
+                promotionQueries = promotionQueries.Where(x =>
+                    x.PromotionName.Contains(query.SearchPromotion!) ||
+                    x.PromotionCode.Contains(query.SearchPromotion!)
+                );
+
             }
 
             var totalCount = await promotionQueries.CountAsync();
