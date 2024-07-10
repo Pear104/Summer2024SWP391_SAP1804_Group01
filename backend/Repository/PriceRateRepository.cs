@@ -26,6 +26,13 @@ namespace backend.Repository
         {
             var priceRateQueries = _context.PriceRates.Include(x => x.Account).OrderByDescending(x => x.CreatedAt).AsQueryable();
 
+            if (query.SearchCreatedAt.HasValue)
+            {
+                priceRateQueries = priceRateQueries.Where(pr =>
+                    pr.CreatedAt <= query.SearchCreatedAt
+                );
+            }
+
             var totalCount = await priceRateQueries.CountAsync();
             var totalPages = (int)Math.Ceiling((double)totalCount / query.PageSize);
 

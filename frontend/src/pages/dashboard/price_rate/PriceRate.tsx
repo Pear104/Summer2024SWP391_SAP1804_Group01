@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Form, Input, Pagination, Skeleton, Empty } from "antd";
+import { Pagination, Skeleton, Empty, DatePicker } from "antd";
+import dayjs, { Dayjs } from 'dayjs';
 import { useSearchStore } from "../../../store/searchStore";
 import { GET } from "../../../utils/request";
 import { useQueries } from "@tanstack/react-query";
@@ -11,8 +12,9 @@ import CreatePriceRate from "./components/CreatePriceRate";
 export default function PriceRate() {
   const location = useLocation();
   const columnHeaders = ["Price Rate ID", "Creator", "Percent", "Create At"];
-  const searchTerm = useSearchStore((state) => state.searchTerm);
+  // const searchTerm = useSearchStore((state) => state.searchTerm);
   const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
+  const [searchDate, setSearchDate] = useState<Dayjs | null>(null);
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
   const navigate = useNavigate();
@@ -32,7 +34,6 @@ export default function PriceRate() {
     ],
   });
   console.log(queryUrl);
-
 
   const renderPriceRateRow = (priceRate: any) => (
     <PriceRateRow key={priceRate.priceRateId} priceRate={priceRate} />
@@ -54,8 +55,8 @@ export default function PriceRate() {
             <h1 className="text-2xl"> Price Rate List </h1>
           </div>
         </div>
-        <div className="flex justify-end space-x-1 items-center">   
-              <CreatePriceRate />
+        <div className="flex justify-end space-x-1 items-center">
+          <CreatePriceRate />
         </div>
       </div>
 
@@ -63,24 +64,23 @@ export default function PriceRate() {
         {/* filter bar */}
         <div className="border-b-gray-200 p-[1rem] box-border">
           <div className="flex justify-between mb-1 items-center">
-            <h3>
-              <Form
-                name="search_form"
-                layout="inline"
-                className="flex gap-2 items-center"
-              >
-                <Form.Item className="flex-grow">
-                  <Input
-                    type="text"
-                    placeholder="Search"
-                    id="keyword"
-                    className="border p-2 rounded-md w-full"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </Form.Item>
-              </Form>
-            </h3>
+
+            <DatePicker
+              value={searchDate}
+              defaultValue={searchDate}
+              onChange={(date: Dayjs | null, dateString) => {
+                console.log("Selected Time: ", date);
+                console.log("Formatted Selected Time: ", dateString);
+                if (date) {
+                  setSearchDate(date);
+                }
+                if (!Array.isArray(dateString)) {
+                  params.set("SearchCreatedAt", dateString);
+                }
+                setQueryUrl(`/api/PriceRate?` + params.toString());
+                navigate({ search: params.toString() });
+              }}
+            />
             <div className="flex space-x-075">
               <div className="card-action ">
                 <a
@@ -88,11 +88,11 @@ export default function PriceRate() {
                   className="text-interactive "
                   onClick={(event) => {
                     event.preventDefault();
-                    setSearchTerm("");
+                    setSearchDate(null);
                     // Clear the URL parameters
                     const params = new URLSearchParams(location.search);
+                    params.delete("SearchCreatedAt");
                     setQueryUrl(`/api/PriceRate?` + params.toString());
-                    // params.delete("type");
                     navigate({ search: params.toString() });
                   }}
                 >
