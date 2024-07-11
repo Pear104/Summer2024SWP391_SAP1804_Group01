@@ -61,14 +61,14 @@ export default function OrderManage() {
         status === "1"
           ? "Pending"
           : status === "2"
-          ? "Processing"
-          : status === "3"
-          ? "Confirmed"
-          : status === "4"
-          ? "Delivering"
-          : status === "5"
-          ? "Completed"
-          : "Failed"
+            ? "Processing"
+            : status === "3"
+              ? "Confirmed"
+              : status === "4"
+                ? "Delivering"
+                : status === "5"
+                  ? "Completed"
+                  : "Failed"
       );
     }
   }, [location.search]);
@@ -105,11 +105,16 @@ export default function OrderManage() {
                 <Form.Item className="flex-grow">
                   <Input
                     type="text"
-                    placeholder="Search"
+                    placeholder="Search by customer name"
                     id="keyword"
-                    className="border p-2 rounded-md w-full"
+                    className="border p-2 rounded-md w-[300px]"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value)
+                      params.set("SearchCustomerName", e.target.value);
+                      setQueryUrl(`/api/Order?` + params.toString());
+                      navigate({ search: params.toString() });
+                    }}
                   />
                 </Form.Item>
                 <Form.Item>
@@ -129,7 +134,7 @@ export default function OrderManage() {
                     // Clear the URL parameters
                     const params = new URLSearchParams(location.search);
                     setQueryUrl(`/api/Order?` + params.toString());
-                    // params.delete("type");
+                    params.delete("SearchCustomerName");
                     navigate({ search: params.toString() });
                   }}
                 >

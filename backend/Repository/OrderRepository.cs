@@ -217,6 +217,13 @@ namespace backend.Repository
                 );
             }
 
+            if (!string.IsNullOrEmpty(query.SearchCustomerName))
+            {
+                orderQueries = orderQueries.Where(x =>
+                    x.Customer!.Name.Contains(query.SearchCustomerName)
+                );
+            }
+
             if (query.SaleStaffId.HasValue)
             {
                 orderQueries = orderQueries.Where(x => x.SaleStaffId == query.SaleStaffId);

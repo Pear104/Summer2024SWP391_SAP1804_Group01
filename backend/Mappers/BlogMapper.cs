@@ -26,7 +26,8 @@ namespace backend.Mappers
                 Content =
                     cleanedContent.Length > 200 ? cleanedContent.Substring(0, 180) : cleanedContent,
                 ThumbnailUrl = HtmlParser.ExtractFirstImageFromHtml(blog.Content),
-                Title = blog.Title
+                Title = blog.Title,
+                IsHidden = blog.IsHidden
             };
         }
 

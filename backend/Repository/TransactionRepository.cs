@@ -10,6 +10,7 @@ using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace backend.Repository
 {
@@ -58,6 +59,13 @@ namespace backend.Repository
         public async Task<TransactionResult?> GetAllTransactionsAsync(TransactionQuery query)
         {
             var transactionsQuery = _context.Transactions.AsQueryable();
+
+            if (!query.SearchOrderId.IsNullOrEmpty())
+            {
+                transactionsQuery = transactionsQuery.Where( tq =>
+                    tq.OrderId!.Contains(query.SearchOrderId!)                    
+                    );
+            }
 
             var totalCount = await transactionsQuery.CountAsync();
             var totalPages = totalCount / (query.PageSize ?? 10);

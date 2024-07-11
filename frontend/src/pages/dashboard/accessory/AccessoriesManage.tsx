@@ -122,7 +122,7 @@ export default function AccessoriesManage() {
                     }}
                   />
                 </Form.Item>
-                <Form.Item>
+                {/* <Form.Item>
                   <Dropdown
                     overlay={statusMenu}
                     placement="bottomCenter"
@@ -133,7 +133,7 @@ export default function AccessoriesManage() {
                       <DownOutlined className="ml-1" />
                     </Button>
                   </Dropdown>
-                </Form.Item>
+                </Form.Item> */}
               </Form>
             </h3>
             <div className="flex space-x-075">
