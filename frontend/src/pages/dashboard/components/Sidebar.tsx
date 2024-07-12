@@ -54,13 +54,12 @@ const ROLE_PERMISSIONS: Record<Role, string[]> = {
     "warranty",
     "product",
     "account",
-    "blog",
     "price",
+    "blog",
   ],
-  SaleStaff: ["dashboard", "salestaff", "warranty-request"],
-  // DeliveryStaff: ["dashboard", "deliverystaff", "deliverywarrantystaff"],
-  DeliveryStaff: ["dashboard", "deliverystaff", "warranty-request"],
-  WarrantyStaff: ["dashboard", "warranty-request"],
+  SaleStaff: ["salestaff", "warranty-request"],
+  DeliveryStaff: ["deliverystaff", "warranty-request"],
+  WarrantyStaff: ["warranty-request"],
 };
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -393,12 +392,12 @@ export default function Sidebar() {
           <div className="text-neutral-100 text-xl">DatJ</div>
         </Link>
         <Button
-          className="mx-3"
-          type="primary"
+          className="w-8 flex justify-center ml-6 bg-neutral-800"
+          type="link"
           onClick={toggleCollapsed}
           style={{ marginBottom: 16, transition: "all 0.5s" }}
         >
-          {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+          {collapsed ? <MenuUnfoldOutlined className="mt-1"/> : <MenuFoldOutlined className="mt-1" />}
         </Button>
         <Menu
           className="bg-neutral-800 text-neutral-100 items-center p-4  "
@@ -407,6 +406,7 @@ export default function Sidebar() {
           inlineCollapsed={collapsed}
           items={items}
         />
+        
 
         {/* Old sidebar */}
         {/* <div className="flex-1 py-8 flex flex-col gap-0.5">

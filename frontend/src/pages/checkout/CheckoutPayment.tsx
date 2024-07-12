@@ -11,7 +11,6 @@ import { useCheckoutStore } from "../../store/checkoutStore";
 import {
   PayPalScriptProvider,
   PayPalButtons,
-  PayPalButtonsComponentProps,
 } from "@paypal/react-paypal-js";
 
 // Renders errors or successfull transactions on the screen.
@@ -291,14 +290,11 @@ export default function CheckoutPayment() {
                               clearCart();
                               const completePaymentTransactionResponse = await PUT(
                                 "/api/Transactions/completePayment/" + reference_id,
-                                {
-                                }
+                                {}
                               );
                               const completePaymentOrderResponse = await PUT(
                                 "/api/Order/completePayment/" + orderId,
-                                {
-
-                                }, 
+                                {}, 
                               );
                               console.log("completePaymentTransactionResponse: ", completePaymentTransactionResponse);
                               console.log("completePaymentOrderResponse: ", completePaymentOrderResponse);
