@@ -200,7 +200,7 @@ export default function AccessoryDetail() {
                 )}
               </Form>
               {!currentDiamond && (
-                <div className="text-xl py-6 w-full bg-gray-200 text-slate-500 hover:scale-95 transition-all rounded-md">
+                <div className="text-xl py-6 w-full bg-gray-200 text-slate-500 hover:scale-95 transition-all rounded-md cursor-not-allowed">
                   <div className="text-center uppercase">
                     Choose this accessory
                   </div>

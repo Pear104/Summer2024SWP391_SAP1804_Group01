@@ -1,6 +1,6 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { GET, PUT, DELETE, POST } from "../../../utils/request";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { v4 } from "uuid";
 import {
   getDownloadURL,
@@ -165,6 +165,7 @@ const schema = z.object({
   availability: z.boolean(),
 });
 export default function DiamondView() {
+  const certificateNumberRef = useRef<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   // const [certificateFile, setCertificateFile] = useState<UploadFile[]>([]);
   const [diamondFile, setDiamondFile] = useState<UploadFile[]>([]);
@@ -312,7 +313,32 @@ export default function DiamondView() {
           className=""
           layout="vertical"
           //submit form
+
           onFinish={handleSubmit(async (formData) => {
+            try {
+              const checkdiamond = await GET(
+                "/api/Diamonds?SearchQuery=" + formData.certificateNumber
+              );
+              console.log("API Response:", checkdiamond);
+
+              if (checkdiamond?.diamonds && checkdiamond.diamonds.length > 0) {
+                setError("certificateNumber", {
+                  type: "manual",
+                  message: "Duplicate Certificate number",
+                });
+                if (certificateNumberRef.current) {
+                  certificateNumberRef.current.scrollIntoView({
+                    behavior: "smooth",
+                  });
+                }
+                return;
+              }
+              console.log(
+                "No duplicate found, proceeding with form submission."
+              );
+            } catch (error) {
+              console.error("Error fetching data:", error);
+            }
             if (!diamondFile || diamondFile?.length === 0) {
               setError("image", {
                 type: "manual",
@@ -376,17 +402,19 @@ export default function DiamondView() {
               className="font-thin border p-2 rounded-md w-full"
             />
           </FormItem>
-          <FormItem
-            label="Certificate Numnber"
-            name="certificateNumber"
-            control={control}
-            required
-          >
-            <Input
-              placeholder="Diamond lab"
-              className="font-thin border p-2 rounded-md w-full"
-            />
-          </FormItem>
+          <div ref={certificateNumberRef}>
+            <FormItem
+              label="Certificate Number"
+              name="certificateNumber"
+              control={control}
+              required
+            >
+              <Input
+                placeholder="Diamond lab"
+                className="font-thin border p-2 rounded-md w-full"
+              />
+            </FormItem>
+          </div>
           <FormItem label="Carat" name="carat" control={control} required>
             <Input
               type="number"

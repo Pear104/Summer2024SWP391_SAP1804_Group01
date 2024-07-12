@@ -16,7 +16,7 @@ export const StatusMenu = ({
   const [targetStatus, setTargetStatus] = useState("");
   const [thisStatus, setThisStatus] = useState("");
 
-  let style = "text-white bg-green-500";
+  let style = "text-yellow bg-green-500";
   switch (statusText) {
     case "Pending":
       style = "text-white bg-yellow-500";
@@ -37,6 +37,30 @@ export const StatusMenu = ({
       style = "text-white bg-green-500";
       break;
   }
+  if (role == "Manager") {
+    switch (statusText) {
+      case "Pending":
+        style = "text-yellow-500 font-bold";
+        break;
+      case "Getting":
+        style = "text-blue-500 font-bold";
+        break;
+      case "Processing":
+        style = "text-blue-600 font-bold";
+        break;
+      case "Returning":
+        style = "text-blue-800 font-bold";
+        break;
+      case "Failed":
+        style = "text-red-500 font-bold";
+        break;
+      case "Completed":
+        style = "text-green-500 font-bold";
+        break;
+      default:
+        break;
+    }
+  } 
   const handleStatusChange = (newStatus: string) => {
     setTargetStatus(newStatus);
     setThisStatus(statusText);
@@ -88,14 +112,11 @@ export const StatusMenu = ({
   return (
     <>
       {role === "Manager" ? (
-        <Button className={`border p-2 rounded-md flex items-center ${style}`}>
-          <span>{statusText}</span>
-        </Button>
+        <div className={`p-2 rounded-md flex items-center ${style}`}>
+         {statusText}
+        </div>
       ) : (
         <Dropdown
-          // disabled={
-          //   (jwtDecode(getCookie("accessToken") || "") as any)?.role == "Manager"
-          // }
           overlay={
             <Menu>
               <Menu.Item key="2" disabled={isDisabled("Getting")}>

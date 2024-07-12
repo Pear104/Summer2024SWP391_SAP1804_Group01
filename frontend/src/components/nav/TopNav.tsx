@@ -1,7 +1,4 @@
 import {
-  ChevronDown,
-  //FlaskConical,
-  // Heart,
   LineChart,
   Mail,
   MapPin,
@@ -13,13 +10,10 @@ import {
 import Logo from "../logo/Logo";
 import { App } from "antd";
 import SearchBar from "../SearchBar";
-import { useState } from "react";
-import JewelryItem from "./components/JewelryItem";
-import DiamondItem from "./components/DiamondItem";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
 import { GET } from "../../utils/request";
-import { useQueries } from "@tanstack/react-query";
 import { jwtDecode } from "jwt-decode";
 import { getCookie } from "../../utils/cookie";
 
@@ -66,22 +60,16 @@ export default function TopNav() {
   const [diamondDrop, setDiamondDrop] = useState(false);
   const [menuDrop, setMenuDrop] = useState(false);
   const { message } = App.useApp();
-
+  const [account, setAccount] = useState<any>();
+  const location = useLocation();
   const navigate = useNavigate();
-  const [shapes, accessoryTypes] = useQueries({
-    queries: [
-      {
-        queryKey: ["shapes"],
-        queryFn: () => GET("/api/Shapes/"),
-        staleTime: Infinity,
-      },
-      {
-        queryKey: ["accessoryTypes"],
-        queryFn: () => GET("/api/AccessoryTypes/"),
-        staleTime: Infinity,
-      },
-    ],
-  });
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await GET("/api/Accounts/me");
+      setAccount(response);
+    };
+    fetchData();
+  }, [location, account]);
   return (
     <div className="top-0 left-0 relative gap-4 py-3 px-4 bg-white w-full shadow-lg h-full">
       <div className="flex justify-between md:hidden">
@@ -109,18 +97,32 @@ export default function TopNav() {
           <div className="cursor-pointer">
             <SearchBar />
           </div>
-          {/* <Link to="/test">
-            <FlaskConical size={20} strokeWidth={2} absoluteStrokeWidth />
-          </Link> */}
           {decode && decode?.role != "Customer" && (
             <div
               className="cursor-pointer"
               onClick={async () => {
                 const response = await GET("/api/Accounts/me");
-                console.log(response);
-                if (response.role != "Customer") {
-                  navigate("/admin");
-                }
+                console.log(response);    
+                  switch(response.role) {
+                    case "Manager":
+                      navigate("/admin");
+                      break;
+                    case "SaleStaff":
+                      navigate("/admin/sale-staffs");
+                      break;
+                    case "DeliveryStaff":
+                      navigate("/admin/delivery-staffs");
+                      break;
+                    case "Administrator":
+                      navigate("/admin");
+                      break;
+                    case "WarrantyStaff":
+                      navigate("/admin/warranty-request");
+                      break;
+                    default:
+                      navigate("/");
+                      break;
+                  }                
               }}
             >
               <LineChart size={20} strokeWidth={2} absoluteStrokeWidth />
@@ -137,6 +139,11 @@ export default function TopNav() {
               )}
             </Link>
           </div>
+          {account && (
+            <div className="text-lg font-semibold text-gray-800 pl-4 py-2">
+              Welcome, {account?.name}
+            </div>
+          )}
           <div
             className="cursor-pointer"
             onClick={async () => {

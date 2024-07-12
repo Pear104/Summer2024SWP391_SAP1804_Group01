@@ -118,11 +118,26 @@ export default function Login() {
                 setCookie("accessToken", authResponse.token, 7);
                 // Check the role of the user
                 const decoded = jwtDecode(authResponse.token || "") as any;
-                if (decoded.role != "Customer") {
-                  navigate("/admin");
-                } else {
-                  navigate("/");
-                }
+                switch(decoded.role) {
+                  case "Manager":
+                    navigate("/admin");
+                    break;
+                  case "SaleStaff":
+                    navigate("/admin/sale-staffs");
+                    break;
+                  case "DeliveryStaff":
+                    navigate("/admin/delivery-staffs");
+                    break;
+                  case "Administrator":
+                    navigate("/admin");
+                    break;
+                  case "WarrantyStaff":
+                    navigate("/admin/warranty-request");
+                    break;
+                  default:
+                    navigate("/");
+                    break;
+                  }
               } else {
                 setIsLoading(false);
                 setError("password", {

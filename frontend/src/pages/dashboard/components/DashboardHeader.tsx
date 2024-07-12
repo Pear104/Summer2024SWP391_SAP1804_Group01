@@ -66,7 +66,7 @@ export default function DashboardHeader() {
               anchor="bottom end"
               className="w-52 origin-top-right rounded-xl border border-white/5 bg-black p-1 text-sm/6 text-white [--anchor-gap:var(--spacing-1)] focus:outline-none"
             >
-              <MenuItem>
+              {/* <MenuItem>
                 {({ active }) => (
                   <a
                     href="/profile"
@@ -77,7 +77,7 @@ export default function DashboardHeader() {
                     Your Profile
                   </a>
                 )}
-              </MenuItem>
+              </MenuItem> */}
 
               <MenuItem>
                 <Button

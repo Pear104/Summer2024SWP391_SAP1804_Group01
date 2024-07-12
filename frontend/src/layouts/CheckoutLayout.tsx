@@ -270,7 +270,9 @@ export default function CheckoutLayout() {
             </div>
             <div className="flex justify-between">
               <div>Discount</div>
-              <div className="font-semibold">{totalDiscount * 100 + "%"}</div>
+              <div className="font-semibold">
+                {(totalDiscount * 100).toFixed(0) + "%"}
+              </div>
             </div>
           </div>
           <Divider />
