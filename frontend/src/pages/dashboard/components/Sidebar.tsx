@@ -389,19 +389,23 @@ export default function Sidebar() {
       {/* Sidebar */}
       <div className="sm:hidden flex flex-col bg-neutral-800 w-auto h-auto text-white overflow-y-auto">
         <Link to={"/"} className="flex items-center gap-2 px-1 py-3 mx-3">
-          <Gem strokeWidth={1.75} />
-          <div className="text-neutral-100 text-xl">DatJ</div>
+          <Gem strokeWidth={1.75} width={15} />
+          <div className="text-neutral-100 text-sm">DatJ</div>
         </Link>
         <Button
-          className="mx-3"
-          type="primary"
+          className="mx-3 w-8 flex justify-center ml-6 bg-neutral-800"
+          type="link"
           onClick={toggleCollapsed}
           style={{ marginBottom: 16, transition: "all 0.5s" }}
         >
-          {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+          {collapsed ? (
+            <MenuUnfoldOutlined className="mt-1" />
+          ) : (
+            <MenuFoldOutlined className="mt-1" />
+          )}
         </Button>
         <Menu
-          className="bg-neutral-800 text-neutral-100 items-center p-4  "
+          className="bg-neutral-800 text-neutral-100 items-center p-4 "
           mode="inline"
           theme="dark"
           inlineCollapsed={collapsed}
