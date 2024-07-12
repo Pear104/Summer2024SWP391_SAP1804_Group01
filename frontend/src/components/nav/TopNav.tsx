@@ -13,10 +13,10 @@ import {
 import Logo from "../logo/Logo";
 import { App } from "antd";
 import SearchBar from "../SearchBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import JewelryItem from "./components/JewelryItem";
 import DiamondItem from "./components/DiamondItem";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
 import { GET } from "../../utils/request";
 import { useQueries } from "@tanstack/react-query";
@@ -66,7 +66,8 @@ export default function TopNav() {
   const [diamondDrop, setDiamondDrop] = useState(false);
   const [menuDrop, setMenuDrop] = useState(false);
   const { message } = App.useApp();
-
+  const [account, setAccount] = useState<any>();
+  const location = useLocation();
   const navigate = useNavigate();
   const [shapes, accessoryTypes] = useQueries({
     queries: [
@@ -82,6 +83,13 @@ export default function TopNav() {
       },
     ],
   });
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await GET("/api/Accounts/me");
+      setAccount(response);
+    };
+    fetchData();
+  }, [location, account]);
   return (
     <div className="top-0 left-0 relative gap-4 py-3 px-4 bg-white w-full shadow-lg h-full">
       <div className="flex justify-between md:hidden">
@@ -137,6 +145,11 @@ export default function TopNav() {
               )}
             </Link>
           </div>
+          {account && (
+            <div className="text-lg font-semibold text-gray-800 pl-4 py-2">
+              Welcome, {account?.name}
+            </div>
+          )}
           <div
             className="cursor-pointer"
             onClick={async () => {
