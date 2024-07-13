@@ -41,13 +41,6 @@ const color: { [key: number]: string } = {
   18: "D",
 };
 
-// const cut: { [key: number]: string } = {
-//   0: "Ideal",
-//   1: "Excellent",
-//   2: "Very Good",
-//   3: "Good",
-// };
-
 const carat: { [key: number]: string } = {
   0: "0",
   1: "1",
@@ -58,6 +51,27 @@ const carat: { [key: number]: string } = {
   6: "6",
   7: "7",
   8: "8",
+};
+
+const info = {
+  carat: {
+    title: "Carat",
+    description:
+      "Carat is the unit of measurement for the physical weight of diamonds. One carat equals 0.200 grams or 1/5 gram and is subdivided into 100 points. One carat equals 0.007 ounce avoirdupois. Which would require over 2,265 carats to equal 1 pound!",
+    img: "https://kimcuongdaquy.info/wp-content/uploads/2019/04/Hero_Carat-Weight_990x500.jpg",
+  },
+  clarity: {
+    title: "Clarity",
+    description:
+      "Diamond purity, also known as clarity/cleanliness, is a qualitative measure that evaluates the appearance of each diamond. The fewer impurities and imperfections a diamond has, the higher its purity.",
+    img: "https://kimcuongdaquy.info/wp-content/uploads/2019/04/diamond-clarity-1-e1629346957837-1024x390.jpg",
+  },
+  color: {
+    title: "Color",
+    description:
+      "Diamond color is a measurable grade given to an individual diamond to quantify how colorless it is along a standardized diamond color chart. The higher-rated diamonds will be as close to colorless as possible, while lower-rated diamonds will often have an increasingly noticeable coloration tint as the ratings move along the color diamond scale chart.",
+    img: "https://www.iconicjewelry.com/app/uploads/2017/07/color-of-a-diamond-2923-diamond-color-clarity-chart-2920-x-870-copy.jpg",
+  },
 };
 
 const items = [
@@ -141,7 +155,7 @@ export default function Filter() {
         /> */}
         <SliderItem
           step={0.01}
-          title="BY CARAT"
+          info={info.carat}
           mark={carat}
           min={0}
           max={8}
@@ -160,7 +174,7 @@ export default function Filter() {
         />
       </div>
       <SliderItem
-        title="BY CLARITY"
+        info={info.clarity}
         mark={clarity}
         min={0}
         max={11}
@@ -178,7 +192,7 @@ export default function Filter() {
         }}
       />
       <SliderItem
-        title="BY COLOR"
+        info={info.color}
         mark={color}
         min={9}
         max={18}

@@ -11,13 +11,36 @@ import { useQueries } from "@tanstack/react-query";
 import Loading from "../../components/Loading";
 import moment from "moment";
 import dayjs from "dayjs";
+import WarrantyInfo from "./components/WarrantyInfo";
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
 );
 
+const reasonOptions = [
+  {
+    value: "The ring may need to be resized to fit the wearer's finger",
+    label: "The ring may need to be resized to fit the wearer's finger",
+  },
+  {
+    value: "The prongs holding the diamond in place are loose or broken",
+    label: "The prongs holding the diamond in place are loose or broken",
+  },
+  {
+    value:
+      "Requiring cleaning and polishing to restore diamond ring appearance",
+    label:
+      "Requiring cleaning and polishing to restore diamond ring appearance",
+  },
+  {
+    value: "Upgrade the diamond or redesign the setting for a new look.",
+    label: "Upgrade the diamond or redesign the setting for a new look.",
+  },
+  { value: "Other", label: "Other" },
+];
+
 const schema = z.object({
-  warrantyCardId: z.coerce.number().min(0, "Please choose your product!"),
+  warrantyCardId: z.coerce.number().min(1, "Please choose your product!"),
   phoneNumber: z
     .string()
     .regex(phoneRegex, "Invalid phone number!")
@@ -40,10 +63,13 @@ type Option = {
   value: string;
   label: string;
   key: number;
+  info: any;
 };
 
 export default function CreateWarrantyRequest() {
   const [isLoading, setIsLoading] = useState(false);
+  const [warrantyCardId, setWarrantyCardId] = useState(0);
+  const [reason, setReason] = useState("");
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
   const [warrantyCards] = useQueries({
@@ -62,25 +88,10 @@ export default function CreateWarrantyRequest() {
       ? `${warrantyCard?.diamond?.carat} ct ${warrantyCard?.diamond?.shape?.name} Shape Diamond #${warrantyCard?.diamond.certificateNumber}`
       : warrantyCard?.accessory?.name,
   }));
-  // const options: Option[] = warrantyCards?.data?.orders
-  //   ?.map((order: any) =>
-  //     order.orderDetails.map((orderDetail: any) => ({
-  //       key: orderDetail.warrantyCardId,
-  //       value: orderDetail.warrantyCardId,
-  //       label: `${orderDetail?.diamond.carat} ct ${
-  //         orderDetail?.diamond.shape
-  //       } Shape Diamond #${orderDetail?.diamond.certificateNumber} ${
-  //         orderDetail?.accessory?.name
-  //           ? "+ " + orderDetail?.accessory?.name
-  //           : ""
-  //       }`,
-  //     }))
-  //   )
-  //   .flat();
 
   console.log(warrantyCards?.data);
 
-  const { control, handleSubmit, reset } = useForm({
+  const { control, handleSubmit, reset, setValue, getValues } = useForm({
     defaultValues: {
       warrantyCardId: "",
       warrantyReason: "",
@@ -109,7 +120,7 @@ export default function CreateWarrantyRequest() {
       }
     })();
   }, [reset]);
-
+  console.log(getValues().warrantyCardId);
   return (
     <>
       {contextHolder}
@@ -119,7 +130,6 @@ export default function CreateWarrantyRequest() {
           <div className="uppercase font-semibold text-xl">
             Request a warranty service
           </div>
-          <div></div>
           <div>
             <Form
               layout="vertical"
@@ -160,8 +170,12 @@ export default function CreateWarrantyRequest() {
                       .localeCompare((optionB?.label ?? "").toLowerCase())
                   }
                   options={options}
+                  onChange={(value) => {
+                    setWarrantyCardId(value);
+                  }}
                 />
               </FormItem>
+              <WarrantyInfo id={warrantyCardId} />
 
               <FormItem
                 className=""
@@ -176,7 +190,7 @@ export default function CreateWarrantyRequest() {
                 />
               </FormItem>
               <FormItem
-                label="Receive time (The day delivery staff can come to get your item)"
+                label="Receive date (The day delivery staff can come to get your item)"
                 name="receiveTime"
                 control={control}
                 className="w-full"
@@ -200,19 +214,40 @@ export default function CreateWarrantyRequest() {
                   className="border text-sm py-2 px-2 without-ring w-full rounded-none"
                 />
               </FormItem>
-              <FormItem
-                className="col-span-2"
-                label="Warranty reason"
-                name="warrantyReason"
-                control={control}
-                required
-              >
-                <Input.TextArea
-                  rows={4}
-                  placeholder="Describe the problem happen with your product (What need to be fixed)"
-                  className="text-black text-sm border py-2 px-2 without-ring w-full rounded-none"
+
+              <div className="col-span-2 mb-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-red-500 text-xl">*</span> Warranty
+                  reason
+                </div>
+                <Select
+                  size="large"
+                  className="font-thin border w-full text-sm"
+                  options={reasonOptions}
+                  onChange={(e: any) => {
+                    setReason(e);
+                    if (e != "Other") {
+                      setValue("warrantyReason", e);
+                    } else {
+                      setValue("warrantyReason", "");
+                    }
+                  }}
                 />
-              </FormItem>
+              </div>
+              {reason == "Other" && (
+                <FormItem
+                  className="mt-4 col-span-2"
+                  name="warrantyReason"
+                  control={control}
+                  required
+                >
+                  <Input.TextArea
+                    rows={4}
+                    placeholder="Describe the problem happen with your product (What need to be fixed)"
+                    className="text-black text-sm border py-2 px-2 without-ring w-full rounded-none"
+                  />
+                </FormItem>
+              )}
               <div className="w-[100px]">
                 <Form.Item className="mb-0">
                   <Button

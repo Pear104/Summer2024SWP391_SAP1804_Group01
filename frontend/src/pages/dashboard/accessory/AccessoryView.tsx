@@ -21,6 +21,19 @@ import UploadImage from "./components/UploadImage";
 import { storage } from "../../../utils/firebase";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 
+const shapeOptions = [
+  { value: 1, label: "Round" },
+  { value: 2, label: "Emerald" },
+  { value: 3, label: "Heart" },
+  { value: 4, label: "Pear" },
+  { value: 5, label: "Oval" },
+  { value: 6, label: "Cushion" },
+  { value: 7, label: "Princess" },
+  { value: 8, label: "Radiant" },
+  { value: 9, label: "Marquise" },
+  { value: 10, label: "Asscher" },
+];
+
 const schema = z.object({
   name: z
     .string()
@@ -259,11 +272,7 @@ export default function AccessoryView() {
             <Select
               size="large"
               className="font-thin border w-full text-sm"
-              options={[
-                { value: "Round", label: "Round" },
-                { value: "Emerald", label: "Emerald" },
-                { value: "Oval", label: "Oval" },
-              ]}
+              options={shapeOptions}
             />
           </FormItem>
           <FormItem

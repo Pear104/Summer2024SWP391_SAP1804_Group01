@@ -16,6 +16,7 @@ import { useCartStore } from "../../store/cartStore";
 import { GET } from "../../utils/request";
 import { jwtDecode } from "jwt-decode";
 import { getCookie } from "../../utils/cookie";
+import { useQueries } from "@tanstack/react-query";
 
 const TopNavItem = ({
   children,
@@ -60,16 +61,24 @@ export default function TopNav() {
   const [diamondDrop, setDiamondDrop] = useState(false);
   const [menuDrop, setMenuDrop] = useState(false);
   const { message } = App.useApp();
-  const [account, setAccount] = useState<any>();
   const location = useLocation();
   const navigate = useNavigate();
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await GET("/api/Accounts/me");
-      setAccount(response);
-    };
-    fetchData();
-  }, [location, account]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await GET("/api/Accounts/me");
+  //     setAccount(response);
+  //   };
+  //   fetchData();
+  // }, [location, account]);
+  const [info] = useQueries({
+    queries: [
+      {
+        queryKey: ["info"],
+        queryFn: () => GET("/api/Accounts/me"),
+        staleTime: Infinity,
+      },
+    ],
+  });
   return (
     <div className="top-0 left-0 relative gap-4 py-3 px-4 bg-white w-full shadow-lg h-full">
       <div className="flex justify-between md:hidden">
@@ -102,27 +111,27 @@ export default function TopNav() {
               className="cursor-pointer"
               onClick={async () => {
                 const response = await GET("/api/Accounts/me");
-                console.log(response);    
-                  switch(response.role) {
-                    case "Manager":
-                      navigate("/admin");
-                      break;
-                    case "SaleStaff":
-                      navigate("/admin/sale-staffs");
-                      break;
-                    case "DeliveryStaff":
-                      navigate("/admin/delivery-staffs");
-                      break;
-                    case "Administrator":
-                      navigate("/admin");
-                      break;
-                    case "WarrantyStaff":
-                      navigate("/admin/warranty-request");
-                      break;
-                    default:
-                      navigate("/");
-                      break;
-                  }                
+                console.log(response);
+                switch (response.role) {
+                  case "Manager":
+                    navigate("/admin");
+                    break;
+                  case "SaleStaff":
+                    navigate("/admin/sale-staffs");
+                    break;
+                  case "DeliveryStaff":
+                    navigate("/admin/delivery-staffs");
+                    break;
+                  case "Administrator":
+                    navigate("/admin");
+                    break;
+                  case "WarrantyStaff":
+                    navigate("/admin/warranty-request");
+                    break;
+                  default:
+                    navigate("/");
+                    break;
+                }
               }}
             >
               <LineChart size={20} strokeWidth={2} absoluteStrokeWidth />
@@ -139,9 +148,9 @@ export default function TopNav() {
               )}
             </Link>
           </div>
-          {account && (
+          {info?.data && (
             <div className="text-lg font-semibold text-gray-800 pl-4 py-2">
-              Welcome, {account?.name}
+              Welcome, {info?.data?.name}
             </div>
           )}
           <div
@@ -198,7 +207,7 @@ export default function TopNav() {
             Diamond
           </Link>
           <TopNavItem setMenuDrop={setMenuDrop} href="/blogs">
-            Blogs
+            Blog
           </TopNavItem>
           <TopNavItem setMenuDrop={setMenuDrop} href="/about">
             About us

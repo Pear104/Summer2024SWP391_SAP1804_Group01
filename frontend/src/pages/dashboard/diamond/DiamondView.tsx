@@ -54,6 +54,7 @@ const Clarity = {
   I2: "I2",
   I3: "I3",
 };
+
 const shapeOptions = [
   { value: 1, label: "Round" },
   { value: 2, label: "Emerald" },
