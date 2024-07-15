@@ -18,9 +18,14 @@ namespace backend.Repository
     public class DiamondRepository : IDiamondRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IDiamondPriceRepository _diamondPriceRepository;
 
-        public DiamondRepository(ApplicationDbContext context)
+        public DiamondRepository(
+            ApplicationDbContext context,
+            IDiamondPriceRepository diamondPriceRepository
+        )
         {
+            _diamondPriceRepository = diamondPriceRepository;
             _context = context;
         }
 
@@ -61,7 +66,6 @@ namespace backend.Repository
         public async Task<DiamondResult> GetAllDiamondsAsync(DiamondQuery query)
         {
             var diamondsQuery = _context.Diamonds.Include(x => x.Shape).AsQueryable();
-
             // Sorting
             if (!string.IsNullOrEmpty(query.SortBy))
             {
@@ -92,6 +96,10 @@ namespace backend.Repository
                         => isDescending
                             ? diamondsQuery.OrderByDescending(x => x.Cut)
                             : diamondsQuery.OrderBy(x => x.Cut),
+                    "price"
+                        => isDescending
+                            ? diamondsQuery.OrderByDescending(x => x.Carat)
+                            : diamondsQuery.OrderBy(x => x.Carat),
                     _ => diamondsQuery.OrderBy(x => x.Carat),
                 };
             }

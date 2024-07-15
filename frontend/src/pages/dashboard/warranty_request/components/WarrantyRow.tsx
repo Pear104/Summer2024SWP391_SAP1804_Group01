@@ -29,9 +29,6 @@ export default function WarrantyRow({ warranty }: { warranty: any }) {
             {warranty.warrantyRequestId}
           </div>
         </td>
-        <td className="px-6 py-4 whitespace-nowrap">
-          <div>{warranty.warrantyCardId}</div>
-        </td>
         <td className="px-6 py-4 w-[500px] whitespace-normal break-words">
           <div>{warranty.warrantyReason}</div>
         </td>

@@ -2,6 +2,7 @@ import { ExternalLink } from "lucide-react";
 import { Button, Image, Modal } from "antd";
 import WarrantyDiamondItem from "./WarrantyDiamondItem";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const DiamondItem = ({
   detail,
@@ -13,7 +14,7 @@ const DiamondItem = ({
   order: any;
 }) => {
   const [isModalDiamondWarranty, setIsModalDiamondWarranty] = useState(false);
-
+  const navigate = useNavigate();
   const showModalDiamondWarranty = () => {
     setIsModalDiamondWarranty(true);
   };
@@ -21,6 +22,17 @@ const DiamondItem = ({
     setIsModalDiamondWarranty(false);
   };
   const handleCancel = () => {
+    setIsModalDiamondWarranty(false);
+  };
+
+  const handleWarranty = () => {
+    navigate(
+      `/account/warranty/request?warrantyCardId=${
+        detail?.warrantyCards?.find(
+          (x: any) => x.diamondId == detail?.diamond?.diamondId
+        )?.warrantyCardId
+      }`
+    );
     setIsModalDiamondWarranty(false);
   };
   return (
@@ -77,13 +89,16 @@ const DiamondItem = ({
             onOk={handleOk}
             onCancel={handleCancel}
             footer={[
+              <Button type="primary" key="warranty" onClick={handleWarranty}>
+                Request warranty
+              </Button>,
               <Button key="back" onClick={handleCancel}>
                 Cancel
               </Button>,
             ]}
           >
             <span>
-              <WarrantyDiamondItem order={order} diamond={detail?.diamond} />
+              <WarrantyDiamondItem order={order} detail={detail} />
             </span>
             <div className="mb-2 tracking-wider"></div>
           </Modal>

@@ -4,10 +4,10 @@ import React from "react";
 
 export default function WarrantyDiamondItem({
   order,
-  diamond,
+  detail,
 }: {
   order: any;
-  diamond: any;
+  detail: any;
 }) {
   return (
     <div className="px-4 py-2 w-full pb-8" id="invoice">
@@ -40,7 +40,12 @@ export default function WarrantyDiamondItem({
           {moment(order.createdAt).format("DD/MM/YYYY")}
         </div>
         <div>
-          <span className="font-semibold">Warranty Id:</span> {order.orderId}
+          <span className="font-semibold">Warranty Id:</span>{" "}
+          {
+            detail?.warrantyCards?.find(
+              (x: any) => x.diamondId == detail?.diamond?.diamondId
+            )?.warrantyCardId
+          }
         </div>
       </div>
       <div className="flex flex-col text-lg">
@@ -61,10 +66,10 @@ export default function WarrantyDiamondItem({
           </thead>
           <tbody className="border">
             <React.Fragment>
-              {diamond && (
+              {detail?.diamond && (
                 <tr className="border-b h-20">
                   <td className="text-center w-[400px]">
-                    {`${diamond?.carat} Carat, ${diamond?.shape} Diamond`}
+                    {`${detail?.diamond?.carat} Carat, ${detail?.diamond?.shape} Diamond`}
                   </td>
                   <td className="text-center">
                     {moment(order.createdAt).format("DD/MM/YYYY")}

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { setCookie } from "../../utils/cookie";
 import { GET, POST } from "../../utils/request";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQueries } from "@tanstack/react-query";
 import Loading from "../../components/Loading";
 import moment from "moment";
@@ -68,7 +68,10 @@ type Option = {
 
 export default function CreateWarrantyRequest() {
   const [isLoading, setIsLoading] = useState(false);
-  const [warrantyCardId, setWarrantyCardId] = useState(0);
+  const [searchParams] = useSearchParams();
+  const [warrantyCardId, setWarrantyCardId] = useState(
+    Number(searchParams.get("warrantyCardId")) || 0
+  );
   const [reason, setReason] = useState("");
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
@@ -89,9 +92,7 @@ export default function CreateWarrantyRequest() {
       : warrantyCard?.accessory?.name,
   }));
 
-  console.log(warrantyCards?.data);
-
-  const { control, handleSubmit, reset, setValue, getValues } = useForm({
+  const { control, handleSubmit, reset, setValue } = useForm({
     defaultValues: {
       warrantyCardId: "",
       warrantyReason: "",
@@ -101,13 +102,14 @@ export default function CreateWarrantyRequest() {
     },
     resolver: zodResolver(schema),
   });
-
   useEffect(() => {
     (async () => {
       const data = await GET("/api/Accounts/me");
       if (data) {
         reset({
-          warrantyCardId: "",
+          warrantyCardId: String(
+            Number(searchParams.get("warrantyCardId")) || "Choose a product"
+          ),
           warrantyReason: "",
           phoneNumber: data.phoneNumber,
           shippingAddress: data.address,
@@ -120,7 +122,6 @@ export default function CreateWarrantyRequest() {
       }
     })();
   }, [reset]);
-  console.log(getValues().warrantyCardId);
   return (
     <>
       {contextHolder}
@@ -140,11 +141,12 @@ export default function CreateWarrantyRequest() {
                 setIsLoading(true);
                 const response = await POST("/api/WarrantyRequests", formData);
                 setIsLoading(false);
+                console.log("response: ");
                 console.log(response);
-                if (response) {
+                if (response?.warrantyRequestId) {
                   navigate("/account/warranty");
                 } else {
-                  messageApi.error("Something went wrong, try again!");
+                  messageApi.error("This product is being warranted.");
                 }
               })}
             >

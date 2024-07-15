@@ -10,7 +10,7 @@ import {
 import Logo from "../logo/Logo";
 import { App } from "antd";
 import SearchBar from "../SearchBar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
 import { GET } from "../../utils/request";
@@ -57,25 +57,17 @@ export default function TopNav() {
       console.error("Error decoding token: ", error.message);
     }
   }
-  const [jewelryDrop, setJewelryDrop] = useState(false);
-  const [diamondDrop, setDiamondDrop] = useState(false);
   const [menuDrop, setMenuDrop] = useState(false);
   const { message } = App.useApp();
   const location = useLocation();
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const response = await GET("/api/Accounts/me");
-  //     setAccount(response);
-  //   };
-  //   fetchData();
-  // }, [location, account]);
+
   const [info] = useQueries({
     queries: [
       {
-        queryKey: ["info"],
+        queryKey: ["info", location],
         queryFn: () => GET("/api/Accounts/me"),
-        staleTime: Infinity,
+        staleTime: 0,
       },
     ],
   });
@@ -222,9 +214,6 @@ export default function TopNav() {
           </span>
         </span>
       </div>
-      {(jewelryDrop || diamondDrop) && (
-        <div className="z-10 fixed left-0 right-0 h-[100vh] w-[100vw] bg-black bg-opacity-30"></div>
-      )}
     </div>
   );
 }

@@ -4,10 +4,10 @@ import React from "react";
 
 export default function WarrantyAccessoryItem({
   order,
-  accessory,
+  detail,
 }: {
   order: any;
-  accessory: any;
+  detail: any;
 }) {
   return (
     <div className="px-4 py-2 w-full pb-8" id="invoice">
@@ -40,7 +40,12 @@ export default function WarrantyAccessoryItem({
           {moment(order.createdAt).format("DD/MM/YYYY")}
         </div>
         <div>
-          <span className="font-semibold">Warranty Id:</span> {order.orderId}
+          <span className="font-semibold">Warranty Id:</span>{" "}
+          {
+            detail?.warrantyCards?.find(
+              (x: any) => x.accessoryId == detail?.accessory?.accessoryId
+            )?.warrantyCardId
+          }
         </div>
       </div>
       <div className="flex flex-col text-lg">
@@ -61,9 +66,9 @@ export default function WarrantyAccessoryItem({
           </thead>
           <tbody className="border">
             <React.Fragment>
-              {accessory && (
+              {detail?.accessory && (
                 <tr className="border-b h-20">
-                  <td className="text-center">{accessory.name}</td>
+                  <td className="text-center">{detail?.accessory?.name}</td>
                   <td className="text-center">
                     {moment(order.createdAt).format("DD/MM/YYYY")}
                   </td>

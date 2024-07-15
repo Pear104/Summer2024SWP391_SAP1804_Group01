@@ -24,29 +24,40 @@ namespace backend.Repository
             _context = context;
         }
 
-        public async Task<List<WarrantyCard>?> getUserWarrantyCards(long userId)
+        public async Task<WarrantyCardResult?> getUserWarrantyCards(WarrantyCardQuery query)
         {
-            var user = await _context.Accounts.FindAsync(userId);
+            var user = await _context.Accounts.FindAsync(query.CustomerId);
             if (user == null)
             {
                 return null;
             }
-            var warrantyCardQueries = await _context
+            var warrantyCardQueries = _context
                 .WarrantyCards.Include(x => x.Diamond)
                 .ThenInclude(x => x.Shape)
                 .Include(x => x.Accessory)
                 .Where(x =>
-                    x.OrderDetail!.Order.CustomerId == userId
+                    x.OrderDetail!.Order.CustomerId == query.CustomerId
                     && (
                         // Only get warranty cards that have no request or have warranty requests that are completed
                         !x.WarrantyRequests.Any()
-                        || x.WarrantyRequests.Any(wr =>
+                        || x.WarrantyRequests.All(wr =>
                             wr.WarrantyStatus == WarrantyStatus.Completed
                         )
                     )
-                )
-                .ToListAsync();
-            return warrantyCardQueries;
+                );
+
+            var totalCount = await warrantyCardQueries.CountAsync();
+
+            var totalPages = (int)Math.Ceiling(totalCount / (double)query.PageSize);
+
+            return new WarrantyCardResult
+            {
+                WarrantyCards = warrantyCardQueries.Select(x => x.ToWarrantyCardDTO()).ToList(),
+                TotalPages = totalPages,
+                PageSize = query.PageSize,
+                CurrentPage = query.PageNumber,
+                TotalCount = totalCount
+            };
         }
 
         public async Task<WarrantyCardResult?> getWarrantyCards(WarrantyCardQuery query)

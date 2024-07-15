@@ -386,31 +386,35 @@ export default function Sidebar() {
         </div>
       </div>
       {/* Sidebar */}
-      <div className="sm:hidden flex flex-col bg-neutral-800 w-auto h-auto text-white overflow-y-auto">
-        <Link to={"/"} className="flex items-center gap-2 px-1 py-3 mx-3">
+      <div
+        className={`sm:hidden flex flex-col bg-neutral-800 h-auto text-white overflow-y-auto ${
+          !collapsed ? "w-auto" : "w-[70px]"
+        }`}
+      >
+        <Link
+          to={"/"}
+          className="flex justify-center items-center gap-2 py-3 px-3"
+        >
           <Gem strokeWidth={1.75} width={15} />
           <div className="text-neutral-100 text-sm">DatJ</div>
         </Link>
-        <Button
-          className="mx-3 w-8 flex justify-center ml-6 bg-neutral-800"
-          type="link"
+        <div
+          className={`text-blue-600 hover:text-blue-400 flex bg-neutral-800 transition-all duration-300 ${
+            collapsed ? "justify-center" : "pl-7 justify-start"
+          }`}
           onClick={toggleCollapsed}
-          style={{ marginBottom: 16, transition: "all 0.5s" }}
         >
-          {collapsed ? (
-            <MenuUnfoldOutlined className="mt-1" />
-          ) : (
-            <MenuFoldOutlined className="mt-1" />
-          )}
-        </Button>
+          {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+        </div>
         <Menu
-          className="bg-neutral-800 text-neutral-100 items-center p-4 "
+          className={`bg-neutral-800 text-neutral-100 items-center ${
+            !collapsed ? "w-[240px]" : "w-full"
+          }`}
           mode="inline"
           theme="dark"
           inlineCollapsed={collapsed}
           items={items}
         />
-        
 
         {/* Old sidebar */}
         {/* <div className="flex-1 py-8 flex flex-col gap-0.5">

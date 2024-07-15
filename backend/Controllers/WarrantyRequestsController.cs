@@ -72,7 +72,7 @@ namespace backend.Controllers
             );
             if (newWarrantyRequest == null)
             {
-                return BadRequest("Something went wrong.");
+                return BadRequest();
             }
             return Ok(newWarrantyRequest);
         }

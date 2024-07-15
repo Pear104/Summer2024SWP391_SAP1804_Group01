@@ -8,6 +8,6 @@ namespace backend.Interfaces
     public interface IWarrantyCardRepository
     {
         Task<WarrantyCardResult?> getWarrantyCards(WarrantyCardQuery query);
-        Task<List<WarrantyCard>?> getUserWarrantyCards(long userId);
+        Task<WarrantyCardResult?> getUserWarrantyCards(WarrantyCardQuery query);
     }
 }

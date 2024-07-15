@@ -1,6 +1,6 @@
 import { Button, Image, Modal } from "antd";
 import { Check, ExternalLink } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import WarrantyAccessoryItem from "./WarrantyAccessoryItem";
 import { useState } from "react";
 
@@ -25,7 +25,7 @@ const AccessoryItem = ({
 }) => {
   const [isModalAccessoryWarranty, setIsModalAccessoryWarranty] =
     useState(false);
-
+  const navigate = useNavigate();
   const showModalAccessoryWarranty = () => {
     setIsModalAccessoryWarranty(true);
   };
@@ -33,6 +33,16 @@ const AccessoryItem = ({
     setIsModalAccessoryWarranty(false);
   };
   const handleCancel = () => {
+    setIsModalAccessoryWarranty(false);
+  };
+  const handleWarranty = () => {
+    navigate(
+      `/account/warranty/request?warrantyCardId=${
+        detail?.warrantyCards?.find(
+          (x: any) => x.accessoryId == detail?.accessory?.accessoryId
+        )?.warrantyCardId
+      }`
+    );
     setIsModalAccessoryWarranty(false);
   };
   return (
@@ -85,16 +95,16 @@ const AccessoryItem = ({
               onOk={handleOk}
               onCancel={handleCancel}
               footer={[
+                <Button type="primary" key="warranty" onClick={handleWarranty}>
+                  Request warranty
+                </Button>,
                 <Button key="back" onClick={handleCancel}>
                   Cancel
                 </Button>,
               ]}
             >
               <span>
-                <WarrantyAccessoryItem
-                  order={order}
-                  accessory={detail?.accessory}
-                />
+                <WarrantyAccessoryItem order={order} detail={detail} />
               </span>
               <div className="mb-2 tracking-wider"></div>
             </Modal>

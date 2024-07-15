@@ -26,9 +26,7 @@ namespace backend.Repository
 
         public async Task<Order?> CompleteOrderAsync(string id)
         {
-            var order = await _context.Orders.FirstOrDefaultAsync(o =>
-                o.OrderId == id
-            );
+            var order = await _context.Orders.FirstOrDefaultAsync(o => o.OrderId == id);
             _context.Entry(order!).State = EntityState.Modified;
             order!.OrderStatus = OrderStatus.Processing;
             await _context.SaveChangesAsync();
@@ -143,19 +141,22 @@ namespace backend.Repository
                             .FirstOrDefault();
                         orderDetail.Accessory = accessory;
                         orderDetail.MaterialPrice = materialPrice;
-                        if(materialPrice != null) {orderDetail.ItemPrice =
-                            PriceHelper.GetDiamondPrice(
-                                diamond.Carat,
-                                diamondPrice.UnitPrice,
-                                priceRate.Percent
-                            )
-                            + PriceHelper.GetAccessoryPrice(
-                                accessory.MaterialWeight,
-                                orderDetailDto.Size - 3,
-                                materialPrice.UnitPrice,
-                                accessory.AccessoryType.ProcessingPrice,
-                                priceRate.Percent
-                            );}
+                        if (materialPrice != null)
+                        {
+                            orderDetail.ItemPrice =
+                                PriceHelper.GetDiamondPrice(
+                                    diamond.Carat,
+                                    diamondPrice.UnitPrice,
+                                    priceRate.Percent
+                                )
+                                + PriceHelper.GetAccessoryPrice(
+                                    accessory.MaterialWeight,
+                                    orderDetailDto.Size - 3,
+                                    materialPrice.UnitPrice,
+                                    accessory.AccessoryType.ProcessingPrice,
+                                    priceRate.Percent
+                                );
+                        }
                     }
                     else
                     {
@@ -275,6 +276,9 @@ namespace backend.Repository
                         {
                             OrderDetailId = y.OrderDetailId,
                             Diamond = y.Diamond != null ? y.Diamond.ToDiamondDTO() : null,
+                            WarrantyCards = y
+                                .WarrantyCards.Select(w => w.ToWarrantyCardDTO())
+                                .ToList(),
                             DiamondPrice =
                                 y.DiamondPrice != null ? y.DiamondPrice.ToDiamondPriceDTO() : null,
                             Accessory =

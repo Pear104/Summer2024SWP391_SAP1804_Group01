@@ -23,9 +23,7 @@ namespace backend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetWarrantyCards(
-            [FromQuery] WarrantyCardQuery query
-        )
+        public async Task<ActionResult> GetWarrantyCards([FromQuery] WarrantyCardQuery query)
         {
             var warrantyCards = await _warrantyCardRepository.getWarrantyCards(query);
             return Ok(warrantyCards);
@@ -33,12 +31,11 @@ namespace backend.Controllers
 
         [HttpGet("me")]
         [Authorize(Roles = "Customer, Manager, Administrator, SaleStaff, DeliveryStaff")]
-        public async Task<ActionResult> GetUserWarrantyCards()
+        public async Task<ActionResult> GetUserWarrantyCards([FromQuery] WarrantyCardQuery query)
         {
             var accountId = User.FindFirst("accountId")?.Value;
-            var warrantyCards = await _warrantyCardRepository.getUserWarrantyCards(
-                long.Parse(accountId ?? "0")
-            );
+            query.CustomerId = long.Parse(accountId ?? "0");
+            var warrantyCards = await _warrantyCardRepository.getUserWarrantyCards(query);
             return Ok(warrantyCards);
         }
     }

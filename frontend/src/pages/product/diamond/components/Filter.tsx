@@ -51,6 +51,13 @@ const carat: { [key: number]: string } = {
   6: "6",
   7: "7",
   8: "8",
+  9: "9",
+  10: "10",
+  11: "11",
+  12: "12",
+  13: "13",
+  14: "14",
+  15: "15",
 };
 
 const info = {
@@ -157,11 +164,11 @@ export default function Filter() {
           step={0.01}
           info={info.carat}
           mark={carat}
-          min={0}
-          max={8}
+          min={Number(carat[0])}
+          max={Number(carat[15])}
           defaultValue={[
             Number(params.get("MinCarat")) || 0,
-            Number(params.get("MaxCarat")) || 8,
+            Number(params.get("MaxCarat")) || 15,
           ]}
           debounceCallback={(value: any) => {
             params.delete("PageNumber");

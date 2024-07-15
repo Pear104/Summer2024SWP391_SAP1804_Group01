@@ -68,8 +68,6 @@ export default function WarrantyInfo({ id }: { id: any }) {
       },
     ],
   });
-  console.log(warrantyCard?.data?.warrantyCards);
-  const data = warrantyCard?.data?.warrantyCards;
   return (
     id != 0 && (
       <div className="col-span-2 mb-4">

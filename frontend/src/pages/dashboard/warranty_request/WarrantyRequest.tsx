@@ -16,7 +16,6 @@ export default function WarrantyRequest() {
   // sort item
   const columnHeaders = [
     "Warranty Request ID",
-    "Warranty Card ID",
     "Reason",
     "Customer",
     "Shipping Address",
@@ -63,14 +62,14 @@ export default function WarrantyRequest() {
         status === "1"
           ? "Pending"
           : status === "2"
-            ? "Processing"
-            : status === "3"
-              ? "Delivering"
-              : status === "4"
-                ? "Returning"
-                : status === "5"
-                  ? "Completed"
-                  : "Failed"
+          ? "Processing"
+          : status === "3"
+          ? "Delivering"
+          : status === "4"
+          ? "Returning"
+          : status === "5"
+          ? "Completed"
+          : "Failed"
       );
     }
   }, [location.search]);
@@ -112,7 +111,7 @@ export default function WarrantyRequest() {
                     className="border p-2 rounded-md w-full"
                     value={searchTerm}
                     onChange={(e) => {
-                      setSearchTerm(e.target.value)
+                      setSearchTerm(e.target.value);
                       params.set("CustomerName", e.target.value);
                       setQueryUrl(`/api/WarrantyRequests?` + params.toString());
                       navigate({ search: params.toString() });
@@ -126,11 +125,9 @@ export default function WarrantyRequest() {
             </h3>
             <div className="flex space-x-075">
               <div className="card-action ">
-                <a
-                  href="/admin/diamonds"
+                <div
                   className="text-interactive "
-                  onClick={(event) => {
-                    event.preventDefault();
+                  onClick={() => {
                     setStatusText("Status");
                     setSearchTerm("");
                     // Clear the URL parameters
@@ -141,7 +138,7 @@ export default function WarrantyRequest() {
                   }}
                 >
                   Clear filter
-                </a>
+                </div>
               </div>
             </div>
           </div>
@@ -175,7 +172,7 @@ export default function WarrantyRequest() {
                         <LoadingItem key={key} />
                       ))}
                     {warrantyRequestList?.data &&
-                      warrantyRequestList?.data?.warrantyRequests?.length > 0 ? (
+                    warrantyRequestList?.data?.warrantyRequests?.length > 0 ? (
                       warrantyRequestList?.data?.warrantyRequests?.map(
                         renderWarrantyRow
                       )
