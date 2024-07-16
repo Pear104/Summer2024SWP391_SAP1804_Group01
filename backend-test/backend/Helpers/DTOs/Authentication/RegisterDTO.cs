@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using backend.Services.Enums;
+﻿using BusinessObjects.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Helpers.DTOs.Authentication
 {

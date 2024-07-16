@@ -1,4 +1,3 @@
-using backend.Services.DTOs.Account;
 
 namespace Helpers.DTOs.Rank
 {

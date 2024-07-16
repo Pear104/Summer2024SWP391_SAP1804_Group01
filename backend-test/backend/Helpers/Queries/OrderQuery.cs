@@ -1,4 +1,5 @@
-using backend.BusinessOjects.Enums;
+
+using BusinessObjects.Enums;
 
 namespace Helpers.Queries
 {

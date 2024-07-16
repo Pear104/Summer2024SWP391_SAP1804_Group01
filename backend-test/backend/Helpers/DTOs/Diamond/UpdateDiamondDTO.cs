@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.Services.Enums;
 
 namespace Helpers.DTOs.Diamond
 {

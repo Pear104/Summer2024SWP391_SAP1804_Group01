@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.BusinessOjects.Models;
 using Helpers.DTOs.Accessory;
 using Helpers.DTOs.Diamond;
 using Helpers.DTOs.DiamondPrice;
