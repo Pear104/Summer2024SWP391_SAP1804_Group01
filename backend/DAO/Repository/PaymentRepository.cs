@@ -1,15 +1,11 @@
-﻿using Azure.Messaging;
-using backend.Data;
-using backend.Enums;
+﻿using backend.BusinessOjects.Enums;
+using backend.BusinessOjects.Models.Payment.Domain.Entities;
+using backend.DAO.Data;
 using backend.Interfaces;
-using backend.Models;
-using backend.Models.Payment.Domain.Entities;
 using backend.Payment_src.core.Payment.Application.Base.Models;
-using backend.Payment_src.core.Payment.Application.Features.Commands;
 using backend.Payment_src.core.Payment.Application.Features.Payment.Dtos;
 using backend.Payment_src.core.Payment.Service.Vnpay.Config;
 using backend.Payment_src.core.Payment.Service.Vnpay.Response;
-using backend.Service;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -55,8 +51,6 @@ namespace backend.Repository
             await _dbContext.SaveChangesAsync();
             return existingPayment;
         }
-
-        
 
         public async Task<
             BaseResultWithData<(PaymentReturnDtos, string)>

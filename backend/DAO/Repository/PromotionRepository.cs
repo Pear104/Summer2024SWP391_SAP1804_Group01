@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using backend.Data;
-using backend.DTOs.Promotion;
-using backend.Services.Helper;
+using backend.BusinessOjects.Models;
+using backend.DAO.Data;
 using backend.Interfaces;
+using backend.Services.DTOs.Promotion;
 using backend.Services.Mappers;
-using backend.Models;
+using backend.Services.QueriesHelper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -47,10 +43,9 @@ namespace backend.Repository
             if (!query.SearchPromotion.IsNullOrEmpty())
             {
                 promotionQueries = promotionQueries.Where(x =>
-                    x.PromotionName.Contains(query.SearchPromotion!) ||
-                    x.PromotionCode.Contains(query.SearchPromotion!)
+                    x.PromotionName.Contains(query.SearchPromotion!)
+                    || x.PromotionCode.Contains(query.SearchPromotion!)
                 );
-
             }
 
             var totalCount = await promotionQueries.CountAsync();

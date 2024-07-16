@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using backend.Services.DTOs.PriceRate;
 using backend.BusinessOjects.Models;
-
+using backend.Services.DTOs.PriceRate;
 
 namespace backend.Services.Mappers
 {

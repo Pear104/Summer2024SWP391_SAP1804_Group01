@@ -1,15 +1,14 @@
-using backend.Data;
-using backend.DTOs.Transaction;
+using backend.BusinessOjects.Enums;
+using backend.DAO.Data;
 using backend.Interfaces;
-using backend.Models;
-using Microsoft.EntityFrameworkCore;
-using backend.Enums;
-using backend.DTOs.Accessory;
+using backend.Services.DTOs;
+using backend.Services.DTOs.Accessory;
+using backend.Services.DTOs.Account;
+using backend.Services.DTOs.Order;
+using backend.Services.DTOs.Report;
+using backend.Services.DTOs.Transaction;
 using backend.Services.Mappers;
-using backend.DTOs;
-using backend.DTOs.Account;
-using backend.DTOs.Report;
-using backend.Services.Helper;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repository
 {
@@ -31,19 +30,22 @@ namespace backend.Repository
                 .Select(x => new OrderDTO
                 {
                     OrderId = x.OrderId,
-                    OrderDetails = x.OrderDetails.Select(y => new OrderDetailDTO
-                    {
-                        OrderDetailId = y.OrderDetailId,
-                        Diamond = y.Diamond != null ? y.Diamond.ToDiamondDTO() : null,
-                        DiamondPrice = y.DiamondPrice != null ? y.DiamondPrice.ToDiamondPriceDTO() : null,
-                        Accessory = y.Accessory != null ? y.Accessory.ToAccessoryDTO() : null,
-                        MaterialPrice = y.MaterialPrice != null ? y.MaterialPrice.ToMaterialPriceDTO() : null,
-                        ItemPrice = y.ItemPrice,
-                        Size = y.Size,
-
-                    }).ToList(),
-
-
+                    OrderDetails = x
+                        .OrderDetails.Select(y => new OrderDetailDTO
+                        {
+                            OrderDetailId = y.OrderDetailId,
+                            Diamond = y.Diamond != null ? y.Diamond.ToDiamondDTO() : null,
+                            DiamondPrice =
+                                y.DiamondPrice != null ? y.DiamondPrice.ToDiamondPriceDTO() : null,
+                            Accessory = y.Accessory != null ? y.Accessory.ToAccessoryDTO() : null,
+                            MaterialPrice =
+                                y.MaterialPrice != null
+                                    ? y.MaterialPrice.ToMaterialPriceDTO()
+                                    : null,
+                            ItemPrice = y.ItemPrice,
+                            Size = y.Size,
+                        })
+                        .ToList(),
                 })
                 .ToListAsync();
 
@@ -57,7 +59,9 @@ namespace backend.Repository
                         var accessory = orderDetail.Accessory;
                         if (accessory != null)
                         {
-                            int index = accessoryInOrderList.FindIndex(x => x.id == accessory.AccessoryId);
+                            int index = accessoryInOrderList.FindIndex(x =>
+                                x.id == accessory.AccessoryId
+                            );
                             if (index != -1)
                             {
                                 var item = accessoryInOrderList[index];
@@ -70,8 +74,8 @@ namespace backend.Repository
                             }
                         }
                     }
-                } 
-                else 
+                }
+                else
                 {
                     continue;
                 }
@@ -80,12 +84,13 @@ namespace backend.Repository
             var returnAccessories = new List<AccessoryDTO>();
             foreach (var item in accessoryInOrderList)
             {
-                var accessory = _context.Accessories
-                    .Include(x => x.Shape)
+                var accessory = _context
+                    .Accessories.Include(x => x.Shape)
                     .Include(x => x.AccessoryType)
                     .Include(x => x.AccessoryImages)
                     .FirstOrDefault(x => x.AccessoryId == item.id);
-                if(accessory != null) returnAccessories.Add(accessory.ToAccessoryDTO());
+                if (accessory != null)
+                    returnAccessories.Add(accessory.ToAccessoryDTO());
             }
             return returnAccessories.Take(5).ToList();
         }
@@ -93,10 +98,13 @@ namespace backend.Repository
         public async Task<IEnumerable<GroupedTransactionDTO>> GetAllTransactionsAsync()
         {
             var twelveMonthsAgo = DateTime.Now.AddMonths(-12);
-            var transactions = await _context.Transactions
-                .Where(t => t.CreatedAt >= twelveMonthsAgo && t.TransactionStatus == TransactionStatus.Completed)
+            var transactions = await _context
+                .Transactions.Where(t =>
+                    t.CreatedAt >= twelveMonthsAgo
+                    && t.TransactionStatus == TransactionStatus.Completed
+                )
                 .ToListAsync();
-            
+
             var groupedTransactions = transactions
                 .GroupBy(t => new { t.CreatedAt.Year, t.CreatedAt.Month })
                 .Select(g => new GroupedTransactionDTO
@@ -114,20 +122,23 @@ namespace backend.Repository
         public async Task<ReportDTO> GetReport()
         {
             double TotalSale = 0;
-            var CompletedOrder = await _context.Orders.Where(o=>o.OrderStatus == OrderStatus.Completed).ToListAsync();
+            var CompletedOrder = await _context
+                .Orders.Where(o => o.OrderStatus == OrderStatus.Completed)
+                .ToListAsync();
             foreach (var order in CompletedOrder)
             {
                 TotalSale += order.TotalPrice;
             }
-            
-            int TotalCustomer = await _context.Accounts.CountAsync(c=> c.Role == Role.Customer);    
+
+            int TotalCustomer = await _context.Accounts.CountAsync(c => c.Role == Role.Customer);
             int TotalOrder = await _context.Orders.CountAsync();
-            var report = new ReportDTO{
+            var report = new ReportDTO
+            {
                 TotalCustomer = TotalCustomer,
                 TotalSale = TotalSale,
                 TotalOrder = TotalOrder
             };
-            
+
             return report;
         }
 
@@ -136,29 +147,36 @@ namespace backend.Repository
             var role = Enum.Parse<Role>("SaleStaff");
             var accounts = _context.Accounts.Where(x => x.Role == role).AsQueryable();
             var accountDTOs = await accounts
-            .OrderByDescending(x => x.OrdersOfSaleStaff.Count)
-            .Select(x => new AccountDTO
-            {
-                AccountId = x.AccountId,
-                Name = x.Name,
-                // Role = x.Role.ToString(),
-                // OrdersOfSaleStaff = x.OrdersOfSaleStaff.Select(y => new OrderDTO
-                // {
-                //     OrderId = y.OrderId,
-                //     OrderDetails = y.OrderDetails.Select(z => new OrderDetailDTO
-                //     {
-                //         OrderDetailId = z.OrderDetailId,
-                //         Diamond = z.Diamond != null ? z.Diamond.ToDiamondDTO() : null,
-                //         DiamondPrice = z.DiamondPrice != null ? z.DiamondPrice.ToDiamondPriceDTO() : null,
-                //         Accessory = z.Accessory != null ? z.Accessory.ToAccessoryDTO() : null,
-                //         MaterialPrice = z.MaterialPrice != null ? z.MaterialPrice.ToMaterialPriceDTO() : null,
-                //         ItemPrice = z.ItemPrice,
-                //         Size = z.Size,
-                //     }
-                //     ).ToList(),
-                // }).ToList(),
-                TotalOrders = x.OrdersOfSaleStaff.Where(x => x.OrderStatus != OrderStatus.Pending && x.OrderStatus != OrderStatus.Processing).ToList().Count,
-            }).ToListAsync();
+                .OrderByDescending(x => x.OrdersOfSaleStaff.Count)
+                .Select(x => new AccountDTO
+                {
+                    AccountId = x.AccountId,
+                    Name = x.Name,
+                    // Role = x.Role.ToString(),
+                    // OrdersOfSaleStaff = x.OrdersOfSaleStaff.Select(y => new OrderDTO
+                    // {
+                    //     OrderId = y.OrderId,
+                    //     OrderDetails = y.OrderDetails.Select(z => new OrderDetailDTO
+                    //     {
+                    //         OrderDetailId = z.OrderDetailId,
+                    //         Diamond = z.Diamond != null ? z.Diamond.ToDiamondDTO() : null,
+                    //         DiamondPrice = z.DiamondPrice != null ? z.DiamondPrice.ToDiamondPriceDTO() : null,
+                    //         Accessory = z.Accessory != null ? z.Accessory.ToAccessoryDTO() : null,
+                    //         MaterialPrice = z.MaterialPrice != null ? z.MaterialPrice.ToMaterialPriceDTO() : null,
+                    //         ItemPrice = z.ItemPrice,
+                    //         Size = z.Size,
+                    //     }
+                    //     ).ToList(),
+                    // }).ToList(),
+                    TotalOrders = x
+                        .OrdersOfSaleStaff.Where(x =>
+                            x.OrderStatus != OrderStatus.Pending
+                            && x.OrderStatus != OrderStatus.Processing
+                        )
+                        .ToList()
+                        .Count,
+                })
+                .ToListAsync();
             return accountDTOs.Take(5).ToList();
         }
 
@@ -167,29 +185,36 @@ namespace backend.Repository
             var role = Role.DeliveryStaff;
             var accounts = _context.Accounts.Where(x => x.Role == role).AsQueryable();
             var accountDTOs = await accounts
-            .OrderByDescending(x => x.OrdersOfDeliveryStaff.Count)
-            .Select(x => new AccountDTO
-            {
-                AccountId = x.AccountId,
-                Name = x.Name,
-                // Role = x.Role.ToString(),
-                // OrdersOfSaleStaff = x.OrdersOfSaleStaff.Select(y => new OrderDTO
-                // {
-                //     OrderId = y.OrderId,
-                //     OrderDetails = y.OrderDetails.Select(z => new OrderDetailDTO
-                //     {
-                //         OrderDetailId = z.OrderDetailId,
-                //         Diamond = z.Diamond != null ? z.Diamond.ToDiamondDTO() : null,
-                //         DiamondPrice = z.DiamondPrice != null ? z.DiamondPrice.ToDiamondPriceDTO() : null,
-                //         Accessory = z.Accessory != null ? z.Accessory.ToAccessoryDTO() : null,
-                //         MaterialPrice = z.MaterialPrice != null ? z.MaterialPrice.ToMaterialPriceDTO() : null,
-                //         ItemPrice = z.ItemPrice,
-                //         Size = z.Size,
-                //     }
-                //     ).ToList(),
-                // }).ToList(),
-                TotalOrders = x.OrdersOfDeliveryStaff.Where(x => x.OrderStatus != OrderStatus.Pending && x.OrderStatus != OrderStatus.Processing).ToList().Count,
-            }).ToListAsync();
+                .OrderByDescending(x => x.OrdersOfDeliveryStaff.Count)
+                .Select(x => new AccountDTO
+                {
+                    AccountId = x.AccountId,
+                    Name = x.Name,
+                    // Role = x.Role.ToString(),
+                    // OrdersOfSaleStaff = x.OrdersOfSaleStaff.Select(y => new OrderDTO
+                    // {
+                    //     OrderId = y.OrderId,
+                    //     OrderDetails = y.OrderDetails.Select(z => new OrderDetailDTO
+                    //     {
+                    //         OrderDetailId = z.OrderDetailId,
+                    //         Diamond = z.Diamond != null ? z.Diamond.ToDiamondDTO() : null,
+                    //         DiamondPrice = z.DiamondPrice != null ? z.DiamondPrice.ToDiamondPriceDTO() : null,
+                    //         Accessory = z.Accessory != null ? z.Accessory.ToAccessoryDTO() : null,
+                    //         MaterialPrice = z.MaterialPrice != null ? z.MaterialPrice.ToMaterialPriceDTO() : null,
+                    //         ItemPrice = z.ItemPrice,
+                    //         Size = z.Size,
+                    //     }
+                    //     ).ToList(),
+                    // }).ToList(),
+                    TotalOrders = x
+                        .OrdersOfDeliveryStaff.Where(x =>
+                            x.OrderStatus != OrderStatus.Pending
+                            && x.OrderStatus != OrderStatus.Processing
+                        )
+                        .ToList()
+                        .Count,
+                })
+                .ToListAsync();
             return accountDTOs.Take(5).ToList();
         }
 
@@ -198,31 +223,37 @@ namespace backend.Repository
             var role = Role.Customer;
             var accounts = _context.Accounts.Where(x => x.Role == role).AsQueryable();
             var accountDTOs = await accounts
-            .OrderByDescending(x => x.OrdersOfCustomer.Count)
-            .Select(x => new AccountDTO
-            {
-                AccountId = x.AccountId,
-                Name = x.Name,
-                // Role = x.Role.ToString(),
-                // OrdersOfSaleStaff = x.OrdersOfSaleStaff.Select(y => new OrderDTO
-                // {
-                //     OrderId = y.OrderId,
-                //     OrderDetails = y.OrderDetails.Select(z => new OrderDetailDTO
-                //     {
-                //         OrderDetailId = z.OrderDetailId,
-                //         Diamond = z.Diamond != null ? z.Diamond.ToDiamondDTO() : null,
-                //         DiamondPrice = z.DiamondPrice != null ? z.DiamondPrice.ToDiamondPriceDTO() : null,
-                //         Accessory = z.Accessory != null ? z.Accessory.ToAccessoryDTO() : null,
-                //         MaterialPrice = z.MaterialPrice != null ? z.MaterialPrice.ToMaterialPriceDTO() : null,
-                //         ItemPrice = z.ItemPrice,
-                //         Size = z.Size,
-                //     }
-                //     ).ToList(),
-                // }).ToList(),
-                TotalOrders = x.OrdersOfCustomer.Where(x => x.OrderStatus != OrderStatus.Pending && x.OrderStatus != OrderStatus.Processing).ToList().Count,
-            }).ToListAsync();
+                .OrderByDescending(x => x.OrdersOfCustomer.Count)
+                .Select(x => new AccountDTO
+                {
+                    AccountId = x.AccountId,
+                    Name = x.Name,
+                    // Role = x.Role.ToString(),
+                    // OrdersOfSaleStaff = x.OrdersOfSaleStaff.Select(y => new OrderDTO
+                    // {
+                    //     OrderId = y.OrderId,
+                    //     OrderDetails = y.OrderDetails.Select(z => new OrderDetailDTO
+                    //     {
+                    //         OrderDetailId = z.OrderDetailId,
+                    //         Diamond = z.Diamond != null ? z.Diamond.ToDiamondDTO() : null,
+                    //         DiamondPrice = z.DiamondPrice != null ? z.DiamondPrice.ToDiamondPriceDTO() : null,
+                    //         Accessory = z.Accessory != null ? z.Accessory.ToAccessoryDTO() : null,
+                    //         MaterialPrice = z.MaterialPrice != null ? z.MaterialPrice.ToMaterialPriceDTO() : null,
+                    //         ItemPrice = z.ItemPrice,
+                    //         Size = z.Size,
+                    //     }
+                    //     ).ToList(),
+                    // }).ToList(),
+                    TotalOrders = x
+                        .OrdersOfCustomer.Where(x =>
+                            x.OrderStatus != OrderStatus.Pending
+                            && x.OrderStatus != OrderStatus.Processing
+                        )
+                        .ToList()
+                        .Count,
+                })
+                .ToListAsync();
             return accountDTOs.Take(5).ToList();
-
         }
     }
 }

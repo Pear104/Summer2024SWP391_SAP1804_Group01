@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using backend.BusinessOjects.Models;
 using backend.Services.DTOs.Accessory;
-using backend.Services.Helper;
-using backend.Models;
+using backend.Services.QueriesHelper;
 
 namespace backend.DAO.Interfaces
 {

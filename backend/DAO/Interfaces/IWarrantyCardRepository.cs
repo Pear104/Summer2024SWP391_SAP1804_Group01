@@ -1,7 +1,5 @@
-﻿using backend.DTOs.WarrantyCard;
-using backend.Services.Helper;
-using backend.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using backend.Services.DTOs.WarrantyCard;
+using backend.Services.QueriesHelper;
 
 namespace backend.Interfaces
 {

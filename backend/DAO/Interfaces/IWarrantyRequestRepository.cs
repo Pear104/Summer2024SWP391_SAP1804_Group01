@@ -1,7 +1,7 @@
-﻿using backend.DTOs.Order;
-using backend.DTOs.WarrantyRequest;
-using backend.Services.Helper;
-using backend.Models;
+﻿using backend.BusinessOjects.Models;
+using backend.Services.DTOs.Order;
+using backend.Services.DTOs.WarrantyRequest;
+using backend.Services.QueriesHelper;
 
 namespace backend.Interfaces
 {

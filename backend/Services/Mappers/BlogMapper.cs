@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using backend.BusinessOjects.Models;
 using backend.Services.DTOs.Blog;
 using backend.Services.Helper;
-using backend.BusinessOjects.Models;
 
 namespace backend.Services.Mappers
 {

@@ -1,13 +1,13 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using backend.Data;
+using backend.BusinessOjects.Enums;
+using backend.BusinessOjects.Models;
+using backend.DAO.Data;
 using backend.Services.DTOs.Authentication;
-using backend.Enums;
-using backend.Interfaces;
-using backend.Models;
-using Microsoft.IdentityModel.Tokens;
 using backend.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace backend.Service
 {
@@ -21,7 +21,11 @@ namespace backend.Service
             _config = config;
 
             //Dat fix null 25/06
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:SigningKey"] ?? throw new InvalidOperationException()));
+            _key = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(
+                    _config["JWT:SigningKey"] ?? throw new InvalidOperationException()
+                )
+            );
         }
 
         public string CreateResetToken(ResetPasswordDTO resetPasswordDto)
@@ -116,7 +120,8 @@ namespace backend.Service
             //Dat fix null 25/06
             string name = jwt.Claims.FirstOrDefault(c => c.Type == "name")?.Value ?? "";
             string password = jwt.Claims.FirstOrDefault(c => c.Type == "password")?.Value ?? "";
-            string phoneNumber = jwt.Claims.FirstOrDefault(c => c.Type == "phoneNumber")?.Value ?? "";
+            string phoneNumber =
+                jwt.Claims.FirstOrDefault(c => c.Type == "phoneNumber")?.Value ?? "";
             string address = jwt.Claims.FirstOrDefault(c => c.Type == "address")?.Value ?? "";
             string email = jwt.Claims.FirstOrDefault(c => c.Type == "email")?.Value ?? "";
             DateTime birthday = DateTime.Parse(

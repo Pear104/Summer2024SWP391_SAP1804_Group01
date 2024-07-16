@@ -1,7 +1,6 @@
-using backend.Services.DTOs;
-using backend.Services.DTOs.Account;
-using backend.Services.Enums;
+using backend.BusinessOjects.Enums;
 using backend.BusinessOjects.Models;
+using backend.Services.DTOs.Account;
 
 namespace backend.Services.Mappers
 {
@@ -19,19 +18,35 @@ namespace backend.Services.Mappers
                 Birthday = account.Birthday,
                 Gender = account.Gender.ToString(),
                 CreatedAt = account.CreatedAt,
-                OrdersOfCustomer = account.OrdersOfCustomer.Select(order => order.ToOrderDTO()).ToList(),
-                OrdersOfSaleStaff = account.OrdersOfSaleStaff.Select(order => order.ToOrderDTO()).ToList(),
-                OrdersOfDeliveryStaff = account.OrdersOfDeliveryStaff.Select(order => order.ToOrderDTO()).ToList(),
-                WarrantyRequestsOfCustomer = account.WarrantyRequestsOfCustomer.Select(warrantyRequest => warrantyRequest.ToWarrantyRequestDTO()).ToList(),
-                WarrantyRequestsOfWarrantyStaff = account.WarrantyRequestsOfWarrantyStaff.Select(warrantyRequest => warrantyRequest.ToWarrantyRequestDTO()).ToList(),
-                WarrantyRequestsOfDeliveryStaff = account.WarrantyRequestsOfDeliveryStaff.Select(warrantyRequest => warrantyRequest.ToWarrantyRequestDTO()).ToList(),
+                OrdersOfCustomer = account
+                    .OrdersOfCustomer.Select(order => order.ToOrderDTO())
+                    .ToList(),
+                OrdersOfSaleStaff = account
+                    .OrdersOfSaleStaff.Select(order => order.ToOrderDTO())
+                    .ToList(),
+                OrdersOfDeliveryStaff = account
+                    .OrdersOfDeliveryStaff.Select(order => order.ToOrderDTO())
+                    .ToList(),
+                WarrantyRequestsOfCustomer = account
+                    .WarrantyRequestsOfCustomer.Select(warrantyRequest =>
+                        warrantyRequest.ToWarrantyRequestDTO()
+                    )
+                    .ToList(),
+                WarrantyRequestsOfWarrantyStaff = account
+                    .WarrantyRequestsOfWarrantyStaff.Select(warrantyRequest =>
+                        warrantyRequest.ToWarrantyRequestDTO()
+                    )
+                    .ToList(),
+                WarrantyRequestsOfDeliveryStaff = account
+                    .WarrantyRequestsOfDeliveryStaff.Select(warrantyRequest =>
+                        warrantyRequest.ToWarrantyRequestDTO()
+                    )
+                    .ToList(),
                 Rank = account.Rank.ToRankDTO(),
                 Role = account.Role.ToString(),
                 RewardPoint = account.RewardPoint
             };
         }
-
-        
 
         public static Account ToAccount(this AccountDTO accountDTO)
         {
@@ -47,6 +62,7 @@ namespace backend.Services.Mappers
                 RewardPoint = accountDTO.RewardPoint
             };
         }
+
         public static Account ToUpdateAccountDTO(this UpdateAccountDTO accountDTO)
         {
             return new Account

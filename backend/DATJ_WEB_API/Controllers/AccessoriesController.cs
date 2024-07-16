@@ -1,15 +1,6 @@
 ﻿using System.Security.Claims;
-using System.Text;
-using backend.Data;
-using backend.DTOs.Accessory;
-using backend.Services.Helper;
-using backend.Interfaces;
-using backend.Services.Mappers;
-using backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Services.QueriesHelper;
 
 namespace backend.Controllers
 {
@@ -17,11 +8,9 @@ namespace backend.Controllers
     [ApiController]
     public class AccessoriesController : ControllerBase
     {
-        private readonly IAccessoryRepository _accessoryRepo ;
+        private readonly IAccessoryRepository _accessoryRepo;
 
-        public AccessoriesController(
-            IAccessoryRepository accessoryRepo
-        )
+        public AccessoriesController(IAccessoryRepository accessoryRepo)
         {
             _accessoryRepo = accessoryRepo;
         }

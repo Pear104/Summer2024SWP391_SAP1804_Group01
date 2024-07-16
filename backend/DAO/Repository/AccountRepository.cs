@@ -1,10 +1,10 @@
-using System.Collections.Generic;
-using backend.Data;
-using backend.DTOs.Account;
-using backend.Enums;
-using backend.Services.Helper;
+using backend.BusinessOjects.Enums;
+using backend.BusinessOjects.Models;
+using backend.DAO.Data;
 using backend.Interfaces;
-using backend.Models;
+using backend.Services.DTOs.Account;
+using backend.Services.Helper;
+using backend.Services.QueriesHelper;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repository

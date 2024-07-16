@@ -1,0 +1,6 @@
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\DAO\obj\Debug\net8.0\DAO.csproj.AssemblyReference.cache
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\DAO\obj\Debug\net8.0\DAO.GeneratedMSBuildEditorConfig.editorconfig
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\DAO\obj\Debug\net8.0\DAO.AssemblyInfoInputs.cache
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\DAO\obj\Debug\net8.0\DAO.AssemblyInfo.cs
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\DAO\obj\Debug\net8.0\DAO.csproj.CoreCompileInputs.cache
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\DAO\obj\Debug\net8.0\DAO.sourcelink.json

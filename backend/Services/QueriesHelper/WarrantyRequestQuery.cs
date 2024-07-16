@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using backend.Enums;
+using backend.BusinessOjects.Enums;
 
-namespace Services.QueriesHelper
+namespace backend.Services.QueriesHelper
 {
     public class WarrantyRequestQuery
     {

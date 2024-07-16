@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using backend.Services.DTOs.WarrantyRequest;
 using backend.BusinessOjects.Models;
+using backend.Services.DTOs.WarrantyRequest;
 
 namespace backend.Services.Mappers
 {
@@ -23,13 +19,13 @@ namespace backend.Services.Mappers
                 WarrantyReason = warrantyRequest?.WarrantyReason,
                 CustomerId = warrantyRequest?.CustomerId,
                 CustomerName = warrantyRequest?.Customer?.Name,
-                WarrantyStaffId = warrantyRequest?.WarrantyStaffId ,
+                WarrantyStaffId = warrantyRequest?.WarrantyStaffId,
                 WarrantyStaffName = warrantyRequest?.WarrantyStaff?.Name,
                 DeliveryStaffId = warrantyRequest?.DeliveryStaffId,
-                DeliveryStaffName =  warrantyRequest?.DeliveryStaff?.Name,
+                DeliveryStaffName = warrantyRequest?.DeliveryStaff?.Name,
                 WarrantyCardId = warrantyRequest?.WarrantyCardId,
                 ReceiveTime = warrantyRequest?.ReceiveTime,
-                ReturnTime = warrantyRequest?.ReturnTime ,
+                ReturnTime = warrantyRequest?.ReturnTime,
                 WarrantyStatus = warrantyRequest?.WarrantyStatus.ToString(),
                 ShippingAddress = warrantyRequest?.ShippingAddress,
                 PhoneNumber = warrantyRequest?.PhoneNumber

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using backend.Models.Payment.Domain;
 
 namespace backend.BusinessOjects.Models.Payment.Domain.Entities
 {

@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Services.QueriesHelper
+namespace backend.Services.QueriesHelper
 {
     public class PriceRateQuery
     {
@@ -15,6 +10,5 @@ namespace Services.QueriesHelper
 
         public int PageSize { get; set; } = 10;
         public int PageNumber { get; set; } = 1;
-
     }
 }

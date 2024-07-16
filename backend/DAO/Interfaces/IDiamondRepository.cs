@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using backend.DTOs.Diamond;
-using backend.Services.Helper;
-using backend.Models;
+using backend.BusinessOjects.Models;
+using backend.Services.DTOs.Diamond;
+using backend.Services.QueriesHelper;
 
 namespace backend.Interfaces
 {

@@ -1,6 +1,6 @@
-﻿using backend.DTOs.Feedback;
-using backend.Services.Helper;
-using backend.Models;
+﻿using backend.BusinessOjects.Models;
+using backend.Services.DTOs.Feedback;
+using backend.Services.QueriesHelper;
 
 namespace backend.Interfaces
 {

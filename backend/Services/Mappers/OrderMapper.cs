@@ -1,8 +1,7 @@
-using System;
+using backend.BusinessOjects.Enums;
+using backend.BusinessOjects.Models;
 using backend.Services.DTOs;
 using backend.Services.DTOs.Order;
-using backend.Services.Enums;
-using backend.BusinessOjects.Models;
 
 namespace backend.Services.Mappers
 {
@@ -13,7 +12,8 @@ namespace backend.Services.Mappers
 #pragma warning disable CS8604 // Possible null reference argument.
             return new Order
             {
-                OrderStatus = (OrderStatus)Enum.Parse(typeof(OrderStatus), order != null ? order.OrderStatus : ""),
+                OrderStatus = (OrderStatus)
+                    Enum.Parse(typeof(OrderStatus), order != null ? order.OrderStatus : ""),
                 SaleStaffId = order?.SaleStaffId,
                 DeliveryStaffId = order?.DeliveryStaffId
             };

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dXU1KyMOfnV0Xs+bi/WCB0KH889r0ZxuyGWtjYJH6y9QivSAy/u0cb7lTdsT3cBzb36bV7YPNv9UUY/rahPr9A==",
+  "dgSpecHash": "QdDdUxu/4Y4=",
   "success": true,
-  "projectFilePath": "D:\\FPT_Uni\\Semester_5\\SWP391\\Summer2024SWP391_SAP1804_Group01\\backend\\Models\\BusinessObjects.csproj",
+  "projectFilePath": "D:\\workspace\\projects\\team\\Summer2024SWP391_SAP1804_Group01\\backend\\Models\\BusinessObjects.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

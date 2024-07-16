@@ -1,6 +1,6 @@
-﻿using backend.Data;
+﻿using backend.BusinessOjects.Models.Payment.Domain.Entities;
+using backend.DAO.Data;
 using backend.Interfaces;
-using backend.Models.Payment.Domain.Entities;
 
 namespace backend.Repository
 {
@@ -12,6 +12,7 @@ namespace backend.Repository
         {
             _dbContext = dbContext;
         }
+
         public async Task<PaymentSignature> CreateSigniture(PaymentSignature paymentSignature)
         {
             await _dbContext.PaymentSignatures.AddAsync(paymentSignature);

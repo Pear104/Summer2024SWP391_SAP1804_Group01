@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using backend.Services.DTOs;
 using backend.BusinessOjects.Models;
+using backend.Services.DTOs;
 
 namespace backend.Services.Mappers
 {

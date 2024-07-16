@@ -1,8 +1,8 @@
-﻿using backend.Data;
-using backend.DTOs.Merchant;
+﻿using backend.BusinessOjects.Models.Payment.Domain.Entities;
+using backend.DAO.Data;
 using backend.Interfaces;
+using backend.Services.DTOs.Merchant;
 using backend.Services.Mappers;
-using backend.Models.Payment.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repository
@@ -15,6 +15,7 @@ namespace backend.Repository
         {
             _dbContext = dbContext;
         }
+
         public async Task<MerchantDto>? Create(Merchant merchant)
         {
             await _dbContext.Merchants.AddAsync(merchant);
@@ -24,7 +25,9 @@ namespace backend.Repository
 
         public async Task<Merchant>? Delete(string id)
         {
-            var merchantModel = await _dbContext.Merchants.FirstOrDefaultAsync(m => m.Id.ToLower().Equals(id.ToLower()));
+            var merchantModel = await _dbContext.Merchants.FirstOrDefaultAsync(m =>
+                m.Id.ToLower().Equals(id.ToLower())
+            );
             if (merchantModel != null)
             {
                 _dbContext.Merchants.Remove(merchantModel);
@@ -45,13 +48,17 @@ namespace backend.Repository
             {
                 return null;
             }
-            var merchantList = await _dbContext.Merchants.Where(m => m.MerchantName.Contains(criteria.Trim())).ToListAsync();
+            var merchantList = await _dbContext
+                .Merchants.Where(m => m.MerchantName.Contains(criteria.Trim()))
+                .ToListAsync();
             return merchantList;
         }
 
         public async Task<Merchant>? GetById(string id)
         {
-            var merchantModel = await _dbContext.Merchants.FirstOrDefaultAsync(m => m.Id.ToLower().Equals(id.ToLower()));
+            var merchantModel = await _dbContext.Merchants.FirstOrDefaultAsync(m =>
+                m.Id.ToLower().Equals(id.ToLower())
+            );
             if (merchantModel != null)
             {
                 return merchantModel;

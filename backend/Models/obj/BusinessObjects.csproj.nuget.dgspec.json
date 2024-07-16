@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\FPT_Uni\\Semester_5\\SWP391\\Summer2024SWP391_SAP1804_Group01\\backend\\Models\\BusinessObjects.csproj": {}
+    "D:\\workspace\\projects\\team\\Summer2024SWP391_SAP1804_Group01\\backend\\Models\\BusinessObjects.csproj": {}
   },
   "projects": {
-    "D:\\FPT_Uni\\Semester_5\\SWP391\\Summer2024SWP391_SAP1804_Group01\\backend\\Models\\BusinessObjects.csproj": {
+    "D:\\workspace\\projects\\team\\Summer2024SWP391_SAP1804_Group01\\backend\\Models\\BusinessObjects.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FPT_Uni\\Semester_5\\SWP391\\Summer2024SWP391_SAP1804_Group01\\backend\\Models\\BusinessObjects.csproj",
+        "projectUniqueName": "D:\\workspace\\projects\\team\\Summer2024SWP391_SAP1804_Group01\\backend\\Models\\BusinessObjects.csproj",
         "projectName": "BusinessObjects",
-        "projectPath": "D:\\FPT_Uni\\Semester_5\\SWP391\\Summer2024SWP391_SAP1804_Group01\\backend\\Models\\BusinessObjects.csproj",
-        "packagesPath": "C:\\Users\\minke\\.nuget\\packages\\",
-        "outputPath": "D:\\FPT_Uni\\Semester_5\\SWP391\\Summer2024SWP391_SAP1804_Group01\\backend\\Models\\obj\\",
+        "projectPath": "D:\\workspace\\projects\\team\\Summer2024SWP391_SAP1804_Group01\\backend\\Models\\BusinessObjects.csproj",
+        "packagesPath": "C:\\Users\\schoo\\.nuget\\packages\\",
+        "outputPath": "D:\\workspace\\projects\\team\\Summer2024SWP391_SAP1804_Group01\\backend\\Models\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\minke\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\schoo\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -60,7 +61,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

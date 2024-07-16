@@ -1,4 +1,4 @@
-﻿using backend.Models.Payment.Domain.Entities;
+﻿using backend.BusinessOjects.Models.Payment.Domain.Entities;
 
 namespace backend.Interfaces
 {

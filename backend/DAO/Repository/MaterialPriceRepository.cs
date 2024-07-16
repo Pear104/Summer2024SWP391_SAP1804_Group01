@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using backend.Data;
-using backend.DTOs.DiamondPrice;
+using backend.BusinessOjects.Models;
+using backend.DAO.Data;
 using backend.Interfaces;
+using backend.Services.DTOs.DiamondPrice;
 using backend.Services.Mappers;
-using backend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repository

@@ -1,8 +1,7 @@
-using backend.DTOs.Accessory;
-using backend.DTOs.Account;
-using backend.DTOs.Report;
-using backend.DTOs.Transaction;
-using backend.Services.Helper;
+using backend.Services.DTOs.Accessory;
+using backend.Services.DTOs.Account;
+using backend.Services.DTOs.Report;
+using backend.Services.DTOs.Transaction;
 
 namespace backend.Interfaces
 {
@@ -14,6 +13,5 @@ namespace backend.Interfaces
         Task<List<AccountDTO>> GetSalesReport();
         Task<List<AccountDTO>> GetDeliveryReport();
         Task<List<AccountDTO>> GetCustomerReport();
-
     }
 }

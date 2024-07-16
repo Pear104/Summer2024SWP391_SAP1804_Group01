@@ -1,0 +1,12 @@
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Models\obj\Debug\net8.0\BusinessObjects.GeneratedMSBuildEditorConfig.editorconfig
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Models\obj\Debug\net8.0\BusinessObjects.AssemblyInfoInputs.cache
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Models\obj\Debug\net8.0\BusinessObjects.AssemblyInfo.cs
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Models\obj\Debug\net8.0\BusinessObjects.csproj.CoreCompileInputs.cache
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Models\obj\Debug\net8.0\BusinessObjects.sourcelink.json
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Models\bin\Debug\net8.0\BusinessObjects.deps.json
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Models\bin\Debug\net8.0\BusinessObjects.dll
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Models\bin\Debug\net8.0\BusinessObjects.pdb
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Models\obj\Debug\net8.0\BusinessObjects.dll
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Models\obj\Debug\net8.0\refint\BusinessObjects.dll
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Models\obj\Debug\net8.0\BusinessObjects.pdb
+D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Models\obj\Debug\net8.0\ref\BusinessObjects.dll

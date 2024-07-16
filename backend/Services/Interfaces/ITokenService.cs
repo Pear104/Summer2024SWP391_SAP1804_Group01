@@ -1,5 +1,5 @@
-using backend.Services.DTOs.Authentication;
 using backend.BusinessOjects.Models;
+using backend.Services.DTOs.Authentication;
 
 namespace backend.Services.Interfaces
 {

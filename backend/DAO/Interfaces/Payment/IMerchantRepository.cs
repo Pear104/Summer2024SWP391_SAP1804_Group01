@@ -1,5 +1,5 @@
-﻿using backend.DTOs.Merchant;
-using backend.Models.Payment.Domain.Entities;
+﻿using backend.BusinessOjects.Models.Payment.Domain.Entities;
+using backend.Services.DTOs.Merchant;
 
 namespace backend.Interfaces
 {
@@ -11,6 +11,5 @@ namespace backend.Interfaces
         public Task<MerchantDto>? Create(Merchant merchant);
         public Task<Merchant>? Update(string id);
         public Task<Merchant>? Delete(string id);
-
     }
 }

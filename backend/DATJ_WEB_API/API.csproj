@@ -62,4 +62,10 @@
 		<Folder Include="Payment_src\shared\Payment.Ultils\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\DAO\DAO.csproj" />
+	  <ProjectReference Include="..\Models\BusinessObjects.csproj" />
+	  <ProjectReference Include="..\Services\Services.csproj" />
+	</ItemGroup>
+
 </Project>

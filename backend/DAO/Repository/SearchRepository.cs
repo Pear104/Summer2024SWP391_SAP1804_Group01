@@ -1,17 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using backend.Data;
-using backend.DTOs;
-using backend.DTOs.Accessory;
-using backend.DTOs.AccessoryImage;
-using backend.DTOs.AccessoryType;
-using backend.DTOs.Search;
-using backend.DTOs.Shape;
-using backend.Services.Helper;
+using backend.DAO.Data;
 using backend.Interfaces;
+using backend.Services.DTOs;
+using backend.Services.DTOs.Accessory;
+using backend.Services.DTOs.Search;
+using backend.Services.DTOs.Shape;
 using backend.Services.Mappers;
+using backend.Services.QueriesHelper;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repository
@@ -27,35 +21,36 @@ namespace backend.Repository
 
         public async Task<SearchResult> GetResult(SearchQuery query)
         {
-            var diamonds = _context.Diamonds
-                .Include(d => d.Shape)
-                .AsQueryable();
+            var diamonds = _context.Diamonds.Include(d => d.Shape).AsQueryable();
 
-            var accessories = _context.Accessories
-                .Include(a => a.Shape)
+            var accessories = _context
+                .Accessories.Include(a => a.Shape)
                 .Include(a => a.AccessoryImages)
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(query.keyword))
             {
                 var searchValue = query.keyword.ToLower();
-                
-                diamonds = diamonds.Where(d => 
-                    d.Lab.ToLower().Contains(searchValue) ||
+
+                diamonds = diamonds.Where(d =>
+                    d.Lab.ToLower().Contains(searchValue)
+                    ||
                     // d.CertificateNumber.ToString().Contains(searchValue) ||
                     // d.Color.ToString().ToLower().Contains(searchValue) ||
                     // d.Clarity.ToString().Contains(searchValue) ||
-                    d.Shape.Name.ToLower().Contains(searchValue));
+                    d.Shape.Name.ToLower().Contains(searchValue)
+                );
 
-                accessories = accessories.Where(a => 
-                    a.Name.ToLower().Contains(searchValue) ||
-                    a.Shape.Name.ToLower().Contains(searchValue));
+                accessories = accessories.Where(a =>
+                    a.Name.ToLower().Contains(searchValue)
+                    || a.Shape.Name.ToLower().Contains(searchValue)
+                );
             }
 
             // Pagination
             var totalDiamonds = await diamonds.CountAsync();
             var totalAccessories = await accessories.CountAsync();
-            
+
             var totalCount = totalDiamonds + totalAccessories;
             var totalPages = (int)Math.Ceiling((double)totalCount / query.PageSize);
 
@@ -71,39 +66,42 @@ namespace backend.Repository
                 .AsNoTracking()
                 .ToListAsync();
 
-            var diamondDTOs = diamondsToReturn.Select(d => new DiamondDTO
-            {
-                DiamondId = d.DiamondId,
-                Lab = d.Lab,
-                CertificateNumber = d.CertificateNumber,
-                CertificateUrl = d.CertificateUrl,
-                ImageUrl = d.ImageUrl,
-                Carat = d.Carat,
-                Cut = d.Cut,
-                // Color = d.Color.ToString(),
-                // Clarity = d.Clarity.ToString(),
-                Polish = d.Polish,
-                Symmetry = d.Symmetry,
-                Fluorescence = d.Fluorescence,
-                Availability = d.Availability,
-                Shape = d.Shape.Name,
-                ShapeId = d.ShapeId
-            }).ToList();
-
-            var accessoryDTOs = accessoriesToReturn.Select(a => new AccessoryDTO
-            {
-                AccessoryId = a.AccessoryId,
-                Karat = a.Karat,
-                MaterialWeight = a.MaterialWeight,
-                Name = a.Name,
-                Quantity = a.Quantity,
-                Shape = new ShapeDTO
+            var diamondDTOs = diamondsToReturn
+                .Select(d => new DiamondDTO
                 {
-                    Name = a.Shape.Name
-                },
-                AccessoryImages = a.AccessoryImages.Select(z => z.ToAccessoryImageDTO()).ToList(),
-                // Feedbacks = a.Feedbacks
-            }).ToList();
+                    DiamondId = d.DiamondId,
+                    Lab = d.Lab,
+                    CertificateNumber = d.CertificateNumber,
+                    CertificateUrl = d.CertificateUrl,
+                    ImageUrl = d.ImageUrl,
+                    Carat = d.Carat,
+                    Cut = d.Cut,
+                    // Color = d.Color.ToString(),
+                    // Clarity = d.Clarity.ToString(),
+                    Polish = d.Polish,
+                    Symmetry = d.Symmetry,
+                    Fluorescence = d.Fluorescence,
+                    Availability = d.Availability,
+                    Shape = d.Shape.Name,
+                    ShapeId = d.ShapeId
+                })
+                .ToList();
+
+            var accessoryDTOs = accessoriesToReturn
+                .Select(a => new AccessoryDTO
+                {
+                    AccessoryId = a.AccessoryId,
+                    Karat = a.Karat,
+                    MaterialWeight = a.MaterialWeight,
+                    Name = a.Name,
+                    Quantity = a.Quantity,
+                    Shape = new ShapeDTO { Name = a.Shape.Name },
+                    AccessoryImages = a
+                        .AccessoryImages.Select(z => z.ToAccessoryImageDTO())
+                        .ToList(),
+                    // Feedbacks = a.Feedbacks
+                })
+                .ToList();
             return new SearchResult
             {
                 Diamonds = diamondDTOs,
@@ -114,7 +112,5 @@ namespace backend.Repository
                 TotalCount = totalCount
             };
         }
-
-
     }
 }

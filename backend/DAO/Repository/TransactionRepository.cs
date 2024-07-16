@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using backend.Data;
-using backend.DTOs.Transaction;
-using backend.Enums;
-using backend.Services.Helper;
+using backend.BusinessOjects.Enums;
+using backend.BusinessOjects.Models;
+using backend.DAO.Data;
 using backend.Interfaces;
+using backend.Services.DTOs.Transaction;
 using backend.Services.Mappers;
-using backend.Models;
+using backend.Services.QueriesHelper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -26,8 +22,8 @@ namespace backend.Repository
         public async Task<Transaction?> CompletePaymentAsync(string id)
         {
             var transaction = await _context.Transactions.FirstOrDefaultAsync(o =>
-                       o.TransactionId.Equals(id)
-                   );
+                o.TransactionId.Equals(id)
+            );
             transaction!.TransactionStatus = TransactionStatus.Completed;
             _context.Entry(transaction).State = EntityState.Modified;
             _context.SaveChanges();
@@ -62,9 +58,9 @@ namespace backend.Repository
 
             if (!query.SearchOrderId.IsNullOrEmpty())
             {
-                transactionsQuery = transactionsQuery.Where( tq =>
-                    tq.OrderId!.Contains(query.SearchOrderId!)                    
-                    );
+                transactionsQuery = transactionsQuery.Where(tq =>
+                    tq.OrderId!.Contains(query.SearchOrderId!)
+                );
             }
 
             var totalCount = await transactionsQuery.CountAsync();
@@ -87,9 +83,7 @@ namespace backend.Repository
 
         public async Task<Transaction?> GetTransactionByIdAsync(string id)
         {
-            return await _context
-                .Transactions
-                .FirstOrDefaultAsync(x => x.TransactionId.Equals(id));
+            return await _context.Transactions.FirstOrDefaultAsync(x => x.TransactionId.Equals(id));
         }
     }
 }
