@@ -2,11 +2,9 @@ using backend.DAO.Data;
 using backend.Services.DTOs.Authentication;
 using backend.Services.Enums;
 using backend.Services.Helper;
-using backend.Interfaces;
-using backend.BusinessOjects.Models;
-using Microsoft.EntityFrameworkCore;
+using backend.Services.Interfaces;
 
-namespace backend.Service
+namespace backend.Services.Service
 {
     public class AuthenticationService : IAuthenticationService
     {
