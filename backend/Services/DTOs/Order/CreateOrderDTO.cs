@@ -1,4 +1,4 @@
-namespace backend.DTOs.Order
+namespace backend.Services.DTOs.Order
 {
     public class CreateOrderDTO
     {

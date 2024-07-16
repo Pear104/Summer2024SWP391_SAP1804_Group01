@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace backend.DTOs.Authentication
+namespace backend.Services.DTOs.Authentication
 {
     public class ResetPasswordDTO
     {

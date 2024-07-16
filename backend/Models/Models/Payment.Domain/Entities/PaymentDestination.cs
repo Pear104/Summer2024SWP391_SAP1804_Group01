@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using backend.Models.Payment.Domain;
 
-namespace backend.Models.Payment.Domain.Entities
+namespace backend.BusinessOjects.Models.Payment.Domain.Entities
 {
     [Table("payment_destination")]
     public class PaymentDestination : BaseAuditableEntity

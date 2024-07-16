@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace backend.DTOs.Report
+namespace backend.Services.DTOs.Report
 {
     public class ReportDTO
     {

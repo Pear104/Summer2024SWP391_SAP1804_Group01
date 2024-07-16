@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace backend.DTOs.Accessory
+namespace backend.Services.DTOs.Accessory
 {
     public class CreateAccessoryDTO
     {

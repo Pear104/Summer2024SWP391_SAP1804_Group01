@@ -1,9 +1,9 @@
-using backend.Data;
-using backend.DTOs.Authentication;
-using backend.Enums;
-using backend.Helper;
+using backend.DAO.Data;
+using backend.Services.DTOs.Authentication;
+using backend.Services.Enums;
+using backend.Services.Helper;
 using backend.Interfaces;
-using backend.Models;
+using backend.BusinessOjects.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Service

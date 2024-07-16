@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.Enums;
+using backend.Services.Enums;
 
-namespace backend.DTOs.DiamondPrice
+namespace backend.Services.DTOs.DiamondPrice
 {
     public class CreateDiamondPriceDTO
     {

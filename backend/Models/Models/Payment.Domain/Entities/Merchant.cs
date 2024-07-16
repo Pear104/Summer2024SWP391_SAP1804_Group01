@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace backend.Models.Payment.Domain.Entities
+namespace backend.BusinessOjects.Models.Payment.Domain.Entities
 {
     [Table("merchant")]
     public class Merchant : BaseAuditableEntity

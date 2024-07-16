@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.Enums;
+using backend.Services.Enums;
 
-namespace backend.DTOs.WarrantyRequest
+namespace backend.Services.DTOs.WarrantyRequest
 {
     public class WarrantyRequestDTO
     {

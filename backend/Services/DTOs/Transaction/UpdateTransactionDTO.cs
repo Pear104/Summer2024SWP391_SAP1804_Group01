@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.Enums;
+using backend.Services.Enums;
 
-namespace backend.DTOs.Transaction
+namespace backend.Services.DTOs.Transaction
 {
     public class UpdateTransactionDTO
     {

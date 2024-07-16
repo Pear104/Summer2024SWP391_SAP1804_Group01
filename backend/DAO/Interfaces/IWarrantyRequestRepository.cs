@@ -1,6 +1,6 @@
 ﻿using backend.DTOs.Order;
 using backend.DTOs.WarrantyRequest;
-using backend.Helper;
+using backend.Services.Helper;
 using backend.Models;
 
 namespace backend.Interfaces

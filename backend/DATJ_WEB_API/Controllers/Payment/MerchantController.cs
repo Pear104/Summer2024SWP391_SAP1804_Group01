@@ -1,6 +1,6 @@
 ﻿using backend.DTOs.Merchant;
 using backend.Interfaces;
-using backend.Mappers;
+using backend.Services.Mappers;
 using backend.Models.Payment.Domain.Entities;
 using backend.Payment_src.core.Payment.Application.Base.Models;
 using backend.Payment_src.core.Payment.Application.Features.Commands;

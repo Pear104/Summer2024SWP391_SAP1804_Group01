@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.DTOs.AccessoryImage;
-using backend.DTOs.AccessoryType;
-using backend.DTOs.Feedback;
-using backend.DTOs.Shape;
+using backend.Services.DTOs.AccessoryImage;
+using backend.Services.DTOs.AccessoryType;
+using backend.Services.DTOs.Feedback;
+using backend.Services.DTOs.Shape;
 
-namespace backend.DTOs.Accessory
+namespace backend.Services.DTOs.Accessory
 {
     public class AccessoryDTO
     {

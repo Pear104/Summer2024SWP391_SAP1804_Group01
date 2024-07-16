@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using backend.DTOs.Accessory;
-using backend.Helper;
+using backend.Services.DTOs.Accessory;
+using backend.Services.Helper;
 using backend.Models;
 
-namespace backend.Interfaces
+namespace backend.DAO.Interfaces
 {
     public interface IAccessoryRepository
     {

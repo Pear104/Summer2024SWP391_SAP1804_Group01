@@ -1,4 +1,4 @@
-﻿namespace backend.DTOs.Authentication
+﻿namespace backend.Services.DTOs.Authentication
 {
     public class AuthenticationResponse
     {

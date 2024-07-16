@@ -1,10 +1,10 @@
 ﻿using System.Reflection.Emit;
-using backend.Helper;
+using backend.BusinessOjects.Models;
 using backend.Models;
 using backend.Models.Payment.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace backend.Data
+namespace backend.DAO.Data
 {
     public class ApplicationDbContext : DbContext
     {

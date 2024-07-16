@@ -7,9 +7,9 @@ using backend.Data;
 using backend.DTOs;
 using backend.DTOs.Diamond;
 using backend.Enums;
-using backend.Helper;
+using backend.Services.Helper;
 using backend.Interfaces;
-using backend.Mappers;
+using backend.Services.Mappers;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using backend.Data;
 using backend.DTOs.Accessory;
 using backend.DTOs.AccessoryType;
-using backend.Helper;
+using backend.Services.Helper;
 using backend.Interfaces;
-using backend.Mappers;
+using backend.Services.Mappers;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 

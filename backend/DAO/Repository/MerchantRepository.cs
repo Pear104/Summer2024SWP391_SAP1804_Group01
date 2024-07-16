@@ -1,7 +1,7 @@
 ﻿using backend.Data;
 using backend.DTOs.Merchant;
 using backend.Interfaces;
-using backend.Mappers;
+using backend.Services.Mappers;
 using backend.Models.Payment.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 

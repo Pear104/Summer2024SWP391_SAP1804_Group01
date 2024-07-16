@@ -1,8 +1,8 @@
-using backend.DTOs.Rank;
-using backend.DTOs.Order;
-using backend.DTOs.WarrantyRequest;
+using backend.Services.DTOs.Rank;
+using backend.Services.DTOs.Order;
+using backend.Services.DTOs.WarrantyRequest;
 
-namespace backend.DTOs.Account
+namespace backend.Services.DTOs.Account
 {
     public class AccountDTO
     {

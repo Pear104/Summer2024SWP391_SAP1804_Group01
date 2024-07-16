@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace backend.Helper
+namespace backend.Services.Helper
 {
     public class PasswordHasher
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend.Models;
 
-namespace backend.Helper
+namespace backend.Services.Helper
 {
     public static class PriceHelper
     {

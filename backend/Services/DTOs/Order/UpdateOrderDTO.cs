@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.DTOs.Account;
+using backend.Services.DTOs.Account;
 
-namespace backend.DTOs
+namespace backend.Services.DTOs
 {
     public class UpdateOrderDTO
     {

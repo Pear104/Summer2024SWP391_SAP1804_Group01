@@ -2,13 +2,14 @@
 using System.Text;
 using backend.Data;
 using backend.DTOs.Accessory;
-using backend.Helper;
+using backend.Services.Helper;
 using backend.Interfaces;
-using backend.Mappers;
+using backend.Services.Mappers;
 using backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Services.QueriesHelper;
 
 namespace backend.Controllers
 {
@@ -16,15 +17,12 @@ namespace backend.Controllers
     [ApiController]
     public class AccessoriesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IAccessoryRepository _accessoryRepo;
+        private readonly IAccessoryRepository _accessoryRepo ;
 
         public AccessoriesController(
-            ApplicationDbContext context,
             IAccessoryRepository accessoryRepo
         )
         {
-            _context = context;
             _accessoryRepo = accessoryRepo;
         }
 

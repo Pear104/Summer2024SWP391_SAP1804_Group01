@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.Models;
-using backend.DTOs.Account;
-using backend.DTOs.PriceRate;
+using backend.BusinessOjects.Models;
+using backend.Services.DTOs.Account;
+using backend.Services.DTOs.PriceRate;
 
-namespace backend.DTOs.Order
+namespace backend.Services.DTOs.Order
 {
     public class OrderStaffDTO
     {

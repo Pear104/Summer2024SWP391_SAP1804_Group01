@@ -4,9 +4,9 @@
 // using System.Threading.Tasks;
 // using backend.Models;
 
-using backend.DTOs.WarrantyRequest;
+using backend.Services.DTOs.WarrantyRequest;
 
-namespace backend.DTOs.Order
+namespace backend.Services.DTOs.Order
 {
     public class WarrantyRequestResult
     {

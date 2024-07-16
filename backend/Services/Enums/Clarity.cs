@@ -1,4 +1,4 @@
-namespace backend.Enums
+namespace backend.Services.Enums
 {
     public enum Clarity
     {

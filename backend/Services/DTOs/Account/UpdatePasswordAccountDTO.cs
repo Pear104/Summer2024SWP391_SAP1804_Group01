@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace backend.DTOs.Account
+namespace backend.Services.DTOs.Account
 {
     public class UpdatePasswordAccountDTO
     {

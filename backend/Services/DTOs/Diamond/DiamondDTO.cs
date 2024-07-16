@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.DTOs.Shape;
-using backend.Models;
+using backend.Services.DTOs.Shape;
+using backend.BusinessOjects.Models;
 
-namespace backend.DTOs
+namespace backend.Services.DTOs
 {
     public class DiamondDTO
     {

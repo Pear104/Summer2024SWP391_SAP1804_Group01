@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace backend.Models.Payment.Domain
+namespace backend.BusinessOjects.Models.Payment.Domain
 {
     public class BaseAuditableEntity
     {

@@ -1,6 +1,6 @@
-using backend.DTOs.Authentication;
+using backend.Services.DTOs.Authentication;
 
-namespace backend.Interfaces
+namespace backend.Services.Interfaces
 {
     public interface IAuthenticationService
     {

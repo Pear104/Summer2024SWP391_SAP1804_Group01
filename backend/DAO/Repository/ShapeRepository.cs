@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using backend.Data;
 using backend.DTOs.Shape;
 using backend.Interfaces;
-using backend.Mappers;
+using backend.Services.Mappers;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 

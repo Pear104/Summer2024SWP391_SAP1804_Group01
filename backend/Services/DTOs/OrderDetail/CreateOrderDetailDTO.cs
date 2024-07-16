@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace backend.DTOs
+namespace backend.Services.DTOs
 {
     public class CreateOrderDetailDTO
     {

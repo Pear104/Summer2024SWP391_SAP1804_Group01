@@ -1,9 +1,9 @@
-using backend.DTOs;
-using backend.DTOs.Account;
-using backend.Enums;
-using backend.Models;
+using backend.Services.DTOs;
+using backend.Services.DTOs.Account;
+using backend.Services.Enums;
+using backend.BusinessOjects.Models;
 
-namespace backend.Mappers
+namespace backend.Services.Mappers
 {
     public static class AccountMapper
     {

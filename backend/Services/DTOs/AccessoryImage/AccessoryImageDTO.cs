@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace backend.DTOs.AccessoryImage
+namespace backend.Services.DTOs.AccessoryImage
 {
     public class AccessoryImageDTO
     {

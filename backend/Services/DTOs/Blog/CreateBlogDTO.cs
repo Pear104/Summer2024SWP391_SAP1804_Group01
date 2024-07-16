@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace backend.DTOs.Blog
+namespace backend.Services.DTOs.Blog
 {
     public class CreateBlogDTO
     {

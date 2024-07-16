@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.DTOs.Search;
-using backend.Helper;
+using backend.Services.Helper;
 
 namespace backend.Interfaces
 {

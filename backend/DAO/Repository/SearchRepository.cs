@@ -9,9 +9,9 @@ using backend.DTOs.AccessoryImage;
 using backend.DTOs.AccessoryType;
 using backend.DTOs.Search;
 using backend.DTOs.Shape;
-using backend.Helper;
+using backend.Services.Helper;
 using backend.Interfaces;
-using backend.Mappers;
+using backend.Services.Mappers;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Repository

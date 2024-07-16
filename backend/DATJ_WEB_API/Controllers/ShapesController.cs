@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using backend.DTOs.Shape;
 using backend.Interfaces;
-using backend.Mappers;
+using backend.Services.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers

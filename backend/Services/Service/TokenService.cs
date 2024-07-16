@@ -2,11 +2,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using backend.Data;
-using backend.DTOs.Authentication;
+using backend.Services.DTOs.Authentication;
 using backend.Enums;
 using backend.Interfaces;
 using backend.Models;
 using Microsoft.IdentityModel.Tokens;
+using backend.Services.Interfaces;
 
 namespace backend.Service
 {

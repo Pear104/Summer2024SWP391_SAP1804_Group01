@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using backend.Enums;
+using backend.BusinessOjects.Enums;
 
-namespace backend.Models
+namespace backend.BusinessOjects.Models
 {
     [Table("diamond")]
     public class Diamond

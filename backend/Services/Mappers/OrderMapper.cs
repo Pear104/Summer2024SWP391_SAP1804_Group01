@@ -1,10 +1,10 @@
 using System;
-using backend.DTOs;
-using backend.DTOs.Order;
-using backend.Enums;
-using backend.Models;
+using backend.Services.DTOs;
+using backend.Services.DTOs.Order;
+using backend.Services.Enums;
+using backend.BusinessOjects.Models;
 
-namespace backend.Mappers
+namespace backend.Services.Mappers
 {
     public static class OrderMapper
     {

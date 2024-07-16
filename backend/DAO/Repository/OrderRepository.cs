@@ -7,9 +7,9 @@ using backend.DTOs.Accessory;
 using backend.DTOs.Feedback;
 using backend.DTOs.Order;
 using backend.Enums;
-using backend.Helper;
+using backend.Services.Helper;
 using backend.Interfaces;
-using backend.Mappers;
+using backend.Services.Mappers;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.DTOs.WarrantyCard;
-using backend.Helper;
+using backend.Services.Helper;
 using backend.Interfaces;
 using backend.Repository;
 using Microsoft.AspNetCore.Authorization;

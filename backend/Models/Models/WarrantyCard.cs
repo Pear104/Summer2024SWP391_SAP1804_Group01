@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace backend.Models
+namespace backend.BusinessOjects.Models
 {
     [Table("warranty_card")]
     public class WarrantyCard

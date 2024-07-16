@@ -1,8 +1,8 @@
-﻿using backend.Models.Payment.Domain.Entities;
+﻿using backend.BusinessOjects.Models.Payment.Domain.Entities;
 using backend.Payment_src.core.Payment.Application.Features.Commands;
 using backend.Payment_src.core.Payment.Application.Features.Payment.Dtos;
 
-namespace backend.Mappers
+namespace backend.Services.Mappers
 {
     public static class PaymentMapper
     {

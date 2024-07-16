@@ -1,6 +1,6 @@
-using backend.DTOs.Account;
+using backend.Services.DTOs.Account;
 
-namespace backend.DTOs.Rank
+namespace backend.Services.DTOs.Rank
 {
     public class RankDTO
     {

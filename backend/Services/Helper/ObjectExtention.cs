@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace backend.Helper
+namespace backend.Services.Helper
 {
     public static class ObjectExtention
     {

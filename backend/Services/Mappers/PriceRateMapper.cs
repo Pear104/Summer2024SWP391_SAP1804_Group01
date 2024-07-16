@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.DTOs.PriceRate;
-using backend.Models;
+using backend.Services.DTOs.PriceRate;
+using backend.BusinessOjects.Models;
 
 
-namespace backend.Mappers
+namespace backend.Services.Mappers
 {
     public static class PriceRateMapper
     {

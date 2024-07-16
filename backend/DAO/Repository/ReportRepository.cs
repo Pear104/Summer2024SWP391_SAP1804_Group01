@@ -5,11 +5,11 @@ using backend.Models;
 using Microsoft.EntityFrameworkCore;
 using backend.Enums;
 using backend.DTOs.Accessory;
-using backend.Mappers;
+using backend.Services.Mappers;
 using backend.DTOs;
 using backend.DTOs.Account;
 using backend.DTOs.Report;
-using backend.Helper;
+using backend.Services.Helper;
 
 namespace backend.Repository
 {

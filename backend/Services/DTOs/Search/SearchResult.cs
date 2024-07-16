@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.DTOs.Accessory;
+using backend.Services.DTOs.Accessory;
 
-namespace backend.DTOs.Search
+namespace backend.Services.DTOs.Search
 {
     public class SearchResult
     {

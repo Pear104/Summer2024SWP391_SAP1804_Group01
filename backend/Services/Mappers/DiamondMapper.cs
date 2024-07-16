@@ -1,8 +1,8 @@
-using backend.DTOs;
-using backend.DTOs.Diamond;
-using backend.Models;
+using backend.Services.DTOs;
+using backend.Services.DTOs.Diamond;
+using backend.BusinessOjects.Models;
 
-namespace backend.Mappers
+namespace backend.Services.Mappers
 {
     public static class DiamondMapper
     {

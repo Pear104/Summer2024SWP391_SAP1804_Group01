@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace backend.DTOs.AccessoryType
+namespace backend.Services.DTOs.AccessoryType
 {
     public class UpdateAccessoryTypeDTO
     {

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.DTOs.Account;
-using backend.Models;
+using backend.Services.DTOs.Account;
+using backend.BusinessOjects.Models;
 
-namespace backend.DTOs.Feedback
+namespace backend.Services.DTOs.Feedback
 {
     public class FeedbackDTO
     {

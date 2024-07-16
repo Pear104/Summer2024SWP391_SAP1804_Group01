@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using backend.DTOs.Blog;
-using backend.Helper;
-using backend.Models;
+using backend.Services.DTOs.Blog;
+using backend.Services.Helper;
+using backend.BusinessOjects.Models;
 
-namespace backend.Mappers
+namespace backend.Services.Mappers
 {
     public static class BlogMapper
     {

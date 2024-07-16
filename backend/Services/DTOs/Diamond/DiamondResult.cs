@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace backend.DTOs.Diamond
+namespace backend.Services.DTOs.Diamond
 {
     public class DiamondResult
     {

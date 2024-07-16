@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using backend.DTOs.Accessory;
-using backend.DTOs.DiamondPrice;
-using backend.DTOs.Feedback;
-using backend.DTOs.WarrantyCard;
-using backend.Models;
+using backend.Services.DTOs.Accessory;
+using backend.Services.DTOs.DiamondPrice;
+using backend.Services.DTOs.Feedback;
+using backend.Services.DTOs.WarrantyCard;
+using backend.BusinessOjects.Models;
 
-namespace backend.DTOs
+namespace backend.Services.DTOs
 {
     public class OrderDetailDTO
     {

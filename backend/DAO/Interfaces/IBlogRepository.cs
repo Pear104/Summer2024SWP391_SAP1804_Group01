@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using backend.DTOs.Blog;
-using backend.Helper;
+using backend.Services.Helper;
 using backend.Models;
 
 namespace backend.Interfaces

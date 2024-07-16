@@ -4,7 +4,7 @@
 // using System.Threading.Tasks;
 // using backend.Models;
 
-namespace backend.DTOs.Order
+namespace backend.Services.DTOs.Order
 {
     public class OrderResult
     {

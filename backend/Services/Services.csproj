@@ -10,4 +10,10 @@
     <Folder Include="Helper\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DAO\DAO.csproj">
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+
 </Project>

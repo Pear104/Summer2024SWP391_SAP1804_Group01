@@ -1,4 +1,4 @@
-﻿namespace backend.DTOs.Merchant
+﻿namespace backend.Services.DTOs.Merchant
 {
     public class MerchantDto
     {

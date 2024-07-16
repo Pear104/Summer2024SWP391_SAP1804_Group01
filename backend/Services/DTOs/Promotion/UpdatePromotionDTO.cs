@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace backend.DTOs.Promotion
+namespace backend.Services.DTOs.Promotion
 {
     public class UpdatePromotionDTO
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace backend.Helper
+namespace backend.Services.Helper
 {
     public class HtmlParser
     {

@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
-namespace backend.Models
+namespace backend.BusinessOjects.Models
 {
     [Table("material_price")]
     public class MaterialPrice  
