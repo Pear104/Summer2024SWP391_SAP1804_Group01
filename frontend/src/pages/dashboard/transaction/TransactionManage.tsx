@@ -80,7 +80,12 @@ export default function TransactionManage() {
                     id="keyword"
                     className="border p-2 rounded-md w-full"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value)
+                      params.set("SearchOrderId", e.target.value);
+                      setQueryUrl(`/api/Transactions?` + params.toString());
+                      navigate({ search: params.toString() });
+                    }}
                   />
                 </Form.Item>
               </Form>
@@ -95,8 +100,8 @@ export default function TransactionManage() {
                     setSearchTerm("");
                     // Clear the URL parameters
                     const params = new URLSearchParams(location.search);
+                    params.delete("SearchOrderId");
                     setQueryUrl(`/api/Transactions?` + params.toString());
-                    // params.delete("type");
                     navigate({ search: params.toString() });
                   }}
                 >
@@ -135,7 +140,7 @@ export default function TransactionManage() {
                         <LoadingItem key={key} />
                       ))}
                     {TransactionsList?.data &&
-                    TransactionsList?.data?.transactions?.length > 0 ? (
+                      TransactionsList?.data?.transactions?.length > 0 ? (
                       TransactionsList?.data?.transactions?.map(
                         renderTransactionsRow
                       )

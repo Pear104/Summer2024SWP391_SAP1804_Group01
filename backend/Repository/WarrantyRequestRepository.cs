@@ -11,6 +11,7 @@ using backend.Interfaces;
 using backend.Mappers;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace backend.Repository
 {
@@ -33,14 +34,23 @@ namespace backend.Repository
             {
                 return null;
             }
-            var warrantyRequest = warrantyRequestDto.ToWarrantyRequestFromCreate();
-            var warrantyCard = await _context.WarrantyCards.FindAsync(
-                warrantyRequestDto.WarrantyCardId
-            );
+            var warrantyCard = await _context
+                .WarrantyCards.Where(x =>
+                    (
+                        // Only get warranty cards that have no request or have warranty requests that are completed
+                        !x.WarrantyRequests.Any()
+                        || x.WarrantyRequests.All(wr =>
+                            wr.WarrantyStatus == WarrantyStatus.Completed
+                        )
+                    )
+                    && x.WarrantyCardId == warrantyRequestDto.WarrantyCardId
+                )
+                .FirstOrDefaultAsync();
             if (warrantyCard == null)
             {
                 return null;
             }
+            var warrantyRequest = warrantyRequestDto.ToWarrantyRequestFromCreate();
             warrantyRequest.Customer = customer;
             warrantyRequest.WarrantyCard = warrantyCard;
 
@@ -75,6 +85,14 @@ namespace backend.Repository
                     x.WarrantyStatus == query.WarrantyStatus
                 );
             }
+
+            if (!query.CustomerName.IsNullOrEmpty())
+            {
+                warrantyRequestQueries = warrantyRequestQueries.Where(x =>
+                    x.Customer!.Name.Contains(query.CustomerName)
+                );
+            }
+
             if (query.CustomerId > 0)
             {
                 warrantyRequestQueries = warrantyRequestQueries.Where(x =>

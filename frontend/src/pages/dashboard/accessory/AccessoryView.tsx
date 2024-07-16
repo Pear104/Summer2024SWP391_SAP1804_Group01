@@ -21,6 +21,19 @@ import UploadImage from "./components/UploadImage";
 import { storage } from "../../../utils/firebase";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 
+const shapeOptions = [
+  { value: 1, label: "Round" },
+  { value: 2, label: "Emerald" },
+  { value: 3, label: "Heart" },
+  { value: 4, label: "Pear" },
+  { value: 5, label: "Oval" },
+  { value: 6, label: "Cushion" },
+  { value: 7, label: "Princess" },
+  { value: 8, label: "Radiant" },
+  { value: 9, label: "Marquise" },
+  { value: 10, label: "Asscher" },
+];
+
 const schema = z.object({
   name: z
     .string()
@@ -108,8 +121,13 @@ export default function AccessoryView() {
         ""
       );
     },
-    onSuccess: () => {
-      message.success("Accessory updated successfully");
+    onSuccess: (data: any) => {
+      if (!data) {
+        message.error("Your don't have permission");
+      } else {
+        message.success("Accessory updated successfully");
+      }
+
       queryClient.invalidateQueries({ queryKey: ["accessory"] });
     },
   });
@@ -122,7 +140,7 @@ export default function AccessoryView() {
         <div className="flex self-center items-center gap-2 ">
           <Link
             to="/admin/accessories"
-            className="rounded-full inline-block px-4 border bg-black text-white p-1"
+            className="rounded-full inline-block px-4 border bg-blue-500 text-white p-1"
           >
             <ArrowLeft />
           </Link>
@@ -133,7 +151,7 @@ export default function AccessoryView() {
             onClick={async () => {
               mutateDelete.mutate();
             }}
-            className="cursor-pointer flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-black text-white p-1"
+            className="cursor-pointer flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-blue-500 text-white p-1"
           >
             {!accessory?.isHidden ? <EyeOff /> : <Eye />}
             <div className="ml-2 text-lg">
@@ -143,7 +161,7 @@ export default function AccessoryView() {
           <a
             href={`/product/accessory/detail/${accessoryId}`}
             target="_blank"
-            className="flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-black text-white p-1"
+            className="flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-blue-500 text-white p-1"
           >
             <ScrollText />
             <div className="ml-2 text-lg">View</div>
@@ -254,11 +272,7 @@ export default function AccessoryView() {
             <Select
               size="large"
               className="font-thin border w-full text-sm"
-              options={[
-                { value: "Round", label: "Round" },
-                { value: "Emerald", label: "Emerald" },
-                { value: "Oval", label: "Oval" },
-              ]}
+              options={shapeOptions}
             />
           </FormItem>
           <FormItem

@@ -1,6 +1,6 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { GET, PUT, DELETE, POST } from "../../../utils/request";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { v4 } from "uuid";
 import {
   getDownloadURL,
@@ -54,6 +54,7 @@ const Clarity = {
   I2: "I2",
   I3: "I3",
 };
+
 const shapeOptions = [
   { value: 1, label: "Round" },
   { value: 2, label: "Emerald" },
@@ -170,6 +171,7 @@ const schema = z.object({
   availability: z.boolean(),
 });
 export default function DiamondView() {
+  const certificateNumberRef = useRef<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   // const [certificateFile, setCertificateFile] = useState<UploadFile[]>([]);
   const [diamondFile, setDiamondFile] = useState<UploadFile[]>([]);
@@ -266,8 +268,12 @@ export default function DiamondView() {
     mutationFn: () => {
       return DELETE(`/api/Diamonds/${diamondId}/${!diamond?.isHidden}`, "");
     },
-    onSuccess: () => {
-      message.success("Diamond updated successfully");
+    onSuccess: (data: any) => {
+      if (!data) {
+        message.error("Your don't have permission");
+      } else {
+        message.success("Diamond updated successfully");
+      }
       queryClient.invalidateQueries({ queryKey: ["diamond"] });
     },
   });
@@ -279,7 +285,7 @@ export default function DiamondView() {
         <div className="flex self-center items-center gap-2 ">
           <Link
             to="/admin/diamonds"
-            className="rounded-full inline-block px-4 border bg-black text-white p-1"
+            className="rounded-full inline-block px-4 border bg-blue-500 text-white p-1"
           >
             <ArrowLeft />
           </Link>
@@ -290,7 +296,7 @@ export default function DiamondView() {
             onClick={async () => {
               mutateDelete.mutate();
             }}
-            className="cursor-pointer flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-black text-white p-1"
+            className="cursor-pointer flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-blue-500 text-white p-1"
           >
             {!diamond?.isHidden ? <EyeOff /> : <Eye />}
             <div className="ml-2 text-lg">
@@ -300,7 +306,7 @@ export default function DiamondView() {
           <a
             href={`/product/diamond/detail/${diamondId}`}
             target="_blank"
-            className="flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-black text-white p-1"
+            className="flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-blue-500 text-white p-1"
           >
             <ScrollText />
             <div className="ml-2 text-lg">View</div>
@@ -313,7 +319,32 @@ export default function DiamondView() {
           className=""
           layout="vertical"
           //submit form
+
           onFinish={handleSubmit(async (formData) => {
+            try {
+              const checkdiamond = await GET(
+                "/api/Diamonds?SearchQuery=" + formData.certificateNumber
+              );
+              console.log("API Response:", checkdiamond);
+
+              if (checkdiamond?.diamonds && checkdiamond.diamonds.length > 0) {
+                setError("certificateNumber", {
+                  type: "manual",
+                  message: "Duplicate Certificate number",
+                });
+                if (certificateNumberRef.current) {
+                  certificateNumberRef.current.scrollIntoView({
+                    behavior: "smooth",
+                  });
+                }
+                return;
+              }
+              console.log(
+                "No duplicate found, proceeding with form submission."
+              );
+            } catch (error) {
+              console.error("Error fetching data:", error);
+            }
             if (!diamondFile || diamondFile?.length === 0) {
               setError("image", {
                 type: "manual",
@@ -382,17 +413,19 @@ export default function DiamondView() {
               options={labOptions}
             />
           </FormItem>
-          <FormItem
-            label="Certificate Numnber"
-            name="certificateNumber"
-            control={control}
-            required
-          >
-            <Input
-              placeholder="Diamond lab"
-              className="font-thin border p-2 rounded-md w-full"
-            />
-          </FormItem>
+          <div ref={certificateNumberRef}>
+            <FormItem
+              label="Certificate Number"
+              name="certificateNumber"
+              control={control}
+              required
+            >
+              <Input
+                placeholder="Diamond lab"
+                className="font-thin border p-2 rounded-md w-full"
+              />
+            </FormItem>
+          </div>
           <FormItem label="Carat" name="carat" control={control} required>
             <Input
               type="number"

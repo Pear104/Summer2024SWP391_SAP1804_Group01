@@ -83,24 +83,17 @@ namespace backend.Controllers
             return Ok(accountDTOs);
         }
 
-        /// <summary>
-        /// Create payment via momo api
-        /// </summary>
-        /// <param name="createPayment"></param>
-        /// <returns></returns>
-        /// <remarks>
-        ///
-        ///     POST
-        ///     {
-        ///     "paymentContent": "Thanh toan don hang 0001",
-        ///     "paymentCurrency": "VND",
-        ///     "paymentRefId": "ORD:12345",
-        ///     "requiredAmount": 50000,
-        ///     "paymentLanguage": "vi",
-        ///     "merchantId": "MER0001",
-        ///     "paymentDestinationId": "MOMO"
-        ///     }
-        /// </remarks>
+        // Create payment via momo api
+        //     POST
+        //     {
+        //     "paymentContent": "Thanh toan don hang 0001",
+        //     "paymentCurrency": "VND",
+        //     "paymentRefId": "ORD:12345",
+        //     "requiredAmount": 50000,
+        //     "paymentLanguage": "vi",
+        //     "merchantId": "MER0001",
+        //     "paymentDestinationId": "MOMO"
+        //     }
         // [HttpPost]
         // [Route("momo-sent-request")]
         // [ProducesResponseType(typeof(PaymentLinkDtos), 200)]
@@ -297,7 +290,7 @@ namespace backend.Controllers
 
             //return NotFound();
             //redirect back to Merchant's page after a successful transaction
-            return Content(returnModel.ToQueryString());
+            return Content(returnModel!.ToQueryString());
         }
     }
 }

@@ -8,5 +8,8 @@ namespace backend.Interfaces
     {
         Task<TransactionResult?> GetAllTransactionsAsync(TransactionQuery query);
         Task<Transaction?> CreateTransactionAsync(CreateTransactionDTO transactionDto);
+
+        Task<Transaction?> GetTransactionByIdAsync(string id);
+        Task<Transaction?> CompletePaymentAsync(string id);
     }
 }

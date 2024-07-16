@@ -28,18 +28,28 @@ namespace backend.Controllers
             _accessoryRepo = accessoryRepo;
         }
 
+        /// <summary>
+        /// Get all accessory
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult> GetAccessories([FromQuery] AccessoryQuery query)
         {
-            // var role = User.FindFirst(ClaimTypes.Role)?.Value;
-            // if (role == "Customer" || role == null)
-            // {
-            //     query.IsAvailability = true;
-            // }
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (role == "Customer" || role == null)
+            {
+                query.IsHidden = false;
+            }
             var accessoryDTOs = await _accessoryRepo.GetAllAccessoriesAsync(query);
             return Ok(accessoryDTOs);
         }
 
+        /// <summary>
+        /// Get accessory by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         // [Authorize(Roles = ("Customer"))]
         public async Task<ActionResult> GetAccessory(long id)
@@ -53,6 +63,12 @@ namespace backend.Controllers
             return Ok(accessory);
         }
 
+        /// <summary>
+        /// Update accessory by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="accessoryDto"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccessory(
             [FromRoute] long id,
@@ -60,7 +76,6 @@ namespace backend.Controllers
         )
         {
             var accessory = await _accessoryRepo.UpdateAccessoryAsync(id, accessoryDto);
-            System.Console.WriteLine("ahihi");
             if (accessory == null)
             {
                 return NotFound("Accessory not found.");
@@ -84,7 +99,7 @@ namespace backend.Controllers
         }
 
         [HttpDelete("{id}/{isHidden}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteAccessory(
             [FromRoute] long id,
             [FromRoute] bool isHidden

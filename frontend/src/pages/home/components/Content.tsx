@@ -47,7 +47,7 @@ const SecondContentSection = () => {
           </div>
           <div>
             <a
-              href="./"
+              href="/about"
               className="inline-block py-2 px-4 font-bold border-2 border-black hover:scale-95 transition-all"
             >
               ABOUT DATJ

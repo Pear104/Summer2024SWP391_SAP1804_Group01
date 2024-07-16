@@ -338,7 +338,7 @@ namespace backend.Controllers
             };
 
             double totalPrice = 0;
-            Diamond diamond = null;
+            Diamond? diamond = null;
             long shapeId = 0;
             while (diamond == null)
             {
@@ -351,7 +351,7 @@ namespace backend.Controllers
                 shapeId = diamond.ShapeId;
             }
 
-            Accessory accessory = null;
+            Accessory? accessory = null;
             while (accessory == null)
             {
                 var accessoryId = rand.Next(1, 2215);

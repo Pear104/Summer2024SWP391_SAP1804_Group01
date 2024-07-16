@@ -41,6 +41,17 @@ namespace backend.Controllers
             return Ok(newTransaction);
         }
 
-
+        [HttpPut("completePayment/{id}")]
+        public async Task<IActionResult> CompletePayment(
+            [FromRoute] string id
+        )
+        {
+            var transaction = await _transactionRepo.CompletePaymentAsync(id);
+            if (transaction == null)
+            {
+                return NotFound("Transaction not found.");
+            }
+            return Ok(transaction);
+        }
     }
 }

@@ -22,6 +22,7 @@ export default function CardManagement() {
 
   const searchTerm = useSearchStore((state) => state.searchTerm);
   const setSearchTerm = useSearchStore((state) => state.setSearchTerm);
+  const [searchProductName, setSearchProductName] = useState("");
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
   const navigate = useNavigate();
@@ -69,7 +70,7 @@ export default function CardManagement() {
       <div className="shadow bg-slate-50-200 border border-r-white">
         {/* filter bar */}
         <div className="border-b-gray-200 p-[1rem] box-border">
-          <div className="flex justify-between mb-1 items-center">
+          <div className="flex mb-1 items-center">
             <h3>
               <Form
                 name="search_form"
@@ -79,15 +80,66 @@ export default function CardManagement() {
                 <Form.Item className="flex-grow">
                   <Input
                     type="text"
-                    placeholder="Search"
+                    placeholder="Search by customer name"
                     id="keyword"
-                    className="border p-2 rounded-md w-full"
+                    className="border p-2 rounded-md w-[300px]"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value)
+                      params.set("CustomerName", e.target.value);
+                      setQueryUrl(`/api/WarrantyCards?` + params.toString());
+                      navigate({ search: params.toString() });
+                    }}
                   />
                 </Form.Item>
               </Form>
             </h3>
+
+            <h3>
+              <Form
+                name="search_form"
+                layout="inline"
+                className="flex gap-2 items-center"
+              >
+                <Form.Item className="flex-grow">
+                  <Input
+                    type="text"
+                    placeholder="Search by product name"
+                    id="keyword"
+                    className="border p-2 rounded-md w-full"
+                    value={searchProductName}
+                    onChange={(e) => {
+                      setSearchProductName(e.target.value)
+                      params.set("ProductName", e.target.value);
+                      setQueryUrl(`/api/WarrantyCards?` + params.toString());
+                      navigate({ search: params.toString() });
+                    }}
+                  />
+                </Form.Item>
+              </Form>
+            </h3>
+
+            <div className="flex space-x-075">
+              <div className="card-action ">
+                <a
+                  href="/admin/diamonds"
+                  className="text-interactive "
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setSearchTerm("");
+                    setSearchProductName("");
+                    // Clear the URL parameters
+                    const params = new URLSearchParams(location.search);
+                    params.delete("CustomerName");
+                    params.delete("ProductName");
+                    setQueryUrl(`/api/WarrantyCards?` + params.toString());
+                    navigate({ search: params.toString() });
+                  }}
+                >
+                  Clear filter
+                </a>
+              </div>
+            </div>
           </div>
           <div className="pt-lg"></div>
         </div>
@@ -119,7 +171,7 @@ export default function CardManagement() {
                         <LoadingItem key={key} />
                       ))}
                     {warrantyCardList?.data &&
-                    warrantyCardList?.data?.warrantyCards?.length > 0 ? (
+                      warrantyCardList?.data?.warrantyCards?.length > 0 ? (
                       warrantyCardList?.data?.warrantyCards?.map(renderCardRow)
                     ) : (
                       <td colSpan={100} className="py-40 w-full">
@@ -128,7 +180,7 @@ export default function CardManagement() {
                     )}
                   </tbody>
                 </table>
-                {warrantyCardList?.data?.warrantyRequests?.length > 0 && (
+                {warrantyCardList?.data?.warrantyCards?.length > 0 && (
                   <div className="flex justify-center items-center px-8 py-4 bg-gray-100">
                     <Pagination
                       showTotal={(total, range) =>

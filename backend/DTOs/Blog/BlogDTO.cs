@@ -12,6 +12,7 @@ namespace backend.DTOs.Blog
         public string? ThumbnailUrl { get; set; }
         public string? Title { get; set; }
         public string? Content { get; set; }
+        public Boolean? IsHidden { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

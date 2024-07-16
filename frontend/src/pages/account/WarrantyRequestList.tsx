@@ -1,9 +1,10 @@
 import { useQueries } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GET } from "../../utils/request";
 import { formatPhoneNumber } from "../../utils/formatter";
 import moment from "moment";
-import { Empty } from "antd";
+import { Empty, Pagination } from "antd";
+import { useSearchStore } from "../../store/searchStore";
 const WarrantyRequestItem = ({ warrantyRequest }: { warrantyRequest: any }) => {
   let statusStyle = "";
   switch (warrantyRequest.warrantyStatus) {
@@ -64,7 +65,6 @@ const WarrantyRequestItem = ({ warrantyRequest }: { warrantyRequest: any }) => {
 };
 
 export default function WarrantyRequestList() {
-  // const [messageApi, contextHolder] = message.useMessage();
   const [warrantyRequests] = useQueries({
     queries: [
       {
@@ -74,7 +74,10 @@ export default function WarrantyRequestList() {
       },
     ],
   });
-  console.log(warrantyRequests?.data);
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.searchParams);
+  const navigate = useNavigate();
+  const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   return (
     <div className="px-2 pt-4 pb-8">
       <div className="uppercase font-semibold text-xl mb-4">
@@ -95,13 +98,26 @@ export default function WarrantyRequestList() {
           <Empty description="You haven't send any warranty request yet" />
         )}
       </div>
-      <div className="flex justify-center">
-        <Link
-          to="/account/warranty/request"
-          className="rounded-xl px-8 py-4 mt-4 text-white bg-primary font-bold uppercase"
-        >
-          Send a warranty request
-        </Link>
+      <div className="flex justify-center border-b items-center px-8 py-4 mt-4">
+        {warrantyRequests?.data &&
+          warrantyRequests?.data?.warrantyRequests?.length != 0 && (
+            <Pagination
+              showTotal={(total, range) =>
+                `${range[0]}-${range[1]} of ${total} items`
+              }
+              className="text-center"
+              current={warrantyRequests.data.currentPage}
+              total={warrantyRequests.data.totalCount}
+              pageSize={warrantyRequests.data.pageSize}
+              onChange={(page) => {
+                params.set("PageNumber", page.toString());
+                navigate(url.pathname + "?" + params.toString());
+                setQueryUrl("/api/WarrantyRequests?" + params.toString());
+              }}
+              // showSizeChanger={true}
+              // onShowSizeChange={(current, size) => setPageSize(size)}
+            />
+          )}
       </div>
     </div>
   );

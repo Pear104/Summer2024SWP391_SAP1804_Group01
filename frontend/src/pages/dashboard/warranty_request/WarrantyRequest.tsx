@@ -16,7 +16,6 @@ export default function WarrantyRequest() {
   // sort item
   const columnHeaders = [
     "Warranty Request ID",
-    "Warranty Card ID",
     "Reason",
     "Customer",
     "Shipping Address",
@@ -107,11 +106,16 @@ export default function WarrantyRequest() {
                 <Form.Item className="flex-grow">
                   <Input
                     type="text"
-                    placeholder="Search"
+                    placeholder="Search by customer name"
                     id="keyword"
                     className="border p-2 rounded-md w-full"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                      params.set("CustomerName", e.target.value);
+                      setQueryUrl(`/api/WarrantyRequests?` + params.toString());
+                      navigate({ search: params.toString() });
+                    }}
                   />
                 </Form.Item>
                 <Form.Item>
@@ -121,22 +125,20 @@ export default function WarrantyRequest() {
             </h3>
             <div className="flex space-x-075">
               <div className="card-action ">
-                <a
-                  href="/admin/diamonds"
+                <div
                   className="text-interactive "
-                  onClick={(event) => {
-                    event.preventDefault();
+                  onClick={() => {
                     setStatusText("Status");
                     setSearchTerm("");
                     // Clear the URL parameters
                     const params = new URLSearchParams(location.search);
+                    params.delete("CustomerName");
                     setQueryUrl(`/api/WarrantyRequests?` + params.toString());
-                    // params.delete("type");
                     navigate({ search: params.toString() });
                   }}
                 >
                   Clear filter
-                </a>
+                </div>
               </div>
             </div>
           </div>

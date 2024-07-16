@@ -1,7 +1,4 @@
 import {
-  ChevronDown,
-  //FlaskConical,
-  // Heart,
   LineChart,
   Mail,
   MapPin,
@@ -14,14 +11,12 @@ import Logo from "../logo/Logo";
 import { App } from "antd";
 import SearchBar from "../SearchBar";
 import { useState } from "react";
-import JewelryItem from "./components/JewelryItem";
-import DiamondItem from "./components/DiamondItem";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useCartStore } from "../../store/cartStore";
 import { GET } from "../../utils/request";
-import { useQueries } from "@tanstack/react-query";
 import { jwtDecode } from "jwt-decode";
 import { getCookie } from "../../utils/cookie";
+import { useQueries } from "@tanstack/react-query";
 
 const TopNavItem = ({
   children,
@@ -62,23 +57,17 @@ export default function TopNav() {
       console.error("Error decoding token: ", error.message);
     }
   }
-  const [jewelryDrop, setJewelryDrop] = useState(false);
-  const [diamondDrop, setDiamondDrop] = useState(false);
   const [menuDrop, setMenuDrop] = useState(false);
   const { message } = App.useApp();
-
+  const location = useLocation();
   const navigate = useNavigate();
-  const [shapes, accessoryTypes] = useQueries({
+
+  const [info] = useQueries({
     queries: [
       {
-        queryKey: ["shapes"],
-        queryFn: () => GET("/api/Shapes/"),
-        staleTime: Infinity,
-      },
-      {
-        queryKey: ["accessoryTypes"],
-        queryFn: () => GET("/api/AccessoryTypes/"),
-        staleTime: Infinity,
+        queryKey: ["info", location],
+        queryFn: () => GET("/api/Accounts/me"),
+        staleTime: 0,
       },
     ],
   });
@@ -109,17 +98,31 @@ export default function TopNav() {
           <div className="cursor-pointer">
             <SearchBar />
           </div>
-          {/* <Link to="/test">
-            <FlaskConical size={20} strokeWidth={2} absoluteStrokeWidth />
-          </Link> */}
           {decode && decode?.role != "Customer" && (
             <div
               className="cursor-pointer"
               onClick={async () => {
                 const response = await GET("/api/Accounts/me");
                 console.log(response);
-                if (response.role != "Customer") {
-                  navigate("/admin");
+                switch (response.role) {
+                  case "Manager":
+                    navigate("/admin");
+                    break;
+                  case "SaleStaff":
+                    navigate("/admin/sale-staffs");
+                    break;
+                  case "DeliveryStaff":
+                    navigate("/admin/delivery-staffs");
+                    break;
+                  case "Administrator":
+                    navigate("/admin");
+                    break;
+                  case "WarrantyStaff":
+                    navigate("/admin/warranty-request");
+                    break;
+                  default:
+                    navigate("/");
+                    break;
                 }
               }}
             >
@@ -137,6 +140,11 @@ export default function TopNav() {
               )}
             </Link>
           </div>
+          {info?.data && (
+            <div className="text-lg font-semibold text-gray-800 pl-4 py-2">
+              Welcome, {info?.data?.name}
+            </div>
+          )}
           <div
             className="cursor-pointer"
             onClick={async () => {
@@ -175,71 +183,23 @@ export default function TopNav() {
           <Link
             className="relative mulish-regular flex gap-1 items-center py-1 px-3 border-b-2 border-b-transparent text-base hover:border-b-blue-500 duration-200 transition-all"
             to={"/product/accessory"}
-            onMouseEnter={() => {
-              setJewelryDrop(true);
-            }}
-            onMouseLeave={() => {
-              setJewelryDrop(false);
-            }}
             onClick={() => {
               setMenuDrop(false);
             }}
           >
-            Accessory <ChevronDown size={16} />
-            {jewelryDrop && (
-              <div className="md:hidden pb-8 absolute z-50 w-[100vw] mx-auto top-[36px] -left-[190px] right-0 bg-white">
-                <div className="mt-4"></div>
-                <div className="grid grid-cols-4 px-4 pb-4 gap-y-2">
-                  {accessoryTypes?.data?.map((item: any, index: number) => {
-                    return (
-                      <JewelryItem
-                        key={index}
-                        shapes={shapes?.data}
-                        accessoryType={item.name}
-                      />
-                    );
-                  })}
-                  {/* <div
-                  className="bg-contain bg-no-repeat h-[200px]"
-                  style={{
-                    backgroundImage: "url(/images/Reserve_1000x.webp)",
-                  }}
-                ></div> */}
-                </div>
-              </div>
-            )}
+            Accessory
           </Link>
           <Link
             className="relative mulish-regular flex gap-1 items-center py-1 px-3 border-b-2 border-b-transparent text-base hover:border-b-blue-500 duration-200 transition-all"
             to={"/product/diamond"}
-            onMouseEnter={() => {
-              setDiamondDrop(true);
-            }}
-            onMouseLeave={() => {
-              setDiamondDrop(false);
-            }}
             onClick={() => {
               setMenuDrop(false);
             }}
           >
-            Diamond <ChevronDown size={16} />
-            {diamondDrop && (
-              <div className="md:hidden z-50 w-[100vw] absolute mx-auto top-[36px] -left-[310px] right-0 bg-white">
-                <div className="mt-4"></div>
-                <div className="flex gap-4">
-                  <DiamondItem shapes={shapes?.data} />
-                  <div
-                    className="aspect-[2/1] bg-contain bg-no-repeat h-[240px]"
-                    style={{
-                      backgroundImage: "url(/images/diamond_desktop.jpg)",
-                    }}
-                  ></div>
-                </div>
-              </div>
-            )}
+            Diamond
           </Link>
           <TopNavItem setMenuDrop={setMenuDrop} href="/blogs">
-            Blogs
+            Blog
           </TopNavItem>
           <TopNavItem setMenuDrop={setMenuDrop} href="/about">
             About us
@@ -254,9 +214,6 @@ export default function TopNav() {
           </span>
         </span>
       </div>
-      {(jewelryDrop || diamondDrop) && (
-        <div className="z-10 fixed left-0 right-0 h-[100vh] w-[100vw] bg-black bg-opacity-30"></div>
-      )}
     </div>
   );
 }

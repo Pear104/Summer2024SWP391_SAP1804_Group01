@@ -42,9 +42,10 @@ export default function PriceRate() {
       },
     ],
   });
-  console.log(queryUrl);
-  console.log(promotionList?.data);
-  console.log(promotionList?.data?.promotion?.length);
+
+  useEffect(() => {
+    setQueryUrl("/api/Promotion" + location.search);
+  }, [location.search]);
 
   const renderPromotionRow = (promotion: any) => (
     <PromotionRow key={promotion.promotionId} promotion={promotion} />
@@ -84,11 +85,17 @@ export default function PriceRate() {
                 <Form.Item className="flex-grow">
                   <Input
                     type="text"
-                    placeholder="Search"
+                    placeholder="Search by code"
                     id="keyword"
                     className="border p-2 rounded-md w-full"
+                    // value={params.get("PromotionName") || ""}
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value)
+                      params.set("SearchPromotion", e.target.value);
+                      setQueryUrl(`/api/Promotion?` + params.toString());
+                      navigate({ search: params.toString() });
+                    }}
                   />
                 </Form.Item>
               </Form>
@@ -103,6 +110,7 @@ export default function PriceRate() {
                     setSearchTerm("");
                     // Clear the URL parameters
                     const params = new URLSearchParams(location.search);
+                    params.delete("SearchPromotion");
                     setQueryUrl(`/api/Promotion?` + params.toString());
                     // params.delete("type");
                     navigate({ search: params.toString() });
@@ -143,7 +151,7 @@ export default function PriceRate() {
                         <LoadingItem key={key} />
                       ))}
                     {promotionList?.data &&
-                    promotionList?.data?.promotion?.length > 0 ? (
+                      promotionList?.data?.promotion?.length > 0 ? (
                       promotionList?.data?.promotion?.map(renderPromotionRow)
                     ) : (
                       <td colSpan={100} className="py-20 w-full">

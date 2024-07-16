@@ -4,7 +4,7 @@ import { useState } from "react";
 export default function SearchBarMainLayout() {
   const [_keyword, setKeyword] = useState("");
   return (
-    <div className="border-2 py-1 border-transparent border-slate-900 rounded-md">
+    <div className="border-2 py-1 border-slate-200 rounded-md md:min-w-[200px] md:fixed md:left-1/2 md:transform md:-translate-x-1/2">
       <form
         action="/search"
         method="GET"

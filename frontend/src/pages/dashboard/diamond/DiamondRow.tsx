@@ -30,34 +30,6 @@ export default function DiamondRow({
   return (
     <>
       <tr key={diamond.diamondId}>
-        <td className="px-6 py-4 whitespace-nowrap">
-          <div className="flex items-center">
-            {/* select checkbox */}
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                value="0"
-                className="form-checkbox w-5 h-5"
-                checked={selectedDiamonds.includes(diamond.diamondId)}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setSelectedDiamonds([
-                      ...selectedDiamonds,
-                      diamond.diamondId,
-                    ]);
-                  } else {
-                    setSelectedDiamonds(
-                      selectedDiamonds.filter((id) => id !== diamond.diamondId)
-                    );
-                  }
-                }}
-              />
-              <span className="checkbox-unchecked"></span>
-              <span className="pl-2"></span>
-              <input type="hidden" value="0" />
-            </label>
-          </div>
-        </td>
         {/* map diamond */}
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="flex items-center">
@@ -110,7 +82,7 @@ export default function DiamondRow({
           {diamond.cut}
         </td>
         <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-          <div className="text-indigo-600 hover:text-indigo-900">
+          <div className="text-indigo-600 hover:text-indigo-900 font-bold">
             {diamond.availability ? "Available" : "Not Available"}
           </div>
         </td>

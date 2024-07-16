@@ -6,18 +6,41 @@ import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { setCookie } from "../../utils/cookie";
 import { GET, POST } from "../../utils/request";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQueries } from "@tanstack/react-query";
 import Loading from "../../components/Loading";
 import moment from "moment";
 import dayjs from "dayjs";
+import WarrantyInfo from "./components/WarrantyInfo";
 
 const phoneRegex = new RegExp(
   /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/
 );
 
+const reasonOptions = [
+  {
+    value: "The ring may need to be resized to fit the wearer's finger",
+    label: "The ring may need to be resized to fit the wearer's finger",
+  },
+  {
+    value: "The prongs holding the diamond in place are loose or broken",
+    label: "The prongs holding the diamond in place are loose or broken",
+  },
+  {
+    value:
+      "Requiring cleaning and polishing to restore diamond ring appearance",
+    label:
+      "Requiring cleaning and polishing to restore diamond ring appearance",
+  },
+  {
+    value: "Upgrade the diamond or redesign the setting for a new look.",
+    label: "Upgrade the diamond or redesign the setting for a new look.",
+  },
+  { value: "Other", label: "Other" },
+];
+
 const schema = z.object({
-  warrantyCardId: z.coerce.number().min(0, "Please choose your product!"),
+  warrantyCardId: z.coerce.number().min(1, "Please choose your product!"),
   phoneNumber: z
     .string()
     .regex(phoneRegex, "Invalid phone number!")
@@ -40,10 +63,16 @@ type Option = {
   value: string;
   label: string;
   key: number;
+  info: any;
 };
 
 export default function CreateWarrantyRequest() {
   const [isLoading, setIsLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const [warrantyCardId, setWarrantyCardId] = useState(
+    Number(searchParams.get("warrantyCardId")) || 0
+  );
+  const [reason, setReason] = useState("");
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
   const [warrantyCards] = useQueries({
@@ -66,9 +95,7 @@ export default function CreateWarrantyRequest() {
     })
   );
 
-  console.log(warrantyCards?.data);
-
-  const { control, handleSubmit, reset } = useForm({
+  const { control, handleSubmit, reset, setValue } = useForm({
     defaultValues: {
       warrantyCardId: "",
       warrantyReason: "",
@@ -78,13 +105,14 @@ export default function CreateWarrantyRequest() {
     },
     resolver: zodResolver(schema),
   });
-
   useEffect(() => {
     (async () => {
       const data = await GET("/api/Accounts/me");
       if (data) {
         reset({
-          warrantyCardId: "",
+          warrantyCardId: String(
+            Number(searchParams.get("warrantyCardId")) || "Choose a product"
+          ),
           warrantyReason: "",
           phoneNumber: data.phoneNumber,
           shippingAddress: data.address,
@@ -97,7 +125,6 @@ export default function CreateWarrantyRequest() {
       }
     })();
   }, [reset]);
-
   return (
     <>
       {contextHolder}
@@ -107,7 +134,6 @@ export default function CreateWarrantyRequest() {
           <div className="uppercase font-semibold text-xl">
             Request a warranty service
           </div>
-          <div></div>
           <div>
             <Form
               layout="vertical"
@@ -118,11 +144,12 @@ export default function CreateWarrantyRequest() {
                 setIsLoading(true);
                 const response = await POST("/api/WarrantyRequests", formData);
                 setIsLoading(false);
+                console.log("response: ");
                 console.log(response);
-                if (response) {
+                if (response?.warrantyRequestId) {
                   navigate("/account/warranty");
                 } else {
-                  messageApi.error("Something went wrong, try again!");
+                  messageApi.error("This product is being warranted.");
                 }
               })}
             >
@@ -148,8 +175,12 @@ export default function CreateWarrantyRequest() {
                       .localeCompare((optionB?.label ?? "").toLowerCase())
                   }
                   options={options}
+                  onChange={(value) => {
+                    setWarrantyCardId(value);
+                  }}
                 />
               </FormItem>
+              <WarrantyInfo id={warrantyCardId} />
 
               <FormItem
                 className=""
@@ -164,7 +195,7 @@ export default function CreateWarrantyRequest() {
                 />
               </FormItem>
               <FormItem
-                label="Receive time (The day delivery staff can come to get your item)"
+                label="Receive date (The day delivery staff can come to get your item)"
                 name="receiveTime"
                 control={control}
                 className="w-full"
@@ -188,19 +219,40 @@ export default function CreateWarrantyRequest() {
                   className="border text-sm py-2 px-2 without-ring w-full rounded-none"
                 />
               </FormItem>
-              <FormItem
-                className="col-span-2"
-                label="Warranty reason"
-                name="warrantyReason"
-                control={control}
-                required
-              >
-                <Input.TextArea
-                  rows={4}
-                  placeholder="Describe the problem happen with your product (What need to be fixed)"
-                  className="text-black text-sm border py-2 px-2 without-ring w-full rounded-none"
+
+              <div className="col-span-2 mb-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-red-500 text-xl">*</span> Warranty
+                  reason
+                </div>
+                <Select
+                  size="large"
+                  className="font-thin border w-full text-sm"
+                  options={reasonOptions}
+                  onChange={(e: any) => {
+                    setReason(e);
+                    if (e != "Other") {
+                      setValue("warrantyReason", e);
+                    } else {
+                      setValue("warrantyReason", "");
+                    }
+                  }}
                 />
-              </FormItem>
+              </div>
+              {reason == "Other" && (
+                <FormItem
+                  className="mt-4 col-span-2"
+                  name="warrantyReason"
+                  control={control}
+                  required
+                >
+                  <Input.TextArea
+                    rows={4}
+                    placeholder="Describe the problem happen with your product (What need to be fixed)"
+                    className="text-black text-sm border py-2 px-2 without-ring w-full rounded-none"
+                  />
+                </FormItem>
+              )}
               <div className="w-[100px]">
                 <Form.Item className="mb-0">
                   <Button

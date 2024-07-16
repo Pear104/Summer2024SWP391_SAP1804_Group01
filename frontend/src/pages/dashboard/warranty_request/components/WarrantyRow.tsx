@@ -9,7 +9,7 @@ export default function WarrantyRow({ warranty }: { warranty: any }) {
   const [saleStaffs, deliveryStaffs] = useQueries({
     queries: [
       {
-        queryKey: ["warrantyStaff"],
+        queryKey: ["warrantyStaffs"],
         queryFn: () => GET("/api/Accounts?Role=WarrantyStaff"),
         staleTime: 0,
       },
@@ -29,9 +29,6 @@ export default function WarrantyRow({ warranty }: { warranty: any }) {
             {warranty.warrantyRequestId}
           </div>
         </td>
-        <td className="px-6 py-4 whitespace-nowrap">
-          <div>{warranty.warrantyCardId}</div>
-        </td>
         <td className="px-6 py-4 w-[500px] whitespace-normal break-words">
           <div>{warranty.warrantyReason}</div>
         </td>
@@ -44,17 +41,17 @@ export default function WarrantyRow({ warranty }: { warranty: any }) {
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="text-sm text-gray-500">
-            <OpenGoogleMaps address={warranty.shippingAddress}/>
+            <OpenGoogleMaps address={warranty.shippingAddress} />
           </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="text-sm text-gray-500">
-          <a
-            href={"tel:" + warranty.phoneNumber}
-            className="text-sm border p-2 bg-blue-500 text-white rounded-lg"
-          >
-            {warranty.phoneNumber}
-          </a>
+            <a
+              href={"tel:" + warranty.phoneNumber}
+              className="text-sm border p-2 bg-blue-500 text-white rounded-lg"
+            >
+              {warranty.phoneNumber}
+            </a>
           </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">

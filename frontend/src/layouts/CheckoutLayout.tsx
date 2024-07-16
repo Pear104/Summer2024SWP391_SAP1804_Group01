@@ -1,5 +1,5 @@
 import { Breadcrumb, Button, Divider, Input, Skeleton, message } from "antd";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Logo from "../components/logo/Logo";
 import { useCartStore } from "../store/cartStore";
 import { useQueries } from "@tanstack/react-query";
@@ -60,6 +60,7 @@ export default function CheckoutLayout() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [appliedPromotion, setAppliedPromotion] = useState("");
   const [discountCode, setDiscountCode] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -92,7 +93,7 @@ export default function CheckoutLayout() {
 
   useEffect(() => {
     if (cart.length == 0) {
-      location.href = "/";
+      navigate("/");
     }
   }, []);
 
@@ -185,6 +186,7 @@ export default function CheckoutLayout() {
           />
         ))}
         <Divider />
+        <div className="font-semibold mb-2">Enter the discount code</div>
         <div className="flex flex-col gap-2">
           <div className="flex gap-4">
             <Input
@@ -199,6 +201,10 @@ export default function CheckoutLayout() {
             >
               Apply
             </Button>
+          </div>
+          <div className="font-light mb-2 italic">
+            * Based on your current rank in our system, you are eligible for a{" "}
+            {userInfo?.data?.rank?.discount * 100}% discount on this order.
           </div>
           <div>
             <div className="flex gap-2">
@@ -217,7 +223,7 @@ export default function CheckoutLayout() {
                 </div>
               )}
             </div>
-            <div className="font-semibold mb-2">Enter the discount code</div>
+
             {/* Discount code items */}
             {/* {promotion?.data?.map((promotion: any) => (
               <div
@@ -264,7 +270,9 @@ export default function CheckoutLayout() {
             </div>
             <div className="flex justify-between">
               <div>Discount</div>
-              <div className="font-semibold">{totalDiscount * 100 + "%"}</div>
+              <div className="font-semibold">
+                {(totalDiscount * 100).toFixed(0) + "%"}
+              </div>
             </div>
           </div>
           <Divider />

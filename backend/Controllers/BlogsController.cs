@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using backend.DTOs.Blog;
 using backend.Helper;
@@ -25,8 +26,12 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<ActionResult> GetBlogs([FromQuery] BlogQuery query)
         {
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (role == "Customer" || role == null)
+            {
+                query.IsHidden = false;
+            }
             var blogResult = await _blogRepo.GetAllBlogsAsync(query);
-            System.Console.WriteLine("Sort by:" + query.SortBy);
             return Ok(blogResult);
         }
 
@@ -75,7 +80,7 @@ namespace backend.Controllers
         }
 
         [HttpDelete("{id}/{isHidden}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteBlog([FromRoute] long id, [FromRoute] bool isHidden)
         {
             var deletedBlog = await _blogRepo.DeleteBlogAsync(id, isHidden);

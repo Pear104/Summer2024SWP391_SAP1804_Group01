@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using backend.Data;
 using backend.DTOs.WarrantyCard;
+using backend.Enums;
 using backend.Helper;
 using backend.Interfaces;
+using backend.Mappers;
 using backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace backend.Repository
 {
@@ -20,34 +24,57 @@ namespace backend.Repository
             _context = context;
         }
 
-        public async Task<List<WarrantyCard>?> getUserWarrantyCards(long userId)
+        public async Task<WarrantyCardResult?> getUserWarrantyCards(WarrantyCardQuery query)
         {
-            var user = await _context.Accounts.FindAsync(userId);
+            var user = await _context.Accounts.FindAsync(query.CustomerId);
             if (user == null)
             {
                 return null;
             }
-            var warrantyCardQueries = await _context
+            var warrantyCardQueries = _context
                 .WarrantyCards.Include(x => x.Diamond)
                 .ThenInclude(x => x.Shape)
                 .Include(x => x.Accessory)
-                .Where(x => x.OrderDetail.Order.CustomerId == userId)
-                .ToListAsync();
-            return warrantyCardQueries;
+                .Where(x =>
+                    x.OrderDetail!.Order.CustomerId == query.CustomerId
+                    && (
+                        // Only get warranty cards that have no request or have warranty requests that are completed
+                        !x.WarrantyRequests.Any()
+                        || x.WarrantyRequests.All(wr =>
+                            wr.WarrantyStatus == WarrantyStatus.Completed
+                        )
+                    )
+                );
+
+            var totalCount = await warrantyCardQueries.CountAsync();
+
+            var totalPages = (int)Math.Ceiling(totalCount / (double)query.PageSize);
+
+            return new WarrantyCardResult
+            {
+                WarrantyCards = warrantyCardQueries.Select(x => x.ToWarrantyCardDTO()).ToList(),
+                TotalPages = totalPages,
+                PageSize = query.PageSize,
+                CurrentPage = query.PageNumber,
+                TotalCount = totalCount
+            };
         }
 
         public async Task<WarrantyCardResult?> getWarrantyCards(WarrantyCardQuery query)
         {
-            var warrantyCardQueries = _context.WarrantyCards.Include(x => x.OrderDetail)
+            var warrantyCardQueries = _context
+                .WarrantyCards.Include(x => x.OrderDetail)
                 .ThenInclude(x => x.Order)
+                .Include(x => x.Accessory)
+                .ThenInclude(x => x.AccessoryImages)
                 .AsQueryable();
 
-            // if (query.WarrantyCardId.HasValue)
-            // {
-            //     warrantyCardQueries = warrantyCardQueries.Where(x =>
-            //         x.WarrantyCardId == query.WarrantyCardId
-            //     );
-            // }
+            if (query.WarrantyCardId.HasValue)
+            {
+                warrantyCardQueries = warrantyCardQueries.Where(x =>
+                    x.WarrantyCardId == query.WarrantyCardId
+                );
+            }
             // if (query.DiamondId.HasValue)
             // {
             //     warrantyCardQueries = warrantyCardQueries.Where(x =>
@@ -68,7 +95,28 @@ namespace backend.Repository
             // {
             //     warrantyCardQueries = warrantyCardQueries.Where(x => x.StartTime <= query.MaxDate);
             // }
-            
+
+            if (!query.CustomerName.IsNullOrEmpty())
+            {
+                warrantyCardQueries = warrantyCardQueries.Where(x =>
+                    x.OrderDetail!.Order.Customer!.Name.Contains(query.CustomerName!)
+                );
+            }
+
+            if (!query.ProductName.IsNullOrEmpty())
+            {
+                warrantyCardQueries = warrantyCardQueries.Where(
+                    (x) =>
+                        x.Accessory != null
+                            ? (x.Accessory.Name.Contains(query.ProductName!))
+                            : (
+                                (x.Diamond!.Carat + " Carat, " + x.Diamond.Shape.Name).Contains(
+                                    query.ProductName!
+                                )
+                            )
+                );
+            }
+
             var totalCount = await warrantyCardQueries.CountAsync();
 
             var totalPages = (int)Math.Ceiling(totalCount / (double)query.PageSize);
@@ -82,14 +130,22 @@ namespace backend.Repository
                     WarrantyCardId = x.WarrantyCardId,
                     DiamondId = x.DiamondId,
                     AccessoryId = x.AccessoryId,
+                    Accessory = x.Accessory != null ? x.Accessory.ToAccessoryDTO() : null,
+                    Diamond = x.Diamond != null ? x.Diamond.ToDiamondDTO() : null,
                     StartTime = x.StartTime,
                     EndTime = x.EndTime,
-                    CustomerName = x.OrderDetail.Order.Customer != null ? x.OrderDetail.Order.Customer.Name : null,
+                    CustomerName =
+                        x.OrderDetail!.Order.Customer != null
+                            ? x.OrderDetail.Order.Customer.Name
+                            : null,
                     AccessoryName = x.Accessory != null ? x.Accessory.Name : null,
-                    DiamondName = x.Diamond != null ? x.Diamond.Carat + " Carat, " + x.Diamond.Shape.Name : null
+                    DiamondName =
+                        x.Diamond != null
+                            ? x.Diamond.Carat + " Carat, " + x.Diamond.Shape.Name
+                            : null
                 })
                 .ToListAsync();
-                
+
             return new WarrantyCardResult
             {
                 WarrantyCards = warrantyCards,
@@ -99,6 +155,5 @@ namespace backend.Repository
                 TotalCount = totalCount
             };
         }
-
     }
 }
