@@ -10,6 +10,7 @@ export const GET = async (url: string) => {
           "Content-Type": "application/json;charset=UTF-8",
           Authorization: `Bearer ${getCookie("accessToken")}`,
         },
+        referrerPolicy: "unsafe-url" 
       })
     ).json();
     return data;
