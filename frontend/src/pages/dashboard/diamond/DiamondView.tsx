@@ -131,6 +131,11 @@ const fluorescenceOptions = [
   { value: "None", label: "None" },
 ];
 
+const labOptions = [
+  { value: "GIA", label: "GIA" },
+  { value: "IGI", label: "IGI" },
+];
+
 const schema = z.object({
   lab: z
     .string()
@@ -367,9 +372,14 @@ export default function DiamondView() {
           })}
         >
           <FormItem label="Lab" name="lab" control={control} required>
-            <Input
+            {/* <Input
               placeholder="Diamond lab"
               className="font-thin border p-2 rounded-md w-full"
+            /> */}
+            <Select
+              size="large"
+              className="font-thin border w-full text-sm"
+              options={labOptions}
             />
           </FormItem>
           <FormItem

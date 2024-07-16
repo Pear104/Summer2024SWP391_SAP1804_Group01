@@ -55,28 +55,16 @@ export default function CreateWarrantyRequest() {
       },
     ],
   });
-  const options: Option[] = warrantyCards?.data?.map((warrantyCard: any) => ({
-    key: warrantyCard.warrantyCardId,
-    value: warrantyCard.warrantyCardId,
-    label: warrantyCard.diamondId
-      ? `${warrantyCard?.diamond?.carat} ct ${warrantyCard?.diamond?.shape?.name} Shape Diamond #${warrantyCard?.diamond.certificateNumber}`
-      : warrantyCard?.accessory?.name,
-  }));
-  // const options: Option[] = warrantyCards?.data?.orders
-  //   ?.map((order: any) =>
-  //     order.orderDetails.map((orderDetail: any) => ({
-  //       key: orderDetail.warrantyCardId,
-  //       value: orderDetail.warrantyCardId,
-  //       label: `${orderDetail?.diamond.carat} ct ${
-  //         orderDetail?.diamond.shape
-  //       } Shape Diamond #${orderDetail?.diamond.certificateNumber} ${
-  //         orderDetail?.accessory?.name
-  //           ? "+ " + orderDetail?.accessory?.name
-  //           : ""
-  //       }`,
-  //     }))
-  //   )
-  //   .flat();
+  const options: Option[] = warrantyCards?.data?.warrantyCards?.map(
+    (warrantyCard: any) => ({
+      key: warrantyCard.warrantyCardId,
+      value: warrantyCard.warrantyCardId,
+      label: warrantyCard.warrantyCardId,
+      // label: warrantyCard.diamondId
+      //   ? `${warrantyCard?.diamond?.carat} ct ${warrantyCard?.diamond?.shape?.name} Shape Diamond #${warrantyCard?.diamond?.certificateNumber}`
+      //   : warrantyCard?.accessory?.name,
+    })
+  );
 
   console.log(warrantyCards?.data);
 
