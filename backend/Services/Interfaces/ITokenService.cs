@@ -1,7 +1,7 @@
-using backend.BusinessOjects.Models;
-using backend.Services.DTOs.Authentication;
+using BusinessObjects.Models;
+using Helpers.DTOs.Authentication;
 
-namespace backend.Services.Interfaces
+namespace Services.Interfaces
 {
     public interface ITokenService
     {

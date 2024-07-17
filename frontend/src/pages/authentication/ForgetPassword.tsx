@@ -6,6 +6,8 @@ import { FormItem } from "react-hook-form-antd";
 import { UserOutlined } from "@ant-design/icons";
 import { CircleArrowRight } from "lucide-react";
 import * as z from "zod";
+import { useState } from "react";
+import Loading from "../../components/Loading";
 
 const schema = z.object({
   email: z
@@ -15,6 +17,7 @@ const schema = z.object({
     .max(32, { message: "Email must be at most 32 characters" }),
 });
 export default function ForgetPassword() {
+  const [loading, setLoading] = useState(false);
   const { control, handleSubmit, setError } = useForm({
     defaultValues: { email: "" },
     resolver: zodResolver(schema),
@@ -22,6 +25,7 @@ export default function ForgetPassword() {
 
   return (
     <div className="grid grid-cols-2 gap-4 py-16 px-32">
+      {loading && <Loading />}
       <div className="col-span-1">
         <div
           className="aspect-square bg-contain bg-no-repeat w-full"
@@ -40,10 +44,12 @@ export default function ForgetPassword() {
             autoComplete="off"
             className="w-[440px] flex flex-col gap-1"
             onFinish={handleSubmit(async (data) => {
+              setLoading(true);
               const authResponse = await POST(
                 "/api/Authentication/reset-password",
                 data
               );
+              setLoading(false);
               if (authResponse) {
                 // setCookie("accessToken", authResponse.token, 7);
                 location.href = "/authentication/email-redirect";

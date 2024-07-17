@@ -8,6 +8,8 @@ import { UserOutlined } from "@ant-design/icons";
 import { CircleArrowLeft, CircleArrowRight } from "lucide-react";
 import * as z from "zod";
 import { jwtDecode } from "jwt-decode";
+import { useState } from "react";
+import Loading from "../../components/Loading";
 
 const schema = z
   .object({
@@ -37,6 +39,7 @@ export default function ResetPasswordForm() {
   const params = new URLSearchParams(url.searchParams);
   const decoded = jwtDecode(params.get("token") || "") as any;
   setCookie("accessToken", params.get("token") || "", 7);
+  const [loading, setLoading] = useState(false);
 
   const { control, handleSubmit, setError } = useForm({
     defaultValues: { email: decoded.email, password: "", confirmPassword: "" },
@@ -45,6 +48,7 @@ export default function ResetPasswordForm() {
 
   return (
     <div className="grid grid-cols-2 gap-4 py-16 px-32">
+      {loading && <Loading />}
       <div className="col-span-1">
         <div
           className="aspect-square bg-contain bg-no-repeat w-full"
@@ -63,10 +67,12 @@ export default function ResetPasswordForm() {
             autoComplete="off"
             className="w-[440px] flex flex-col gap-1"
             onFinish={handleSubmit(async (data) => {
+              setLoading(true);
               const authResponse = await POST(
                 "/api/Authentication/confirm-password",
                 data
               );
+              setLoading(false);
               if (authResponse.token) {
                 setCookie("accessToken", authResponse.token, 7);
                 location.href = "/account";

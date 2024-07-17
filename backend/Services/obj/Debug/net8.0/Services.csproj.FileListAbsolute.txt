@@ -1,6 +1,0 @@
-D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Services\obj\Debug\net8.0\Services.GeneratedMSBuildEditorConfig.editorconfig
-D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Services\obj\Debug\net8.0\Services.AssemblyInfoInputs.cache
-D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Services\obj\Debug\net8.0\Services.AssemblyInfo.cs
-D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Services\obj\Debug\net8.0\Services.csproj.CoreCompileInputs.cache
-D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Services\obj\Debug\net8.0\Services.sourcelink.json
-D:\workspace\projects\team\Summer2024SWP391_SAP1804_Group01\backend\Services\obj\Debug\net8.0\Services.csproj.AssemblyReference.cache

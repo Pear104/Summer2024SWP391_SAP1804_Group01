@@ -1,6 +1,6 @@
-﻿using backend.BusinessOjects.Models;
+﻿using BusinessObjects.Models;
 
-namespace backend.Services.Interfaces
+namespace Services.Interfaces
 {
     public interface IEmailSender
     {

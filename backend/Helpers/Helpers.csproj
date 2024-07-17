@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Helpers\Helpers.csproj" />
-    <ProjectReference Include="..\Repositories\Repositories.csproj">
+    <ProjectReference Include="..\BusinessObjects\BusinessObjects.csproj">
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
