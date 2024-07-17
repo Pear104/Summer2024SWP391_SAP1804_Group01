@@ -1,12 +1,20 @@
 ﻿using System.Net;
 using System.Net.Mail;
 using BusinessObjects.Models;
+using Microsoft.Extensions.Configuration;
 using Services.Interfaces;
 
 namespace Services.Implements
 {
     public class EmailSender : IEmailSender
     {
+        private readonly IConfiguration _config;
+
+        public EmailSender(IConfiguration config)
+        {
+            _config = config;
+        }
+
         public static string GetVerifyContent(string name, string link)
         {
             string htmlString =
@@ -385,23 +393,24 @@ a[x-apple-data-detectors] {
         {
             try
             {
-                string url = $"http://localhost:3000/authentication/verify-gmail?token={token}";
+                string url = $"{_config["ClientUrl"]}/authentication/verify-gmail?token={token}";
                 var message = new MailMessage()
                 {
-                    From = new MailAddress("datj.company@gmail.com", "DATJ DIAMOND"),
+                    From = new MailAddress(_config["Mail:Address"], _config["Mail:DisplayName"]),
                     Subject = subject,
                     IsBodyHtml = true,
                     Body = GetVerifyContent(name, url),
                 };
                 message.To.Add(toEmail);
-                var smtp = new SmtpClient("smtp.gmail.com")
+                var smtp = new SmtpClient(_config["Mail:Host"])
                 {
-                    Port = 587,
+                    Port =
+                        _config["Mail:Port"] != null ? Convert.ToInt32(_config["Mail:Port"]) : 587,
                     Credentials = new NetworkCredential(
-                        "datj.company@gmail.com",
-                        "qdfh hxaz rkcp yrwh"
+                        _config["Mail:Address"],
+                        _config["Mail:AppPassword"]
                     ),
-                    EnableSsl = true,
+                    EnableSsl = bool.Parse(_config["Mail:EnableSsl"]),
                 };
                 smtp.Send(message);
                 return true;
@@ -417,23 +426,24 @@ a[x-apple-data-detectors] {
         {
             try
             {
-                string url = $"http://localhost:3000/authentication/reset-password?token={token}";
+                string url = $"{_config["ClientUrl"]}/authentication/reset-password?token={token}";
                 var message = new MailMessage()
                 {
-                    From = new MailAddress("datj.company@gmail.com", "DATJ DIAMOND"),
+                    From = new MailAddress(_config["Mail:Address"], _config["Mail:DisplayName"]),
                     Subject = subject,
                     IsBodyHtml = true,
                     Body = GetResetContent(name, url),
                 };
                 message.To.Add(toEmail);
-                var smtp = new SmtpClient("smtp.gmail.com")
+                var smtp = new SmtpClient(_config["Mail:Host"])
                 {
-                    Port = 587,
+                    Port =
+                        _config["Mail:Port"] != null ? Convert.ToInt32(_config["Mail:Port"]) : 587,
                     Credentials = new NetworkCredential(
-                        "datj.company@gmail.com",
-                        "qdfh hxaz rkcp yrwh"
+                        _config["Mail:Address"],
+                        _config["Mail:AppPassword"]
                     ),
-                    EnableSsl = true,
+                    EnableSsl = bool.Parse(_config["Mail:EnableSsl"]),
                 };
                 smtp.Send(message);
                 return true;
@@ -470,20 +480,21 @@ a[x-apple-data-detectors] {
             {
                 var message = new MailMessage()
                 {
-                    From = new MailAddress("datj.company@gmail.com", "DATJ DIAMOND"),
+                    From = new MailAddress(_config["Mail:Address"], _config["Mail:DisplayName"]),
                     Subject = $"[DATJ Diamond] – {subject}",
                     IsBodyHtml = true,
                     Body = GetOrderContent(order, subject),
                 };
                 message.To.Add(order.Customer.Email);
-                var smtp = new SmtpClient("smtp.gmail.com")
+                var smtp = new SmtpClient(_config["Mail:Host"])
                 {
-                    Port = 587,
+                    Port =
+                        _config["Mail:Port"] != null ? Convert.ToInt32(_config["Mail:Port"]) : 587,
                     Credentials = new NetworkCredential(
-                        "datj.company@gmail.com",
-                        "qdfh hxaz rkcp yrwh"
+                        _config["Mail:Address"],
+                        _config["Mail:AppPassword"]
                     ),
-                    EnableSsl = true,
+                    EnableSsl = bool.Parse(_config["Mail:EnableSsl"]),
                 };
                 smtp.Send(message);
                 return true;
