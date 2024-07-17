@@ -52,7 +52,7 @@ namespace DAOs
                     .AddJsonFile("appsettings.json", true, true)
                     .Build();
 
-                var connectionString = config["ConnectionStrings:DefaultConnection"];
+                var connectionString = config.GetConnectionString("DefaultConnection");
 
                 optionsBuilder.UseSqlServer(connectionString);
             }
