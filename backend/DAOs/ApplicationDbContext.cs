@@ -42,19 +42,23 @@ namespace DAOs
 
         //End payment
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
-            optionsBuilder.UseSqlServer(GetConnectionString());
 
-        private string? GetConnectionString()
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            IConfiguration config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true)
-                .Build();
-            var strConn = config["ConnectionStrings:DefaultConnection"];
+            if (!optionsBuilder.IsConfigured)
+            {
+                IConfiguration config = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", true, true)
+                    .Build();
 
-            return strConn;
+                var connectionString = config["ConnectionStrings:DefaultConnection"];
+
+                optionsBuilder.UseSqlServer(connectionString);
+            }
         }
+
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

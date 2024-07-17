@@ -52,6 +52,9 @@ namespace BusinessObjects.Models
         [Column("is_hidden")]
         public bool IsHidden { get; set; } = true;
 
+        [Column("import_price")]
+        public double ImportPrice { get; set; }
+
         [Column("shape_id")]
         public long ShapeId { get; set; }
         public Shape Shape { get; set; } = new Shape();
