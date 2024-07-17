@@ -60,6 +60,6 @@ namespace BusinessObjects.Models
         public Shape Shape { get; set; } = new Shape();
 
         public List<OrderDetail>? OrderDetails { get; set; }
-        public List<WarrantyCard> WarrantyCards { get; set; }
+        public List<WarrantyCard>? WarrantyCards { get; set; }
     }
 }

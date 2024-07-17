@@ -19,7 +19,7 @@ namespace BusinessObjects.Models
         public double? ItemPrice { get; set; }
 
         [Column("order_id")]
-        public string OrderId { get; set; }
+        public string? OrderId { get; set; }
         public Order Order { get; set; } = new Order();
 
         [Column("diamond_id")]
@@ -38,7 +38,7 @@ namespace BusinessObjects.Models
         public long? MaterialPriceId { get; set; }
         public MaterialPrice? MaterialPrice { get; set; }
 
-        public List<WarrantyCard> WarrantyCards { get; set; }
+        public List<WarrantyCard>? WarrantyCards { get; set; }
 
         [Column("feedback_id")]
         public long? FeedbackId { get; set; }
