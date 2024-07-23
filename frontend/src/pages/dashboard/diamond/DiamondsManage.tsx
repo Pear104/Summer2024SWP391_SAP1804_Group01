@@ -225,32 +225,6 @@ export default function ProductsManage() {
                   {/* theader */}
                   <thead className="w-full bg-gray-50">
                     <tr className="">
-                      {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        <div className="flex items-center">
-                          <label className="flex items-center">
-                            <input
-                              type="checkbox"
-                              value="0"
-                              className="form-checkbox w-5 h-5"
-                              checked={selectAll}
-                              onChange={(e) => {
-                                setSelectAll(e.target.checked);
-                                if (e.target.checked) {
-                                  setSelectedDiamonds(
-                                    diamondsData.map(
-                                      (diamond: any) => diamond.diamondId
-                                    )
-                                  );
-                                } else {
-                                  setSelectedDiamonds([]);
-                                }
-                              }}
-                            />
-                            <span className="checkbox-unchecked"></span>
-                            <span className="pl-2"></span>
-                          </label>
-                        </div>
-                      </th> */}
                       {columnHeaders.map((header) => {
                         return (
                           <DiamondColumnHeader
