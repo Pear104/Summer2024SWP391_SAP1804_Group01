@@ -5,11 +5,10 @@ import { Truck } from "lucide-react";
 import EditCheckoutInfo from "./components/EditCheckoutInfo";
 import { POST, PUT } from "../../utils/request";
 import { useCartStore } from "../../store/cartStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { useCheckoutStore } from "../../store/checkoutStore";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-
 // Renders errors or successfull transactions on the screen.
 interface MessageProps {
   content: string;
@@ -25,6 +24,7 @@ export default function CheckoutPayment() {
   const clearCart = useCartStore((state) => state.clearCart);
   const navigate = useNavigate();
 
+  // Handle errors order
   const showErrorModal = () => {
     Modal.error({
       title: "Order Error",
@@ -36,6 +36,7 @@ export default function CheckoutPayment() {
     });
   };
 
+  // config paypal
   const initialOptions = {
     clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID,
     currency: "USD",
@@ -44,7 +45,30 @@ export default function CheckoutPayment() {
     "data-sdk-integration-source": "developer-studio",
   };
 
+  //message 
   const [message, setMessage] = useState<string>("");
+  const [USDRate, setUSDRate] = useState(25000);
+  //API call to get USD price rate and convert to VND
+  const fetchExchangeRates = async () => {
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", "Basic OGNhN2FlMjUtOTNjNS00MmFlLThhYjQtMzlkZTFlOTQzZDEwOjliN2UzNmZkLWRjYjgtNDEwZS1hYzc3LTQ5NGRmYmEyZGJjZA==");
+
+    const requestOptions: RequestInit = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+
+    try {
+      const response = await fetch("https://api.wise.com/v1/rates?source=USD&target=VND", requestOptions);
+      const result = await response.json();
+      console.log(result);
+      setUSDRate(result[0].rate);
+      console.log("price USD rate: " + USDRate);
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
   return (
     <div className="">
       <Divider>
@@ -83,6 +107,7 @@ export default function CheckoutPayment() {
                       });
                       console.log("orderResponse: ", orderResponse);
                       if (orderResponse?.orderId) {
+                        fetchExchangeRates();
                         const transactionResponse = await POST(
                           "/api/Transactions",
                           {
@@ -97,18 +122,19 @@ export default function CheckoutPayment() {
                           "transactionResponse: ",
                           transactionResponse
                         );
+                        fetchExchangeRates();
                         const paymentResponse = await POST(
                           "/api/payment/vnpay-sent-request",
                           {
                             paymentContent:
                               "Thanh toan don hang " + orderResponse?.orderId,
-                            paymentCurrency: "USD",
+                            paymentCurrency: "VND",
                             paymentRefId: transactionResponse?.transactionId,
                             requiredAmount: (
-                              orderResponse?.totalPrice *
+                              orderResponse?.totalPrice * USDRate *
                               (1 - orderResponse?.totalDiscountPercent)
                             ).toFixed(0),
-                            paymentLanguage: "en",
+                            paymentLanguage: "vi",
                             merchantId: "MER0001",
                             paymentDestinationId: "VNPAY",
                             signature: "123456789ABC",
@@ -134,7 +160,7 @@ export default function CheckoutPayment() {
                       Credit Card
                     </div>
                   </Button>
-                  {/* Paypal button */}
+                  {/* Ship cod button */}
                   <Button
                     className="gap-4 px-8 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
                     onClick={async () => {
@@ -156,19 +182,19 @@ export default function CheckoutPayment() {
                           "transactionResponse: ",
                           transactionResponse
                         );
+                        fetchExchangeRates();
                         const paymentResponse = await POST(
                           "/api/payment/vnpay-sent-request",
                           {
                             paymentContent:
-                              "Dat coc don hang " + orderResponse?.orderId,
-                            paymentCurrency: "USD",
+                              "Thanh toan don hang " + orderResponse?.orderId,
+                            paymentCurrency: "VND",
                             paymentRefId: transactionResponse?.transactionId,
                             requiredAmount: (
-                              orderResponse?.totalPrice *
-                              0.4 *
-                              (1 - orderResponse?.totalDiscountPercent / 100)
+                              orderResponse?.totalPrice * USDRate *
+                              (1 - orderResponse?.totalDiscountPercent)
                             ).toFixed(0),
-                            paymentLanguage: "en",
+                            paymentLanguage: "vi",
                             merchantId: "MER0001",
                             paymentDestinationId: "VNPAY",
                             signature: "123456789ABC",
@@ -178,7 +204,7 @@ export default function CheckoutPayment() {
                           clearCart();
                           location.href = paymentResponse.paymentUrl;
                         }
-                      } else{
+                      } else {
                         console.log("Error: ", orderResponse);
                         clearCart();
                         showErrorModal();
@@ -189,7 +215,7 @@ export default function CheckoutPayment() {
                     <Truck />
                     Ship COD (Deposit 40%)
                   </Button>
-
+                  {/* Paypal button */}
                   <PayPalScriptProvider options={initialOptions}>
                     <PayPalButtons
                       className="hover:scale-95 font-bold text-white flex items-center justify-center w-[300px]"
@@ -256,7 +282,7 @@ export default function CheckoutPayment() {
 
                               throw new Error(errorMessage);
                             }
-                          } else{
+                          } else {
                             console.log("Error: ", orderResponse);
                             clearCart();
                             showErrorModal();
