@@ -179,6 +179,7 @@ export default function DiamondView() {
   const [diamond, setDiamond] = useState<any>();
   const { diamondId } = useParams();
   const queryClient = useQueryClient();
+  const { message } = App.useApp();
   const navigate = useNavigate();
 
   const { control, handleSubmit, reset, setError } = useForm({
@@ -206,16 +207,7 @@ export default function DiamondView() {
         queryKey: ["diamond", diamondId, reset],
         queryFn: async () => {
           const data = await GET(`/api/Diamonds/${diamondId}`);
-          if (data) {
-            setDiamondFile([
-              {
-                uid: "-1",
-                name: "image.png",
-                status: "done",
-                url: data?.imageUrl,
-              },
-            ]);
-            console.log(data);
+          if (diamondId) {
             setDiamond(data);
             setAvailability(data?.availability);
             reset({
@@ -240,8 +232,6 @@ export default function DiamondView() {
       },
     ],
   });
-
-  const { message } = App.useApp();
 
   const mutatePost = useMutation({
     mutationFn: (diamond: any) => {

@@ -74,7 +74,7 @@ export default function AccessoryView() {
         queryKey: ["accessory", accessoryId, reset],
         queryFn: async () => {
           const data = await GET(`/api/Accessories/${accessoryId}`);
-          if (data.accessoryId) {
+          if (accessoryId) {
             setFileList(data?.accessoryImages);
             setAccessory(data);
             reset({
