@@ -75,7 +75,7 @@ function CustomerManage() {
       setSelectedAccount={setSelectedCustomer}
     />
   );
-  const [selectAll, setSelectAll] = useState(false);
+  // const [selectAll, setSelectAll] = useState(false);
   // pagination, change page size
   const [pageSize, setPageSize] = useState(10);
   useEffect(() => {
@@ -84,13 +84,13 @@ function CustomerManage() {
     setQueryUrl(getAllCustomerAPI + params.toString());
   }, [pageSize]);
 
-  const handleAction = (action: string) => {
-    if (action === "clear") {
-      setSelectedCustomer([]);
-      setSelectAll(false);
-    }
-    console.log(action);
-  };
+  // const handleAction = (action: string) => {
+  //   if (action === "clear") {
+  //     setSelectedCustomer([]);
+  //     setSelectAll(false);
+  //   }
+  //   console.log(action);
+  // };
 
   return (
     <>
@@ -152,10 +152,7 @@ function CustomerManage() {
                       setSearchTerm("");
                       // Clear the URL parameters
                       const params = new URLSearchParams(location.search);
-                      params.delete("IsAvailability");
-                      params.delete("IsDescending");
-                      params.delete("SortBy");
-                      params.delete("SearchQuery");
+                      params.delete("AccountName");
                       setQueryUrl(getAllCustomerAPI + params.toString());
                       // params.delete("type");
                       navigate({ search: params.toString() });
@@ -179,36 +176,6 @@ function CustomerManage() {
                     {/* theader */}
                     <thead className="bg-gray-50">
                       <tr>
-                        <th
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                          <div className="flex items-center">
-                            <label className="flex items-center">
-                              <input
-                                type="checkbox"
-                                value="0"
-                                className="form-checkbox w-5 h-5"
-                                checked={selectAll}
-                                onChange={(e) => {
-                                  setSelectAll(e.target.checked);
-                                  if (e.target.checked) {
-                                    setSelectedCustomer(
-                                      customersData.map(
-                                        (customer: any) => customer.customerId
-                                      )
-                                    );
-                                  } else {
-                                    setSelectedCustomers([]);
-                                  }
-                                }}
-                              />
-                              <span className="checkbox-unchecked"></span>
-                              <span className="pl-2"></span>
-                              {/* <input type="hidden" value="0" /> */}
-                            </label>
-                          </div>
-                        </th>
                         {columnHeaders.map((header) => {
                           return (
                             <CustomerColumnHeader
@@ -224,44 +191,6 @@ function CustomerManage() {
                     {/* body */}
                     {/* selected diamond pop up */}
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {selectedCustomer.length > 0 && (
-                        <tr>
-                          <td colSpan={100} className="border-t-0">
-                            <div className="inline-flex border border-gray-300 rounded justify-start">
-                              <button
-                                onClick={() => handleAction("selected")}
-                                className="font-semibold py-1 px-2"
-                              >
-                                {selectedCustomer.length} selected
-                              </button>
-                              <button
-                                onClick={() => handleAction("disable")}
-                                className="font-semibold py-1 px-2 border-l border-gray-300"
-                              >
-                                Disable
-                              </button>
-                              <button
-                                onClick={() => handleAction("enable")}
-                                className="font-semibold py-1 px-2 border-l border-gray-300"
-                              >
-                                Enable
-                              </button>
-                              {/* <button
-                              onClick={() => handleAction("delete")}
-                              className="font-semibold py-1 px-2 border-l border-gray-300"
-                            >
-                              Delete
-                            </button> */}
-                              <button
-                                onClick={() => handleAction("clear")}
-                                className="font-semibold py-1 px-2 border-l border-gray-300"
-                              >
-                                Clear
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
                       {customer?.isLoading &&
                         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((key) => (
                           <LoadingItem key={key} />
