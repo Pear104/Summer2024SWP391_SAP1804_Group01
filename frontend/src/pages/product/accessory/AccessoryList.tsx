@@ -7,6 +7,7 @@ import { useQueries } from "@tanstack/react-query";
 import AccessoryItem from "./AccessoryItem";
 import { getAccessoryPrice } from "../../../utils/getPrice";
 import LoadingItem from "./components/LoadingItem";
+import Filter from "./components/Filter";
 
 export default function AccessoryList() {
   const url = new URL(window.location.href);
@@ -40,6 +41,7 @@ export default function AccessoryList() {
 
   return (
     <div className="flex items-center justify-around flex-col mb-20 px-20">
+      <Filter />
       <div className="w-full">
         <div className="font-bold text-3xl libre-baskerville-regular flex justify-around my-10">
           DATJ's ACCESSORY PRODUCTS

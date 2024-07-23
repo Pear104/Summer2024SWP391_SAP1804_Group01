@@ -293,14 +293,16 @@ export default function DiamondView() {
               {!diamond?.isHidden ? "Hide" : "Show"}
             </div>
           </div>
-          <a
-            href={`/product/diamond/detail/${diamondId}`}
-            target="_blank"
-            className="flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-blue-500 text-white p-1"
-          >
-            <ScrollText />
-            <div className="ml-2 text-lg">View</div>
-          </a>
+          {diamondId && (
+            <a
+              href={`/product/diamond/detail/${diamondId}`}
+              target="_blank"
+              className="flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-blue-500 text-white p-1"
+            >
+              <ScrollText />
+              <div className="ml-2 text-lg">View</div>
+            </a>
+          )}
         </div>
       </div>
       <div className="bg-white rounded-lg my-4 p-4">

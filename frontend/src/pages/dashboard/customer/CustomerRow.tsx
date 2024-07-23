@@ -43,32 +43,6 @@ function CustomerRow({
   return (
     <>
       <tr key={account.accountId}>
-        <td className="px-6 py-4 whitespace-nowrap">
-          {" "}
-          {/* start select checkbox */}
-          <div className="flex items-center">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                value="0"
-                className="form-checkbox w-5 h-5"
-                checked={selectedAccount.includes(account.accountId)}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setSelectedAccount([...selectedAccount, account.accountId]);
-                  } else {
-                    setSelectedAccount(
-                      selectedAccount.filter((id) => id !== account.accountId)
-                    );
-                  }
-                }}
-              />
-              <span className="checkbox-unchecked"></span>
-              <span className="pl-2"></span>
-              <input type="hidden" value="0" />
-            </label>
-          </div>
-        </td>{" "}
         {/* end select checkbox */}
         {/* map diamond */}
         <td className="px-6 py-4 whitespace-nowrap">

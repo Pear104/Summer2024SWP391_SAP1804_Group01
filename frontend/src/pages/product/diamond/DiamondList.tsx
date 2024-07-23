@@ -86,7 +86,7 @@ export default function DiamondList() {
             [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((key) => (
               <LoadingItem key={key} />
             ))}
-          {diamond?.data?.diamonds?.map((diamond: any, index: number) => (
+          {diamond?.data?.diamonds?.map((diamond: Diamond, index: number) => (
             <DiamondItem
               key={index}
               diamond={diamond}
