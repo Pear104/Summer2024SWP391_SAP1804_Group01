@@ -93,17 +93,18 @@ export default function AccountDetail() {
           {userInfo && (
             <div className="w-full">
               <div className="text-center">
-                Current reward: -{userInfo?.rank?.discount * 100}% all order
+                Current reward: sale off {userInfo?.rank?.discount * 100}% all
+                order
               </div>
               {userInfo?.rank?.rankId != 6 && (
                 <Progress
-                  percent={
+                  percent={Math.floor(
                     ((userInfo?.rewardPoint - userInfo?.rank?.rewardPoint) /
                       (ranks?.data?.find((r: any) => r.rankId == nextRank)
                         ?.rewardPoint -
                         userInfo?.rank?.rewardPoint)) *
-                    100
-                  }
+                      100
+                  )}
                   size="small"
                 />
               )}

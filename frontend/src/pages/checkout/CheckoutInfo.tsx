@@ -13,18 +13,18 @@ const phoneRegex = new RegExp(
 );
 
 const schema = z.object({
-  email: z
-    .string()
-    .email()
-    .min(8, { message: "Invalid email" })
-    .max(32, { message: "Email should be less than 32 characters" }),
-  name: z
-    .string()
-    .min(6, { message: "Name should be at least 6 characters" })
-    .max(32, { message: "Name should be less than 32 characters" })
-    .refine((value) => value.trim().length > 0, {
-      message: "Name cannot be empty",
-    }),
+  // email: z
+  //   .string()
+  //   .email()
+  //   .min(8, { message: "Invalid email" })
+  //   .max(32, { message: "Email should be less than 32 characters" }),
+  // name: z
+  //   .string()
+  //   .min(6, { message: "Name should be at least 6 characters" })
+  //   .max(32, { message: "Name should be less than 32 characters" })
+  //   .refine((value) => value.trim().length > 0, {
+  //     message: "Name cannot be empty",
+  //   }),
   phoneNumber: z
     .string()
     .regex(phoneRegex, "Invalid phone number!")
@@ -65,9 +65,7 @@ export default function CheckoutInfo() {
       className="flex flex-col gap-[4px]"
       onFinish={handleSubmit(async (formData) => {
         console.log(formData);
-        useCheckoutStore.getState().setEmail(formData.email);
         useCheckoutStore.getState().setPhoneNumber(formData.phoneNumber);
-        useCheckoutStore.getState().setName(formData.name);
         useCheckoutStore.getState().setShippingAddress(formData.address);
         navigate("/checkout/payment");
       })}
@@ -83,6 +81,7 @@ export default function CheckoutInfo() {
         disabled
       >
         <Input
+          defaultValue={useCheckoutStore.getState().email}
           placeholder="Your name"
           className="text-black text-sm border border-none py-3 px-4 without-ring w-full rounded-none"
         />
@@ -95,6 +94,7 @@ export default function CheckoutInfo() {
         disabled
       >
         <Input
+          defaultValue={useCheckoutStore.getState().name}
           placeholder="Your email"
           className="text-black text-sm border border-none py-3 px-4 without-ring w-full rounded-none"
         />
@@ -111,10 +111,6 @@ export default function CheckoutInfo() {
           className="border text-sm border-primary py-2 px-4 without-ring rounded-none"
         />
       </FormItem>
-
-      {/* <Divider orientation="left" className="text-xl font-bold">
-        Shipping Address
-      </Divider> */}
       <FormItem
         label="Address"
         name="address"

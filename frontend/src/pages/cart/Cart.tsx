@@ -11,7 +11,6 @@ import { useQueries } from "@tanstack/react-query";
 import { getAccessoryPrice, getDiamondPrice } from "../../utils/getPrice";
 
 const Cart: React.FC = () => {
-  
   const [isLoading] = useState(false);
   const [totalPriceCart, setTotalPriceCart] = useState(0);
   const navigate = useNavigate();
@@ -51,7 +50,6 @@ const Cart: React.FC = () => {
               priceRate?.data.percent
             );
           }
-
           return totalPrice;
         })
       );
@@ -85,9 +83,8 @@ const Cart: React.FC = () => {
               type="default"
               href="/product/diamond"
             >
-              Continue shopping 
+              Continue shopping
             </a>
-            
           </div>
         </div>
       ) : (
@@ -128,7 +125,7 @@ const Cart: React.FC = () => {
               <div className="flex justify-between items-center">
                 <span className="font-bold">Total estimated:</span>
                 <span className="font-bold">
-                  {totalPriceCart != 0 ? (
+                  {totalPriceCart > 0 ? (
                     totalPriceCart.toLocaleString("en-US", {
                       style: "currency",
                       currency: "USD",

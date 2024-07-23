@@ -11,23 +11,12 @@ export const SaleStatusFilter = ({ statusText }: { statusText: any }) => {
     <Dropdown
       overlay={
         <Menu>
-          <Menu.Item key="1">
-            <a
-              onClick={() => {
-                params.set("OrderStatus", "Pending");
-                setQueryUrl(`/api/Order?` + params.toString());
-                navigate("/admin/orders?" + params.toString());
-              }}
-            >
-              Pending
-            </a>
-          </Menu.Item>
           <Menu.Item key="2">
             <a
               onClick={() => {
                 params.set("OrderStatus", "Processing");
                 setQueryUrl(`/api/Order?` + params.toString());
-                navigate("/admin/orders?" + params.toString());
+                navigate("/admin/sale-staffs?" + params.toString());
               }}
             >
               Processing
@@ -36,34 +25,12 @@ export const SaleStatusFilter = ({ statusText }: { statusText: any }) => {
           <Menu.Item key="3">
             <a
               onClick={() => {
-                params.set("OrderStatus", "Delivering");
+                params.set("OrderStatus", "Confirmed");
                 setQueryUrl(`/api/Order?` + params.toString());
-                navigate("/admin/orders?" + params.toString());
+                navigate("/admin/sale-staffs?" + params.toString());
               }}
             >
-              Delivering
-            </a>
-          </Menu.Item>
-          <Menu.Item key="4">
-            <a
-              onClick={() => {
-                params.set("OrderStatus", "Completed");
-                setQueryUrl(`/api/Order?` + params.toString());
-                navigate("/admin/orders?" + params.toString());
-              }}
-            >
-              Completed
-            </a>
-          </Menu.Item>
-          <Menu.Item key="5">
-            <a
-              onClick={() => {
-                params.set("OrderStatus", "Failed");
-                setQueryUrl(`/api/Order?` + params.toString());
-                navigate("/admin/orders?" + params.toString());
-              }}
-            >
-              Failed
+              Confirmed
             </a>
           </Menu.Item>
         </Menu>

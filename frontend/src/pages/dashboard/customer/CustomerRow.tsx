@@ -91,7 +91,7 @@ function CustomerRow({
         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
           {" "}
           {/*start account total order*/}
-          {account.totalOrders}
+          {account?.ordersOfCustomer?.length}
         </td>{" "}
         {/*end account total order*/}
         <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">

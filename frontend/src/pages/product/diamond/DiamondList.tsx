@@ -110,7 +110,7 @@ export default function DiamondList() {
         </div>
         <div className="mt-10 flex justify-center">
           {diamond?.data && diamond?.data.diamonds?.length == 0 ? (
-            <section className="bg-white dark:bg-gray-900">
+            <section className="bg-white">
               <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
                 <div className="mx-auto max-w-screen-sm text-center">
                   <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-primary-600 dark:text-primary-500">

@@ -61,14 +61,14 @@ export default function OrderManage() {
         status === "1"
           ? "Pending"
           : status === "2"
-            ? "Processing"
-            : status === "3"
-              ? "Confirmed"
-              : status === "4"
-                ? "Delivering"
-                : status === "5"
-                  ? "Completed"
-                  : "Failed"
+          ? "Processing"
+          : status === "3"
+          ? "Confirmed"
+          : status === "4"
+          ? "Delivering"
+          : status === "5"
+          ? "Completed"
+          : "Failed"
       );
     }
   }, [location.search]);
@@ -110,7 +110,7 @@ export default function OrderManage() {
                     className="border p-2 rounded-md w-[300px]"
                     value={searchTerm}
                     onChange={(e) => {
-                      setSearchTerm(e.target.value)
+                      setSearchTerm(e.target.value);
                       params.set("SearchCustomerName", e.target.value);
                       setQueryUrl(`/api/Order?` + params.toString());
                       navigate({ search: params.toString() });
@@ -124,22 +124,21 @@ export default function OrderManage() {
             </h3>
             <div className="flex space-x-075">
               <div className="card-action ">
-                <a
-                  href="/admin/orders"
-                  className="text-interactive "
-                  onClick={(event) => {
-                    event.preventDefault();
+                <div
+                  className="cursor-pointer text-interactive "
+                  onClick={() => {
                     setStatusText("Status");
                     setSearchTerm("");
                     // Clear the URL parameters
                     const params = new URLSearchParams(location.search);
-                    setQueryUrl(`/api/Order?` + params.toString());
+                    params.delete("OrderStatus");
                     params.delete("SearchCustomerName");
+                    setQueryUrl(`/api/Order?` + params.toString());
                     navigate({ search: params.toString() });
                   }}
                 >
                   Clear filter
-                </a>
+                </div>
               </div>
             </div>
           </div>

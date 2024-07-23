@@ -168,7 +168,7 @@ namespace Repositories.Implements
         )
         {
             ListWithPagingDTO<Account> result;
-            var accountsQuery = _context.Accounts.AsQueryable();
+            var accountsQuery = _context.Accounts.Include(x => x.OrdersOfCustomer).AsQueryable();
             if (!string.IsNullOrEmpty(accountQuery.GetRole()))
             {
                 var role = Enum.Parse<Role>(accountQuery.GetRole());

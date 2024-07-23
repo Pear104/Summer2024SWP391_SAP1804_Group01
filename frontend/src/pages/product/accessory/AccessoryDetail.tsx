@@ -104,7 +104,7 @@ export default function AccessoryDetail() {
                 getAccessoryPrice(
                   accessory?.data,
                   materialPrices?.data,
-                  size,
+                  size < 3 || size > 8 ? 3 : size,
                   priceRate?.data?.percent
                 ).toLocaleString("en-US", {
                   style: "currency",
@@ -181,6 +181,9 @@ export default function AccessoryDetail() {
                   required
                 >
                   <Input
+                    type="number"
+                    min={3}
+                    max={8}
                     className="w-[100px]"
                     onChange={(value) => {
                       setSize(Number(value.target.value));

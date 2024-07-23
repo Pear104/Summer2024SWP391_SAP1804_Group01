@@ -114,7 +114,12 @@ export default function SaleStaffsManagement() {
                     id="keyword"
                     className="border p-2 rounded-md w-full"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                      params.set("SearchQuery", e.target.value);
+                      setQueryUrl(`/api/Order?` + params.toString());
+                      navigate({ search: params.toString() });
+                    }}
                   />
                 </Form.Item>
                 <Form.Item>
@@ -125,7 +130,7 @@ export default function SaleStaffsManagement() {
             <div className="flex space-x-075">
               <div className="card-action ">
                 <a
-                  href="/admin/diamonds"
+                  href="/admin/sale-staffs"
                   className="text-interactive "
                   onClick={(event) => {
                     event.preventDefault();
@@ -133,8 +138,9 @@ export default function SaleStaffsManagement() {
                     setSearchTerm("");
                     // Clear the URL parameters
                     const params = new URLSearchParams(location.search);
+                    params.delete("OrderStatus");
+                    params.delete("OrderStatus");
                     setQueryUrl(`/api/Order?` + params.toString());
-                    // params.delete("type");
                     navigate({ search: params.toString() });
                   }}
                 >
