@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GET } from "../../../utils/request";
-import { Button, Dropdown, Empty, Form, Input, Menu, Pagination } from "antd";
-import { DownOutlined } from "@ant-design/icons";
+import { Empty, Form, Input, Pagination } from "antd";
 import { useSearchStore } from "../../../store/searchStore";
 import { useQueries } from "@tanstack/react-query";
 import BlogListItem from "./components/BlogListItem";
@@ -13,7 +12,7 @@ export default function BlogsManage() {
   const navigate = useNavigate();
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
-  const [statusText, setStatusText] = useState("Status");
+  const [_statusText, setStatusText] = useState("Status");
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   useEffect(() => {
@@ -35,24 +34,24 @@ export default function BlogsManage() {
     // }
   }, [location.search]);
 
-  const handleStatusClick = (status: string, statusText: string) => {
-    setStatusText(statusText);
-    const params = new URLSearchParams(location.search);
-    params.set("status", status);
-    navigate({ search: params.toString() });
-  };
+  // const handleStatusClick = (status: string, statusText: string) => {
+  //   setStatusText(statusText);
+  //   const params = new URLSearchParams(location.search);
+  //   params.set("status", status);
+  //   navigate({ search: params.toString() });
+  // };
 
   const columnHeaders = ["Blog Id", "Title", "Author", "Created at", "Status"];
-  const statusMenu = (
-    <Menu>
-      <Menu.Item key="1">
-        <a onClick={() => handleStatusClick("1", "Enable")}>Enable</a>
-      </Menu.Item>
-      <Menu.Item key="2">
-        <a onClick={() => handleStatusClick("2", "Disable")}>Disable</a>
-      </Menu.Item>
-    </Menu>
-  );
+  // const statusMenu = (
+  //   <Menu>
+  //     <Menu.Item key="1">
+  //       <a onClick={() => handleStatusClick("1", "Enable")}>Enable</a>
+  //     </Menu.Item>
+  //     <Menu.Item key="2">
+  //       <a onClick={() => handleStatusClick("2", "Disable")}>Disable</a>
+  //     </Menu.Item>
+  //   </Menu>
+  // );
 
   return (
     <div className="p-4">
@@ -184,7 +183,7 @@ export default function BlogsManage() {
                         setQueryUrl("/api/Blogs?" + params.toString());
                       }}
                       showSizeChanger={true}
-                      onShowSizeChange={(current, size) =>
+                      onShowSizeChange={(_current, size) =>
                         params.set("PageSize", size.toString())
                       }
                     />

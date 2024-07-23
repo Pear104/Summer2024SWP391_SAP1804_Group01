@@ -27,6 +27,8 @@ export default function DiamondRow({
       </>
     );
   }
+  console.log(selectedDiamonds);
+  console.log(setSelectedDiamonds);
   return (
     <>
       <tr key={diamond.diamondId}>

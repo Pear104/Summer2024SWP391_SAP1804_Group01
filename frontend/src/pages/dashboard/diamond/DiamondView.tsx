@@ -384,7 +384,7 @@ export default function DiamondView() {
             submitForm["imageUrl"] = diamondImageUrl;
             submitForm["availability"] = availability;
 
-            if (diamond.diamondId) {
+            if (diamond?.diamondId) {
               mutatePut.mutate(submitForm);
             } else {
               mutatePost.mutate(submitForm);

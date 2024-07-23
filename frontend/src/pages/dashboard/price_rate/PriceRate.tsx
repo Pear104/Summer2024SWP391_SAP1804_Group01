@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Pagination, Skeleton, Empty, DatePicker } from "antd";
-import dayjs, { Dayjs } from 'dayjs';
+import { Dayjs } from "dayjs";
 import { useSearchStore } from "../../../store/searchStore";
 import { GET } from "../../../utils/request";
 import { useQueries } from "@tanstack/react-query";
@@ -64,7 +64,6 @@ export default function PriceRate() {
         {/* filter bar */}
         <div className="border-b-gray-200 p-[1rem] box-border">
           <div className="flex justify-between mb-1 items-center">
-
             <DatePicker
               value={searchDate}
               defaultValue={searchDate}
@@ -138,7 +137,7 @@ export default function PriceRate() {
                       </td>
                     )}
                     {priceRateList?.data &&
-                      priceRateList?.data?.priceRates?.length > 0 ? (
+                    priceRateList?.data?.priceRates?.length > 0 ? (
                       priceRateList?.data?.priceRates?.map(renderPriceRateRow)
                     ) : (
                       <td colSpan={100} className="py-20 w-full">

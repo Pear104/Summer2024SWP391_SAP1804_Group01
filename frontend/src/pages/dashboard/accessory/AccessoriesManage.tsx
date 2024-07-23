@@ -1,5 +1,4 @@
-import { DownOutlined } from "@ant-design/icons";
-import { Button, Dropdown, Form, Input, Menu, Pagination } from "antd";
+import { Form, Input, Pagination } from "antd";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { GET } from "../../../utils/request";
@@ -23,7 +22,7 @@ export default function AccessoriesManage() {
   const params = new URLSearchParams(url.searchParams);
   const location = useLocation();
   const navigate = useNavigate();
-  const [statusText, setStatusText] = useState("Status");
+  const [_statusText, setStatusText] = useState("Status");
   const [searchTerm, setSearchTerm] = useState("");
   // many diamond action
 
@@ -61,23 +60,23 @@ export default function AccessoriesManage() {
     }
   }, [location.search]);
 
-  const handleStatusClick = (status: string, statusText: string) => {
-    setStatusText(statusText);
-    const params = new URLSearchParams(location.search);
-    params.set("status", status);
-    navigate({ search: params.toString() });
-  };
+  // const handleStatusClick = (status: string, statusText: string) => {
+  //   setStatusText(statusText);
+  //   const params = new URLSearchParams(location.search);
+  //   params.set("status", status);
+  //   navigate({ search: params.toString() });
+  // };
 
-  const statusMenu = (
-    <Menu>
-      <Menu.Item key="1">
-        <a onClick={() => handleStatusClick("1", "Enable")}>Enable</a>
-      </Menu.Item>
-      <Menu.Item key="2">
-        <a onClick={() => handleStatusClick("2", "Disable")}>Disable</a>
-      </Menu.Item>
-    </Menu>
-  );
+  // const statusMenu = (
+  //   <Menu>
+  //     <Menu.Item key="1">
+  //       <a onClick={() => handleStatusClick("1", "Enable")}>Enable</a>
+  //     </Menu.Item>
+  //     <Menu.Item key="2">
+  //       <a onClick={() => handleStatusClick("2", "Disable")}>Disable</a>
+  //     </Menu.Item>
+  //   </Menu>
+  // );
 
   return (
     <div className="p-4">

@@ -21,7 +21,7 @@ import { useQuery } from "@tanstack/react-query";
 import { GET } from "../../../utils/request";
 import React, { useState } from "react";
 import type { MenuProps } from "antd";
-import { Button, Menu } from "antd";
+import { Menu } from "antd";
 
 import {
   MenuFoldOutlined,

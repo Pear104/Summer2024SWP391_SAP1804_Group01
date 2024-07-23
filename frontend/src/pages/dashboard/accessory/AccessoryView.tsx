@@ -41,10 +41,14 @@ const schema = z.object({
     .refine((value) => value.trim().length > 0, {
       message: "Name cannot be empty",
     }),
-  karat: z.coerce.number().min(8, { message: "Required" }),
-  quantity: z.coerce.number().min(1, { message: "Required" }),
-  materialWeight: z.coerce.number().min(8, { message: "Required" }),
-  shape: z.string().min(1, { message: "Required" }),
+  karat: z.coerce.number().min(8, { message: "Karat must greater than 8" }),
+  quantity: z.coerce
+    .number()
+    .min(1, { message: "Quantity must greater than 1" }),
+  materialWeight: z.coerce
+    .number()
+    .min(8, { message: "Material Weight must greater than 8" }),
+  shape: z.coerce.number().min(1, { message: "Required" }),
   accessoryType: z.string().min(1, { message: "Required" }),
   images: z.string().min(0, { message: "Required" }),
 });
@@ -83,8 +87,8 @@ export default function AccessoryView() {
               quantity: data?.quantity,
               materialWeight: data?.materialWeight,
               images: "",
-              shape: data?.shape.name,
-              accessoryType: data?.accessoryType.name,
+              shape: data?.shape?.name,
+              accessoryType: data?.accessoryType?.name,
             });
           }
         },
@@ -225,7 +229,7 @@ export default function AccessoryView() {
 
             // Add firebase's image url to DATJ database
             submitForm["accessoryImages"] = urlList;
-            if (accessory.accessoryId) {
+            if (accessory?.accessoryId) {
               mutatePut.mutate(submitForm);
             } else {
               mutatePost.mutate(submitForm);

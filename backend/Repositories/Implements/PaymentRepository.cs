@@ -6,6 +6,7 @@ using BusinessObjects.Enums;
 using BusinessObjects.Models.Payment.Domain.Entities;
 using DAOs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Repositories.Interfaces.Payments;
@@ -20,15 +21,19 @@ namespace Repositories.Implements
 
         private readonly VnpayConfig _vnpayConfig;
 
+        private readonly IConfiguration _config;
+
         public PaymentRepository(
             ApplicationDbContext dbContext,
             //PaymentTransactionRepository transactionRepository,
-            IOptions<VnpayConfig> vnpayConfig
+            IOptions<VnpayConfig> vnpayConfig,IConfiguration config
         )
         {
             _dbContext = dbContext;
             //_transactionRepository = transactionRepository;
             _vnpayConfig = vnpayConfig.Value;
+            _config = config;
+
         }
 
         public async Task<Payment> CreatePayment(Payment payment)
@@ -78,7 +83,7 @@ namespace Repositories.Implements
                     );
 
                     // returnUrl = merchant?.MerchantReturnUrl ?? string.Empty;
-                    returnUrl = "http://localhost:3000/account/order-history";
+                    returnUrl = $"{_config["ClientUrl"]}/account/order-history";
                 } //end payment is NOT null
                 else
                 {

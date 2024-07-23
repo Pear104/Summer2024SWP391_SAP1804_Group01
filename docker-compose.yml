@@ -20,7 +20,6 @@ services:
     depends_on:
       - backend
     environment:
-      - REACT_APP_API_URL=http://localhost:8080
       - VITE_SERVER_URL=http://localhost:8080
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true

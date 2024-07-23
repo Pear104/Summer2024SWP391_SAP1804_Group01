@@ -83,7 +83,7 @@ export default function DiamondDetail() {
                 getDiamondPrice(
                   diamond?.data,
                   diamondPrice?.data,
-                  priceRate?.data.percent
+                  priceRate?.data?.percent
                 ).toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",

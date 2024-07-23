@@ -113,7 +113,7 @@ export default function ProductsManage() {
   // selected diamonds
   const [selectedDiamonds, setSelectedDiamonds] = useState<number[]>([]);
   // select all
-  const [selectAll, setSelectAll] = useState(false);
+  const [_selectAll, setSelectAll] = useState(false);
   // pagination, change page size
   const [pageSize, setPageSize] = useState(10);
   useEffect(() => {

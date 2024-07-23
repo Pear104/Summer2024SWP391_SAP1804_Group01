@@ -96,14 +96,7 @@ export default function RecentOrders() {
               .map((customer) => (
                 <tr key={customer.customerID}>
                   <td className="px-4 py-2">#{customer.customerID}</td>
-                  <td className="px-4 py-2">
-                    <Link
-                      to={`/admin/customers/detail/${customer.customerID}`}
-                      className="hover:underline"
-                    >
-                      {customer.customerName}
-                    </Link>
-                  </td>
+                  <td className="px-4 py-2">{customer.customerName}</td>
                   <td className="px-4 py-2">{customer.gender}</td>
                   <td className="px-4 py-2">{customer.totalOrder}</td>
                   <td className="px-4 py-2">

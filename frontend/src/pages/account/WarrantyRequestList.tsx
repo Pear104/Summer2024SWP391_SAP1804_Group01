@@ -1,5 +1,5 @@
 import { useQueries } from "@tanstack/react-query";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { GET } from "../../utils/request";
 import { formatPhoneNumber } from "../../utils/formatter";
 import moment from "moment";
