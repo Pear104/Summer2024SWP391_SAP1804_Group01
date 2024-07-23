@@ -92,10 +92,23 @@ const OrderItem = ({
             />
           </div>
         ))}
-        <div className="flex justify-end text-xl">
+        <div className="flex justify-between items-center text-xl mt-8">
+          <div className="font-bold text-gray-800 flex justify-between gap-10">
+            <div>
+              Subtotal:{" "}
+              {order?.totalPrice?.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 0,
+              })}
+            </div>
+            <div>
+              Discount: {(order?.totalDiscountPercent * 100)?.toFixed(0)}%
+            </div>
+          </div>
           <OrderStatus order={order} />
         </div>
-        <div className="flex justify-between items-center mt-4">
+        <div className="flex justify-between items-center">
           <div className="text-xl font-bold text-gray-800">
             Total:{" "}
             {(

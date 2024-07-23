@@ -3,6 +3,7 @@ import { Button, Image, Modal } from "antd";
 import WarrantyDiamondItem from "./WarrantyDiamondItem";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getOrderDiamondPrice } from "../../../utils/getPrice";
 
 const DiamondItem = ({
   detail,
@@ -71,11 +72,10 @@ const DiamondItem = ({
           </div>
           <div className="text-gray-800 font-bold">
             <span className="">Price:</span>{" "}
-            {(
-              detail.diamondPrice.unitPrice *
-              detail.diamond.carat *
-              percent *
-              100
+            {getOrderDiamondPrice(
+              detail.diamond,
+              detail.diamondPrice,
+              percent
             ).toLocaleString("en-US", {
               style: "currency",
               currency: "USD",

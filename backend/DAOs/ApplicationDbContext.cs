@@ -45,20 +45,21 @@ namespace DAOs
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-           if (!optionsBuilder.IsConfigured)
-           {
-               IConfiguration config = new ConfigurationBuilder()
-                   .SetBasePath(Directory.GetCurrentDirectory())
-                   .AddJsonFile("appsettings.json", true, true)
-                   .Build();
+            if (!optionsBuilder.IsConfigured)
+            {
+                IConfiguration config = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", true, true)
+                    .Build();
 
-               var connectionString = config.GetConnectionString("DefaultConnection");
+                var connectionString = config.GetConnectionString("DefaultConnection");
 
-               optionsBuilder.UseSqlServer(connectionString);
-           }
+                optionsBuilder.UseSqlServer(
+                    connectionString,
+                    options => options.CommandTimeout(300)
+                );
+            }
         }
-
-
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

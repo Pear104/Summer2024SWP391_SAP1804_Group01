@@ -20,7 +20,6 @@ import ResetPasswordForm from "../pages/authentication/ResetPasswordForm";
 import Dashboard from "../pages/dashboard/Dashboard";
 import Cart from "../pages/cart/Cart";
 import Test from "../pages/test/Test";
-import OrderDetail from "../pages/account/OrderDetail";
 import EditAccount from "../pages/account/EditAccount";
 import CompleteProduct from "../pages/product/complete/CompleteProduct";
 import BlogsManage from "../pages/dashboard/blog/BlogsManage";
@@ -291,10 +290,6 @@ const routes = [
               {
                 element: <OrderHistory />,
                 path: "order-history",
-              },
-              {
-                element: <OrderDetail />,
-                path: "order-history/detail",
               },
               {
                 element: <WarrantyRequestList />,

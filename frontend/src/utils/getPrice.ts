@@ -17,6 +17,10 @@ export const getDiamondPrice = (
   );
 };
 
+export const getOrderUnitPrice = (diamondPrice: any, priceRate: any) => {
+  return diamondPrice * 5 * priceRate;
+};
+
 export const getOrderDiamondPrice = (
   diamond: any,
   diamondPrice: any,

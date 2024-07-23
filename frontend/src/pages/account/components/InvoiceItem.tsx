@@ -4,6 +4,7 @@ import React from "react";
 import {
   getOrderAccessoryPrice,
   getOrderDiamondPrice,
+  getOrderUnitPrice,
 } from "../../../utils/getPrice";
 
 export default function InvoiceItem({ order }: { order: any }) {
@@ -81,9 +82,8 @@ export default function InvoiceItem({ order }: { order: any }) {
                   <td className="text-center">24 months</td>
                   <td className="text-center">Carat</td>
                   <td className="text-center">
-                    {(
-                      detail?.diamondPrice?.unitPrice *
-                      100 *
+                    {getOrderUnitPrice(
+                      detail?.diamondPrice?.unitPrice,
                       order?.priceRate?.percent
                     ).toLocaleString("en-US", {
                       style: "currency",

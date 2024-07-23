@@ -1,5 +1,6 @@
 import { Button } from "antd";
 import { useRouteError } from "react-router-dom";
+import Logo from "../components/logo/Logo";
 
 export default function Error() {
   const error: any = useRouteError();
@@ -25,17 +26,12 @@ export default function Error() {
         <div
           className="aspect-square bg-contain bg-no-repeat w-[500px]"
           style={{
-            //backgroundImage: "url(/images/face-without-mouth_1f636.png)",
-             backgroundImage: randomImage,
+            backgroundImage: "url(/images/face-without-mouth_1f636.png)",
+            //  backgroundImage: randomImage,
           }}
         ></div>
         <div className="font-bold text-3xl">Oops!</div>
-        <div className="text-lg">
-          Sorry, an unexpected error has occurred:{" "}
-          <span className="text-slate-600 italic">
-            {error.statusText || error.message}
-          </span>
-        </div>
+        <div className="text-lg">Sorry, an unexpected error has occurred</div>
         <a href="/">
           <Button>Back to Home</Button>
         </a>
