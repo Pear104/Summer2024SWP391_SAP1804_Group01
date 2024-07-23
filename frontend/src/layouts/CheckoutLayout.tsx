@@ -27,6 +27,13 @@ const item = [
 ];
 
 export default function CheckoutLayout() {
+  const cart = useCartStore((state) => state.cart);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [appliedPromotion, setAppliedPromotion] = useState("");
+  const [discountCode, setDiscountCode] = useState("");
+  const navigate = useNavigate();
+
+  // fetch data
   const [diamondPrices, materialPrices, priceRate, userInfo, promotion] =
     useQueries({
       queries: [
@@ -55,12 +62,6 @@ export default function CheckoutLayout() {
         },
       ],
     });
-
-  const cart = useCartStore((state) => state.cart);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [appliedPromotion, setAppliedPromotion] = useState("");
-  const [discountCode, setDiscountCode] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -91,6 +92,7 @@ export default function CheckoutLayout() {
     })();
   }, [cart, diamondPrices, materialPrices, priceRate]);
 
+  // check the cart, if cart empty then redirect to home
   useEffect(() => {
     if (cart.length == 0) {
       navigate("/");
@@ -109,9 +111,6 @@ export default function CheckoutLayout() {
     }
   };
 
-  // const isPromotionApplied = (promotionCode: string): boolean => {
-  //   return appliedPromotion === promotionCode;
-  // };
   const removePromotion = (): void => {
     const removedPromotion = appliedPromotion;
     setAppliedPromotion("");
@@ -167,7 +166,7 @@ export default function CheckoutLayout() {
         </div>
         <Breadcrumb separator=">" items={item} />
         <div>
-          {/* Different pages only have different forms */}
+          {/* Different pages have different forms */}
           <Outlet />
         </div>
       </div>
@@ -188,6 +187,7 @@ export default function CheckoutLayout() {
         <Divider />
         <div className="font-semibold mb-2">Enter the discount code</div>
         <div className="flex flex-col gap-2">
+          {/* Discount code */}
           <div className="flex gap-4">
             <Input
               className="w-full"
@@ -223,32 +223,9 @@ export default function CheckoutLayout() {
                 </div>
               )}
             </div>
-
-            {/* Discount code items */}
-            {/* {promotion?.data?.map((promotion: any) => (
-              <div
-                key={promotion.promotionCode}
-                className="cursor-pointer text-primary font-semibold flex justify-between py-3 px-4 bg-slate-300 hover:bg-slate-300/40"
-              >
-                <div className="flex gap-2 text-blue-900 items-center">
-                  <Tags />
-                  {promotion.promotionCode} - {promotion.promotionName}: Get{" "}
-                  {promotion.discountPercent * 100}% off
-                </div>
-                {isPromotionApplied(promotion.promotionCode) ? (
-                  <CheckOutlined />
-                ) : (
-                  <Button
-                    className="px-4 py-4 hover:scale-95 font-bold text-white bg-primary flex items-center justify-center"
-                    onClick={() => handleApplyPromotion(promotion)}
-                  >
-                    Apply
-                  </Button>
-                )}
-              </div>
-            ))} */}
           </div>
           <Divider />
+          {/* Subtotal */}
           <div className="text-base">
             <div className="flex justify-between mb-2">
               <div>Subtotal</div>
@@ -276,6 +253,7 @@ export default function CheckoutLayout() {
             </div>
           </div>
           <Divider />
+          {/* Total */}
           <div className="flex w-full justify-between ">
             <div className="text-3xl">Total</div>
             <div className="flex items-center gap-2">
