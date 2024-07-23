@@ -22,16 +22,16 @@ import { storage } from "../../../utils/firebase";
 import { useMutation, useQueries, useQueryClient } from "@tanstack/react-query";
 
 const shapeOptions = [
-  { value: 1, label: "Round" },
-  { value: 2, label: "Emerald" },
-  { value: 3, label: "Heart" },
-  { value: 4, label: "Pear" },
-  { value: 5, label: "Oval" },
-  { value: 6, label: "Cushion" },
-  { value: 7, label: "Princess" },
-  { value: 8, label: "Radiant" },
-  { value: 9, label: "Marquise" },
-  { value: 10, label: "Asscher" },
+  { value: "Round", label: "Round" },
+  { value: "Emerald", label: "Emerald" },
+  { value: "Heart", label: "Heart" },
+  { value: "Pear", label: "Pear" },
+  { value: "Oval", label: "Oval" },
+  { value: "Cushion", label: "Cushion" },
+  { value: "Princess", label: "Princess" },
+  { value: "Radiant", label: "Radiant" },
+  { value: "Marquise", label: "Marquise" },
+  { value: "Asscher", label: "Asscher" },
 ];
 
 const schema = z.object({
@@ -48,7 +48,7 @@ const schema = z.object({
   materialWeight: z.coerce
     .number()
     .min(8, { message: "Material Weight must greater than 8" }),
-  shape: z.coerce.number().min(1, { message: "Required" }),
+  shape: z.string().min(1, { message: "Required" }),
   accessoryType: z.string().min(1, { message: "Required" }),
   images: z.string().min(0, { message: "Required" }),
 });
@@ -78,7 +78,7 @@ export default function AccessoryView() {
         queryKey: ["accessory", accessoryId, reset],
         queryFn: async () => {
           const data = await GET(`/api/Accessories/${accessoryId}`);
-          if (accessoryId) {
+          if (data?.accessoryId) {
             setFileList(data?.accessoryImages);
             setAccessory(data);
             reset({
@@ -162,14 +162,16 @@ export default function AccessoryView() {
               {!accessory?.isHidden ? "Hide" : "Show"}
             </div>
           </div>
-          <a
-            href={`/product/accessory/detail/${accessoryId}`}
-            target="_blank"
-            className="flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-blue-500 text-white p-1"
-          >
-            <ScrollText />
-            <div className="ml-2 text-lg">View</div>
-          </a>
+          {accessoryId && (
+            <a
+              href={`/product/accessory/detail/${accessoryId}`}
+              target="_blank"
+              className="flex self-center items-center gap-2 rounded-md py-2 px-4 border bg-blue-500 text-white p-1"
+            >
+              <ScrollText />
+              <div className="ml-2 text-lg">View</div>
+            </a>
+          )}
         </div>
       </div>
       <div className="bg-white rounded-lg my-4 p-4">
