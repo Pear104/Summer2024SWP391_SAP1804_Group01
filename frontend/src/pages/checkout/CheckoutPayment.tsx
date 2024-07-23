@@ -1,4 +1,4 @@
-import { Button, Divider } from "antd";
+import { Button, Divider, Modal } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { Truck } from "lucide-react";
@@ -8,10 +8,7 @@ import { useCartStore } from "../../store/cartStore";
 import { useState } from "react";
 import Loading from "../../components/Loading";
 import { useCheckoutStore } from "../../store/checkoutStore";
-import {
-  PayPalScriptProvider,
-  PayPalButtons,
-} from "@paypal/react-paypal-js";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 // Renders errors or successfull transactions on the screen.
 interface MessageProps {
@@ -27,6 +24,17 @@ export default function CheckoutPayment() {
   const cart = useCartStore((state) => state.cart);
   const clearCart = useCartStore((state) => state.clearCart);
   const navigate = useNavigate();
+
+  const showErrorModal = () => {
+    Modal.error({
+      title: "Order Error",
+      content:
+        "The order could not be completed. Another order is in progress. Please choose another product.",
+      onOk() {
+        navigate("/"); // Redirect to the homepage
+      },
+    });
+  };
 
   const initialOptions = {
     clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID,
@@ -59,6 +67,7 @@ export default function CheckoutPayment() {
             <div className="border-b w-full p-4 font-bold flex gap-4">
               <div>
                 <div className="text-lg flex gap-4 flex-wrap">
+                  {/* VNPay Button */}
                   <Button
                     className="px-8 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
                     onClick={async () => {
@@ -109,6 +118,10 @@ export default function CheckoutPayment() {
                           clearCart();
                           location.href = paymentResponse.paymentUrl;
                         }
+                      } else {
+                        console.log("Error: ", orderResponse);
+                        clearCart();
+                        showErrorModal();
                       }
                       setIsLoading(false);
                     }}
@@ -121,7 +134,7 @@ export default function CheckoutPayment() {
                       Credit Card
                     </div>
                   </Button>
-
+                  {/* Paypal button */}
                   <Button
                     className="gap-4 px-8 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
                     onClick={async () => {
@@ -165,6 +178,10 @@ export default function CheckoutPayment() {
                           clearCart();
                           location.href = paymentResponse.paymentUrl;
                         }
+                      } else{
+                        console.log("Error: ", orderResponse);
+                        clearCart();
+                        showErrorModal();
                       }
                       setIsLoading(false);
                     }}
@@ -239,6 +256,10 @@ export default function CheckoutPayment() {
 
                               throw new Error(errorMessage);
                             }
+                          } else{
+                            console.log("Error: ", orderResponse);
+                            clearCart();
+                            showErrorModal();
                           }
                         } catch (error) {
                           // console.error(error);
@@ -260,11 +281,15 @@ export default function CheckoutPayment() {
                             }
                           );
                           console.log("Ket qua tra ve: ", response);
-                          console.log("TransactionId: " + response?.purchase_units[0].reference_id);
-                          const reference_id = response?.purchase_units[0].reference_id;
+                          console.log(
+                            "TransactionId: " +
+                              response?.purchase_units[0].reference_id
+                          );
+                          const reference_id =
+                            response?.purchase_units[0].reference_id;
                           const updatePart = reference_id.split("-");
                           const orderId = updatePart[0].substring(3);
-                          const orderData =  response?.data;
+                          const orderData = response?.data;
                           console.log("orderData: ", orderData);
                           // Three cases to handle:
                           //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
@@ -284,21 +309,29 @@ export default function CheckoutPayment() {
                             );
                           } else {
                             // (3) Successful transaction -> Show confirmation or thank you message
-                            // Or go to another URL:  actions.redirect('thank_you.html');                            
+                            // Or go to another URL:  actions.redirect('thank_you.html');
                             if (response?.status == "COMPLETED") {
                               console.log("Ahihi");
                               clearCart();
-                              const completePaymentTransactionResponse = await PUT(
-                                "/api/Transactions/completePayment/" + reference_id,
-                                {}
-                              );
+                              const completePaymentTransactionResponse =
+                                await PUT(
+                                  "/api/Transactions/completePayment/" +
+                                    reference_id,
+                                  {}
+                                );
                               const completePaymentOrderResponse = await PUT(
                                 "/api/Order/completePayment/" + orderId,
-                                {}, 
+                                {}
                               );
-                              console.log("completePaymentTransactionResponse: ", completePaymentTransactionResponse);
-                              console.log("completePaymentOrderResponse: ", completePaymentOrderResponse);
-                              location.href = ("/account/order-history");
+                              console.log(
+                                "completePaymentTransactionResponse: ",
+                                completePaymentTransactionResponse
+                              );
+                              console.log(
+                                "completePaymentOrderResponse: ",
+                                completePaymentOrderResponse
+                              );
+                              location.href = "/account/order-history";
                             }
                             console.log("Thanh cong");
                           }
@@ -312,22 +345,6 @@ export default function CheckoutPayment() {
                     />
                   </PayPalScriptProvider>
                   <Message content={message} />
-                  {/* <Button
-                    className="gap-4 px-8 hover:scale-95 font-bold text-white bg-primary py-6 flex items-center justify-center"
-                    onClick={async () => {
-                      console.log(cart);
-                      setIsLoading(true);
-                      await POST("/api/Order", {
-                        orderDetails: cart,
-                      });
-                      clearCart();
-                      setIsLoading(false);
-                      navigate("/account/order-history");
-                    }}
-                  >
-                    <Truck />
-                    Test
-                  </Button> */}
                 </div>
               </div>
             </div>
