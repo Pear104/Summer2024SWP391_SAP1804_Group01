@@ -102,13 +102,15 @@ const DiamondItem = ({
             </span>
             <div className="mb-2 tracking-wider"></div>
           </Modal>
-          <button
-            className="text-blue-500 flex"
-            onClick={showModalDiamondWarranty}
-          >
-            Warranty
-            <ExternalLink size={12} />
-          </button>
+          {order.orderStatus == "Completed" && (
+            <button
+              className="text-blue-500 flex"
+              onClick={showModalDiamondWarranty}
+            >
+              Warranty
+              <ExternalLink size={12} />
+            </button>
+          )}
         </div>
       </div>
     </div>

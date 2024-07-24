@@ -108,13 +108,15 @@ const AccessoryItem = ({
               </span>
               <div className="mb-2 tracking-wider"></div>
             </Modal>
-            <button
-              className="text-blue-500 flex"
-              onClick={showModalAccessoryWarranty}
-            >
-              Warranty
-              <ExternalLink size={12} />
-            </button>
+            {orderStatus == "Completed" && (
+              <button
+                className="text-blue-500 flex"
+                onClick={showModalAccessoryWarranty}
+              >
+                Warranty
+                <ExternalLink size={12} />
+              </button>
+            )}
             {orderStatus == "Completed" && (
               <button
                 className="bg-gray-200 text-gray-800 px-4 py-2 rounded mr-4 text-sm border border-black"
