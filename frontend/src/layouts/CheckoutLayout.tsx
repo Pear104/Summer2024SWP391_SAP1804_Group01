@@ -185,7 +185,21 @@ export default function CheckoutLayout() {
           />
         ))}
         <Divider />
-        <div className="font-semibold mb-2">Enter the discount code</div>
+        <div className="font-semibold mb-2">
+          Enter the discount code
+          <span>
+            {" "}
+            (See our latest discount code{" "}
+            <a
+              href="/promotions"
+              target="blank"
+              className="text-blue-500 cursor-pointer"
+            >
+              here
+            </a>{" "}
+            )
+          </span>
+        </div>
         <div className="flex flex-col gap-2">
           {/* Discount code */}
           <div className="flex gap-4">

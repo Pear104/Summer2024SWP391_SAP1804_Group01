@@ -4,6 +4,7 @@ namespace Helpers.Queries
     {
         public string? Title { get; set; }
         public string? SortBy { get; set; }
+        public string? Type { get; set; }
         public bool IsDescending { get; set; }
         public bool? IsHidden { get; set; }
         public int? PageSize { get; set; }

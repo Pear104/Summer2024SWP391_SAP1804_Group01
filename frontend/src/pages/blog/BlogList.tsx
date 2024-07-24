@@ -8,7 +8,8 @@ import { useNavigate } from "react-router-dom";
 import LoadingBlogListItem from "./components/LoadingBlogListItem";
 import BigItem from "./components/BigItem";
 import scrollTo from "../../utils/scroll";
-export default function BlogList({ type = "all" }: { type?: any }) {
+
+export default function BlogList({ type = "knowledge" }: { type?: any }) {
   console.log(type);
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
@@ -16,8 +17,10 @@ export default function BlogList({ type = "all" }: { type?: any }) {
   const queryUrl = useSearchStore((state) => state.queryUrl);
   const setQueryUrl = useSearchStore((state) => state.setQueryUrl);
   useEffect(() => {
-    setQueryUrl("/api/Blogs?");
-  }, []);
+    setQueryUrl(
+      `/api/Blogs?type=${type}${type == "promotion" ? "&SortBy=Date" : ""}`
+    );
+  }, [type]);
   const [blogs] = useQueries({
     queries: [
       {
@@ -31,7 +34,7 @@ export default function BlogList({ type = "all" }: { type?: any }) {
     <div className="mt-4">
       <div className="flex flex-col gap-4">
         <div id="blog-list" className="font-bold text-4xl uppercase">
-          Diamond Knowledge
+          {type}
         </div>
         {!blogs?.isLoading && blogs?.data?.blogs?.length == 0 && (
           <div className="text-center text-2xl p-40">

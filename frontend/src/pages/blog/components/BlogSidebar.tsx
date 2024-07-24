@@ -15,34 +15,36 @@ export default function BlogSidebar() {
     queries: [
       {
         queryKey: ["blogs", blogId],
-        queryFn: () => GET("/api/Blogs?SortBy=Date"),
+        queryFn: () => GET("/api/Blogs?type=knowledge&SortBy=Date"),
       },
     ],
   });
   return (
-    <div>
-      <Divider orientation="left" className="font-bold uppercase">
-        Should read
-      </Divider>
-      <div className="flex flex-col gap-4">
-        {/* big item */}
-        {blogs?.data?.blogs?.length > 0 && (
-          <SidebarBigItem blog={blogs?.data?.blogs[0]} />
-        )}
-        {/* child item */}
-        {blogs?.data?.blogs
-          ?.slice(5)
-          .map((blog: any, index: number) => (
-            <SidebarBlogItem key={index} blog={blog} />
-          )) || (
-          <>
-            <LoadingSidebarItem />
-            <LoadingSidebarItem />
-            <LoadingSidebarItem />
-            <LoadingSidebarItem />
-          </>
-        )}
+    !window.location.href.includes("promotions") && (
+      <div>
+        <Divider orientation="left" className="font-bold uppercase">
+          Should read
+        </Divider>
+        <div className="flex flex-col gap-4">
+          {/* big item */}
+          {blogs?.data?.blogs?.length > 0 && (
+            <SidebarBigItem blog={blogs?.data?.blogs[0]} />
+          )}
+          {/* child item */}
+          {blogs?.data?.blogs
+            ?.slice(5)
+            .map((blog: any, index: number) => (
+              <SidebarBlogItem key={index} blog={blog} />
+            )) || (
+            <>
+              <LoadingSidebarItem />
+              <LoadingSidebarItem />
+              <LoadingSidebarItem />
+              <LoadingSidebarItem />
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    )
   );
 }

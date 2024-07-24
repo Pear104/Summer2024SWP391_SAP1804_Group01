@@ -56,6 +56,15 @@ namespace Repositories.Implements
                 blogsQuery = blogsQuery.OrderByDescending(x => x.CreatedAt);
             }
 
+            if (query.Type == "promotion")
+            {
+                blogsQuery = blogsQuery.Where(x => x.Title.Contains("[PROMOTION]"));
+            }
+            else if (query.Type == "knowledge")
+            {
+                blogsQuery = blogsQuery.Where(x => !x.Title.Contains("[PROMOTION]"));
+            }
+
             if (query.IsHidden != null)
             {
                 blogsQuery = blogsQuery.Where(x => x.IsHidden == query.IsHidden);

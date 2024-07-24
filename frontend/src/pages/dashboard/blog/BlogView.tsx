@@ -39,10 +39,12 @@ export default function BlogView() {
           const data = await GET(`/api/Blogs/${blogId}`);
           if (data.blogId) {
             setIsHidden(data.isHidden);
-            reset({
-              title: data?.title,
-              content: data?.content,
-            });
+            if (data.blogId) {
+              reset({
+                title: data?.title,
+                content: data?.content,
+              });
+            }
           }
         },
       },
