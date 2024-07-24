@@ -1,4 +1,3 @@
-
 using BusinessObjects.Models;
 using Helpers.DTOs.Accessory;
 
@@ -10,6 +9,7 @@ namespace Helpers.Mappers
         {
             return new AccessoryDTO
             {
+                IsHidden = accessory.IsHidden,
                 AccessoryId = accessory.AccessoryId,
                 Karat = accessory.Karat,
                 MaterialWeight = accessory.MaterialWeight,

@@ -198,6 +198,9 @@ export default function TopNav() {
           >
             Diamond
           </Link>
+          <TopNavItem setMenuDrop={setMenuDrop} href="/promotions">
+            Promotion
+          </TopNavItem>
           <TopNavItem setMenuDrop={setMenuDrop} href="/blogs">
             Blog
           </TopNavItem>

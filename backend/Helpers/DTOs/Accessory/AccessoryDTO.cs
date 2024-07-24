@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Helpers.DTOs.AccessoryImage;
 using Helpers.DTOs.AccessoryType;
 using Helpers.DTOs.Feedback;
@@ -17,6 +13,7 @@ namespace Helpers.DTOs.Accessory
         public string Name { get; set; } = string.Empty;
         public int Quantity { get; set; }
         public AccessoryTypeDTO AccessoryType { get; set; } = new AccessoryTypeDTO();
+        public bool IsHidden { get; set; }
         public ShapeDTO Shape { get; set; } = new ShapeDTO();
         public List<AccessoryImageDTO>? AccessoryImages { get; set; } =
             new List<AccessoryImageDTO>();

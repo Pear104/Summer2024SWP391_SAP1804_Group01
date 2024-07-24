@@ -9,7 +9,7 @@ namespace Helpers.HelperClasses
     {
         public static double GetDiamondPrice(float carat, double diamondPrice, float priceRate)
         {
-            return carat * diamondPrice * 5 * priceRate;
+            return carat * diamondPrice * 0.5 * priceRate;
         }
 
         public static double GetAccessoryPrice(
