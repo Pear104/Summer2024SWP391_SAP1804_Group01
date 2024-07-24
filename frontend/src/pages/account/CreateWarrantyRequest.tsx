@@ -84,16 +84,14 @@ export default function CreateWarrantyRequest() {
       },
     ],
   });
-  const options: Option[] = warrantyCards?.data?.warrantyCards?.map(
-    (warrantyCard: any) => ({
-      key: warrantyCard.warrantyCardId,
-      value: warrantyCard.warrantyCardId,
-      label: warrantyCard.warrantyCardId,
-      // label: warrantyCard.diamondId
-      //   ? `${warrantyCard?.diamond?.carat} ct ${warrantyCard?.diamond?.shape?.name} Shape Diamond #${warrantyCard?.diamond?.certificateNumber}`
-      //   : warrantyCard?.accessory?.name,
-    })
-  );
+  const options: Option[] = warrantyCards?.data?.map((warrantyCard: any) => ({
+    key: warrantyCard.warrantyCardId,
+    value: warrantyCard.warrantyCardId,
+    label: warrantyCard.diamondId
+      ? warrantyCard?.diamondName
+      : warrantyCard?.accessoryName,
+  }));
+  console.log(warrantyCards?.data);
 
   const { control, handleSubmit, reset, setValue } = useForm({
     defaultValues: {

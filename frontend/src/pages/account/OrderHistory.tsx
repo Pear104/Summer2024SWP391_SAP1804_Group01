@@ -134,7 +134,7 @@ export default function OrderHistory() {
         </Form>
       </Modal>
       {/* Feedback modal */}
-      <Modal
+      {/* <Modal
         className="w-[400px]"
         centered
         title="Enter new unit price (USD) for: "
@@ -143,7 +143,7 @@ export default function OrderHistory() {
         onCancel={handleCancel}
       >
         <div className="mb-2 tracking-wider"></div>
-      </Modal>
+      </Modal> */}
       <div className="text-2xl font-serif mb-6">ORDER HISTORY</div>
       {orderHistories?.data?.orders?.length != 0 ? (
         <div className="w-full">

@@ -25,11 +25,14 @@ namespace API.Controllers
 
         [HttpGet("me")]
         [Authorize(Roles = "Customer, Manager, Administrator, SaleStaff, DeliveryStaff")]
-        public async Task<ActionResult> GetUserWarrantyCards([FromQuery] WarrantyCardQuery query)
+        public async Task<ActionResult> GetUserWarrantyCards()
         {
-            var accountId = User.FindFirst("accountId")?.Value;
-            query.CustomerId = long.Parse(accountId ?? "0");
-            var warrantyCards = await _warrantyCardService.getUserWarrantyCards(query);
+            var accountId = long.Parse(User.FindFirst("accountId")?.Value ?? "0");
+            if (accountId <= 0)
+            {
+                return BadRequest();
+            }
+            var warrantyCards = await _warrantyCardService.getUserWarrantyCards(accountId);
             return Ok(warrantyCards);
         }
     }

@@ -18,9 +18,9 @@ namespace Repositories.Implements
             _context = context;
         }
 
-        public async Task<WarrantyCardResult?> getUserWarrantyCards(WarrantyCardQuery query)
+        public async Task<List<WarrantyCardDTO>?> getUserWarrantyCards(long accountId)
         {
-            var user = await _context.Accounts.FindAsync(query.CustomerId);
+            var user = await _context.Accounts.FindAsync(accountId);
             if (user == null)
             {
                 return null;
@@ -30,7 +30,8 @@ namespace Repositories.Implements
                 .ThenInclude(x => x.Shape)
                 .Include(x => x.Accessory)
                 .Where(x =>
-                    x.OrderDetail!.Order.CustomerId == query.CustomerId
+                    x.OrderDetail!.Order.CustomerId == accountId
+                    && x.OrderDetail!.Order.OrderStatus == OrderStatus.Completed
                     && (
                         // Only get warranty cards that have no request or have warranty requests that are completed
                         !x.WarrantyRequests.Any()
@@ -40,18 +41,7 @@ namespace Repositories.Implements
                     )
                 );
 
-            var totalCount = await warrantyCardQueries.CountAsync();
-
-            var totalPages = (int)Math.Ceiling(totalCount / (double)query.PageSize);
-
-            return new WarrantyCardResult
-            {
-                WarrantyCards = warrantyCardQueries.Select(x => x.ToWarrantyCardDTO()).ToList(),
-                TotalPages = totalPages,
-                PageSize = query.PageSize,
-                CurrentPage = query.PageNumber,
-                TotalCount = totalCount
-            };
+            return warrantyCardQueries.Select(x => x.ToWarrantyCardDTO()).ToList();
         }
 
         public async Task<WarrantyCardResult?> getWarrantyCards(WarrantyCardQuery query)

@@ -14,9 +14,9 @@ namespace Services.Implements
             _warrantyCardRepository = warrantyCardRepository;
         }
 
-        public Task<WarrantyCardResult?> getUserWarrantyCards(WarrantyCardQuery query)
+        public Task<List<WarrantyCardDTO>?> getUserWarrantyCards(long accountId)
         {
-            return _warrantyCardRepository.getUserWarrantyCards(query);
+            return _warrantyCardRepository.getUserWarrantyCards(accountId);
         }
 
         public Task<WarrantyCardResult?> getWarrantyCards(WarrantyCardQuery query)
