@@ -2,12 +2,12 @@ namespace Helpers.Queries
 {
     public class WarrantyCardQuery
     {
-        public long? WarrantyCardId { get; set; } = 0;
-        public long? DiamondId { get; set; } = 0;
-        public long? AccessoryId { get; set; } = 0;
-        public string? ProductName { get; set; } = string.Empty;
-        public long? CustomerId { get; set; } = 0;
-        public string? CustomerName { get; set; } = string.Empty;
+        public long? WarrantyCardId { get; set; }
+        public long? DiamondId { get; set; }
+        public long? AccessoryId { get; set; }
+        public string? ProductName { get; set; }
+        public long? CustomerId { get; set; }
+        public string? CustomerName { get; set; }
         public DateTime? MinDate { get; set; } = null;
         public DateTime? MaxDate { get; set; } = null;
         public int PageSize { get; set; } = 5;

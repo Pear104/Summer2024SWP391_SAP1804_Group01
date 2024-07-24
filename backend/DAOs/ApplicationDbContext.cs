@@ -9,7 +9,10 @@ namespace DAOs
     public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions options)
-            : base(options) { }
+            : base(options)
+        {
+            this.Database.SetCommandTimeout(300);
+        }
 
         public ApplicationDbContext() { }
 

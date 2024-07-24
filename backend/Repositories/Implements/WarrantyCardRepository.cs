@@ -49,6 +49,7 @@ namespace Repositories.Implements
             var warrantyCardQueries = _context
                 .WarrantyCards.Include(x => x.OrderDetail)
                 .ThenInclude(x => x.Order)
+                .Include(x => x.Diamond)
                 .Include(x => x.Accessory)
                 .ThenInclude(x => x.AccessoryImages)
                 .AsQueryable();
@@ -130,6 +131,11 @@ namespace Repositories.Implements
 
             return new WarrantyCardResult
             {
+                //WarrantyCards = warrantyCardQueries
+                //    .Skip(query.PageSize * (query.PageNumber - 1))
+                //    .Take(query.PageSize)
+                //    .Select(x => x.ToWarrantyCardDTO())
+                //    .ToList(),
                 WarrantyCards = warrantyCards,
                 TotalPages = totalPages,
                 PageSize = query.PageSize,
