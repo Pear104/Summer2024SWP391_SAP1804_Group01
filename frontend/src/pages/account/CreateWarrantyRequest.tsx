@@ -167,11 +167,11 @@ export default function CreateWarrantyRequest() {
                   filterOption={(input, option) =>
                     (option?.label ?? "").includes(input)
                   }
-                  filterSort={(optionA, optionB) =>
-                    (optionA?.label ?? "")
-                      .toLowerCase()
-                      .localeCompare((optionB?.label ?? "").toLowerCase())
-                  }
+                  // filterSort={(optionA, optionB) =>
+                  //   (optionA?.label ?? "")
+                  //     .toLowerCase()
+                  //     .localeCompare((optionB?.label ?? "").toLowerCase())
+                  // }
                   options={options}
                   onChange={(value) => {
                     setWarrantyCardId(value);
