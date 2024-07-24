@@ -37,6 +37,7 @@ namespace Repositories.Implements
             {
                 var diamond = diamondDto.ToDiamondFromCreate();
                 diamond.Shape = shape;
+                diamond.IsHidden = false;
                 await _context.Diamonds.AddAsync(diamond);
                 await _context.SaveChangesAsync();
                 return diamond;

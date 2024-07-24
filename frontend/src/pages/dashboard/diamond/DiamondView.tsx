@@ -207,6 +207,16 @@ export default function DiamondView() {
         queryKey: ["diamond", diamondId, reset],
         queryFn: async () => {
           const data = await GET(`/api/Diamonds/${diamondId}`);
+          if (data?.imageUrl) {
+            setDiamondFile([
+              {
+                uid: "-1",
+                name: "image.png",
+                status: "done",
+                url: data?.imageUrl,
+              },
+            ]);
+          }
           if (diamondId) {
             setDiamond(data);
             setAvailability(data?.availability);
@@ -319,7 +329,11 @@ export default function DiamondView() {
               );
               console.log("API Response:", checkdiamond);
 
-              if (checkdiamond?.diamonds && checkdiamond.diamonds.length > 0) {
+              if (
+                !diamondId &&
+                checkdiamond?.diamonds &&
+                checkdiamond.diamonds.length > 0
+              ) {
                 setError("certificateNumber", {
                   type: "manual",
                   message: "Duplicate Certificate number",

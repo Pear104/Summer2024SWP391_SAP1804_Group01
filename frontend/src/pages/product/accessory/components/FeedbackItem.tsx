@@ -17,7 +17,7 @@ export default function FeedbackItem({ feedback }: { feedback: any }) {
               Verified Buyer <Check className="ml-2" size={20} />
             </div>
           </div>
-          <Rate value={feedback?.score} />
+          <Rate disabled defaultValue={feedback?.score} />
         </div>
       </div>
       <div className="text-xl mt-4">{feedback?.content}</div>
