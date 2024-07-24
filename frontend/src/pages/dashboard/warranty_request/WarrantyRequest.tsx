@@ -18,6 +18,7 @@ export default function WarrantyRequest() {
     "Warranty Request ID",
     "Reason",
     "Customer",
+    "Receive date ",
     "Shipping Address",
     "Phone Number",
     "Delivery Staff",

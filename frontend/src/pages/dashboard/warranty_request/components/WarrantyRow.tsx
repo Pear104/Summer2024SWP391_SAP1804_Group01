@@ -5,6 +5,18 @@ import DeliveryStaffComponent from "./DeliveryStaffComponent";
 import WarrantyUpdateComponent from "./WarrantyUpdateComponent";
 import OpenGoogleMaps from "./OpenMap";
 
+function formatDate(isoDate: string): string {
+  const date = new Date(isoDate);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+
+  return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+}
+
 export default function WarrantyRow({ warranty }: { warranty: any }) {
   const [saleStaffs, deliveryStaffs] = useQueries({
     queries: [
@@ -37,6 +49,11 @@ export default function WarrantyRow({ warranty }: { warranty: any }) {
             {warranty.customerName}
             {" #"}
             {warranty.customerId}
+          </div>
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <div className="text-sm text-gray-500">
+            {formatDate(warranty.receiveTime)}
           </div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
