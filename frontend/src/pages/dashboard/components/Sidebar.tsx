@@ -76,7 +76,7 @@ export default function Sidebar() {
     queryKey: ["account"],
     queryFn: () => GET("/api/Accounts/me"),
   });
-  if (account?.role == "Customer") {
+  if (account?.role == "Customer" || !account) {
     navigate("/");
   }
   const userRole: Role = account?.role;

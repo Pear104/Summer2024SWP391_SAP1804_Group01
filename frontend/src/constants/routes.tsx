@@ -226,7 +226,21 @@ const routes = [
             children: [
               {
                 index: true,
-                element: <BlogList />,
+                element: <BlogList type={"knowledge"} />,
+              },
+              {
+                path: ":blogId",
+                element: <BlogDetail />,
+              },
+            ],
+          },
+          {
+            path: "promotions",
+            element: <BlogLayout />,
+            children: [
+              {
+                index: true,
+                element: <BlogList type={"promotion"} />,
               },
               {
                 path: ":blogId",

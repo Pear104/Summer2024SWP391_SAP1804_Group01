@@ -9,7 +9,13 @@ import { getDiamondPrice } from "../../../utils/getPrice";
 import { useEffect, useState } from "react";
 export default function DiamondDetail() {
   const { diamondId } = useParams();
+  const { message } = App.useApp();
   const [loadingCertificate, setLoadingCertificate] = useState(false);
+  const [showCertificate, setShowCertificate] = useState(false);
+  const navigate = useNavigate();
+  const setCart = useCartStore((state) => state.setCart);
+  const setCurrentDiamond = useCartStore((state) => state.setCurrentDiamond);
+  const setCurrentShape = useCartStore((state) => state.setCurrentShape);
 
   const [diamond, diamondPrice, priceRate] = useQueries({
     queries: [
@@ -30,17 +36,14 @@ export default function DiamondDetail() {
       },
     ],
   });
-  const [showCertificate, setShowCertificate] = useState(false);
-  const navigate = useNavigate();
-  const setCart = useCartStore((state) => state.setCart);
-  const setCurrentDiamond = useCartStore((state) => state.setCurrentDiamond);
-  const setCurrentShape = useCartStore((state) => state.setCurrentShape);
-  const { message } = App.useApp();
 
   useEffect(() => {
     scrollTo("choose-item");
   }, []);
 
+  if (diamond?.data?.isHidden == true || diamond?.data?.availability == false) {
+    navigate("/error");
+  }
   // console.log(diamond?.data?.certificateNumber);
   // console.log(diamond?.data?.certificateNumber.slice(0, 2));
 

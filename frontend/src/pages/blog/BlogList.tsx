@@ -8,7 +8,8 @@ import { useNavigate } from "react-router-dom";
 import LoadingBlogListItem from "./components/LoadingBlogListItem";
 import BigItem from "./components/BigItem";
 import scrollTo from "../../utils/scroll";
-export default function BlogList() {
+export default function BlogList({ type = "all" }: { type?: any }) {
+  console.log(type);
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.searchParams);
   const navigate = useNavigate();

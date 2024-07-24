@@ -1,3 +1,5 @@
+const pricePerCarat = 0.5;
+
 export const getDiamondPrice = (
   diamond: any,
   diamondPrice: any,
@@ -12,13 +14,13 @@ export const getDiamondPrice = (
         price.minCaratEff <= diamond?.carat &&
         diamond?.carat <= price.maxCaratEff
     )?.unitPrice *
-    5 *
+    pricePerCarat *
     priceRate
   );
 };
 
 export const getOrderUnitPrice = (diamondPrice: any, priceRate: any) => {
-  return diamondPrice * 5 * priceRate;
+  return diamondPrice * pricePerCarat * priceRate;
 };
 
 export const getOrderDiamondPrice = (
@@ -26,7 +28,7 @@ export const getOrderDiamondPrice = (
   diamondPrice: any,
   priceRate: any
 ) => {
-  return diamond?.carat * diamondPrice.unitPrice * 5 * priceRate;
+  return diamond?.carat * diamondPrice.unitPrice * pricePerCarat * priceRate;
 };
 
 export const getAccessoryPrice = (
