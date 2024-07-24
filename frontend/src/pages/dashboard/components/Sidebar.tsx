@@ -76,9 +76,10 @@ export default function Sidebar() {
     queryKey: ["account"],
     queryFn: () => GET("/api/Accounts/me"),
   });
-  if (account?.role == "Customer" || !account) {
+  if (account?.role == "Customer") {
     navigate("/");
   }
+  console.log(account);
   const userRole: Role = account?.role;
 
   const DASHBOARD_SIDEBAR_LINKS = [
