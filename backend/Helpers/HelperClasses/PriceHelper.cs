@@ -20,7 +20,7 @@ namespace Helpers.HelperClasses
             float priceRate
         )
         {
-            return (materialWeight + (size - 3) * materialPrice + processingPrice) * priceRate;
+            return ((materialWeight + (size - 3)) * materialPrice + processingPrice) * priceRate;
         }
     }
 }

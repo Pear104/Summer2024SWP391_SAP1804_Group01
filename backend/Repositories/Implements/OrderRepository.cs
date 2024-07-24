@@ -33,6 +33,8 @@ namespace Repositories.Implements
 
         public async Task<Order?> CreateOrderAsync(long customerId, CreateOrderDTO orderDto)
         {
+            Console.WriteLine("Start create Order!");
+            Console.WriteLine("\n\n\n");
             var customer = await _context.Accounts.FindAsync(customerId);
             if (customer == null)
             {
@@ -68,12 +70,21 @@ namespace Repositories.Implements
                     return null;
                 }
                 newOrder.TotalDiscountPercent = promotion.DiscountPercent + rank.Discount;
+                Console.WriteLine("\n\n\n");
+                Console.WriteLine("Total discount percent: " + newOrder.TotalDiscountPercent);
+                Console.WriteLine("\n\n\n");
+
             }
             else
             {
+
                 newOrder.TotalDiscountPercent = rank.Discount;
+                Console.WriteLine("\n\n\n");
+                Console.WriteLine("Total discount percent: " + newOrder.TotalDiscountPercent);
+                Console.WriteLine("\n\n\n");
             }
             double totalPrice = 0;
+            Console.WriteLine("TotalPrice:" + totalPrice);
             foreach (var orderDetailDto in orderDto.OrderDetails)
             {
                 var diamond = _context.Diamonds.FirstOrDefault(x =>
@@ -141,6 +152,24 @@ namespace Repositories.Implements
                         orderDetail.MaterialPrice = materialPrice;
                         if (materialPrice != null)
                         {
+
+
+                            Console.WriteLine("\n\n\n");
+                            Console.WriteLine("Diamond Price: " + PriceHelper.GetDiamondPrice(
+                                    diamond.Carat,
+                                    diamondPrice.UnitPrice,
+                                    priceRate.Percent
+                                ));
+                            Console.WriteLine("Accessory Price: " + PriceHelper.GetAccessoryPrice(
+                                    accessory.MaterialWeight,
+                                    orderDetailDto.Size,
+                                    materialPrice.UnitPrice,
+                                    accessory.AccessoryType.ProcessingPrice,
+                                    priceRate.Percent));
+                            Console.WriteLine("\n\n\n");
+
+
+
                             orderDetail.ItemPrice =
                                 PriceHelper.GetDiamondPrice(
                                     diamond.Carat,
@@ -149,7 +178,7 @@ namespace Repositories.Implements
                                 )
                                 + PriceHelper.GetAccessoryPrice(
                                     accessory.MaterialWeight,
-                                    orderDetailDto.Size - 3,
+                                    orderDetailDto.Size,
                                     materialPrice.UnitPrice,
                                     accessory.AccessoryType.ProcessingPrice,
                                     priceRate.Percent

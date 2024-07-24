@@ -48,17 +48,16 @@ export default function CheckoutPayment() {
   //message 
   const [message, setMessage] = useState<string>("");
   const [USDRate, setUSDRate] = useState(25000);
+
   //API call to get USD price rate and convert to VND
   const fetchExchangeRates = async () => {
     const myHeaders = new Headers();
     myHeaders.append("Authorization", "Basic OGNhN2FlMjUtOTNjNS00MmFlLThhYjQtMzlkZTFlOTQzZDEwOjliN2UzNmZkLWRjYjgtNDEwZS1hYzc3LTQ5NGRmYmEyZGJjZA==");
-
     const requestOptions: RequestInit = {
       method: 'GET',
       headers: myHeaders,
       redirect: 'follow'
     };
-
     try {
       const response = await fetch("https://api.wise.com/v1/rates?source=USD&target=VND", requestOptions);
       const result = await response.json();
@@ -215,7 +214,9 @@ export default function CheckoutPayment() {
                     <Truck />
                     Ship COD (Deposit 40%)
                   </Button>
+
                   {/* Paypal button */}
+
                   <PayPalScriptProvider options={initialOptions}>
                     <PayPalButtons
                       className="hover:scale-95 font-bold text-white flex items-center justify-center w-[300px]"
