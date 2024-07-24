@@ -16,7 +16,7 @@ namespace Services.Implements
 
         public Task<SearchResult> GetResult(SearchQuery query)
         {
-            throw new NotImplementedException();
+           return _searchRepository.GetResult(query);
         }
     }
 }
