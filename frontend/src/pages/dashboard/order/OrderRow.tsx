@@ -3,6 +3,11 @@ import DeliveryStaffComponent from "./DeliveryStaffComponent";
 import OrderUpdateComponent from "./OrderUpdateComponent";
 import SaleStaffComponent from "./SaleStaffComponent";
 import { GET } from "../../../utils/request";
+import { Modal, Button } from "antd";
+import { useState } from "react";
+import DiamondItem from "./components/DiamondItem";
+import AccessoryItem from "./components/AccessoryItem";
+import { OrderStatus } from "./components/OrderStatus";
 const formatDate = (dateString: any) => {
   const date = new Date(dateString);
   const day = String(date.getDate()).padStart(2, "0");
@@ -11,6 +16,7 @@ const formatDate = (dateString: any) => {
   return `${day}/${month}/${year}`;
 };
 export default function OrderRow({ order }: { order: any }) {
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [saleStaffs, deliveryStaffs] = useQueries({
     queries: [
       {
@@ -26,19 +32,25 @@ export default function OrderRow({ order }: { order: any }) {
     ],
   });
 
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
   return (
     <>
       <tr key={order.orderId}>
-        <td className="px-6 py-4 whitespace-nowrap">
+        <td className="px-6 py-4 whitespace-nowrap cursor-pointer" onClick={showModal}>
           <div className="flex items-center">
             {"#"}
             {order.orderId}
           </div>
         </td>
-        <td className="px-6 py-4 whitespace-nowrap">
+        <td className="px-6 py-4 whitespace-nowrap cursor-pointer" onClick={showModal}>
           <div>{formatDate(order.createdAt)}</div>
         </td>
-        <td className="px-6 py-4 whitespace-nowrap">
+        <td className="px-6 py-4 whitespace-nowrap cursor-pointer" onClick={showModal}>
           <div className="text-sm text-gray-500">
             {order.customerName}
             {" #"}
@@ -86,6 +98,71 @@ export default function OrderRow({ order }: { order: any }) {
           />
         </td>
       </tr>
+      
+      <Modal
+        title="Order Details"
+        visible={isModalVisible}
+        onOk={handleOk}
+        footer={[
+          <Button key="submit" type="primary" onClick={handleOk}>
+            OK
+          </Button>,
+        ]}
+        width={1400}
+        centered
+      >
+        <div className="pb-4">
+        <div>Order ID: {order.orderId}</div>
+        <div>Created at: {formatDate(order.createdAt)}</div>
+      </div>
+      <div className="border-b border-gray-300 py-4 mb-6">
+        {order.orderDetails.map((detail: any) => (
+          <div
+            key={detail.orderDetailId}
+            className="border rounded-md p-4 bg-slate-100 grid grid-cols-2 mb-4 gap-x-4 border-spacing-y-4"
+          >
+            <DiamondItem
+              detail={detail}
+              percent={order?.priceRate?.percent}
+              order={order}
+            />
+            <AccessoryItem       
+              detail={detail}     
+              percent={order?.priceRate?.percent}
+            />
+          </div>
+        ))}
+        <div className="flex justify-between items-center text-xl mt-8">
+          <div className="font-bold text-gray-800 flex justify-between gap-10">
+            <div>
+              Subtotal:{" "}
+              {order?.totalPrice?.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 0,
+              })}
+            </div>
+            <div>
+              Discount: {(order?.totalDiscountPercent * 100)?.toFixed(0)}%
+            </div>
+          </div>
+          <OrderStatus order={order} />
+        </div>
+        <div className="flex justify-between items-center">
+          <div className="text-xl font-bold text-gray-800">
+            Total:{" "}
+            {(
+              order.totalPrice *
+              (1 - order.totalDiscountPercent)
+            ).toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+              maximumFractionDigits: 0,
+            })}
+          </div>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 }

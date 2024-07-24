@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Button, Modal, Input, message } from "antd";
 import { POST } from "../../../../utils/request";
+import { useNavigate } from "react-router-dom";
 
 const App: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   // const [modalText, setModalText] = useState('Content of the modal');
   const [percent, setPercent] = useState(0);
+  const navigate = useNavigate();
 
   const showModal = () => {
     setOpen(true);
@@ -31,6 +33,7 @@ const App: React.FC = () => {
             percent: percent,
           });
           console.log("API response:", response);
+          message.success("Price rate created successfully.");
           window.location.reload();
           setOpen(false);
         } catch (error) {
